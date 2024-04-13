@@ -19,6 +19,7 @@ public class App {
         NorthAmericaFishModel   naFishModel = new NorthAmericaFishModel();
         AsiaFishModel           asiaFishModel = new AsiaFishModel();
 
+       
         europeFishModel.solveAndPrintNumberOfSolutions();
         europeFishModel.solveAndPrintSolution();
         naFishModel.solveAndPrintNumberOfSolutions();
@@ -26,8 +27,9 @@ public class App {
         asiaFishModel.solveAndPrintNumberOfSolutions();
         asiaFishModel.solveAndPrintSolution();
 
-        europeFishModel.solveXNumberOfTimes(1000);
-        naFishModel.solveXNumberOfTimes(1000);
-        asiaFishModel.solveXNumberOfTimes(1000);
+        europeFishModel.solveXNumberOfTimes(10);
+        naFishModel.solveXNumberOfTimes(10);
+        asiaFishModel.solveXNumberOfTimes(10);
+    
     }
 }

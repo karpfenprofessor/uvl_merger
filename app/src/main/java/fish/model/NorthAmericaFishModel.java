@@ -95,6 +95,93 @@ public class NorthAmericaFishModel extends BaseModel {
         model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=", 0)),
                 model.arithm(diet, "=", 0));
 
+        // Constraint 21: Large saltwater fish like Red Grouper are carnivorous
+        model.ifThen(model.and(model.arithm(fishSpecies, "=", 5), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "=", 2));
+
+        // Constraint 22: Freshwater environments are unlikely to host large carnivorous
+        // fish
+        model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 0)),
+                model.arithm(diet, "!=", 2));
+
+        // Constraint 23: Omnivorous diet common among all Centrarchidae regardless of
+        // size
+        model.ifThen(model.arithm(fishFamily, "=", 3),
+                model.arithm(diet, "=", 1));
+
+        // Constraint 24: Blue Catfish, a large species, found in freshwater
+        model.ifThen(model.arithm(fishSpecies, "=", 3),
+                model.arithm(habitat, "=", 0));
+
+        // Constraint 25: Small saltwater fish are rarely carnivorous
+        model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "!=", 2));
+
+        // Constraint 26: Medium-sized fish like Bluegill are found in freshwater
+        model.ifThen(model.arithm(fishSpecies, "=", 6),
+                model.arithm(habitat, "=", 0));
+
+        // Constraint 27: Carnivorous species in freshwater are typically medium to
+        // large
+        model.ifThen(model.and(model.arithm(diet, "=", 2), model.arithm(habitat, "=", 0)),
+                model.or(model.arithm(size, "=", 1), model.arithm(size, "=", 2)));
+
+        // Constraint 28: Herbivores in saltwater are typically small
+        model.ifThen(model.and(model.arithm(diet, "=", 0), model.arithm(habitat, "=", 1)),
+                model.arithm(size, "=", 0));
+
+        // Constraint 29: Large fish species in freshwater are omnivorous or carnivorous
+        model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 0)),
+                model.or(model.arithm(diet, "=", 1), model.arithm(diet, "=", 2)));
+
+        // Constraint 30: Small and medium-sized fish in saltwater are primarily
+        // herbivorous or omnivorous
+        model.ifThen(
+                model.and(model.arithm(habitat, "=", 1),
+                        model.or(model.arithm(size, "=", 0), model.arithm(size, "=", 1))),
+                model.or(model.arithm(diet, "=", 0), model.arithm(diet, "=", 1)));
+
+        // Constraint 31: No large herbivores in saltwater
+        model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "!=", 0));
+
+        // Constraint 32: Medium-sized freshwater fish are not exclusively carnivorous
+        model.ifThen(model.and(model.arithm(size, "=", 1), model.arithm(habitat, "=", 0)),
+                model.arithm(diet, "!=", 2));
+
+        // Constraint 33: Herbivores are not found among the largest freshwater fish
+        model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 0)),
+                model.arithm(diet, "!=", 0));
+
+        // Constraint 34: Small fish are primarily herbivores in freshwater
+        model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=", 0)),
+                model.arithm(diet, "=", 0));
+
+        // Constraint 35: All saltwater fish of medium size are not herbivores
+        model.ifThen(model.and(model.arithm(size, "=", 1), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "!=", 0));
+
+        // Constraint 36: Carnivorous diet is exclusive to medium and large fish in
+        // freshwater
+        model.ifThen(model.and(model.arithm(diet, "=", 2), model.arithm(habitat, "=", 0)),
+                model.or(model.arithm(size, "=", 1), model.arithm(size, "=", 2)));
+
+        // Constraint 37: Small fish in freshwater are rarely carnivorous
+        model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=", 0)),
+                model.arithm(diet, "!=", 2));
+
+        // Constraint 38: No small carnivorous fish in saltwater
+        model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "!=", 2));
+
+        // Constraint 39: Medium-sized herbivorous fish are uncommon in saltwater
+        model.ifThen(model.and(model.arithm(size, "=", 1), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "!=", 0));
+
+        // Constraint 40: Large omnivorous fish are more common in saltwater
+        model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 1)),
+                model.arithm(diet, "=", 1));
+
     }
 
     @Override
