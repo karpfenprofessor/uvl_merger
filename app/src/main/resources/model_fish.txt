@@ -1,0 +1,26 @@
+Model EuropeFishModel:
+    Variables:
+        region = "Europe"
+        habitat ∈ {Freshwater, Saltwater}
+        size ∈ {S, M, L}
+        diet ∈ {Herbivore, Omnivore, Carnivore}
+        fishFamily ∈ {Salmonidae, Cyprinidae, Percidae, Gadidae}
+        fishSpecies ∈ {Grayling, Brown Trout, Common Carp, Roach, European Perch, Pikeperch, Atlantic Cod, Atlantic Halibut}
+
+Model NorthAmericaFishModel:
+    Variables:
+        region = "North America"
+        habitat ∈ {Freshwater, Saltwater}
+        size ∈ {S, M, L}
+        diet ∈ {Herbivore, Omnivore, Carnivore}
+        fishFamily ∈ {Salmonidae, Ictaluridae, Serranidae, Centrarchidae}
+        fishSpecies ∈ {Chinook Salmon, Rainbow Trout, Channel Catfish, Blue Catfish, Black Sea Bass, Red Grouper, Bluegill, Largemouth Bass}
+
+Model AsiaFishModel:
+    Variables:
+        region = "Asia"
+        habitat ∈ {Freshwater, Saltwater}
+        size ∈ {S, M, L}
+        diet ∈ {Herbivore, Omnivore, Carnivore}
+        fishFamily ∈ {Cyprinidae, Scombridae, Lutjanidae, Cichlidae}
+        fishSpecies ∈ {Grass Carp, Silver Carp, Yellowfin Tuna, Skipjack Tuna, Red Snapper, Flame Snapper, Tilapia, Discus}
