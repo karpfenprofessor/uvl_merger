@@ -8,28 +8,17 @@ import fish.model.EuropeFishModel;
 import fish.model.NorthAmericaFishModel;
 
 public class App {
-    public String getGreeting() {
-        return "\n\nHello Fish!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-        
-        EuropeFishModel         europeFishModel = new EuropeFishModel();
-        NorthAmericaFishModel   naFishModel = new NorthAmericaFishModel();
-        AsiaFishModel           asiaFishModel = new AsiaFishModel();
-
-       
+        EuropeFishModel europeFishModel = new EuropeFishModel();
         europeFishModel.solveAndPrintNumberOfSolutions();
-        europeFishModel.solveAndPrintSolution();
-        naFishModel.solveAndPrintNumberOfSolutions();
-        naFishModel.solveAndPrintSolution();
-        asiaFishModel.solveAndPrintNumberOfSolutions();
-        asiaFishModel.solveAndPrintSolution();
+        europeFishModel.addRandomConstraints(30);
+        europeFishModel.solveAndPrintNumberOfSolutions();
 
-        europeFishModel.solveXNumberOfTimes(10);
-        naFishModel.solveXNumberOfTimes(10);
-        asiaFishModel.solveXNumberOfTimes(10);
-    
+        NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
+        naFishModel.solveAndPrintNumberOfSolutions();
+
+        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 15);
+        asiaFishModel.solveAndPrintNumberOfSolutions();
     }
 }
