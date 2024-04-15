@@ -1,4 +1,7 @@
-package fish.model;
+package fish.model.impl;
+
+import fish.model.base.BaseModel;
+import fish.model.base.Region;
 
 public class NorthAmericaFishModel extends BaseModel {
 

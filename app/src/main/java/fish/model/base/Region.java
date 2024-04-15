@@ -1,4 +1,4 @@
-package fish.model;
+package fish.model.base;
 
 public enum Region {
     EUROPE(0),
