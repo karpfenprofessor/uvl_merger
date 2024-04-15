@@ -12,7 +12,7 @@ public class App {
     public static void main(String[] args) {
         EuropeFishModel europeFishModel = new EuropeFishModel();
         europeFishModel.solveAndPrintNumberOfSolutions();
-        europeFishModel.addRandomConstraints(30);
+        europeFishModel.addRandomConstraints(20);
         europeFishModel.solveAndPrintNumberOfSolutions();
 
         NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);

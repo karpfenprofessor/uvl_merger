@@ -2,8 +2,6 @@ package fish.model.base;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.constraints.Constraint;
-
 import java.util.Random;
 import org.chocosolver.solver.variables.IntVar;
 
@@ -32,25 +30,22 @@ public abstract class BaseModel {
     private boolean isConstraintInModel(String description) {
         if (!constraintsSet.contains(description)) {
             constraintsSet.add(description);
-            return true;
+            /*System.out.println(
+                "[OK] Constraint will be put in the model " + regionModel.printRegion() + ": " + description);*/
+            return false;
         }
 
-        System.out.println(
-                "[ERR] Constraint already in the model " + regionModel.printRegion() + ": " + description);
-        return false;
+        /*System.out.println(
+                "[ERR] Constraint already in the model " + regionModel.printRegion() + ": " + description);*/
+        return true;
     }
 
-    public Constraint createConstraint(IntVar x, int xIdx, String operator) {
-       return model.arithm(x, operator, xIdx);
-    }
-
-    public void addIfConstraintsToModel(Constraint x, Constraint y, String operator) {
-        model.ifThen(x,y);
+    public String getRandomConstraintDescription(IntVar a, int ax, IntVar b, int bx) {
+        return "(" + a + "=" + ax + ")=(" + b + "=" + bx + ")";
     }
 
     public void addRandomConstraints(int numberOfConstraints) {
         long constraintsInModel = model.getNbCstrs();
-        String constraintDescription = null;
         System.out.println("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
                 + " | CONSTRAINTS: " + constraintsInModel);
         Random random = new Random(12345);
@@ -60,8 +55,7 @@ public abstract class BaseModel {
                 case 0: // Constraint on habitat based on family
                     int familyIndex = random.nextInt(4); // Assuming 4 fish families
                     int habitatType = random.nextInt(2); // 0 for Freshwater, 1 for Saltwater
-                    constraintDescription = familyIndex + "=" + habitatType;
-                    if(!isConstraintInModel(constraintDescription)) {
+                    if(!isConstraintInModel(getRandomConstraintDescription(fishFamily, familyIndex, habitat, habitatType))) {
                         model.ifThen(model.arithm(fishFamily, "=", familyIndex),
                             model.arithm(habitat, "=", habitatType));
                     } else {
@@ -71,8 +65,7 @@ public abstract class BaseModel {
                 case 1: // Constraint on diet based on size
                     int sizeIndex = random.nextInt(3); // 0 for S, 1 for M, 2 for L
                     int dietType = random.nextInt(3); // 0 for Herbivore, 1 for Omnivore, 2 for Carnivore
-                    constraintDescription = sizeIndex + "=" + dietType;
-                    if(!isConstraintInModel(constraintDescription)) {
+                    if(!isConstraintInModel(getRandomConstraintDescription(size, sizeIndex, diet, dietType))) {
                         model.ifThen(model.arithm(size, "=", sizeIndex),
                             model.arithm(diet, "=", dietType));
                     } else {
@@ -82,8 +75,7 @@ public abstract class BaseModel {
                 case 2: // Constraint linking size to habitat
                     int sizeForHabitat = random.nextInt(3); // Size
                     int habitatForSize = random.nextInt(2); // Habitat
-                    constraintDescription = sizeForHabitat + "=" + habitatForSize;
-                    if(!isConstraintInModel(constraintDescription)) {
+                    if(!isConstraintInModel(getRandomConstraintDescription(size, sizeForHabitat, habitat, habitatForSize))) {
                         model.ifThen(model.arithm(size, "=", sizeForHabitat),
                             model.arithm(habitat, "=", habitatForSize));
                     } else {
@@ -93,8 +85,7 @@ public abstract class BaseModel {
                 case 3: // Species to habitat constraint
                     int speciesIndex = random.nextInt(8); // Assuming 8 species
                     int speciesHabitat = random.nextInt(2); // Habitat
-                    constraintDescription = speciesIndex + "=" + speciesHabitat;
-                    if(!isConstraintInModel(constraintDescription)) {
+                    if(!isConstraintInModel(getRandomConstraintDescription(fishSpecies, speciesIndex, habitat, speciesHabitat))) {
                         model.ifThen(model.arithm(fishSpecies, "=", speciesIndex),
                             model.arithm(habitat, "=", speciesHabitat));
                     } else {
@@ -104,8 +95,7 @@ public abstract class BaseModel {
                 case 4: // Diet restrictions based on species
                     int speciesForDiet = random.nextInt(8); // Species
                     int dietForSpecies = random.nextInt(3); // Diet
-                    constraintDescription = speciesForDiet + "=" + dietForSpecies;
-                    if(!isConstraintInModel(constraintDescription)) {
+                    if(!isConstraintInModel(getRandomConstraintDescription(fishSpecies, speciesForDiet, diet, dietForSpecies))) {
                         model.ifThen(model.arithm(fishSpecies, "=", speciesForDiet),
                             model.arithm(diet, "=", dietForSpecies));
                     } else {
