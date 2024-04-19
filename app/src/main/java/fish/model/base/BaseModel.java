@@ -35,13 +35,12 @@ public abstract class BaseModel {
     private boolean isConstraintInModel(String description) {
         if (!constraintsSet.contains(description)) {
             constraintsSet.add(description);
-            /*System.out.println(
-                "[OK] Constraint will be put in the model " + regionModel.printRegion() + ": " + description);*/
+            logger.info("[OK] Constraint will be put in the model " + printRegion() + ": " + description);
+
             return false;
         }
 
-        /*System.out.println(
-                "[ERR] Constraint already in the model " + regionModel.printRegion() + ": " + description);*/
+        logger.info("[ERR] Constraint already in the model " + printRegion() + ": " + description);
         return true;
     }
 
@@ -49,9 +48,13 @@ public abstract class BaseModel {
         return "(" + a + "=" + ax + ")=(" + b + "=" + bx + ")";
     }
 
+    public String printRegion() {
+        return regionModel.printRegion();
+    }
+
     public void addRandomConstraints(int numberOfConstraints) {
         long constraintsInModel = model.getNbCstrs();
-        System.out.println("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
+        logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
                 + " | CONSTRAINTS: " + constraintsInModel);
         Random random = new Random(12345);
         for (int i = 0; i < numberOfConstraints; i++) {
@@ -60,9 +63,10 @@ public abstract class BaseModel {
                 case 0: // Constraint on habitat based on family
                     int familyIndex = random.nextInt(4); // Assuming 4 fish families
                     int habitatType = random.nextInt(2); // 0 for Freshwater, 1 for Saltwater
-                    if(!isConstraintInModel(getRandomConstraintDescription(fishFamily, familyIndex, habitat, habitatType))) {
+                    if (!isConstraintInModel(
+                            getRandomConstraintDescription(fishFamily, familyIndex, habitat, habitatType))) {
                         model.ifThen(model.arithm(fishFamily, "=", familyIndex),
-                            model.arithm(habitat, "=", habitatType));
+                                model.arithm(habitat, "=", habitatType));
                     } else {
                         i--;
                     }
@@ -70,9 +74,9 @@ public abstract class BaseModel {
                 case 1: // Constraint on diet based on size
                     int sizeIndex = random.nextInt(3); // 0 for S, 1 for M, 2 for L
                     int dietType = random.nextInt(3); // 0 for Herbivore, 1 for Omnivore, 2 for Carnivore
-                    if(!isConstraintInModel(getRandomConstraintDescription(size, sizeIndex, diet, dietType))) {
+                    if (!isConstraintInModel(getRandomConstraintDescription(size, sizeIndex, diet, dietType))) {
                         model.ifThen(model.arithm(size, "=", sizeIndex),
-                            model.arithm(diet, "=", dietType));
+                                model.arithm(diet, "=", dietType));
                     } else {
                         i--;
                     }
@@ -80,9 +84,10 @@ public abstract class BaseModel {
                 case 2: // Constraint linking size to habitat
                     int sizeForHabitat = random.nextInt(3); // Size
                     int habitatForSize = random.nextInt(2); // Habitat
-                    if(!isConstraintInModel(getRandomConstraintDescription(size, sizeForHabitat, habitat, habitatForSize))) {
+                    if (!isConstraintInModel(
+                            getRandomConstraintDescription(size, sizeForHabitat, habitat, habitatForSize))) {
                         model.ifThen(model.arithm(size, "=", sizeForHabitat),
-                            model.arithm(habitat, "=", habitatForSize));
+                                model.arithm(habitat, "=", habitatForSize));
                     } else {
                         i--;
                     }
@@ -90,9 +95,10 @@ public abstract class BaseModel {
                 case 3: // Species to habitat constraint
                     int speciesIndex = random.nextInt(8); // Assuming 8 species
                     int speciesHabitat = random.nextInt(2); // Habitat
-                    if(!isConstraintInModel(getRandomConstraintDescription(fishSpecies, speciesIndex, habitat, speciesHabitat))) {
+                    if (!isConstraintInModel(
+                            getRandomConstraintDescription(fishSpecies, speciesIndex, habitat, speciesHabitat))) {
                         model.ifThen(model.arithm(fishSpecies, "=", speciesIndex),
-                            model.arithm(habitat, "=", speciesHabitat));
+                                model.arithm(habitat, "=", speciesHabitat));
                     } else {
                         i--;
                     }
@@ -100,9 +106,10 @@ public abstract class BaseModel {
                 case 4: // Diet restrictions based on species
                     int speciesForDiet = random.nextInt(8); // Species
                     int dietForSpecies = random.nextInt(3); // Diet
-                    if(!isConstraintInModel(getRandomConstraintDescription(fishSpecies, speciesForDiet, diet, dietForSpecies))) {
+                    if (!isConstraintInModel(
+                            getRandomConstraintDescription(fishSpecies, speciesForDiet, diet, dietForSpecies))) {
                         model.ifThen(model.arithm(fishSpecies, "=", speciesForDiet),
-                            model.arithm(diet, "=", dietForSpecies));
+                                model.arithm(diet, "=", dietForSpecies));
                     } else {
                         i--;
                     }
@@ -111,7 +118,7 @@ public abstract class BaseModel {
         }
 
         constraintsInModel = model.getNbCstrs();
-        System.out.println("END  |ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
+        logger.info("END  |ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
                 + " | CONSTRAINTS: " + constraintsInModel);
 
     }

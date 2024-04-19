@@ -5,3 +5,4 @@
 build
 .vscode/launch.json
 app/bin/*
+logs/app.log

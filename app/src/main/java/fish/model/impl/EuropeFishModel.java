@@ -26,16 +26,16 @@ public class EuropeFishModel extends BaseModel {
                                                                  // Halibut: 7
 
                 if (addConstraints && number == 0) {
-                        System.out.println("START|ADD-LOGICAL|-> " + regionModel.printRegion()
+                        logger.info("START|ADD-LOGICAL|-> " + regionModel.printRegion()
                                         + " | CONSTRAINTS: " + model.getNbCstrs());
                         addLogicalConstraints();
-                        System.out.println("END  |ADD-LOGICAL|-> " + regionModel.printRegion()
+                        logger.info("END  |ADD-LOGICAL|-> " + regionModel.printRegion()
                                         + " | CONSTRAINTS: " + model.getNbCstrs());
                 } else if (addConstraints) {
                         addRandomConstraints(number);
                 }
 
-                System.out.println("CREATED Model " + regionModel.printRegion() + " with " + model.getNbCstrs()
+                logger.info("CREATED Model " + regionModel.printRegion() + " with " + model.getNbCstrs()
                                 + " constraints.");
         }
 
