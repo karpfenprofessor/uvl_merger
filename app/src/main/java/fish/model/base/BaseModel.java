@@ -31,6 +31,7 @@ public abstract class BaseModel {
         model = new Model();
         constraintsSet = new HashSet<>();
         logger = LogManager.getLogger(this.getClass());
+        logger.debug("Created new Model");
     }
 
     private boolean isConstraintInModel(String description) {
