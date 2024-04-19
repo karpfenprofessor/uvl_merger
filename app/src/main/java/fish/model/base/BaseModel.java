@@ -8,6 +8,9 @@ import org.chocosolver.solver.variables.IntVar;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public abstract class BaseModel {
 
     // Define variables
@@ -21,10 +24,12 @@ public abstract class BaseModel {
     public Model model;
     public Region regionModel;
     public Set<String> constraintsSet;
+    protected final Logger logger;
 
     public BaseModel() {
         model = new Model();
         constraintsSet = new HashSet<>();
+        logger = LogManager.getLogger(this.getClass());
     }
 
     private boolean isConstraintInModel(String description) {
