@@ -31,13 +31,12 @@ public abstract class BaseModel {
         model = new Model();
         constraintsSet = new HashSet<>();
         logger = LogManager.getLogger(this.getClass());
-        logger.debug("Created new Model");
     }
 
     private boolean isConstraintInModel(String description) {
         if (!constraintsSet.contains(description)) {
             constraintsSet.add(description);
-            logger.info("[OK] Constraint will be put in the model " + printRegion() + ": " + description);
+            //logger.info("[OK] Constraint will be put in the model " + printRegion() + ": " + description);
 
             return false;
         }
@@ -77,8 +76,8 @@ public abstract class BaseModel {
         long constraintsInModel = model.getNbCstrs();
         String operator1 = null;
         String operator2 = null;
-        logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
-                + " | CONSTRAINTS: " + constraintsInModel);
+        //logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
+          //      + " | CONSTRAINTS: " + constraintsInModel);
        
         for (int i = 0; i < numberOfConstraints; i++) {
             int constraintType = random.nextInt(5); // Assume 5 different types of constraints
@@ -151,8 +150,8 @@ public abstract class BaseModel {
         }
 
         constraintsInModel = model.getNbCstrs();
-        logger.info("END  |ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
-                + " | CONSTRAINTS: " + constraintsInModel);
+        //logger.info("END  |ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
+          //      + " | CONSTRAINTS: " + constraintsInModel);
 
     }
 

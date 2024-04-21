@@ -6,19 +6,27 @@ package solve;
 import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
 import fish.model.impl.NorthAmericaFishModel;
+import fish.merge.Checker;
 
 public class App {
 
     public static void main(String[] args) {
-        EuropeFishModel europeFishModel = new EuropeFishModel();
+        /*EuropeFishModel europeFishModel = new EuropeFishModel();
         europeFishModel.solveAndPrintNumberOfSolutions();
         europeFishModel.addRandomConstraints(20);
         europeFishModel.solveAndPrintNumberOfSolutions();
 
         NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
-        naFishModel.solveAndPrintNumberOfSolutions();
+        naFishModel.solveAndPrintNumberOfSolutions();*/
 
-        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 15);
+        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 10);
         asiaFishModel.solveAndPrintNumberOfSolutions();
+        Checker.checkConsistency(asiaFishModel);
+        Checker.checkConsistencyByPropagation(asiaFishModel);
+        
+        EuropeFishModel europeFishModel = new EuropeFishModel(true, 5);
+        europeFishModel.solveAndPrintNumberOfSolutions();
+        Checker.checkConsistency(europeFishModel);
+        Checker.checkConsistencyByPropagation(europeFishModel);
     }
 }
