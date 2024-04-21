@@ -1,8 +1,6 @@
 package fish.merge;
 
-import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.exception.ContradictionException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
