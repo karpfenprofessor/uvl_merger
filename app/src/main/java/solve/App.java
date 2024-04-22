@@ -5,8 +5,9 @@ package solve;
 
 import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
-import fish.model.impl.NorthAmericaFishModel;
+import fish.model.impl.MergedModel;
 import fish.merge.Checker;
+import fish.merge.ModelMerger;
 
 public class App {
 
@@ -19,14 +20,19 @@ public class App {
         NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
         naFishModel.solveAndPrintNumberOfSolutions();*/
 
-        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 10);
+        AsiaFishModel asiaFishModel = new AsiaFishModel(false, 0);
         asiaFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(asiaFishModel);
         Checker.checkConsistencyByPropagation(asiaFishModel);
         
-        EuropeFishModel europeFishModel = new EuropeFishModel(true, 5);
+        EuropeFishModel europeFishModel = new EuropeFishModel(false, 0);
         europeFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(europeFishModel);
         Checker.checkConsistencyByPropagation(europeFishModel);
+
+        MergedModel m = ModelMerger.mergeModels(asiaFishModel, europeFishModel);
+        Checker.checkConsistency(m);
+        m.solveAndPrintNumberOfSolutions();
+
     }
 }

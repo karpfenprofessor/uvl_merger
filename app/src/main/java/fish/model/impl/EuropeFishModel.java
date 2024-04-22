@@ -14,7 +14,7 @@ public class EuropeFishModel extends BaseModel {
                 regionModel = Region.EUROPE;
 
                 // Initialize variables
-                region = model.intVar("region", 0, 0); // Europe
+                region = model.intVar("region", 0, 2); // Europe
                 habitat = model.intVar("habitat", 0, 1); // Freshwater: 0, Saltwater: 1
                 size = model.intVar("size", 0, 2); // S: 0, M: 1, L: 2
                 diet = model.intVar("diet", 0, 2); // Herbivore: 0, Omnivore: 1, Carnivore: 2
@@ -24,6 +24,7 @@ public class EuropeFishModel extends BaseModel {
                                                                  // European Perch: 4, Pikeperch: 5, Atlantic Cod: 6,
                                                                  // Atlantic
                                                                  // Halibut: 7
+
 
                 if (addConstraints && number == 0) {
                         logger.info("START|ADD-LOGICAL|-> " + regionModel.printRegion()

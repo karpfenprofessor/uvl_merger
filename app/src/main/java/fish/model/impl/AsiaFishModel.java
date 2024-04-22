@@ -14,7 +14,7 @@ public class AsiaFishModel extends BaseModel {
                 regionModel = Region.ASIA;
 
                 // Initialize variables
-                region = model.intVar("region", 2, 2); // Asia
+                region = model.intVar("region", 0, 2); // Asia
                 habitat = model.intVar("habitat", 0, 1); // Freshwater: 0, Saltwater: 1
                 size = model.intVar("size", 0, 2); // S: 0, M: 1, L: 2
                 diet = model.intVar("diet", 0, 2); // Herbivore: 0, Omnivore: 1, Carnivore: 2

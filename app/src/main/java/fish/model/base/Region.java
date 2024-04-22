@@ -3,7 +3,8 @@ package fish.model.base;
 public enum Region {
     EUROPE(0),
     NORTH_AMERICA(1),
-    ASIA(2);
+    ASIA(2),
+    MERGED(3);
 
     private final int value;
 
@@ -23,6 +24,8 @@ public enum Region {
                 return "NA";
             case 2:
                 return "ASIA";
+            case 3:
+                return "MERGED";
             default:
                 return "err";
         }
