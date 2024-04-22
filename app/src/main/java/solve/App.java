@@ -20,19 +20,19 @@ public class App {
         NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
         naFishModel.solveAndPrintNumberOfSolutions();*/
 
-        AsiaFishModel asiaFishModel = new AsiaFishModel(false, 0);
+        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 2);
         asiaFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(asiaFishModel);
         Checker.checkConsistencyByPropagation(asiaFishModel);
         
-        EuropeFishModel europeFishModel = new EuropeFishModel(false, 0);
+        EuropeFishModel europeFishModel = new EuropeFishModel(true, 2);
         europeFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(europeFishModel);
         Checker.checkConsistencyByPropagation(europeFishModel);
 
         MergedModel m = ModelMerger.mergeModels(asiaFishModel, europeFishModel);
         Checker.checkConsistency(m);
-        m.solveAndPrintNumberOfSolutions();
+        //m.solveAndPrintNumberOfSolutions();
 
     }
 }

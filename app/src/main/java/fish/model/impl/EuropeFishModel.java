@@ -18,8 +18,8 @@ public class EuropeFishModel extends BaseModel {
                 habitat = model.intVar("habitat", 0, 1); // Freshwater: 0, Saltwater: 1
                 size = model.intVar("size", 0, 2); // S: 0, M: 1, L: 2
                 diet = model.intVar("diet", 0, 2); // Herbivore: 0, Omnivore: 1, Carnivore: 2
-                fishFamily = model.intVar("fishFamily", 0, 3); // Salmonidae: 0, Cyprinidae: 1, Percidae: 2, Gadidae: 3
-                fishSpecies = model.intVar("fishSpecies", 0, 7); // Grayling: 0, Brown Trout: 1, Common Carp: 2, Roach:
+                fishFamily = model.intVar("fishFamily", 4, 7); // Salmonidae: 0, Cyprinidae: 1, Percidae: 2, Gadidae: 3
+                fishSpecies = model.intVar("fishSpecies", 8, 15); // Grayling: 0, Brown Trout: 1, Common Carp: 2, Roach:
                                                                  // 3,
                                                                  // European Perch: 4, Pikeperch: 5, Atlantic Cod: 6,
                                                                  // Atlantic

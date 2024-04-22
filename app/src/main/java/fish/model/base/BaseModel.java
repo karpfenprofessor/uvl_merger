@@ -28,7 +28,7 @@ public abstract class BaseModel {
     public Region regionModel;
     protected Set<String> constraintsSet;
     protected final Logger logger;
-    private Random random = new Random(12345);
+    private Random random = new Random();
 
     public BaseModel() {
         model = new Model();
@@ -244,13 +244,13 @@ public abstract class BaseModel {
                 + " | Species: " + getFishSpecies(fishSpecies.getValue()) + "\n");
     }
 
-    protected abstract String getHabitat(int value);
+    public abstract String getHabitat(int value);
 
-    protected abstract String getSize(int value);
+    public abstract String getSize(int value);
 
-    protected abstract String getDiet(int value);
+    public abstract String getDiet(int value);
 
-    protected abstract String getFishFamily(int value);
+    public abstract String getFishFamily(int value);
 
-    protected abstract String getFishSpecies(int value);
+    public abstract String getFishSpecies(int value);
 }

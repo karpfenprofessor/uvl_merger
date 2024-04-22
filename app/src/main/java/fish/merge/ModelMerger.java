@@ -27,21 +27,29 @@ public class ModelMerger {
         Model model2 = baseModel2.getModel();
         Model mergedModel = mergedBaseModel.getModel();
 
-        // Transfer variables and constraints from the first model
         for (IntVar var : model1.retrieveIntVars(true)) {
             IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
             variablesMap.put(var.getName(), mergedVar);
-            //logger.debug("Var of " + baseModel1.printRegion() + ": " + var.getName() + " lb: " + var.getLB() + " ub: "
-              //      + var.getUB());
         }
 
         // Transfer variables from the second model, unify if they already exist
         for (IntVar var : model2.retrieveIntVars(true)) {
-            IntVar mergedVar = variablesMap.getOrDefault(var.getName(),
-                    mergedModel.intVar(var.getName(), var.getLB(), var.getUB())); // Create or get existing
-            variablesMap.put(var.getName(), mergedVar); // Ensure map is updated
-            //logger.debug("Var of " + baseModel2.printRegion() + ": " + var.getName() + " lb: " + var.getLB() + " ub: "
-              //      + var.getUB());
+            if (variablesMap.containsKey(var.getName())) {
+                // Get the existing variable from the map
+                IntVar existingVar = variablesMap.get(var.getName());
+                // Calculate the union of domains
+                int lowerBound = Math.min(existingVar.getLB(), var.getLB());
+                int upperBound = Math.max(existingVar.getUB(), var.getUB());
+                // Re-define the variable in the merged model with the new domain
+                IntVar mergedVar = mergedModel.intVar(var.getName(), lowerBound, upperBound);
+                // Update the map
+                variablesMap.put(var.getName(), mergedVar);
+                // Remove the previous variable definition from the model to avoid confusion
+            } else {
+                // Create new variable if it doesn't exist
+                IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
+                variablesMap.put(var.getName(), mergedVar);
+            }
         }
 
         printAllVariables(variablesMap);

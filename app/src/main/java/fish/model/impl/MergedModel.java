@@ -18,31 +18,31 @@ public class MergedModel extends BaseModel {
     }
 
     @Override
-    protected String getHabitat(int value) {
+    public String getHabitat(int value) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getHabitat'");
     }
 
     @Override
-    protected String getSize(int value) {
+    public String getSize(int value) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getSize'");
     }
 
     @Override
-    protected String getDiet(int value) {
+    public String getDiet(int value) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getDiet'");
     }
 
     @Override
-    protected String getFishFamily(int value) {
+    public String getFishFamily(int value) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getFishFamily'");
     }
 
     @Override
-    protected String getFishSpecies(int value) {
+    public String getFishSpecies(int value) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getFishSpecies'");
     }

@@ -18,9 +18,9 @@ public class AsiaFishModel extends BaseModel {
                 habitat = model.intVar("habitat", 0, 1); // Freshwater: 0, Saltwater: 1
                 size = model.intVar("size", 0, 2); // S: 0, M: 1, L: 2
                 diet = model.intVar("diet", 0, 2); // Herbivore: 0, Omnivore: 1, Carnivore: 2
-                fishFamily = model.intVar("fishFamily", 0, 3); // Cyprinidae: 0, Scombridae: 1, Lutjanidae: 2,
+                fishFamily = model.intVar("fishFamily", 8, 11); // Cyprinidae: 0, Scombridae: 1, Lutjanidae: 2,
                                                                // Cichlidae: 3
-                fishSpecies = model.intVar("fishSpecies", 0, 7); // Grass Carp: 0, Silver Carp: 1, Yellowfin Tuna: 2,
+                fishSpecies = model.intVar("fishSpecies", 16, 23); // Grass Carp: 0, Silver Carp: 1, Yellowfin Tuna: 2,
                                                                  // Skipjack
                                                                  // Tuna: 3, Red Snapper: 4, Flame Snapper: 5, Tilapia:
                                                                  // 6,
