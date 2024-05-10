@@ -39,7 +39,7 @@ public abstract class BaseModel {
     private boolean isConstraintInModel(String description) {
         if (!constraintsSet.contains(description)) {
             constraintsSet.add(description);
-            //logger.info("[OK] Constraint will be put in the model " + printRegion() + ": " + description);
+            logger.info("[OK] Constraint will be put in the model " + printRegion() + ": " + description);
 
             return false;
         }
@@ -112,7 +112,7 @@ public abstract class BaseModel {
             int constraintType = random.nextInt(5); // Assume 5 different types of constraints
             switch (constraintType) {
                 case 0: // Constraint on habitat based on family
-                    int familyIndex = random.nextInt(4); // Assuming 4 fish families
+                    int familyIndex = random.nextInt(fishFamily.getLB(), fishFamily.getUB()); // Assuming 4 fish families
                     int habitatType = random.nextInt(2); // 0 for Freshwater, 1 for Saltwater
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
@@ -150,7 +150,7 @@ public abstract class BaseModel {
                     }
                     break;
                 case 3: // Species to habitat constraint
-                    int speciesIndex = random.nextInt(8); // Assuming 8 species
+                    int speciesIndex = random.nextInt(fishSpecies.getLB(), fishSpecies.getUB()); // Assuming 8 species
                     int speciesHabitat = random.nextInt(2); // Habitat
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
@@ -163,7 +163,7 @@ public abstract class BaseModel {
                     }
                     break;
                 case 4: // Diet restrictions based on species
-                    int speciesForDiet = random.nextInt(8); // Species
+                    int speciesForDiet = random.nextInt(fishSpecies.getLB(), fishSpecies.getUB()); // Species
                     int dietForSpecies = random.nextInt(3); // Diet
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
@@ -245,12 +245,8 @@ public abstract class BaseModel {
     }
 
     public abstract String getHabitat(int value);
-
     public abstract String getSize(int value);
-
     public abstract String getDiet(int value);
-
     public abstract String getFishFamily(int value);
-
     public abstract String getFishSpecies(int value);
 }
