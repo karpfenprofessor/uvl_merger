@@ -11,9 +11,8 @@ import fish.merge.ModelMerger;
 public class App2 {
 
     public static void main(String[] args) {
-        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 2);
+        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 1);
         
         ModelMerger.contextualizeConstraints(asiaFishModel.getModel(), "region", Region.ASIA);
-
     }
 }

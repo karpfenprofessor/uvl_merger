@@ -6,6 +6,8 @@ import java.util.Map.Entry;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.constraints.Propagator;
+import org.chocosolver.solver.exception.ContradictionException;
+import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
 import org.chocosolver.util.tools.StringUtils;
@@ -16,6 +18,8 @@ import fish.model.impl.MergedModel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y;
 
 public class ModelMerger {
 
@@ -94,6 +98,7 @@ public class ModelMerger {
      * @param regionId      The integer ID of the region for which constraints
      *                      should apply.
      * @return A new Choco model with contextualized constraints.
+     * @throws ContradictionException 
      */
     public static Model contextualizeConstraints(Model originalModel, String variableName, Region region) {
         // Create a new model to hold the contextualized constraints
@@ -105,23 +110,21 @@ public class ModelMerger {
             variablesMap.put(var.getName(), mergedVar);
         }
 
-        // printAllVariables(variablesMap);
+        printAllVariables(variablesMap);
 
         for (Constraint c : originalModel.getCstrs()) {
             logger.info("constraint: " + c.toString());
             if (c.getName().contains("ARITHM")) {
-                for (Propagator p : c.getPropagators()) {
-                    logger.info("  propagator: " + p.toString());
-
-                    IntVar var1 = variablesMap.get(p.getVar(0).getName());
-                    IntVar var2 = variablesMap.get(p.getVar(1).getName());
-                    Constraint newConstraint = newModel.arithm(var1, "=", var2);
-                     
-                    // Contextualize the constraint: apply it only if regionVar matches the current region
-                    newModel.ifThen(newModel.arithm(variablesMap.get(variableName), "=", region.ordinal()), newConstraint);     
-                }
+                logger.info("add arithm region constraint");
+                if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
+                    logger.info("constraint match");
+                } 
+                
+                originalModel.unpost(c);
+                Constraint cNew = Constraint.merge("ARITHM", c);
+                originalModel.ifThen(newModel.arithm(variablesMap.get(variableName), "=", region.ordinal()), cNew);
             } else {
-                //newModel.post(c);
+                logger.info("add reif constraint");
             }
         }
 
@@ -129,5 +132,4 @@ public class ModelMerger {
 
         return newModel;
     }
-
 }
