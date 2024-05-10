@@ -12,19 +12,8 @@ import fish.merge.ModelMerger;
 public class App {
 
     public static void main(String[] args) {
-        /*EuropeFishModel europeFishModel = new EuropeFishModel();
-        europeFishModel.solveAndPrintNumberOfSolutions();
-        europeFishModel.addRandomConstraints(20);
-        europeFishModel.solveAndPrintNumberOfSolutions();
-
-        NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
-        naFishModel.solveAndPrintNumberOfSolutions();*/
-
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 2);
-        asiaFishModel.solveAndPrintNumberOfSolutions();
-        Checker.checkConsistency(asiaFishModel);
-        Checker.checkConsistencyByPropagation(asiaFishModel);
-        
+               
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 2);
         europeFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(europeFishModel);

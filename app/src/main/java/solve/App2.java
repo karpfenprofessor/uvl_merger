@@ -12,11 +12,8 @@ public class App2 {
 
     public static void main(String[] args) {
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 2);
-        asiaFishModel.solveAndPrintNumberOfSolutions();
-        Checker.checkConsistency(asiaFishModel);
-        Checker.checkConsistencyByPropagation(asiaFishModel);
         
-        ModelMerger.contextualizeConstraints(asiaFishModel.getModel(), Region.ASIA);
+        ModelMerger.contextualizeConstraints(asiaFishModel.getModel(), "region", Region.ASIA);
 
     }
 }

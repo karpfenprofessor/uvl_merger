@@ -7,6 +7,9 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.constraints.Propagator;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.Variable;
+import org.chocosolver.util.tools.StringUtils;
+
 import fish.model.base.BaseModel;
 import fish.model.base.Region;
 import fish.model.impl.MergedModel;
@@ -21,7 +24,8 @@ public class ModelMerger {
     public static MergedModel mergeModels(BaseModel baseModel1, BaseModel baseModel2) {
         MergedModel mergedBaseModel = new MergedModel(false, 0);
 
-        // Map to store unified variables, ensuring variables with the same name are the same in the merged model
+        // Map to store unified variables, ensuring variables with the same name are the
+        // same in the merged model
         HashMap<String, IntVar> variablesMap = new HashMap<>();
         Model model1 = baseModel1.getModel();
         Model model2 = baseModel2.getModel();
@@ -34,7 +38,7 @@ public class ModelMerger {
 
         // Transfer variables from the second model, unify if they already exist
         for (IntVar var : model2.retrieveIntVars(true)) {
-            if (variablesMap.containsKey(var.getName())) {
+            if (variablesMap.containsKey(var.getName()) && !var.getName().contains("REIF_")) {
                 // Get the existing variable from the map
                 IntVar existingVar = variablesMap.get(var.getName());
                 // Calculate the union of domains
@@ -43,11 +47,15 @@ public class ModelMerger {
                 // Re-define the variable in the merged model with the new domain
                 IntVar mergedVar = mergedModel.intVar(var.getName(), lowerBound, upperBound);
                 // Update the map
+                logger.info("m2 var dupl: " + mergedVar.toString());
                 variablesMap.put(var.getName(), mergedVar);
                 // Remove the previous variable definition from the model to avoid confusion
+            } else if (variablesMap.containsKey(var.getName()) && var.getName().contains("REIF_")) {
+
             } else {
                 // Create new variable if it doesn't exist
                 IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
+                logger.info("m1 var new: " + mergedVar.toString());
                 variablesMap.put(var.getName(), mergedVar);
             }
         }
@@ -72,15 +80,22 @@ public class ModelMerger {
         }
     }
 
+    private static void printAllConstraints(Model m) {
+        for (Constraint c : m.getCstrs()) {
+            logger.debug(c.toString());
+        }
+    }
+
     /**
      * Contextualizes all constraints in a model based on a specified region.
      *
      * @param originalModel The original Choco model.
-     * @param region The variable representing the region.
-     * @param regionId The integer ID of the region for which constraints should apply.
+     * @param region        The variable representing the region.
+     * @param regionId      The integer ID of the region for which constraints
+     *                      should apply.
      * @return A new Choco model with contextualized constraints.
      */
-    public static Model contextualizeConstraints(Model originalModel, Region region) {
+    public static Model contextualizeConstraints(Model originalModel, String variableName, Region region) {
         // Create a new model to hold the contextualized constraints
         HashMap<String, IntVar> variablesMap = new HashMap<>();
         Model newModel = new Model(originalModel.getName() + "_contextualized");
@@ -90,20 +105,27 @@ public class ModelMerger {
             variablesMap.put(var.getName(), mergedVar);
         }
 
-        //printAllVariables(variablesMap);
+        // printAllVariables(variablesMap);
 
-        // Here we manually translate each constraint
-        // Example: if you know your original model only uses arithmetic constraints
         for (Constraint c : originalModel.getCstrs()) {
-            // Extract details about the constraint
-            // (you need to do this manually based on your knowledge about what constraints are in your model)
-            // For illustration, assume we know how to translate the constraint
-            // Example simple constraint replication (assuming it's just greater-than between first two vars):
             logger.info("constraint: " + c.toString());
-            for(Propagator p : c.getPropagators()) {
-                //logger.info("  propagator: " + p.toString());
+            if (c.getName().contains("ARITHM")) {
+                for (Propagator p : c.getPropagators()) {
+                    logger.info("  propagator: " + p.toString());
+
+                    IntVar var1 = variablesMap.get(p.getVar(0).getName());
+                    IntVar var2 = variablesMap.get(p.getVar(1).getName());
+                    Constraint newConstraint = newModel.arithm(var1, "=", var2);
+                     
+                    // Contextualize the constraint: apply it only if regionVar matches the current region
+                    newModel.ifThen(newModel.arithm(variablesMap.get(variableName), "=", region.ordinal()), newConstraint);     
+                }
+            } else {
+                //newModel.post(c);
             }
         }
+
+        printAllConstraints(newModel);
 
         return newModel;
     }
