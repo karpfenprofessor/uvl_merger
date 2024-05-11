@@ -39,9 +39,11 @@ public class Checker {
         try {
             model.getSolver().propagate();
             logger.debug("checkConsistencyByPropagation for model " + model.printRegion() + ": true");
+            model.getSolver().reset();
             return true; // Propagation successful, no inconsistencies detected
         } catch (ContradictionException e) {
             logger.debug("checkConsistencyByPropagation for model " + model.printRegion() + ": false");
+            model.getSolver().reset();
             return false; // Propagation failed, inconsistency detected
         }
     }

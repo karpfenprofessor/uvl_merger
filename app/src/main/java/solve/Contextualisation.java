@@ -5,7 +5,7 @@ package solve;
 
 import fish.model.base.Region;
 import fish.model.impl.AsiaFishModel;
-
+import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
 public class Contextualisation {
@@ -13,7 +13,10 @@ public class Contextualisation {
     public static void main(String[] args) {
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 0);
         asiaFishModel.solveAndPrintNumberOfSolutions();
-        AsiaFishModel contextAsiaModel = (AsiaFishModel) ModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
-        contextAsiaModel.solveAndPrintNumberOfSolutions();
+       
+        ModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
+        asiaFishModel.solveAndPrintNumberOfSolutions();
+        Checker.checkConsistency(asiaFishModel);
+        Checker.checkConsistencyByPropagation(asiaFishModel);
     }
 }

@@ -103,26 +103,23 @@ public class ModelMerger {
      * @return A new Choco model with contextualized constraints.
      * @throws ContradictionException 
      */
-    public static BaseModel contextualizeConstraints(BaseModel originalModel, String variableName, Region region) {
-        BaseModel newModel = originalModel;
+    public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
         //printAllVariables(newModel);
         //printAllConstraints(newModel);
 
-        for (Constraint c : newModel.getModel().getCstrs()) {
+        for (Constraint c : model.getModel().getCstrs()) {
             if (c.getName().contains("ARITHM")) {
                 if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
                 } 
                 
-                newModel.getModel().unpost(c);
+                model.getModel().unpost(c);
                 Constraint cNew = Constraint.merge("ARITHM", c);
-                newModel.getModel().ifThen(newModel.getModel().arithm(getVariablesAsMap(newModel.getModel()).get(variableName), "=", region.ordinal()), cNew);
+                model.getModel().ifThen(model.getModel().arithm(getVariablesAsMap(model.getModel()).get(variableName), "=", region.ordinal()), cNew);
             } 
         }
 
         //printAllVariables(newModel);
         //printAllConstraints(newModel);
-
-        return newModel;
     }
 
     private static HashMap<String, IntVar> getVariablesAsMap(Model m) {

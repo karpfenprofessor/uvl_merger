@@ -12,16 +12,18 @@ import fish.merge.ModelMerger;
 public class Merge {
 
     public static void main(String[] args) {
-        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 2);
-               
-        EuropeFishModel europeFishModel = new EuropeFishModel(true, 2);
+        AsiaFishModel asiaFishModel = new AsiaFishModel(true, 0);
+        asiaFishModel.solveAndPrintNumberOfSolutions();
+        Checker.checkConsistency(asiaFishModel);
+        Checker.checkConsistencyByPropagation(asiaFishModel);
+        EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
         europeFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(europeFishModel);
         Checker.checkConsistencyByPropagation(europeFishModel);
 
         MergedModel m = ModelMerger.mergeModels(asiaFishModel, europeFishModel);
         Checker.checkConsistency(m);
-        //m.solveAndPrintNumberOfSolutions();
+        m.solveAndPrintNumberOfSolutions();
 
     }
 }
