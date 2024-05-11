@@ -9,7 +9,7 @@ import fish.model.impl.MergedModel;
 import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
-public class App {
+public class Merge {
 
     public static void main(String[] args) {
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 2);

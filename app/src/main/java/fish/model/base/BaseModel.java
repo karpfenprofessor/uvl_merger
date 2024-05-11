@@ -213,7 +213,7 @@ public abstract class BaseModel {
     }
 
     // Method to solve the model and print the number of solutions
-    public void solveAndPrintNumberOfSolutions() {
+    public int solveAndPrintNumberOfSolutions() {
         Solver solver = getSolver();
         int cnt = 0;
         long startTime = System.currentTimeMillis();
@@ -226,6 +226,7 @@ public abstract class BaseModel {
         getSolver().reset();
         System.out.println("[SOL] Number of solutions in " + regionModel.printRegion() + " with calculation time "
                 + executionTime + " ms: " + cnt);
+        return cnt;
     }
 
     // Method to solve the model and print the solution

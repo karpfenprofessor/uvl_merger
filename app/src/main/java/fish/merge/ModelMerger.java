@@ -5,21 +5,14 @@ import java.util.Map.Entry;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.constraints.Propagator;
 import org.chocosolver.solver.exception.ContradictionException;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
-import org.chocosolver.solver.variables.Variable;
-import org.chocosolver.util.tools.StringUtils;
-
 import fish.model.base.BaseModel;
 import fish.model.base.Region;
 import fish.model.impl.MergedModel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y;
 
 public class ModelMerger {
 
@@ -64,7 +57,7 @@ public class ModelMerger {
             }
         }
 
-        printAllVariables(variablesMap);
+        printAllVariables(mergedBaseModel);
 
         // Transfer constraints from both models, ensuring references to unified
         // variables
@@ -74,19 +67,29 @@ public class ModelMerger {
         return mergedBaseModel;
     }
 
-    private static void printAllVariables(HashMap<String, IntVar> variablesMap) {
+    private static void printAllVariables(BaseModel m) {
+        logger.debug("-- print variables of model " + m.printRegion() + " --");
+        HashMap<String, IntVar> variablesMap = new HashMap<>();
+
+        for (IntVar var : m.getModel().retrieveIntVars(true)) {
+            variablesMap.put(var.getName(), var);
+        }
+        
         for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
             IntVar var = entry.getValue();
-            String varDetails = String.format("Variable Key: %s, Name: %s, Domain: [%d, %d], Current Value: %s",
+            String varDetails = String.format("  Variable Key: %s, Name: %s, Domain: [%d, %d], Current Value: %s",
                     entry.getKey(), var.getName(), var.getLB(), var.getUB(),
                     var.isInstantiated() ? String.valueOf(var.getValue()) : "Not instantiated");
             logger.debug(varDetails);
         }
     }
 
-    private static void printAllConstraints(Model m) {
-        for (Constraint c : m.getCstrs()) {
-            logger.debug(c.toString());
+    private static void printAllConstraints(BaseModel m) {
+        logger.debug("-- print constraints of model " + m.printRegion() + " --");
+        int cnt = 0;
+        for (Constraint c : m.getModel().getCstrs()) {
+            logger.debug("  Constraint " + cnt + ": " + c.toString());
+            cnt++;
         }
     }
 
@@ -100,36 +103,35 @@ public class ModelMerger {
      * @return A new Choco model with contextualized constraints.
      * @throws ContradictionException 
      */
-    public static Model contextualizeConstraints(Model originalModel, String variableName, Region region) {
-        // Create a new model to hold the contextualized constraints
-        HashMap<String, IntVar> variablesMap = new HashMap<>();
-        Model newModel = new Model(originalModel.getName() + "_contextualized");
+    public static BaseModel contextualizeConstraints(BaseModel originalModel, String variableName, Region region) {
+        BaseModel newModel = originalModel;
+        //printAllVariables(newModel);
+        //printAllConstraints(newModel);
 
-        for (IntVar var : originalModel.retrieveIntVars(true)) {
-            IntVar mergedVar = newModel.intVar(var.getName(), var.getLB(), var.getUB());
-            variablesMap.put(var.getName(), mergedVar);
-        }
-
-        printAllVariables(variablesMap);
-
-        for (Constraint c : originalModel.getCstrs()) {
-            logger.info("constraint: " + c.toString());
+        for (Constraint c : newModel.getModel().getCstrs()) {
             if (c.getName().contains("ARITHM")) {
-                logger.info("add arithm region constraint");
                 if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
-                    logger.info("constraint match");
                 } 
                 
-                originalModel.unpost(c);
+                newModel.getModel().unpost(c);
                 Constraint cNew = Constraint.merge("ARITHM", c);
-                originalModel.ifThen(newModel.arithm(variablesMap.get(variableName), "=", region.ordinal()), cNew);
-            } else {
-                logger.info("add reif constraint");
-            }
+                newModel.getModel().ifThen(newModel.getModel().arithm(getVariablesAsMap(newModel.getModel()).get(variableName), "=", region.ordinal()), cNew);
+            } 
         }
 
-        printAllConstraints(newModel);
+        //printAllVariables(newModel);
+        //printAllConstraints(newModel);
 
         return newModel;
+    }
+
+    private static HashMap<String, IntVar> getVariablesAsMap(Model m) {
+        HashMap<String, IntVar> variablesMap = new HashMap<>();
+
+        for (IntVar var : m.retrieveIntVars(true)) {
+            variablesMap.put(var.getName(), var);
+        }
+
+        return variablesMap;
     }
 }

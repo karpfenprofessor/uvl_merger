@@ -27,11 +27,7 @@ public class AsiaFishModel extends BaseModel {
                                                                  // Discus: 7
 
                 if (addConstraints && number == 0) {
-                        logger.info("START|ADD-LOGICAL|-> " + regionModel.printRegion()
-                                        + " | CONSTRAINTS: " + model.getNbCstrs());
                         addLogicalConstraints();
-                        logger.info("END  |ADD-LOGICAL|-> " + regionModel.printRegion()
-                                        + " | CONSTRAINTS: " + model.getNbCstrs());
                 } else if (addConstraints) {
                         addRandomConstraints(number);
                 }
@@ -52,8 +48,10 @@ public class AsiaFishModel extends BaseModel {
                 // Constraint 3: Lutjanidae like Red Snapper are found in saltwater
                 model.ifThen(model.arithm(fishFamily, "=", 2),
                                 model.arithm(habitat, "=", 1));
+        }
 
-                // Constraint 4: Cichlidae, including Tilapia, are primarily freshwater fish
+        /*
+         * // Constraint 4: Cichlidae, including Tilapia, are primarily freshwater fish
                 model.ifThen(model.arithm(fishFamily, "=", 3),
                                 model.arithm(habitat, "=", 0));
 
@@ -210,7 +208,7 @@ public class AsiaFishModel extends BaseModel {
                 // saltwater
                 model.ifThen(model.and(model.arithm(fishSpecies, "=", 2), model.arithm(size, "=", 2)),
                                 model.and(model.arithm(habitat, "=", 1), model.arithm(diet, "=", 2)));
-        }
+         */
 
         @Override
         public String getHabitat(int value) {
