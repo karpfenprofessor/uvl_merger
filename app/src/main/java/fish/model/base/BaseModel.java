@@ -8,6 +8,8 @@ import org.chocosolver.solver.exception.ContradictionException;
 import java.util.Random;
 import org.chocosolver.solver.variables.IntVar;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,6 +82,9 @@ public abstract class BaseModel {
 
     public String printRegion() {
         return regionModel.printRegion();
+    }
+    public Region getRegionModel() {
+        return regionModel;
     }
 
     private String getRandomOperator() {
@@ -243,6 +248,10 @@ public abstract class BaseModel {
                 + " | Size: " + getSize(size.getValue()));
         System.out.println("  Diet: " + getDiet(diet.getValue()) + " | Family: " + getFishFamily(fishFamily.getValue())
                 + " | Species: " + getFishSpecies(fishSpecies.getValue()) + "\n");
+    }
+
+    public Set<String> getVariableNames() {
+        return Set.of("region", "habitat", "size", "diet", "fishFamily", "fishSpecies");
     }
 
     public abstract String getHabitat(int value);

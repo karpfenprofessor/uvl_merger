@@ -20,22 +20,26 @@ public class ModelMerger {
 
     public static MergedModel mergeModels(BaseModel baseModel1, BaseModel baseModel2) {
         MergedModel mergedBaseModel = new MergedModel(false, 0);
-
-        // Map to store unified variables, ensuring variables with the same name are the
-        // same in the merged model
         HashMap<String, IntVar> variablesMap = new HashMap<>();
+
+        contextualizeConstraints(baseModel1, "region", baseModel1.getRegionModel());
+        contextualizeConstraints(baseModel2, "region", baseModel2.getRegionModel());
+
         Model model1 = baseModel1.getModel();
         Model model2 = baseModel2.getModel();
         Model mergedModel = mergedBaseModel.getModel();
 
         for (IntVar var : model1.retrieveIntVars(true)) {
-            IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
-            variablesMap.put(var.getName(), mergedVar);
+            if(baseModel1.getVariableNames().contains(var.getName())) {
+                IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
+                //logger.info("m1 var new: " + mergedVar.toString());
+                variablesMap.put(var.getName(), mergedVar);
+            }
         }
 
         // Transfer variables from the second model, unify if they already exist
         for (IntVar var : model2.retrieveIntVars(true)) {
-            if (variablesMap.containsKey(var.getName()) && !var.getName().contains("REIF_")) {
+            if (variablesMap.containsKey(var.getName()) && baseModel2.getVariableNames().contains(var.getName())) {
                 // Get the existing variable from the map
                 IntVar existingVar = variablesMap.get(var.getName());
                 // Calculate the union of domains
@@ -43,21 +47,21 @@ public class ModelMerger {
                 int upperBound = Math.max(existingVar.getUB(), var.getUB());
                 // Re-define the variable in the merged model with the new domain
                 IntVar mergedVar = mergedModel.intVar(var.getName(), lowerBound, upperBound);
+                mergedModel.unassociates(existingVar);
                 // Update the map
-                logger.info("m2 var dupl: " + mergedVar.toString());
+                //logger.info("m2 var dupl: " + mergedVar.toString());
                 variablesMap.put(var.getName(), mergedVar);
                 // Remove the previous variable definition from the model to avoid confusion
-            } else if (variablesMap.containsKey(var.getName()) && var.getName().contains("REIF_")) {
-
-            } else {
+            } else if (baseModel2.getVariableNames().contains(var.getName())) {
                 // Create new variable if it doesn't exist
                 IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
-                logger.info("m1 var new: " + mergedVar.toString());
+                //logger.info("m2 var new: " + mergedVar.toString());
                 variablesMap.put(var.getName(), mergedVar);
             }
         }
 
         printAllVariables(mergedBaseModel);
+        printAllConstraints(mergedBaseModel);
 
         // Transfer constraints from both models, ensuring references to unified
         // variables
@@ -68,7 +72,7 @@ public class ModelMerger {
     }
 
     private static void printAllVariables(BaseModel m) {
-        logger.debug("-- print variables of model " + m.printRegion() + " --");
+        logger.debug("-|- print variables of model " + m.printRegion() + " -|-");
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
         for (IntVar var : m.getModel().retrieveIntVars(true)) {
@@ -82,15 +86,17 @@ public class ModelMerger {
                     var.isInstantiated() ? String.valueOf(var.getValue()) : "Not instantiated");
             logger.debug(varDetails);
         }
+        logger.debug("-|- finished variables of model " + m.printRegion() + " -|-");
     }
 
     private static void printAllConstraints(BaseModel m) {
-        logger.debug("-- print constraints of model " + m.printRegion() + " --");
+        logger.debug("-|- print constraints of model " + m.printRegion() + " -|-");
         int cnt = 0;
         for (Constraint c : m.getModel().getCstrs()) {
             logger.debug("  Constraint " + cnt + ": " + c.toString());
             cnt++;
         }
+        logger.debug("-|- finished constraints of model " + m.printRegion() + " -|-");
     }
 
     /**
@@ -106,7 +112,7 @@ public class ModelMerger {
     public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
         //printAllVariables(newModel);
         //printAllConstraints(newModel);
-
+        logger.debug("Start Contextualize of model " + model.printRegion() + " with number of constraints: " + model.getModel().getNbCstrs());
         for (Constraint c : model.getModel().getCstrs()) {
             if (c.getName().contains("ARITHM")) {
                 if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
@@ -118,6 +124,7 @@ public class ModelMerger {
             } 
         }
 
+        logger.debug("Finished Contextualize of model " + model.printRegion() + " with number of constraints: " + model.getModel().getNbCstrs());
         //printAllVariables(newModel);
         //printAllConstraints(newModel);
     }

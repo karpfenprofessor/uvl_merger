@@ -20,18 +20,13 @@ public class EuropeFishModel extends BaseModel {
                 diet = model.intVar("diet", 0, 2); // Herbivore: 0, Omnivore: 1, Carnivore: 2
                 fishFamily = model.intVar("fishFamily", 4, 7); // Salmonidae: 0, Cyprinidae: 1, Percidae: 2, Gadidae: 3
                 fishSpecies = model.intVar("fishSpecies", 8, 15); // Grayling: 0, Brown Trout: 1, Common Carp: 2, Roach:
-                                                                 // 3,
-                                                                 // European Perch: 4, Pikeperch: 5, Atlantic Cod: 6,
-                                                                 // Atlantic
-                                                                 // Halibut: 7
-
+                                                                  // 3,
+                                                                  // European Perch: 4, Pikeperch: 5, Atlantic Cod: 6,
+                                                                  // Atlantic
+                                                                  // Halibut: 7
 
                 if (addConstraints && number == 0) {
-                        logger.info("START|ADD-LOGICAL|-> " + regionModel.printRegion()
-                                        + " | CONSTRAINTS: " + model.getNbCstrs());
                         addLogicalConstraints();
-                        logger.info("END  |ADD-LOGICAL|-> " + regionModel.printRegion()
-                                        + " | CONSTRAINTS: " + model.getNbCstrs());
                 } else if (addConstraints) {
                         addRandomConstraints(number);
                 }
@@ -60,150 +55,160 @@ public class EuropeFishModel extends BaseModel {
                 // Constraint 5: Herbivores are generally smaller in size
                 model.ifThen(model.arithm(diet, "=", 0),
                                 model.arithm(size, "=", 0));
-
-                // Constraint 6: Gadidae, including Atlantic Cod, generally large and in
-                // saltwater
-                model.ifThen(model.arithm(fishFamily, "=", 3),
-                                model.and(model.arithm(habitat, "=", 1), model.arithm(size, "=", 2)));
-
-                // Constraint 7: Percidae found in freshwater, generally omnivorous
-                model.ifThen(model.arithm(fishFamily, "=", 2),
-                                model.and(model.arithm(habitat, "=", 0), model.arithm(diet, "=", 1)));
-
-                // Constraint 8: Omnivores like Roach found in both water types
-                model.ifThen(model.arithm(fishSpecies, "=", 3),
-                                model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
-
-                // Constraint 9: Small size fish like Grayling in freshwater
-                model.ifThen(model.arithm(fishSpecies, "=", 0),
-                                model.arithm(habitat, "=", 0));
-
-                // Constraint 10: Brown Trout adaptable to both water types
-                model.ifThen(model.arithm(fishSpecies, "=", 1),
-                                model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
-
-                // Constraint 11: Carnivores more likely in saltwater, like Atlantic Halibut
-                model.ifThen(model.arithm(fishSpecies, "=", 7),
-                                model.arithm(diet, "=", 2));
-
-                // Constraint 12: Large, carnivorous fish are more likely in deeper waters
-                model.ifThen(model.arithm(size, "=", 2),
-                                model.and(model.arithm(habitat, "=", 1), model.arithm(diet, "=", 2)));
-
-                // Constraint 13: European Perch, typically omnivorous in freshwater
-                model.ifThen(model.arithm(fishSpecies, "=", 4),
-                                model.and(model.arithm(habitat, "=", 0), model.arithm(diet, "=", 1)));
-
-                // Constraint 14: Common Carp, large and herbivorous, found in freshwater
-                model.ifThen(model.arithm(fishSpecies, "=", 2),
-                                model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 0)));
-
-                // Constraint 15: Small and medium fish are more common in freshwater
-                model.ifThen(model.arithm(size, "<", 2),
-                                model.arithm(habitat, "=", 0));
-
-                // Constraint 16: Carnivorous diet primarily in saltwater
-                model.ifThen(model.arithm(diet, "=", 2),
-                                model.arithm(habitat, "=", 1));
-
-                // Constraint 17: Omnivores found across all size categories
-                model.ifThen(model.arithm(diet, "=", 1),
-                                model.or(model.arithm(size, "=", 0),
-                                                model.or(model.arithm(size, "=", 1), model.arithm(size, "=", 2))));
-
-                // Constraint 18: Roach adaptable to both habitats
-                model.ifThen(model.arithm(fishSpecies, "=", 3),
-                                model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
-
-                // Constraint 19: Large fish species in saltwater are mostly carnivorous
-                model.ifThen(model.arithm(size, "=", 2),
-                                model.and(model.arithm(habitat, "=", 1), model.arithm(diet, "=", 2)));
-
-                // Constraint 20: Freshwater habitats favor smaller, herbivorous fish
-                model.ifThen(model.arithm(habitat, "=", 0),
-                                model.and(model.arithm(size, "=", 0), model.arithm(diet, "=", 0)));
-
-                // Constraint 21: Large fish like Atlantic Halibut found primarily in saltwater
-                model.ifThen(model.arithm(fishSpecies, "=", 7),
-                                model.arithm(habitat, "=", 1));
-
-                // Constraint 22: Medium and large fish species more common in saltwater
-                model.ifThen(model.arithm(size, ">", 0),
-                                model.arithm(habitat, "=", 1));
-
-                // Constraint 23: Herbivores are less common in saltwater
-                model.ifThen(model.arithm(diet, "=", 0),
-                                model.arithm(habitat, "=", 0));
-
-                // Constraint 24: Omnivores found in freshwater include Roach and Common Carp
-                model.ifThen(model.or(model.arithm(fishSpecies, "=", 2), model.arithm(fishSpecies, "=", 3)),
-                                model.and(model.arithm(diet, "=", 1), model.arithm(habitat, "=", 0)));
-
-                // Constraint 25: Carnivorous fish in freshwater include Pikeperch
-                model.ifThen(model.arithm(fishSpecies, "=", 5),
-                                model.and(model.arithm(diet, "=", 2), model.arithm(habitat, "=", 0)));
-
-                // Constraint 26: Smaller fish species like Roach prefer freshwater
-                model.ifThen(model.arithm(fishSpecies, "=", 3),
-                                model.arithm(habitat, "=", 0));
-
-                // Constraint 27: Fish families in saltwater more likely to be large
-                model.ifThen(model.arithm(habitat, "=", 1),
-                                model.arithm(size, "=", 2));
-
-                // Constraint 28: Freshwater habitats favor medium-sized fish
-                model.ifThen(model.arithm(habitat, "=", 0),
-                                model.arithm(size, "=", 1));
-
-                // Constraint 29: Carnivores are uncommon among the smallest size category
-                model.ifThen(model.arithm(size, "=", 0),
-                                model.arithm(diet, "!=", 2));
-
-                // Constraint 30: Omnivorous diet common among medium-sized fish
-                model.ifThen(model.arithm(size, "=", 1),
-                                model.arithm(diet, "=", 1));
-
-                // Constraint 31: Large fish are less likely to be herbivores
-                model.ifThen(model.arithm(size, "=", 2),
-                                model.arithm(diet, "!=", 0));
-
-                // Constraint 32: Smallest fish size primarily herbivorous or omnivorous
-                model.ifThen(model.arithm(size, "=", 0),
-                                model.or(model.arithm(diet, "=", 0), model.arithm(diet, "=", 1)));
-
-                // Constraint 33: Large freshwater fish primarily carnivorous or omnivorous
-                model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 0)),
-                                model.or(model.arithm(diet, "=", 1), model.arithm(diet, "=", 2)));
-
-                // Constraint 34: Carnivorous species more prevalent in saltwater
-                model.ifThen(model.arithm(diet, "=", 2),
-                                model.arithm(habitat, "=", 1));
-
-                // Constraint 35: No small carnivorous fish in saltwater
-                model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=", 1)),
-                                model.arithm(diet, "!=", 2));
-
-                // Constraint 36: Medium and large fish in saltwater are not herbivores
-                model.ifThen(model.and(model.arithm(size, ">=", 1), model.arithm(habitat, "=", 1)),
-                                model.arithm(diet, "!=", 0));
-
-                // Constraint 37: Freshwater fish of all sizes are less likely to be carnivorous
-                model.ifThen(model.arithm(habitat, "=", 0),
-                                model.arithm(diet, "!=", 2));
-
-                // Constraint 38: Small and medium fish in freshwater may be any diet type
-                model.ifThen(model.arithm(habitat, "=", 0),
-                                model.or(model.arithm(size, "=", 0), model.arithm(size, "=", 1)));
-
-                // Constraint 39: European Perch are typically medium-sized and found in
-                // freshwater
-                model.ifThen(model.arithm(fishSpecies, "=", 4),
-                                model.and(model.arithm(size, "=", 1), model.arithm(habitat, "=", 0)));
-
-                // Constraint 40: Atlantic Cod are large and found in saltwater
-                model.ifThen(model.arithm(fishSpecies, "=", 6),
-                                model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 1)));
         }
+
+        /*
+         * 
+         * // Constraint 6: Gadidae, including Atlantic Cod, generally large and in
+         * // saltwater
+         * model.ifThen(model.arithm(fishFamily, "=", 3),
+         * model.and(model.arithm(habitat, "=", 1), model.arithm(size, "=", 2)));
+         * 
+         * // Constraint 7: Percidae found in freshwater, generally omnivorous
+         * model.ifThen(model.arithm(fishFamily, "=", 2),
+         * model.and(model.arithm(habitat, "=", 0), model.arithm(diet, "=", 1)));
+         * 
+         * // Constraint 8: Omnivores like Roach found in both water types
+         * model.ifThen(model.arithm(fishSpecies, "=", 3),
+         * model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
+         * 
+         * // Constraint 9: Small size fish like Grayling in freshwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 0),
+         * model.arithm(habitat, "=", 0));
+         * 
+         * // Constraint 10: Brown Trout adaptable to both water types
+         * model.ifThen(model.arithm(fishSpecies, "=", 1),
+         * model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
+         * 
+         * // Constraint 11: Carnivores more likely in saltwater, like Atlantic Halibut
+         * model.ifThen(model.arithm(fishSpecies, "=", 7),
+         * model.arithm(diet, "=", 2));
+         * 
+         * // Constraint 12: Large, carnivorous fish are more likely in deeper waters
+         * model.ifThen(model.arithm(size, "=", 2),
+         * model.and(model.arithm(habitat, "=", 1), model.arithm(diet, "=", 2)));
+         * 
+         * // Constraint 13: European Perch, typically omnivorous in freshwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 4),
+         * model.and(model.arithm(habitat, "=", 0), model.arithm(diet, "=", 1)));
+         * 
+         * // Constraint 14: Common Carp, large and herbivorous, found in freshwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 2),
+         * model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 0)));
+         * 
+         * // Constraint 15: Small and medium fish are more common in freshwater
+         * model.ifThen(model.arithm(size, "<", 2),
+         * model.arithm(habitat, "=", 0));
+         * 
+         * // Constraint 16: Carnivorous diet primarily in saltwater
+         * model.ifThen(model.arithm(diet, "=", 2),
+         * model.arithm(habitat, "=", 1));
+         * 
+         * // Constraint 17: Omnivores found across all size categories
+         * model.ifThen(model.arithm(diet, "=", 1),
+         * model.or(model.arithm(size, "=", 0),
+         * model.or(model.arithm(size, "=", 1), model.arithm(size, "=", 2))));
+         * 
+         * // Constraint 18: Roach adaptable to both habitats
+         * model.ifThen(model.arithm(fishSpecies, "=", 3),
+         * model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
+         * 
+         * // Constraint 19: Large fish species in saltwater are mostly carnivorous
+         * model.ifThen(model.arithm(size, "=", 2),
+         * model.and(model.arithm(habitat, "=", 1), model.arithm(diet, "=", 2)));
+         * 
+         * // Constraint 20: Freshwater habitats favor smaller, herbivorous fish
+         * model.ifThen(model.arithm(habitat, "=", 0),
+         * model.and(model.arithm(size, "=", 0), model.arithm(diet, "=", 0)));
+         * 
+         * // Constraint 21: Large fish like Atlantic Halibut found primarily in
+         * saltwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 7),
+         * model.arithm(habitat, "=", 1));
+         * 
+         * // Constraint 22: Medium and large fish species more common in saltwater
+         * model.ifThen(model.arithm(size, ">", 0),
+         * model.arithm(habitat, "=", 1));
+         * 
+         * // Constraint 23: Herbivores are less common in saltwater
+         * model.ifThen(model.arithm(diet, "=", 0),
+         * model.arithm(habitat, "=", 0));
+         * 
+         * // Constraint 24: Omnivores found in freshwater include Roach and Common Carp
+         * model.ifThen(model.or(model.arithm(fishSpecies, "=", 2),
+         * model.arithm(fishSpecies, "=", 3)),
+         * model.and(model.arithm(diet, "=", 1), model.arithm(habitat, "=", 0)));
+         * 
+         * // Constraint 25: Carnivorous fish in freshwater include Pikeperch
+         * model.ifThen(model.arithm(fishSpecies, "=", 5),
+         * model.and(model.arithm(diet, "=", 2), model.arithm(habitat, "=", 0)));
+         * 
+         * // Constraint 26: Smaller fish species like Roach prefer freshwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 3),
+         * model.arithm(habitat, "=", 0));
+         * 
+         * // Constraint 27: Fish families in saltwater more likely to be large
+         * model.ifThen(model.arithm(habitat, "=", 1),
+         * model.arithm(size, "=", 2));
+         * 
+         * // Constraint 28: Freshwater habitats favor medium-sized fish
+         * model.ifThen(model.arithm(habitat, "=", 0),
+         * model.arithm(size, "=", 1));
+         * 
+         * // Constraint 29: Carnivores are uncommon among the smallest size category
+         * model.ifThen(model.arithm(size, "=", 0),
+         * model.arithm(diet, "!=", 2));
+         * 
+         * // Constraint 30: Omnivorous diet common among medium-sized fish
+         * model.ifThen(model.arithm(size, "=", 1),
+         * model.arithm(diet, "=", 1));
+         * 
+         * // Constraint 31: Large fish are less likely to be herbivores
+         * model.ifThen(model.arithm(size, "=", 2),
+         * model.arithm(diet, "!=", 0));
+         * 
+         * // Constraint 32: Smallest fish size primarily herbivorous or omnivorous
+         * model.ifThen(model.arithm(size, "=", 0),
+         * model.or(model.arithm(diet, "=", 0), model.arithm(diet, "=", 1)));
+         * 
+         * // Constraint 33: Large freshwater fish primarily carnivorous or omnivorous
+         * model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=",
+         * 0)),
+         * model.or(model.arithm(diet, "=", 1), model.arithm(diet, "=", 2)));
+         * 
+         * // Constraint 34: Carnivorous species more prevalent in saltwater
+         * model.ifThen(model.arithm(diet, "=", 2),
+         * model.arithm(habitat, "=", 1));
+         * 
+         * // Constraint 35: No small carnivorous fish in saltwater
+         * model.ifThen(model.and(model.arithm(size, "=", 0), model.arithm(habitat, "=",
+         * 1)),
+         * model.arithm(diet, "!=", 2));
+         * 
+         * // Constraint 36: Medium and large fish in saltwater are not herbivores
+         * model.ifThen(model.and(model.arithm(size, ">=", 1), model.arithm(habitat,
+         * "=", 1)),
+         * model.arithm(diet, "!=", 0));
+         * 
+         * // Constraint 37: Freshwater fish of all sizes are less likely to be
+         * carnivorous
+         * model.ifThen(model.arithm(habitat, "=", 0),
+         * model.arithm(diet, "!=", 2));
+         * 
+         * // Constraint 38: Small and medium fish in freshwater may be any diet type
+         * model.ifThen(model.arithm(habitat, "=", 0),
+         * model.or(model.arithm(size, "=", 0), model.arithm(size, "=", 1)));
+         * 
+         * // Constraint 39: European Perch are typically medium-sized and found in
+         * // freshwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 4),
+         * model.and(model.arithm(size, "=", 1), model.arithm(habitat, "=", 0)));
+         * 
+         * // Constraint 40: Atlantic Cod are large and found in saltwater
+         * model.ifThen(model.arithm(fishSpecies, "=", 6),
+         * model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 1)));
+         * 
+         */
 
         @Override
         public String getSize(int value) {
