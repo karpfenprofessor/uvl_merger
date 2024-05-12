@@ -18,24 +18,24 @@ public class ModelMerger {
 
     protected final static Logger logger = LogManager.getLogger(ModelMerger.class);
 
-    public static MergedModel mergeModels(BaseModel baseModel1, BaseModel baseModel2) {
-        MergedModel baseMergedModel = new MergedModel(false, 0);
+    public static MergedModel mergeModels(BaseModel base1, BaseModel base2) {
+        MergedModel baseMerged = new MergedModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
-        contextualizeConstraints(baseModel1, "region", baseModel1.getRegionModel());
-        contextualizeConstraints(baseModel2, "region", baseModel2.getRegionModel());
+        contextualizeConstraints(base1, "region", base1.getRegionModel());
+        contextualizeConstraints(base2, "region", base2.getRegionModel());
 
-        mergeVariables(baseModel1, baseModel2, baseMergedModel, variablesMap);
+        mergeVariables(base1, base2, baseMerged, variablesMap);
 
-        printAllVariables(baseMergedModel);
-        printAllConstraints(baseMergedModel);
+        printAllVariables(baseMerged);
+        printAllConstraints(baseMerged);
 
         // Transfer constraints from both models, ensuring references to unified
         // variables
         // addConstraintsToModel(model1, mergedModel, variablesMap);
         // addConstraintsToModel(model2, mergedModel, variablesMap);
 
-        return baseMergedModel;
+        return baseMerged;
     }
 
     private static void mergeVariables(BaseModel baseModel1, BaseModel baseModel2, BaseModel baseMergedModel,

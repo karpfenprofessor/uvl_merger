@@ -8,8 +8,6 @@ import org.chocosolver.solver.exception.ContradictionException;
 import java.util.Random;
 import org.chocosolver.solver.variables.IntVar;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.util.HashSet;
 import java.util.Set;
 
