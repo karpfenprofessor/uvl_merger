@@ -2,9 +2,6 @@ package fish.model.base;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.exception.ContradictionException;
-
 import java.util.Random;
 import org.chocosolver.solver.variables.IntVar;
 
@@ -48,32 +45,6 @@ public abstract class BaseModel {
         return true;
     }
 
-    private boolean addConstraint(Constraint constraint) {
-        constraint.post();  // Post the constraint temporarily
-        
-        try {
-            getSolver().propagate();  // Try to propagate to find any immediate inconsistencies
-            return true;  // If no exceptions, the model is consistent with the constraint
-        } catch (ContradictionException e) {
-            model.unpost(constraint);  // If inconsistent, remove the constraint
-            return false;
-        } finally {
-            getSolver().reset();  // Reset the solver to its initial state
-        }
-    }
-
-    private void removeConstraint(Constraint constraint) {
-        model.unpost(constraint);  // Remove the constraint
-        
-        getSolver().reset();  // Reset to re-evaluate the model's consistency
-        if (getSolver().findSolution() != null) {
-            System.out.println("The model is still consistent after removing the constraint.");
-        } else {
-            System.out.println("The model becomes inconsistent without the constraint.");
-            constraint.post();  // Optionally re-post the constraint if needed
-        }
-    }
-
     private String getRandomConstraintDescription(IntVar a, String operator1, int ax, IntVar b, String operator2, int bx) {
         return "(" + a + operator1 + ax + ")=(" + b + operator2 + bx + ")";
     }
@@ -105,7 +76,7 @@ public abstract class BaseModel {
     }
 
     public void addRandomConstraints(int numberOfConstraints) {
-        long constraintsInModel = model.getNbCstrs();
+        //long constraintsInModel = model.getNbCstrs();
         String operator1 = null;
         String operator2 = null;
         //logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
@@ -181,7 +152,7 @@ public abstract class BaseModel {
             }
         }
 
-        constraintsInModel = model.getNbCstrs();
+        //constraintsInModel = model.getNbCstrs();
         //logger.info("END  |ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
           //      + " | CONSTRAINTS: " + constraintsInModel);
 
