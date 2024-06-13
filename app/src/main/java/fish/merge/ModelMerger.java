@@ -118,25 +118,25 @@ public class ModelMerger {
      */
     public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
         // printAllVariables(newModel);
-        // printAllConstraints(newModel);
+        printAllConstraints(model);
         logger.debug("Start Contextualize of model " + model.printRegion() + " with number of constraints: "
                 + model.getModel().getNbCstrs());
         for (Constraint c : model.getModel().getCstrs()) {
             if (c.getName().contains("ARITHM")) {
-                if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
-                }
+                /*if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
+                }*/
 
                 model.getModel().unpost(c);
-                Constraint cNew = Constraint.merge("ARITHM", c);
+                //Constraint cNew = Constraint.merge("ARITHM", c);
                 model.getModel().ifThen(model.getModel().arithm(getVariablesAsMap(model.getModel()).get(variableName),
-                        "=", region.ordinal()), cNew);
+                        "=", region.ordinal()), c);
             }
         }
 
         logger.debug("Finished Contextualize of model " + model.printRegion() + " with number of constraints: "
                 + model.getModel().getNbCstrs());
         // printAllVariables(newModel);
-        // printAllConstraints(newModel);
+        printAllConstraints(model);
     }
 
     private static HashMap<String, IntVar> getVariablesAsMap(Model m) {
