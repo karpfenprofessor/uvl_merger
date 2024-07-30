@@ -19,7 +19,7 @@ public class Checker {
      */
     public static boolean checkConsistency(BaseModel model) {
         boolean consistency = model.getSolver().findSolution() != null;;
-        logger.debug("checkConsistency for model " + model.printRegion() + ": " + consistency);
+        logger.warn("checkConsistency for model " + model.printRegion() + ": " + consistency);
         model.getSolver().reset();
         return consistency;
     }
@@ -38,11 +38,11 @@ public class Checker {
     public static boolean checkConsistencyByPropagation(BaseModel model) {
         try {
             model.getSolver().propagate();
-            logger.debug("checkConsistencyByPropagation for model " + model.printRegion() + ": true");
+            logger.warn("checkConsistencyByPropagation for model " + model.printRegion() + ": true");
             model.getSolver().reset();
             return true; // Propagation successful, no inconsistencies detected
         } catch (ContradictionException e) {
-            logger.debug("checkConsistencyByPropagation for model " + model.printRegion() + ": false");
+            logger.error("checkConsistencyByPropagation for model " + model.printRegion() + ": false");
             model.getSolver().reset();
             return false; // Propagation failed, inconsistency detected
         }

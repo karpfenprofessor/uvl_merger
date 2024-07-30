@@ -103,7 +103,7 @@ public class ModelMerger {
             logger.info("  Constraint " + cnt + ": " + c.toString());
             cnt++;
         }
-        logger.debug("finished constraints of model " + m.printRegion());
+        logger.debug("finished printing constraints of model " + m.printRegion() + "\n");
     }
 
     /**
