@@ -45,13 +45,15 @@ public abstract class BaseModel {
         return true;
     }
 
-    private String getRandomConstraintDescription(IntVar a, String operator1, int ax, IntVar b, String operator2, int bx) {
+    private String getRandomConstraintDescription(IntVar a, String operator1, int ax, IntVar b, String operator2,
+            int bx) {
         return "(" + a + operator1 + ax + ")=(" + b + operator2 + bx + ")";
     }
 
     public String printRegion() {
         return regionModel.printRegion();
     }
+
     public Region getRegionModel() {
         return regionModel;
     }
@@ -62,13 +64,13 @@ public abstract class BaseModel {
         switch (operator) {
             case 0:
                 return "=";
-            case 1: 
+            case 1:
                 return "<=";
             case 2:
                 return ">=";
             case 3:
                 return "!=";
-        
+
             default:
                 logger.error("Wrong Operator Generation!");
                 return "=";
@@ -76,22 +78,25 @@ public abstract class BaseModel {
     }
 
     public void addRandomConstraints(int numberOfConstraints) {
-        //long constraintsInModel = model.getNbCstrs();
+        // long constraintsInModel = model.getNbCstrs();
         String operator1 = null;
         String operator2 = null;
-        //logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
-          //      + " | CONSTRAINTS: " + constraintsInModel);
-       
+        // logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " +
+        // regionModel.printRegion()
+        // + " | CONSTRAINTS: " + constraintsInModel);
+
         for (int i = 0; i < numberOfConstraints; i++) {
             int constraintType = random.nextInt(5); // Assume 5 different types of constraints
             switch (constraintType) {
                 case 0: // Constraint on habitat based on family
-                    int familyIndex = random.nextInt(fishFamily.getLB(), fishFamily.getUB()); // Assuming 4 fish families
+                    int familyIndex = random.nextInt(fishFamily.getLB(), fishFamily.getUB()); // Assuming 4 fish
+                                                                                              // families
                     int habitatType = random.nextInt(2); // 0 for Freshwater, 1 for Saltwater
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
                     if (!isConstraintInModel(
-                            getRandomConstraintDescription(fishFamily, operator1, familyIndex, habitat, operator2, habitatType))) {
+                            getRandomConstraintDescription(fishFamily, operator1, familyIndex, habitat, operator2,
+                                    habitatType))) {
                         model.ifThen(model.arithm(fishFamily, operator1, familyIndex),
                                 model.arithm(habitat, operator2, habitatType));
                     } else {
@@ -103,7 +108,8 @@ public abstract class BaseModel {
                     int dietType = random.nextInt(3); // 0 for Herbivore, 1 for Omnivore, 2 for Carnivore
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
-                    if (!isConstraintInModel(getRandomConstraintDescription(size, operator1, sizeIndex, diet, operator2, dietType))) {
+                    if (!isConstraintInModel(
+                            getRandomConstraintDescription(size, operator1, sizeIndex, diet, operator2, dietType))) {
                         model.ifThen(model.arithm(size, operator1, sizeIndex),
                                 model.arithm(diet, operator2, dietType));
                     } else {
@@ -116,7 +122,8 @@ public abstract class BaseModel {
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
                     if (!isConstraintInModel(
-                            getRandomConstraintDescription(size, operator1, sizeForHabitat, habitat, operator2, habitatForSize))) {
+                            getRandomConstraintDescription(size, operator1, sizeForHabitat, habitat, operator2,
+                                    habitatForSize))) {
                         model.ifThen(model.arithm(size, operator1, sizeForHabitat),
                                 model.arithm(habitat, operator2, habitatForSize));
                     } else {
@@ -129,7 +136,8 @@ public abstract class BaseModel {
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
                     if (!isConstraintInModel(
-                            getRandomConstraintDescription(fishSpecies, operator1, speciesIndex, habitat, operator2, speciesHabitat))) {
+                            getRandomConstraintDescription(fishSpecies, operator1, speciesIndex, habitat, operator2,
+                                    speciesHabitat))) {
                         model.ifThen(model.arithm(fishSpecies, operator1, speciesIndex),
                                 model.arithm(habitat, operator2, speciesHabitat));
                     } else {
@@ -142,7 +150,8 @@ public abstract class BaseModel {
                     operator1 = getRandomOperator();
                     operator2 = getRandomOperator();
                     if (!isConstraintInModel(
-                            getRandomConstraintDescription(fishSpecies, operator1, speciesForDiet, diet, operator2, dietForSpecies))) {
+                            getRandomConstraintDescription(fishSpecies, operator1, speciesForDiet, diet, operator2,
+                                    dietForSpecies))) {
                         model.ifThen(model.arithm(fishSpecies, operator1, speciesForDiet),
                                 model.arithm(diet, operator2, dietForSpecies));
                     } else {
@@ -152,9 +161,10 @@ public abstract class BaseModel {
             }
         }
 
-        //constraintsInModel = model.getNbCstrs();
-        //logger.info("END  |ADD-RANDOM| " + numberOfConstraints + " |-> " + regionModel.printRegion()
-          //      + " | CONSTRAINTS: " + constraintsInModel);
+        // constraintsInModel = model.getNbCstrs();
+        // logger.info("END |ADD-RANDOM| " + numberOfConstraints + " |-> " +
+        // regionModel.printRegion()
+        // + " | CONSTRAINTS: " + constraintsInModel);
 
     }
 
@@ -182,7 +192,7 @@ public abstract class BaseModel {
             cnt++;
         } while (cnt < x);
 
-        System.out.println("[SOL] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
+        logger.debug("[SOL] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
                 + (msSum / cnt) + " ms");
     }
 
@@ -198,7 +208,7 @@ public abstract class BaseModel {
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
         getSolver().reset();
-        System.out.println("[SOL] Number of solutions in " + regionModel.printRegion() + " with calculation time "
+        logger.debug("[SOL] Number of solutions in " + regionModel.printRegion() + " with calculation time "
                 + executionTime + " ms: " + cnt);
         return cnt;
     }
@@ -212,10 +222,10 @@ public abstract class BaseModel {
         getSolver().reset();
 
         // Print solution
-        System.out.println("[SOL] Solution found in " + executionTime + " ms");
-        System.out.println("  Region: " + regionModel.printRegion() + " | Habitat: " + getHabitat(habitat.getValue())
+        logger.debug("[SOL] Solution found in " + executionTime + " ms");
+        logger.debug("  Region: " + regionModel.printRegion() + " | Habitat: " + getHabitat(habitat.getValue())
                 + " | Size: " + getSize(size.getValue()));
-        System.out.println("  Diet: " + getDiet(diet.getValue()) + " | Family: " + getFishFamily(fishFamily.getValue())
+        logger.debug("  Diet: " + getDiet(diet.getValue()) + " | Family: " + getFishFamily(fishFamily.getValue())
                 + " | Species: " + getFishSpecies(fishSpecies.getValue()) + "\n");
     }
 
@@ -224,8 +234,12 @@ public abstract class BaseModel {
     }
 
     public abstract String getHabitat(int value);
+
     public abstract String getSize(int value);
+
     public abstract String getDiet(int value);
+
     public abstract String getFishFamily(int value);
+
     public abstract String getFishSpecies(int value);
 }
