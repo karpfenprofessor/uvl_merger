@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.ModelAnalyser;
+import org.chocosolver.solver.ModelAnalyser.VariableTypeStatistics;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.constraints.Propagator;
 import org.chocosolver.solver.exception.ContradictionException;
@@ -133,9 +135,9 @@ public class ModelMerger {
 
         for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
             IntVar var = entry.getValue();
-            String varDetails = String.format("  Variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Current Value: %s",
+            String varDetails = String.format("  Variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Value: %s",
                     cnt, entry.getKey(), var.getName(), var.getLB(), var.getUB(),
-                    var.isInstantiated() ? String.valueOf(var.getValue()) : "Not instantiated");
+                    var.isInstantiated() ? String.valueOf(var.getValue()) : "null");
             cnt++;
             logger.info(varDetails);
         }
@@ -152,5 +154,11 @@ public class ModelMerger {
         }
 
         logger.debug("finished constraints of model " + m.printRegion() + "\n");
+    }
+
+    public static void analyseModel(BaseModel m) {
+        ModelAnalyser analyser = m.getModel().getModelAnalyser();
+        analyser.printVariableAnalysis();
+        analyser.printConstraintAnalysis();
     }
 }

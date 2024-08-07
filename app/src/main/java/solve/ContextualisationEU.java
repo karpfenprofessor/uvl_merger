@@ -13,11 +13,13 @@ public class ContextualisationEU {
     public static void main(String[] args) {
         EuropeFishModel model = new EuropeFishModel(true, 0);
         model.solveAndPrintNumberOfSolutions();
-        ModelMerger.printAllConstraints(model);
-        ModelMerger.printAllVariables(model);
+        //ModelMerger.printAllConstraints(model);
+        //ModelMerger.printAllVariables(model);
+        ModelMerger.analyseModel(model);
         ModelMerger.contextualizeConstraints(model, "region", Region.EUROPE);
-        ModelMerger.printAllVariables(model);
-        ModelMerger.printAllConstraints(model);
+        //ModelMerger.printAllVariables(model);
+        //ModelMerger.printAllConstraints(model);
+        ModelMerger.analyseModel(model);
         model.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(model);
         Checker.checkConsistencyByPropagation(model);
