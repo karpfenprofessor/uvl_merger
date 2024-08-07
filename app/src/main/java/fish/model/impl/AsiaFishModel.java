@@ -48,6 +48,7 @@ public class AsiaFishModel extends BaseModel {
                 // Constraint 3: Lutjanidae like Red Snapper are found in saltwater
                 model.ifThen(model.arithm(fishFamily, "=", 2),
                                 model.arithm(habitat, "=", 1));
+
         }
 
         /*

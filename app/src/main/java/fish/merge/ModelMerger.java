@@ -5,10 +5,14 @@ import java.util.Map.Entry;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.constraints.Propagator;
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.Variable;
+
 import fish.model.base.BaseModel;
 import fish.model.base.Region;
+import fish.model.impl.AsiaFishModel;
 import fish.model.impl.MergedModel;
 
 import org.apache.logging.log4j.LogManager;
@@ -78,33 +82,6 @@ public class ModelMerger {
         logger.debug("Finished merge Variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
     }
 
-    private static void printAllVariables(BaseModel m) {
-        logger.debug("print variables of model " + m.printRegion());
-        HashMap<String, IntVar> variablesMap = new HashMap<>();
-
-        for (IntVar var : m.getModel().retrieveIntVars(true)) {
-            variablesMap.put(var.getName(), var);
-        }
-
-        for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
-            IntVar var = entry.getValue();
-            String varDetails = String.format("  Variable Key: %s, Name: %s, Domain: [%d, %d], Current Value: %s",
-                    entry.getKey(), var.getName(), var.getLB(), var.getUB(),
-                    var.isInstantiated() ? String.valueOf(var.getValue()) : "Not instantiated");
-            logger.info(varDetails);
-        }
-        logger.debug("finished variables of model " + m.printRegion());
-    }
-
-    private static void printAllConstraints(BaseModel m) {
-        logger.debug("print constraints of model " + m.printRegion());
-        int cnt = 0;
-        for (Constraint c : m.getModel().getCstrs()) {
-            logger.info("  Constraint " + cnt + ": " + c.toString());
-            cnt++;
-        }
-        logger.debug("finished printing constraints of model " + m.printRegion() + "\n");
-    }
 
     /**
      * Contextualizes all constraints in a model based on a specified region.
@@ -117,8 +94,6 @@ public class ModelMerger {
      * @throws ContradictionException
      */
     public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
-        // printAllVariables(newModel);
-        printAllConstraints(model);
         logger.debug("Start Contextualize of model " + model.printRegion() + " with number of constraints: "
                 + model.getModel().getNbCstrs());
         for (Constraint c : model.getModel().getCstrs()) {
@@ -135,17 +110,47 @@ public class ModelMerger {
 
         logger.debug("Finished Contextualize of model " + model.printRegion() + " with number of constraints: "
                 + model.getModel().getNbCstrs());
-        // printAllVariables(newModel);
-        printAllConstraints(model);
     }
 
     private static HashMap<String, IntVar> getVariablesAsMap(Model m) {
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
-        for (IntVar var : m.retrieveIntVars(true)) {
+        /*for (IntVar var : m.retrieveIntVars(true)) {
             variablesMap.put(var.getName(), var);
+        }*/
+
+        for(Variable var : m.getVars()) {
+            variablesMap.put(var.getName(), var.asIntVar());
         }
 
         return variablesMap;
+    }
+
+    public static void printAllVariables(BaseModel m) {
+        logger.debug("print variables of model " + m.printRegion());
+        int cnt = 0;
+        HashMap<String, IntVar> variablesMap = getVariablesAsMap(m.getModel());
+
+        for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
+            IntVar var = entry.getValue();
+            String varDetails = String.format("  Variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Current Value: %s",
+                    cnt, entry.getKey(), var.getName(), var.getLB(), var.getUB(),
+                    var.isInstantiated() ? String.valueOf(var.getValue()) : "Not instantiated");
+            cnt++;
+            logger.info(varDetails);
+        }
+
+        logger.debug("finished variables of model " + m.printRegion());
+    }
+
+    public static void printAllConstraints(BaseModel m) {
+        logger.debug("print constraints of model " + m.printRegion());
+        int cnt = 0;
+        for (Constraint c : m.getModel().getCstrs()) {
+            logger.info("  Constraint [" + cnt + "]: " + c.toString());
+            cnt++;
+        }
+
+        logger.debug("finished constraints of model " + m.printRegion() + "\n");
     }
 }

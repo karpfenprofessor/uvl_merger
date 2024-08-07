@@ -5,18 +5,25 @@ package solve;
 
 import fish.model.base.Region;
 import fish.model.impl.AsiaFishModel;
+import fish.model.impl.EuropeFishModel;
 import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
-public class Contextualisation {
+public class ContextualisationAndCombiningModels {
 
     public static void main(String[] args) {
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 0);
         asiaFishModel.solveAndPrintNumberOfSolutions();
-       
         ModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
         asiaFishModel.solveAndPrintNumberOfSolutions();
         Checker.checkConsistency(asiaFishModel);
         Checker.checkConsistencyByPropagation(asiaFishModel);
+
+        EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
+        europeFishModel.solveAndPrintNumberOfSolutions();
+        ModelMerger.contextualizeConstraints(europeFishModel, "region", Region.EUROPE);
+        europeFishModel.solveAndPrintNumberOfSolutions();
+        Checker.checkConsistency(europeFishModel);
+        Checker.checkConsistencyByPropagation(europeFishModel);
     }
 }

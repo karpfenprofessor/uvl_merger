@@ -25,11 +25,7 @@ public class NorthAmericaFishModel extends BaseModel {
                                                                  // Bluegill: 6, Largemouth Bass: 7
 
                 if (addConstraints && number == 0) {
-                        logger.info("START|ADD-LOGICAL|-> " + regionModel.printRegion()
-                                        + " | CONSTRAINTS: " + model.getNbCstrs());
                         addLogicalConstraints();
-                        logger.info("END  |ADD-LOGICAL|-> " + regionModel.printRegion()
-                                        + " | CONSTRAINTS: " + model.getNbCstrs() + "");
                 } else if (addConstraints) {
                         addRandomConstraints(number);
                 }

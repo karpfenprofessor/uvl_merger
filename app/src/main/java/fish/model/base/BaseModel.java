@@ -198,10 +198,9 @@ public abstract class BaseModel {
 
     // Method to solve the model and print the number of solutions
     public int solveAndPrintNumberOfSolutions() {
-        Solver solver = getSolver();
         int cnt = 0;
         long startTime = System.currentTimeMillis();
-        while (solver.solve()) {
+        while (getSolver().solve()) {
             cnt++;
         }
 
