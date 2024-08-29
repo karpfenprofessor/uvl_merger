@@ -13,10 +13,16 @@ public class ContextualisationNA {
     public static void main(String[] args) {
         NorthAmericaFishModel model = new NorthAmericaFishModel(true, 0);
         model.solveAndPrintNumberOfSolutions();
-        //ModelMerger.printAllConstraints(model);
+        model.getSolver().constraintNetworkToGephi("na_original.gexf");
+        // ModelMerger.printAllConstraints(model);
+        // ModelMerger.printAllVariables(model);
+        // ModelMerger.analyseModel(model);
         ModelMerger.contextualizeConstraints(model, "region", Region.NORTH_AMERICA);
-        //ModelMerger.printAllConstraints(model);
+        // ModelMerger.printAllConstraints(model);
+        // ModelMerger.printAllVariables(model);
+        // ModelMerger.analyseModel(model);
         model.solveAndPrintNumberOfSolutions();
+        model.getSolver().constraintNetworkToGephi("na_contextualized.gexf");
         Checker.checkConsistency(model);
         Checker.checkConsistencyByPropagation(model);
     }

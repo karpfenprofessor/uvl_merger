@@ -37,8 +37,8 @@ public class EuropeFishModel extends BaseModel {
 
         private void addLogicalConstraints() {
                 // Constraint 1: Salmonidae found in both freshwater and saltwater
-                /*model.ifThen(model.arithm(fishFamily, "=", 0),
-                                model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));*/
+                model.ifThen(model.arithm(fishFamily, "=", 0),
+                                model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
 
                 // Constraint 2: Cyprinidae found primarily in freshwater
                 model.ifThen(model.arithm(fishFamily, "=", 1),
