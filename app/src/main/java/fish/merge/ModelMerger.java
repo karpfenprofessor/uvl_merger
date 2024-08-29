@@ -30,9 +30,6 @@ public class ModelMerger {
 
         mergeVariables(base1, base2, baseMerged, variablesMap);
 
-        printAllVariables(baseMerged);
-        printAllConstraints(baseMerged);
-
         // Transfer constraints from both models, ensuring references to unified
         // variables
         // addConstraintsToModel(model1, mergedModel, variablesMap);

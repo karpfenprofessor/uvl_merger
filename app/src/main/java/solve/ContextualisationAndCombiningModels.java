@@ -6,24 +6,33 @@ package solve;
 import fish.model.base.Region;
 import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
-import fish.merge.Checker;
+import fish.model.impl.MergedModel;
 import fish.merge.ModelMerger;
 
 public class ContextualisationAndCombiningModels {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        int numberOfSolutions = 0;
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 0);
-        asiaFishModel.solveAndPrintNumberOfSolutions();
+        numberOfSolutions = asiaFishModel.solveAndPrintNumberOfSolutions();
         ModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
-        asiaFishModel.solveAndPrintNumberOfSolutions();
-        Checker.checkConsistency(asiaFishModel);
-        Checker.checkConsistencyByPropagation(asiaFishModel);
+        numberOfSolutions = numberOfSolutions - asiaFishModel.solveAndPrintNumberOfSolutions();
+
+        if(numberOfSolutions != 0) {
+            throw new Exception("Contextualization of Asia failed");
+        }
 
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
-        europeFishModel.solveAndPrintNumberOfSolutions();
+        numberOfSolutions = europeFishModel.solveAndPrintNumberOfSolutions();
         ModelMerger.contextualizeConstraints(europeFishModel, "region", Region.EUROPE);
-        europeFishModel.solveAndPrintNumberOfSolutions();
-        Checker.checkConsistency(europeFishModel);
-        Checker.checkConsistencyByPropagation(europeFishModel);
+        numberOfSolutions = numberOfSolutions - europeFishModel.solveAndPrintNumberOfSolutions();
+        if(numberOfSolutions != 0) {
+            throw new Exception("Contextualization of Asia failed");
+        }
+
+        MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel);
+
+
+
     }
 }
