@@ -6,7 +6,7 @@
 	xmlns:viz="http://www.gexf.net/1.2draft/viz"
 	version="1.2">
 	<graph mode="static" defaultedgetype="directed">
-		<nodes count="47">
+		<nodes count="45">
 			<node id="1" label="region" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
@@ -31,159 +31,151 @@
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="9" label="REIF_1" >
+			<node id="10" label="REIF_1" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="11" label="not(REIF_1)" >
+			<node id="12" label="not(REIF_1)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="13" label="REIF_2" >
+			<node id="14" label="REIF_2" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="15" label="not(REIF_2)" >
+			<node id="16" label="not(REIF_2)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="20" label="REIF_3" >
+			<node id="18" label="IV_3" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="22" label="not(REIF_3)" >
+			<node id="21" label="REIF_4" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="24" label="REIF_4" >
+			<node id="23" label="not(REIF_4)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="26" label="not(REIF_4)" >
+			<node id="25" label="REIF_5" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="31" label="REIF_5" >
+			<node id="27" label="not(REIF_5)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="33" label="not(REIF_5)" >
+			<node id="32" label="REIF_6" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="35" label="REIF_6" >
+			<node id="34" label="not(REIF_6)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="37" label="not(REIF_6)" >
+			<node id="36" label="REIF_7" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="42" label="REIF_7" >
+			<node id="38" label="not(REIF_7)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="44" label="not(REIF_7)" >
+			<node id="43" label="REIF_8" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="46" label="REIF_8" >
+			<node id="45" label="not(REIF_8)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="48" label="not(REIF_8)" >
+			<node id="47" label="REIF_9" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="52" label="REIF_9" >
+			<node id="49" label="not(REIF_9)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="54" label="not(REIF_9)" >
+			<node id="54" label="REIF_10" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="56" label="REIF_10" >
+			<node id="56" label="not(REIF_10)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="58" label="not(REIF_10)" >
+			<node id="58" label="REIF_11" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="61" label="REIF_11" >
+			<node id="60" label="not(REIF_11)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="63" label="not(REIF_11)" >
+			<node id="65" label="REIF_12" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="66" label="REIF_12" >
+			<node id="67" label="not(REIF_12)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="68" label="not(REIF_12)" >
+			<node id="69" label="REIF_13" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="71" label="REIF_13" >
+			<node id="71" label="not(REIF_13)" >
 				<viz:color r="191" g="63" b="63" a="1"/>
 				<viz:shape value="disc"/>
 			</node>
-			<node id="73" label="not(REIF_13)" >
-				<viz:color r="191" g="63" b="63" a="1"/>
-				<viz:shape value="disc"/>
-			</node>
-			<node id="11" label="not(REIF_1)" >
+			<node id="12" label="not(REIF_1)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="15" label="not(REIF_2)" >
+			<node id="16" label="not(REIF_2)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="22" label="not(REIF_3)" >
+			<node id="23" label="not(REIF_4)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="26" label="not(REIF_4)" >
+			<node id="27" label="not(REIF_5)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="33" label="not(REIF_5)" >
+			<node id="34" label="not(REIF_6)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="37" label="not(REIF_6)" >
+			<node id="38" label="not(REIF_7)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="44" label="not(REIF_7)" >
+			<node id="45" label="not(REIF_8)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="48" label="not(REIF_8)" >
+			<node id="49" label="not(REIF_9)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="54" label="not(REIF_9)" >
+			<node id="56" label="not(REIF_10)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="58" label="not(REIF_10)" >
+			<node id="60" label="not(REIF_11)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="63" label="not(REIF_11)" >
+			<node id="67" label="not(REIF_12)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
-			<node id="68" label="not(REIF_12)" >
-				<viz:color r="191" g="127" b="63" a="1"/>
-				<viz:shape value="diamond"/>
-			</node>
-			<node id="73" label="not(REIF_13)" >
+			<node id="71" label="not(REIF_13)" >
 				<viz:color r="191" g="127" b="63" a="1"/>
 				<viz:shape value="diamond"/>
 			</node>
@@ -195,7 +187,7 @@
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
-			<node id="c_3" label="ARITHM" >
+			<node id="c_3" label="SUM" >
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
@@ -231,7 +223,7 @@
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
-			<node id="c_12" label="REIFICATIONCONSTRAINT" >
+			<node id="c_12" label="ARITHM" >
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
@@ -243,7 +235,7 @@
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
-			<node id="c_15" label="REIFICATIONCONSTRAINT" >
+			<node id="c_15" label="ARITHM" >
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
@@ -251,63 +243,65 @@
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
-			<node id="c_17" label="ARITHM" >
+			<node id="c_17" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_18" label="ARITHM" >
 				<viz:color r="63" g="127" b="191" a="0.1"/>
 				<viz:shape value="square"/>
 			</node>
 		</nodes>
 		<edges>
-			<edge id="1" source="11" target="9" type="directed"/>
-			<edge id="2" source="15" target="13" type="directed"/>
-			<edge id="3" source="22" target="20" type="directed"/>
-			<edge id="4" source="26" target="24" type="directed"/>
-			<edge id="5" source="33" target="31" type="directed"/>
-			<edge id="6" source="37" target="35" type="directed"/>
-			<edge id="7" source="44" target="42" type="directed"/>
-			<edge id="8" source="48" target="46" type="directed"/>
-			<edge id="9" source="54" target="52" type="directed"/>
-			<edge id="10" source="58" target="56" type="directed"/>
-			<edge id="11" source="63" target="61" type="directed"/>
-			<edge id="12" source="68" target="66" type="directed"/>
-			<edge id="13" source="73" target="71" type="directed"/>
-			<edge id="14" source="c_1" target="9" type="directed"/>
-			<edge id="15" source="c_1" target="5" type="directed"/>
-			<edge id="16" source="c_2" target="13" type="directed"/>
-			<edge id="17" source="c_2" target="2" type="directed"/>
-			<edge id="18" source="c_3" target="66" type="directed"/>
-			<edge id="19" source="c_3" target="52" type="directed"/>
-			<edge id="20" source="c_4" target="20" type="directed"/>
-			<edge id="21" source="c_4" target="6" type="directed"/>
-			<edge id="22" source="c_5" target="24" type="directed"/>
-			<edge id="23" source="c_5" target="2" type="directed"/>
-			<edge id="24" source="c_6" target="56" type="directed"/>
-			<edge id="25" source="c_6" target="52" type="directed"/>
-			<edge id="26" source="c_7" target="31" type="directed"/>
-			<edge id="27" source="c_7" target="6" type="directed"/>
-			<edge id="28" source="c_8" target="35" type="directed"/>
-			<edge id="29" source="c_8" target="4" type="directed"/>
-			<edge id="30" source="c_9" target="61" type="directed"/>
-			<edge id="31" source="c_9" target="52" type="directed"/>
-			<edge id="32" source="c_10" target="42" type="directed"/>
-			<edge id="33" source="c_10" target="4" type="directed"/>
-			<edge id="34" source="c_11" target="46" type="directed"/>
-			<edge id="35" source="c_11" target="3" type="directed"/>
-			<edge id="36" source="c_12" target="52" type="directed"/>
-			<edge id="37" source="c_12" target="1" type="directed"/>
-			<edge id="38" source="c_13" target="56" type="directed"/>
-			<edge id="39" source="c_13" target="9" type="directed"/>
-			<edge id="40" source="c_13" target="13" type="directed"/>
-			<edge id="41" source="c_14" target="61" type="directed"/>
-			<edge id="42" source="c_14" target="20" type="directed"/>
-			<edge id="43" source="c_14" target="24" type="directed"/>
-			<edge id="44" source="c_15" target="66" type="directed"/>
-			<edge id="45" source="c_15" target="35" type="directed"/>
-			<edge id="46" source="c_15" target="31" type="directed"/>
-			<edge id="47" source="c_16" target="71" type="directed"/>
-			<edge id="48" source="c_16" target="42" type="directed"/>
-			<edge id="49" source="c_16" target="46" type="directed"/>
-			<edge id="50" source="c_17" target="71" type="directed"/>
-			<edge id="51" source="c_17" target="52" type="directed"/>
+			<edge id="1" source="12" target="10" type="directed"/>
+			<edge id="2" source="16" target="14" type="directed"/>
+			<edge id="3" source="23" target="21" type="directed"/>
+			<edge id="4" source="27" target="25" type="directed"/>
+			<edge id="5" source="34" target="32" type="directed"/>
+			<edge id="6" source="38" target="36" type="directed"/>
+			<edge id="7" source="45" target="43" type="directed"/>
+			<edge id="8" source="49" target="47" type="directed"/>
+			<edge id="9" source="56" target="54" type="directed"/>
+			<edge id="10" source="60" target="58" type="directed"/>
+			<edge id="11" source="67" target="65" type="directed"/>
+			<edge id="12" source="71" target="69" type="directed"/>
+			<edge id="13" source="c_1" target="10" type="directed"/>
+			<edge id="14" source="c_1" target="2" type="directed"/>
+			<edge id="15" source="c_2" target="14" type="directed"/>
+			<edge id="16" source="c_2" target="2" type="directed"/>
+			<edge id="17" source="c_3" target="10" type="directed"/>
+			<edge id="18" source="c_3" target="14" type="directed"/>
+			<edge id="19" source="c_3" target="18" type="directed"/>
+			<edge id="20" source="c_4" target="21" type="directed"/>
+			<edge id="21" source="c_4" target="5" type="directed"/>
+			<edge id="22" source="c_5" target="25" type="directed"/>
+			<edge id="23" source="c_5" target="18" type="directed"/>
+			<edge id="24" source="c_6" target="25" type="directed"/>
+			<edge id="25" source="c_6" target="21" type="directed"/>
+			<edge id="26" source="c_7" target="32" type="directed"/>
+			<edge id="27" source="c_7" target="5" type="directed"/>
+			<edge id="28" source="c_8" target="36" type="directed"/>
+			<edge id="29" source="c_8" target="2" type="directed"/>
+			<edge id="30" source="c_9" target="36" type="directed"/>
+			<edge id="31" source="c_9" target="32" type="directed"/>
+			<edge id="32" source="c_10" target="43" type="directed"/>
+			<edge id="33" source="c_10" target="6" type="directed"/>
+			<edge id="34" source="c_11" target="47" type="directed"/>
+			<edge id="35" source="c_11" target="2" type="directed"/>
+			<edge id="36" source="c_12" target="47" type="directed"/>
+			<edge id="37" source="c_12" target="43" type="directed"/>
+			<edge id="38" source="c_13" target="54" type="directed"/>
+			<edge id="39" source="c_13" target="6" type="directed"/>
+			<edge id="40" source="c_14" target="58" type="directed"/>
+			<edge id="41" source="c_14" target="4" type="directed"/>
+			<edge id="42" source="c_15" target="58" type="directed"/>
+			<edge id="43" source="c_15" target="54" type="directed"/>
+			<edge id="44" source="c_16" target="65" type="directed"/>
+			<edge id="45" source="c_16" target="4" type="directed"/>
+			<edge id="46" source="c_17" target="69" type="directed"/>
+			<edge id="47" source="c_17" target="3" type="directed"/>
+			<edge id="48" source="c_18" target="69" type="directed"/>
+			<edge id="49" source="c_18" target="65" type="directed"/>
 		</edges>
 	</graph>
 </gexf>
