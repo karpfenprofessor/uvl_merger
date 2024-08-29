@@ -1,0 +1,36 @@
+29.08: Contextualisation von Constraints
+
+Die einzelnen REIF-Constraints welche = Bedingungen abbilden, 
+werden korrekt überführt
+sind für 4 if-then Constraints weitere 8 REIF-Constraints welche 1:1 übernommen werden
+die 4 if-then Constraints (ARITHM), haben einen Propagator welcher REIF2.GEQ.REIF1 abbildet
+GEQ heißt soviel wie folgt aus, wenn REIF1 zutrifft folgt daraus REIF2
+detail:
+If REIF_1 = 1 (i.e., fishFamily = 1), then REIF_2 must be 1 as well (i.e., habitat = 0 must be true).
+If REIF_1 = 0 (i.e., fishFamily != 1), REIF_2 can be either 0 or 1 (i.e., habitat = 0 could be true or false).
+
+
+
+log analyse EU:
+die GEQ Constraints werden getauscht
+2 GEQ 1 -> 14 GEQ 13
+4 GEQ 3 -> 10 GEQ 9
+6 GEQ 5 -> 12 GEQ 11
+8 GEQ 7 -> 16 GEQ 15
+
+9 - region = 0
+
+10 - 2 GEQ 1
+14 - 6 GEQ 5
+12 - 4 GEQ 3
+16 - 8 GEQ 7
+
+13 - region = 0
+11 - region = 0
+15 - region = 0
+
+
+getSolver().printStatistics();
+getSolver().constraintNetworkToGephi("file");
+
+ende 29.08: contextualisation funktioniert nun, region variable war falsch definiert

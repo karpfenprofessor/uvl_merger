@@ -1,3 +1,9 @@
 2024-05-11 11:47:39 INFO  fish.model.impl.AsiaFishModel - CREATED Model ASIA with 0 constraints.
 2024-05-11 11:47:52 INFO  fish.model.impl.AsiaFishModel - CREATED Model ASIA with 0 constraints.
 2024-05-11 11:49:30 INFO  fish.model.impl.AsiaFishModel - CREATED Model ASIA with 0 constraints.
+2024-08-29 17:34:17 INFO  fish.model.impl.AsiaFishModel - CREATED Model ASIA with 9 constraints.
+2024-08-29 17:34:17 DEBUG fish.model.impl.AsiaFishModel - [SOL] Number of solutions in ASIA with calculation time 43 ms: 1728
+2024-08-29 17:34:17 INFO  fish.model.impl.EuropeFishModel - CREATED Model EU with 12 constraints.
+2024-08-29 17:34:17 DEBUG fish.model.impl.EuropeFishModel - [SOL] Number of solutions in EU with calculation time 7 ms: 1344
+2024-08-29 17:34:17 INFO  fish.model.impl.NorthAmericaFishModel - CREATED Model NA with 219 constraints.
+2024-08-29 17:34:17 DEBUG fish.model.impl.NorthAmericaFishModel - [SOL] Number of solutions in NA with calculation time 17 ms: 54

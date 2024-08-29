@@ -5,16 +5,13 @@ import java.util.Map.Entry;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.ModelAnalyser;
-import org.chocosolver.solver.ModelAnalyser.VariableTypeStatistics;
 import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.constraints.Propagator;
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
 
 import fish.model.base.BaseModel;
 import fish.model.base.Region;
-import fish.model.impl.AsiaFishModel;
 import fish.model.impl.MergedModel;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,8 +43,9 @@ public class ModelMerger {
 
     private static void mergeVariables(BaseModel baseModel1, BaseModel baseModel2, BaseModel baseMergedModel,
             HashMap<String, IntVar> variablesMap) {
-        
-        logger.debug("Start merge Variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
+
+        logger.debug(
+                "Start merge Variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
         Model model1 = baseModel1.getModel();
         Model model2 = baseModel2.getModel();
         Model mergedModel = baseMergedModel.getModel();
@@ -81,9 +79,9 @@ public class ModelMerger {
                 variablesMap.put(var.getName(), mergedVar);
             }
         }
-        logger.debug("Finished merge Variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
+        logger.debug(
+                "Finished merge Variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
     }
-
 
     /**
      * Contextualizes all constraints in a model based on a specified region.
@@ -98,15 +96,15 @@ public class ModelMerger {
     public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
         logger.debug("Start Contextualize of model " + model.printRegion() + " with number of constraints: "
                 + model.getModel().getNbCstrs());
+
+        Constraint contextualizationConstraint = model.getModel()
+                .arithm(getVariablesAsMap(model.getModel()).get(variableName), "=", region.ordinal());
+        logger.warn("create contextualization constraint " + contextualizationConstraint.toString());
+
         for (Constraint c : model.getModel().getCstrs()) {
             if (c.getName().contains("ARITHM")) {
-                /*if (c.getPropagator(0) instanceof org.chocosolver.solver.constraints.binary.PropGreaterOrEqualX_Y) {
-                }*/
-
                 model.getModel().unpost(c);
-                //Constraint cNew = Constraint.merge("ARITHM", c);
-                model.getModel().ifThen(model.getModel().arithm(getVariablesAsMap(model.getModel()).get(variableName),
-                        "=", region.ordinal()), c);
+                model.getModel().ifThen(contextualizationConstraint, c);
             }
         }
 
@@ -117,11 +115,13 @@ public class ModelMerger {
     private static HashMap<String, IntVar> getVariablesAsMap(Model m) {
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
-        /*for (IntVar var : m.retrieveIntVars(true)) {
-            variablesMap.put(var.getName(), var);
-        }*/
+        /*
+         * for (IntVar var : m.retrieveIntVars(true)) {
+         * variablesMap.put(var.getName(), var);
+         * }
+         */
 
-        for(Variable var : m.getVars()) {
+        for (Variable var : m.getVars()) {
             variablesMap.put(var.getName(), var.asIntVar());
         }
 

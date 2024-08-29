@@ -13,7 +13,7 @@ public class NorthAmericaFishModel extends BaseModel {
                 super();
                 regionModel = Region.NORTH_AMERICA;
 
-                region = model.intVar("region", 0, 2); // North America
+                region = model.intVar("region", 1, 1); // North America
                 habitat = model.intVar("habitat", 0, 1); // Freshwater: 0, Saltwater: 1
                 size = model.intVar("size", 0, 2); // S: 0, M: 1, L: 2
                 diet = model.intVar("diet", 0, 2); // Herbivore: 0, Omnivore: 1, Carnivore: 2

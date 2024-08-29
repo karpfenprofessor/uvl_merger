@@ -5,6 +5,7 @@ package solve;
 
 import fish.model.base.Region;
 import fish.model.impl.EuropeFishModel;
+
 import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
@@ -13,14 +14,17 @@ public class ContextualisationEU {
     public static void main(String[] args) {
         EuropeFishModel model = new EuropeFishModel(true, 0);
         model.solveAndPrintNumberOfSolutions();
+        model.getSolver().constraintNetworkToGephi("test_gephi.gexf");
+    
         //ModelMerger.printAllConstraints(model);
-        //ModelMerger.printAllVariables(model);
-        ModelMerger.analyseModel(model);
+        ModelMerger.printAllVariables(model);
+        //ModelMerger.analyseModel(model);
         ModelMerger.contextualizeConstraints(model, "region", Region.EUROPE);
         //ModelMerger.printAllVariables(model);
-        //ModelMerger.printAllConstraints(model);
-        ModelMerger.analyseModel(model);
+        ModelMerger.printAllConstraints(model);
+        //ModelMerger.analyseModel(model);
         model.solveAndPrintNumberOfSolutions();
+        model.getSolver().constraintNetworkToGephi("test_gephi_context.gexf");
         Checker.checkConsistency(model);
         Checker.checkConsistencyByPropagation(model);
     }

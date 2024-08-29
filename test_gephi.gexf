@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF−8"?>
+<gexf 	xmlns="http://www.gexf.net/1.2draft"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema−instance"
+	xsi:schemaLocation="http://www.gexf.net/1.2draft
+		http://www.gexf.net/1.2draft/gexf.xsd"
+	xmlns:viz="http://www.gexf.net/1.2draft/viz"
+	version="1.2">
+	<graph mode="static" defaultedgetype="directed">
+		<nodes count="32">
+			<node id="1" label="region" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="2" label="habitat" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="3" label="size" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="4" label="diet" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="5" label="fishFamily" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="6" label="fishSpecies" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="9" label="REIF_1" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="11" label="not(REIF_1)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="13" label="REIF_2" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="15" label="not(REIF_2)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="20" label="REIF_3" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="22" label="not(REIF_3)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="24" label="REIF_4" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="26" label="not(REIF_4)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="31" label="REIF_5" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="33" label="not(REIF_5)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="35" label="REIF_6" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="37" label="not(REIF_6)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="42" label="REIF_7" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="44" label="not(REIF_7)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="46" label="REIF_8" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="48" label="not(REIF_8)" >
+				<viz:color r="191" g="63" b="63" a="1"/>
+				<viz:shape value="disc"/>
+			</node>
+			<node id="11" label="not(REIF_1)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="15" label="not(REIF_2)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="22" label="not(REIF_3)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="26" label="not(REIF_4)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="33" label="not(REIF_5)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="37" label="not(REIF_6)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="44" label="not(REIF_7)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="48" label="not(REIF_8)" >
+				<viz:color r="191" g="127" b="63" a="1"/>
+				<viz:shape value="diamond"/>
+			</node>
+			<node id="c_1" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_2" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_3" label="ARITHM" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_4" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_5" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_6" label="ARITHM" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_7" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_8" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_9" label="ARITHM" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_10" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_11" label="REIFICATIONCONSTRAINT" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+			<node id="c_12" label="ARITHM" >
+				<viz:color r="63" g="127" b="191" a="0.1"/>
+				<viz:shape value="square"/>
+			</node>
+		</nodes>
+		<edges>
+			<edge id="1" source="11" target="9" type="directed"/>
+			<edge id="2" source="15" target="13" type="directed"/>
+			<edge id="3" source="22" target="20" type="directed"/>
+			<edge id="4" source="26" target="24" type="directed"/>
+			<edge id="5" source="33" target="31" type="directed"/>
+			<edge id="6" source="37" target="35" type="directed"/>
+			<edge id="7" source="44" target="42" type="directed"/>
+			<edge id="8" source="48" target="46" type="directed"/>
+			<edge id="9" source="c_1" target="9" type="directed"/>
+			<edge id="10" source="c_1" target="5" type="directed"/>
+			<edge id="11" source="c_2" target="13" type="directed"/>
+			<edge id="12" source="c_2" target="2" type="directed"/>
+			<edge id="13" source="c_3" target="13" type="directed"/>
+			<edge id="14" source="c_3" target="9" type="directed"/>
+			<edge id="15" source="c_4" target="20" type="directed"/>
+			<edge id="16" source="c_4" target="6" type="directed"/>
+			<edge id="17" source="c_5" target="24" type="directed"/>
+			<edge id="18" source="c_5" target="2" type="directed"/>
+			<edge id="19" source="c_6" target="24" type="directed"/>
+			<edge id="20" source="c_6" target="20" type="directed"/>
+			<edge id="21" source="c_7" target="31" type="directed"/>
+			<edge id="22" source="c_7" target="6" type="directed"/>
+			<edge id="23" source="c_8" target="35" type="directed"/>
+			<edge id="24" source="c_8" target="4" type="directed"/>
+			<edge id="25" source="c_9" target="35" type="directed"/>
+			<edge id="26" source="c_9" target="31" type="directed"/>
+			<edge id="27" source="c_10" target="42" type="directed"/>
+			<edge id="28" source="c_10" target="4" type="directed"/>
+			<edge id="29" source="c_11" target="46" type="directed"/>
+			<edge id="30" source="c_11" target="3" type="directed"/>
+			<edge id="31" source="c_12" target="46" type="directed"/>
+			<edge id="32" source="c_12" target="42" type="directed"/>
+		</edges>
+	</graph>
+</gexf>
