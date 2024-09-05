@@ -1,10 +1,7 @@
 package fish.merge;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
-
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.ModelAnalyser;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
@@ -21,12 +18,14 @@ public class ModelMerger {
 
     protected final static Logger logger = LogManager.getLogger(ModelMerger.class);
 
-    public static MergedModel mergeModels(BaseModel base1, BaseModel base2) {
+    public static MergedModel mergeModels(BaseModel base1, BaseModel base2, boolean alreadyContextualized) {
         MergedModel baseMerged = new MergedModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
-        contextualizeConstraints(base1, "region", base1.getRegionModel());
-        contextualizeConstraints(base2, "region", base2.getRegionModel());
+        if (!alreadyContextualized) {
+            contextualizeConstraints(base1, "region", base1.getRegionModel());
+            contextualizeConstraints(base2, "region", base2.getRegionModel());
+        }
 
         mergeVariables(base1, base2, baseMerged, variablesMap);
 
@@ -46,11 +45,16 @@ public class ModelMerger {
         Model model1 = baseModel1.getModel();
         Model model2 = baseModel2.getModel();
         Model mergedModel = baseMergedModel.getModel();
+
+        // Variablen des ersten Models in die Map einfuegen
         for (IntVar var : model1.retrieveIntVars(true)) {
             if (baseModel1.getVariableNames().contains(var.getName())) {
                 IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
                 // logger.info("m1 var new: " + mergedVar.toString());
                 variablesMap.put(var.getName(), mergedVar);
+            } else {
+                //REIF und andere Variablen
+                
             }
         }
 
@@ -59,12 +63,13 @@ public class ModelMerger {
             if (variablesMap.containsKey(var.getName()) && baseModel2.getVariableNames().contains(var.getName())) {
                 // Get the existing variable from the map
                 IntVar existingVar = variablesMap.get(var.getName());
+                mergedModel.unassociates(existingVar);
+
                 // Calculate the union of domains
                 int lowerBound = Math.min(existingVar.getLB(), var.getLB());
                 int upperBound = Math.max(existingVar.getUB(), var.getUB());
                 // Re-define the variable in the merged model with the new domain
                 IntVar mergedVar = mergedModel.intVar(var.getName(), lowerBound, upperBound);
-                mergedModel.unassociates(existingVar);
                 // Update the map
                 // logger.info("m2 var dupl: " + mergedVar.toString());
                 variablesMap.put(var.getName(), mergedVar);
@@ -123,39 +128,5 @@ public class ModelMerger {
         }
 
         return variablesMap;
-    }
-
-    public static void printAllVariables(BaseModel m) {
-        logger.debug("print variables of model " + m.printRegion());
-        int cnt = 0;
-        HashMap<String, IntVar> variablesMap = getVariablesAsMap(m.getModel());
-
-        for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
-            IntVar var = entry.getValue();
-            String varDetails = String.format("  Variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Value: %s",
-                    cnt, entry.getKey(), var.getName(), var.getLB(), var.getUB(),
-                    var.isInstantiated() ? String.valueOf(var.getValue()) : "null");
-            cnt++;
-            logger.info(varDetails);
-        }
-
-        logger.debug("finished variables of model " + m.printRegion());
-    }
-
-    public static void printAllConstraints(BaseModel m) {
-        logger.debug("print constraints of model " + m.printRegion());
-        int cnt = 0;
-        for (Constraint c : m.getModel().getCstrs()) {
-            logger.info("  Constraint [" + cnt + "]: " + c.toString());
-            cnt++;
-        }
-
-        logger.debug("finished constraints of model " + m.printRegion() + "\n");
-    }
-
-    public static void analyseModel(BaseModel m) {
-        ModelAnalyser analyser = m.getModel().getModelAnalyser();
-        analyser.printVariableAnalysis();
-        analyser.printConstraintAnalysis();
     }
 }

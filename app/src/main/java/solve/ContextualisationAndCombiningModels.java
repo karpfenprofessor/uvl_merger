@@ -27,12 +27,15 @@ public class ContextualisationAndCombiningModels {
         ModelMerger.contextualizeConstraints(europeFishModel, "region", Region.EUROPE);
         numberOfSolutions = numberOfSolutions - europeFishModel.solveAndPrintNumberOfSolutions();
         if(numberOfSolutions != 0) {
-            throw new Exception("Contextualization of Asia failed");
+            throw new Exception("Contextualization of Europe failed");
         }
 
-        MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel);
-
-
-
+        asiaFishModel.printAllVariables(true);
+        asiaFishModel.printAllConstraints();
+        europeFishModel.printAllVariables(true);
+        europeFishModel.printAllConstraints();
+        
+        MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel, true);
+        mergedModel.printAllVariables(true);
     }
 }

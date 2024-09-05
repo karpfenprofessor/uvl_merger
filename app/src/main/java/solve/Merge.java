@@ -5,8 +5,6 @@ package solve;
 
 import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
-import fish.model.impl.MergedModel;
-import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
 public class Merge {
@@ -18,9 +16,6 @@ public class Merge {
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
         europeFishModel.solveAndPrintNumberOfSolutions();
 
-        MergedModel m = ModelMerger.mergeModels(asiaFishModel, europeFishModel);
-        Checker.checkConsistency(m);
-        m.solveAndPrintNumberOfSolutions();
-
+        ModelMerger.mergeModels(asiaFishModel, europeFishModel, false);
     }
 }

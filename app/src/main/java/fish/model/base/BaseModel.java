@@ -1,9 +1,16 @@
 package fish.model.base;
 
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.ModelAnalyser;
 import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.constraints.Constraint;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import java.util.Random;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.Variable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +40,52 @@ public abstract class BaseModel {
         logger = LogManager.getLogger(this.getClass());
     }
 
+    public void printAllVariables(boolean showReifVariables) {
+        logger.debug("print variables of model " + this.printRegion());
+        int cnt = 0;
+        HashMap<String, IntVar> variablesMap = getVariablesAsMap();
+
+        for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
+            IntVar var = entry.getValue();
+            String varDetails = String.format("  Variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Value: %s",
+                    cnt, entry.getKey(), var.getName(), var.getLB(), var.getUB(),
+                    var.isInstantiated() ? String.valueOf(var.getValue()) : "null");
+            cnt++;
+            if(showReifVariables && varDetails.contains("REIF_") || !varDetails.contains("REIF_")) {
+                logger.info(varDetails);
+            } 
+        }
+
+        logger.debug("finished variables of model " + this.printRegion());
+    }
+
+    public HashMap<String, IntVar> getVariablesAsMap() {
+        HashMap<String, IntVar> variablesMap = new HashMap<>();
+
+        for (Variable var : this.getModel().getVars()) {
+            variablesMap.put(var.getName(), var.asIntVar());
+        }
+
+        return variablesMap;
+    }
+
+    public void printAllConstraints() {
+        logger.debug("print constraints of model " + this.printRegion());
+        int cnt = 0;
+        for (Constraint c : this.getModel().getCstrs()) {
+            logger.info("  Constraint [" + cnt + "]: " + c.toString());
+            cnt++;
+        }
+
+        logger.debug("finished constraints of model " + this.printRegion() + "\n");
+    }
+
+    public void analyseModel() {
+        ModelAnalyser analyser = this.getModel().getModelAnalyser();
+        analyser.printVariableAnalysis();
+        analyser.printConstraintAnalysis();
+    }
+
     private boolean isConstraintInModel(String description) {
         if (!constraintsSet.contains(description)) {
             constraintsSet.add(description);
@@ -58,6 +111,70 @@ public abstract class BaseModel {
         return regionModel;
     }
 
+    public Solver getSolver() {
+        return model.getSolver();
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void solveXNumberOfTimes(int x) {
+        Solver solver = getSolver();
+        int cnt = 0;
+        long msSum = 0;
+        do {
+            long startTime = System.currentTimeMillis();
+            while (solver.solve()) {
+            }
+            long endTime = System.currentTimeMillis();
+            long executionTime = endTime - startTime;
+            msSum = msSum + executionTime;
+            getSolver().reset();
+
+            cnt++;
+        } while (cnt < x);
+
+        logger.debug("[SOL] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
+                + (msSum / cnt) + " ms");
+    }
+
+    // Method to solve the model and print the number of solutions
+    public int solveAndPrintNumberOfSolutions() {
+        int cnt = 0;
+        long startTime = System.currentTimeMillis();
+        while (getSolver().solve()) {
+            cnt++;
+        }
+
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+        getSolver().reset();
+        logger.debug("[SOL] Number of solutions in " + regionModel.printRegion() + " with calculation time "
+                + executionTime + " ms: " + cnt);
+        return cnt;
+    }
+
+    // Method to solve the model and print the solution
+    public void solveAndPrintSolution() {
+        long startTime = System.currentTimeMillis();
+        getSolver().solve();
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+        getSolver().reset();
+
+        // Print solution
+        logger.debug("[SOL] Solution found in " + executionTime + " ms");
+        logger.debug("  Region: " + regionModel.printRegion() + " | Habitat: " + getHabitat(habitat.getValue())
+                + " | Size: " + getSize(size.getValue()));
+        logger.debug("  Diet: " + getDiet(diet.getValue()) + " | Family: " + getFishFamily(fishFamily.getValue())
+                + " | Species: " + getFishSpecies(fishSpecies.getValue()) + "\n");
+    }
+
+    public Set<String> getVariableNames() {
+        return Set.of("region", "habitat", "size", "diet", "fishFamily", "fishSpecies");
+    }
+
     private String getRandomOperator() {
         int operator = random.nextInt(3); // 0 for =, 1 for <=, 2 for >=, 3 for !=
 
@@ -78,12 +195,8 @@ public abstract class BaseModel {
     }
 
     public void addRandomConstraints(int numberOfConstraints) {
-        // long constraintsInModel = model.getNbCstrs();
         String operator1 = null;
         String operator2 = null;
-        // logger.info("START|ADD-RANDOM| " + numberOfConstraints + " |-> " +
-        // regionModel.printRegion()
-        // + " | CONSTRAINTS: " + constraintsInModel);
 
         for (int i = 0; i < numberOfConstraints; i++) {
             int constraintType = random.nextInt(5); // Assume 5 different types of constraints
@@ -160,76 +273,6 @@ public abstract class BaseModel {
                     break;
             }
         }
-
-        // constraintsInModel = model.getNbCstrs();
-        // logger.info("END |ADD-RANDOM| " + numberOfConstraints + " |-> " +
-        // regionModel.printRegion()
-        // + " | CONSTRAINTS: " + constraintsInModel);
-
-    }
-
-    public Solver getSolver() {
-        return model.getSolver();
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
-    public void solveXNumberOfTimes(int x) {
-        Solver solver = getSolver();
-        int cnt = 0;
-        long msSum = 0;
-        do {
-            long startTime = System.currentTimeMillis();
-            while (solver.solve()) {
-            }
-            long endTime = System.currentTimeMillis();
-            long executionTime = endTime - startTime;
-            msSum = msSum + executionTime;
-            getSolver().reset();
-
-            cnt++;
-        } while (cnt < x);
-
-        logger.debug("[SOL] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
-                + (msSum / cnt) + " ms");
-    }
-
-    // Method to solve the model and print the number of solutions
-    public int solveAndPrintNumberOfSolutions() {
-        int cnt = 0;
-        long startTime = System.currentTimeMillis();
-        while (getSolver().solve()) {
-            cnt++;
-        }
-
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-        getSolver().reset();
-        logger.debug("[SOL] Number of solutions in " + regionModel.printRegion() + " with calculation time "
-                + executionTime + " ms: " + cnt);
-        return cnt;
-    }
-
-    // Method to solve the model and print the solution
-    public void solveAndPrintSolution() {
-        long startTime = System.currentTimeMillis();
-        getSolver().solve();
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-        getSolver().reset();
-
-        // Print solution
-        logger.debug("[SOL] Solution found in " + executionTime + " ms");
-        logger.debug("  Region: " + regionModel.printRegion() + " | Habitat: " + getHabitat(habitat.getValue())
-                + " | Size: " + getSize(size.getValue()));
-        logger.debug("  Diet: " + getDiet(diet.getValue()) + " | Family: " + getFishFamily(fishFamily.getValue())
-                + " | Species: " + getFishSpecies(fishSpecies.getValue()) + "\n");
-    }
-
-    public Set<String> getVariableNames() {
-        return Set.of("region", "habitat", "size", "diet", "fishFamily", "fishSpecies");
     }
 
     public abstract String getHabitat(int value);
