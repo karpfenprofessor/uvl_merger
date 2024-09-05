@@ -34,3 +34,8 @@ getSolver().printStatistics();
 getSolver().constraintNetworkToGephi("file");
 
 ende 29.08: contextualisation funktioniert nun, region variable war falsch definiert
+
+
+30.08: nachsehen bzgl VariableUtils.union(), VariableUtils.intersection(), 
+
+05.09
