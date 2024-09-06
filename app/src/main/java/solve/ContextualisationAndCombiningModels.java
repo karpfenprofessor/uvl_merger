@@ -30,10 +30,10 @@ public class ContextualisationAndCombiningModels {
             throw new Exception("Contextualization of Europe failed");
         }
 
-        asiaFishModel.printAllVariables(true);
-        asiaFishModel.printAllConstraints();
-        europeFishModel.printAllVariables(true);
-        europeFishModel.printAllConstraints();
+        //asiaFishModel.printAllVariables(true);
+        //asiaFishModel.printAllConstraints();
+        //europeFishModel.printAllVariables(true);
+        //europeFishModel.printAllConstraints();
         
         MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel, true);
         mergedModel.printAllVariables(true);

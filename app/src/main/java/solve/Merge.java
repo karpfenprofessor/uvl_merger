@@ -5,6 +5,7 @@ package solve;
 
 import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
+import fish.model.impl.NorthAmericaFishModel;
 import fish.merge.ModelMerger;
 
 public class Merge {
@@ -16,6 +17,9 @@ public class Merge {
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
         europeFishModel.solveAndPrintNumberOfSolutions();
 
-        ModelMerger.mergeModels(asiaFishModel, europeFishModel, false);
+        NorthAmericaFishModel northAmericaFishModel = new NorthAmericaFishModel(true, 0);
+        northAmericaFishModel.solveAndPrintNumberOfSolutions();
+
+        ModelMerger.mergeModels(asiaFishModel, northAmericaFishModel, true);
     }
 }

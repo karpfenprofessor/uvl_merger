@@ -1,8 +1,8 @@
 package fish.model.base;
 
 public enum Region {
-    EUROPE(0),
-    NORTH_AMERICA(1),
+    NORTH_AMERICA(0),
+    EUROPE(1),
     ASIA(2),
     MERGED(3);
 
