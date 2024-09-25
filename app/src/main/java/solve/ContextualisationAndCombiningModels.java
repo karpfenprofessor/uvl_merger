@@ -36,6 +36,5 @@ public class ContextualisationAndCombiningModels {
         //europeFishModel.printAllConstraints();
         
         MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel, true);
-        mergedModel.printAllVariables(true);
     }
 }
