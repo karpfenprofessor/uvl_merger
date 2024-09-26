@@ -56,7 +56,7 @@ public abstract class BaseModel {
             } 
         }
 
-        logger.debug("finished variables of model " + this.printRegion());
+        logger.debug("finished variables of model " + this.printRegion() + "\n");
     }
 
     public HashMap<String, IntVar> getVariablesAsMap() {

@@ -58,8 +58,8 @@ public class ModelMerger {
         Model mergedModel = baseMergedModel.getModel();
         String prefix = baseModel1.printRegion();
 
-        logger.debug("Start merging " + baseModel.getNbCstrs() + " Constraints of model/prefix "
-                + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + "\n");
+        logger.debug("Start merge " + baseModel.getNbCstrs() + " Constraints of model/prefix "
+                + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " Constraints");
 
         for (Constraint c : baseModel.getCstrs()) {
             if (c instanceof org.chocosolver.solver.constraints.ReificationConstraint) {
@@ -138,6 +138,23 @@ public class ModelMerger {
                 logger.error("Constraint type not supported: " + c.getClass());
             }
         }
+
+        logger.debug(
+                "Finished merge Constraints of models " + baseModel1.printRegion() + " and " + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " Constraints");
+    
+            
+        logger.debug("Start constrain variables with region variable");
+
+        Constraint isRegionModel = mergedModel.arithm(variablesMap.get("region"), "=", baseModel1.regionModel.ordinal());
+        
+        Constraint isFishFamilyModel = mergedModel.member(variablesMap.get("fishFamily"), baseModel1.fishFamily.getLB(), baseModel1.fishFamily.getUB());
+        mergedModel.ifOnlyIf(isRegionModel, isFishFamilyModel);
+
+        Constraint isFishSpeciesModel = mergedModel.member(variablesMap.get("fishSpecies"), baseModel1.fishSpecies.getLB(), baseModel1.fishSpecies.getUB());
+        mergedModel.ifOnlyIf(isRegionModel, isFishSpeciesModel);
+
+        logger.debug(
+                "Finished constrain variables of model " + baseMergedModel.printRegion() + " with " + baseModel1.printRegion() + " with " + mergedModel.getNbCstrs() + " Constraints");
     }
 
     private static void mergeVariables(BaseModel baseModel1, BaseModel baseModel2, BaseModel baseMergedModel,
@@ -198,7 +215,6 @@ public class ModelMerger {
             }
         }
 
-        baseMergedModel.printAllVariables(true);
         logger.debug(
                 "Finished merge Variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
     }
