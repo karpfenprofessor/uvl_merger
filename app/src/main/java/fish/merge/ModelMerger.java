@@ -47,38 +47,9 @@ public class ModelMerger {
 
         mergeVariables(base1, base2, baseMerged, variablesMap, true);
         mergeConstraints(base1, baseMerged, variablesMap);
+        mergeConstraints(base2, baseMerged, variablesMap);
 
         return baseMerged;
-    }
-
-    private static List<Constraint> parseModel(BaseModel baseModel1) {
-        logger.warn("\n---------------------------------------------------\n");
-        Model model = baseModel1.getModel();
-        int cnt = 0;
-        List<Constraint> constraints = Arrays.asList(model.getCstrs());
-        // constraints.sort(Comparator.comparing(c -> c.getName()));
-        for (Constraint c : constraints) {
-            logger.warn("constraint [" + cnt + "] " + c.toString());
-            int cnt_prop = 0;
-            for (Propagator p : c.getPropagators()) {
-                logger.warn("propagator [" + cnt + "_" + cnt_prop + "] " + p.toString());
-
-                int cnt_var = 0;
-                for (Variable v : p.getVars()) {
-                    // logger.warn("variables [" + cnt + "_" + cnt_prop + "_" + cnt_var + "] " +
-                    // v.toString());
-                    cnt_var++;
-                }
-                cnt_prop++;
-            }
-            cnt++;
-
-            // Constraint mergedConstraint = Constraint.merge(baseModel1.getRegionModel() +
-            // "_" + c.getName(), c);
-            // logger.warn(mergedConstraint.toString());
-        }
-
-        return constraints;
     }
 
     private static void mergeConstraints(BaseModel baseModel1, BaseModel baseMergedModel,
@@ -87,57 +58,81 @@ public class ModelMerger {
         Model mergedModel = baseMergedModel.getModel();
         String prefix = baseModel1.printRegion();
 
-       
-
         logger.debug("Start merging " + baseModel.getNbCstrs() + " Constraints of model/prefix "
                 + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + "\n");
-        
-        
+
         for (Constraint c : baseModel.getCstrs()) {
             if (c instanceof org.chocosolver.solver.constraints.ReificationConstraint) {
-                logger.debug("\nreification constraint: " + c.toString());
-                
+                //logger.debug("reification constraint: " + c.toString());
+                String operator = null;
+
                 for (Propagator p : c.getPropagators()) {
-                    String operator = null;
-                    if(p instanceof PropEqualXC) {
+
+                    if (p instanceof PropEqualXC) {
                         PropEqualXC pMapped = (PropEqualXC) p;
-                        logger.info(pMapped.toString());
-                        operator = "=";
+                        if (pMapped.isReified() && pMapped.reifiedWith() != null) {
+                            IntVar reifiedVariable = pMapped.reifiedWith();
+                            IntVar storedReifiedVariable = variablesMap.get(prefix + "_" + reifiedVariable.getName());
+                            IntVar arithmVariable = pMapped.getVar(0);
+                            IntVar storedArithmVariable = variablesMap.get(arithmVariable.getName());
+                            Integer constant = Integer.parseInt(pMapped.toString().split("=")[1].trim());
+
+                            Constraint arithmConstraint = mergedModel.arithm(storedArithmVariable, "=", constant);
+                            arithmConstraint.reifyWith((BoolVar) storedReifiedVariable);
+                        }
                     } else if (p instanceof PropNotEqualXC) {
                         PropNotEqualXC pMapped = (PropNotEqualXC) p;
-                        logger.info(pMapped.toString());
+                        // logger.info(pMapped.toString());
                         operator = "=/=";
                     } else if (p instanceof PropReif) {
                         PropReif pMapped = (PropReif) p;
-                        logger.info(pMapped.toString());
+                        // logger.info(pMapped.toString());
                         operator = "REIF";
-                    } else if(p instanceof PropGreaterOrEqualX_Y) {
+                    } else if (p instanceof PropGreaterOrEqualX_Y) {
                         PropGreaterOrEqualX_Y pMapped = (PropGreaterOrEqualX_Y) p;
-                        logger.info(pMapped.toString());
                         operator = "GEQ";
-                    } else if(p instanceof PropGreaterOrEqualX_YC) {
+
+                        if (pMapped.isReified() && pMapped.reifiedWith() != null) {
+                            IntVar reifiedVariable = pMapped.reifiedWith();
+                            IntVar storedReifiedVariable = variablesMap.get(prefix + "_" + reifiedVariable.getName());
+                            IntVar arithmVariable1 = pMapped.getVar(0);
+                            IntVar arithmVariable2 = pMapped.getVar(1);
+                            IntVar storedArithmVariable1 = variablesMap.get(prefix + "_" + arithmVariable1.getName());
+                            IntVar storedArithmVariable2 = variablesMap.get(prefix + "_" + arithmVariable2.getName());
+
+                            Constraint arithmConstraint = mergedModel.arithm(storedArithmVariable1, ">=",
+                                    storedArithmVariable2);
+                            arithmConstraint.reifyWith((BoolVar) storedReifiedVariable);
+                        }
+                    } else if (p instanceof PropGreaterOrEqualX_YC) {
                         PropGreaterOrEqualX_YC pMapped = (PropGreaterOrEqualX_YC) p;
-                        logger.info(pMapped.toString());
+                        // logger.info(pMapped.toString());
                         operator = "GEQ1";
                     } else {
                         logger.error("Propagation type not supported: " + p.getClass());
                     }
 
-
-
                 }
             } else if (c instanceof org.chocosolver.solver.constraints.Arithmetic) {
-                logger.debug("\narithmetic constraint: " + c.toString());
+                //logger.debug("arithmetic constraint: " + c.toString());
                 for (Propagator p : c.getPropagators()) {
                     String operator = null;
-                    if(p instanceof PropGreaterOrEqualX_Y) {
+                    if (p instanceof PropGreaterOrEqualX_Y) {
                         PropGreaterOrEqualX_Y pMapped = (PropGreaterOrEqualX_Y) p;
-                        logger.info(pMapped.toString());
                         operator = "GEQ";
+
+                        IntVar arithmVariable1 = pMapped.getVar(0);
+                        IntVar arithmVariable2 = pMapped.getVar(1);
+                        IntVar storedArithmVariable1 = variablesMap.get(prefix + "_" + arithmVariable1.getName());
+                        IntVar storedArithmVariable2 = variablesMap.get(prefix + "_" + arithmVariable2.getName());
+
+                        Constraint arithmConstraint = mergedModel.arithm(storedArithmVariable1, ">=",
+                                storedArithmVariable2);
+                        arithmConstraint.post();
                     } else {
                         logger.error("Propagation type not supported: " + p.getClass());
                     }
-                    
+
                 }
             } else {
                 logger.error("Constraint type not supported: " + c.getClass());
@@ -162,10 +157,12 @@ public class ModelMerger {
                 variablesMap.put(var.getName(), mergedVar);
             } else if (mergeReif) {
                 // REIF und andere Variablen
-                String variableName = baseModel1.getRegionModel().printRegion() + "_" + var.getName();
-                IntVar mergedVar = mergedModel.intVar(variableName, var);
-                // logger.info("m1 var new other: " + mergedVar.toString());
-                variablesMap.put(variableName, mergedVar);
+                if (!var.getName().contains("not(")) {
+                    String variableName = baseModel1.getRegionModel().printRegion() + "_" + var.getName();
+                    IntVar mergedVar = mergedModel.intVar(variableName, var);
+                    // logger.info("m1 var new other: " + mergedVar.toString());
+                    variablesMap.put(variableName, mergedVar);
+                }
             }
         }
 
@@ -192,10 +189,12 @@ public class ModelMerger {
                 variablesMap.put(var.getName(), mergedVar);
             } else if (mergeReif) {
                 // REIF und andere Variablen model2
-                String variableName = baseModel2.getRegionModel().printRegion() + "_" + var.getName();
-                IntVar mergedVar = mergedModel.intVar(variableName, var);
-                // logger.info("m2 var new other: " + mergedVar.toString());
-                variablesMap.put(variableName, mergedVar);
+                if (!var.getName().contains("not(")) {
+                    String variableName = baseModel2.getRegionModel().printRegion() + "_" + var.getName();
+                    IntVar mergedVar = mergedModel.intVar(variableName, var);
+                    // logger.info("m2 var new other: " + mergedVar.toString());
+                    variablesMap.put(variableName, mergedVar);
+                }
             }
         }
 

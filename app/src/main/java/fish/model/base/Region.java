@@ -19,9 +19,9 @@ public enum Region {
     public String printRegion() {
         switch (getValue()) {
             case 0:
-                return "EU";
-            case 1:
                 return "NA";
+            case 1:
+                return "EU";
             case 2:
                 return "ASIA";
             case 3:

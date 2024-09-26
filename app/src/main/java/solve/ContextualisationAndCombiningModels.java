@@ -36,5 +36,10 @@ public class ContextualisationAndCombiningModels {
         //europeFishModel.printAllConstraints();
         
         MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel, true);
+        mergedModel.printAllVariables(true);
+        mergedModel.printAllConstraints();
+        asiaFishModel.solveAndPrintNumberOfSolutions();
+        europeFishModel.solveAndPrintNumberOfSolutions();
+        mergedModel.solveAndPrintNumberOfSolutions();
     }
 }
