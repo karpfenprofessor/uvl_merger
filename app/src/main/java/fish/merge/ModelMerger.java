@@ -60,7 +60,11 @@ public class ModelMerger {
                             IntVar reifiedVariable = pMapped.reifiedWith();
                             IntVar storedReifiedVariable = variablesMap.get(prefix + "_" + reifiedVariable.getName());
                             IntVar arithmVariable = pMapped.getVar(0);
-                            IntVar storedArithmVariable = variablesMap.get(arithmVariable.getName());
+                            String arithmVariableName = arithmVariable.getName();
+                            if(!baseModel1.getDomainVariablesAsString().contains(arithmVariable.getName())) {
+                                arithmVariableName = prefix + "_" + arithmVariableName;
+                            }
+                            IntVar storedArithmVariable = variablesMap.get(arithmVariableName);
                             Integer constant = Integer.parseInt(pMapped.toString().split("=")[1].trim());
 
                             Constraint arithmConstraint = mergedModel.arithm(storedArithmVariable, "=", constant);

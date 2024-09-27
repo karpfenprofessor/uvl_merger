@@ -40,6 +40,10 @@ public abstract class BaseModel {
         logger = LogManager.getLogger(this.getClass());
     }
 
+    public String getDomainVariablesAsString() {
+        return "region habitat size diet fishFamily fishSpecies";
+    }
+
     public void printAllVariables(boolean showReifVariables) {
         logger.debug("[print] print variables of model " + this.printRegion());
         int cnt = 0;
