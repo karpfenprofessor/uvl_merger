@@ -32,7 +32,7 @@ public class AsiaFishModel extends BaseModel {
                         addRandomConstraints(number);
                 }
 
-                logger.info("CREATED Model " + regionModel.printRegion() + " with " + model.getNbCstrs()
+                logger.info("[create] model " + regionModel.printRegion() + " with " + model.getNbCstrs()
                                 + " constraints.");
         }
 

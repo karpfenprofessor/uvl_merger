@@ -41,7 +41,7 @@ public abstract class BaseModel {
     }
 
     public void printAllVariables(boolean showReifVariables) {
-        logger.debug("print variables of model " + this.printRegion());
+        logger.debug("[print] print variables of model " + this.printRegion());
         int cnt = 0;
         HashMap<String, IntVar> variablesMap = getVariablesAsMap();
 
@@ -56,7 +56,7 @@ public abstract class BaseModel {
             } 
         }
 
-        logger.debug("finished variables of model " + this.printRegion() + "\n");
+        logger.debug("[print] finished printing variables of model " + this.printRegion() + "\n");
     }
 
     public HashMap<String, IntVar> getVariablesAsMap() {
@@ -70,14 +70,14 @@ public abstract class BaseModel {
     }
 
     public void printAllConstraints() {
-        logger.debug("print constraints of model " + this.printRegion());
+        logger.debug("[print] print constraints of model " + this.printRegion());
         int cnt = 0;
         for (Constraint c : this.getModel().getCstrs()) {
             logger.info("  Constraint [" + cnt + "]: " + c.toString());
             cnt++;
         }
 
-        logger.debug("finished constraints of model " + this.printRegion() + "\n");
+        logger.debug("[print] finished printing constraints of model " + this.printRegion() + "\n");
     }
 
     public void analyseModel() {
@@ -135,7 +135,7 @@ public abstract class BaseModel {
             cnt++;
         } while (cnt < x);
 
-        logger.debug("[SOL] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
+        logger.debug("[sol] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
                 + (msSum / cnt) + " ms");
     }
 
@@ -150,7 +150,7 @@ public abstract class BaseModel {
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
         getSolver().reset();
-        logger.debug("[SOL] Number of solutions in " + regionModel.printRegion() + " with calculation time "
+        logger.debug("[sol] Number of solutions in " + regionModel.printRegion() + " with calculation time "
                 + executionTime + " ms: " + cnt);
         return cnt;
     }
@@ -164,7 +164,7 @@ public abstract class BaseModel {
         getSolver().reset();
 
         // Print solution
-        logger.debug("[SOL] Solution found in " + executionTime + " ms");
+        logger.debug("[sol] Solution found in " + executionTime + " ms");
         logger.debug("  Region: " + regionModel.printRegion() + " | Habitat: " + getHabitat(habitat.getValue())
                 + " | Size: " + getSize(size.getValue()));
         logger.debug("  Diet: " + getDiet(diet.getValue()) + " | Family: " + getFishFamily(fishFamily.getValue())

@@ -30,8 +30,8 @@ public class NorthAmericaFishModel extends BaseModel {
                         addRandomConstraints(number);
                 }
 
-                logger.info("CREATED Model " + regionModel.printRegion() + " with " + model.getNbCstrs()
-                                + " constraints.");
+                logger.info("[create] model " + regionModel.printRegion() + " with " + model.getNbCstrs()
+                                + " constraints");
         }
 
         private void addLogicalConstraints() {

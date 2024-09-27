@@ -13,8 +13,8 @@ public class MergedModel extends BaseModel {
         super();
         regionModel = Region.MERGED;
 
-        logger.info("CREATED Model " + regionModel.printRegion() + " with " + model.getNbCstrs()
-                + " constraints.");
+        logger.info("[create] model " + regionModel.printRegion() + " with " + model.getNbCstrs()
+                + " constraints");
     }
 
     @Override
