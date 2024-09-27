@@ -1,4 +1,5 @@
 package fish;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,7 +43,7 @@ public class ContextualizationAndMergingTest {
     void mergeTwoModelsIntoMergedModel() {
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 0);
         int solutionsAsiaBefore = asiaFishModel.solveAndPrintNumberOfSolutions();
-        
+
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
         int solutionsEuBefore = europeFishModel.solveAndPrintNumberOfSolutions();
 
@@ -52,15 +53,22 @@ public class ContextualizationAndMergingTest {
         assertEquals(solutionsMerged, solutionsAsiaBefore + solutionsEuBefore);
         assertTrue(Checker.checkConsistency(mergedFishModel));
         assertTrue(Checker.checkConsistencyByPropagation(mergedFishModel));
+    }
+
+    @Test
+    void mergeTwoModelsIntoMergedModelWithMoreConstraints() {
+        EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
+        int solutionsEuBefore = europeFishModel.solveAndPrintNumberOfSolutions();
 
         NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
         int solutionsNaBefore = naFishModel.solveAndPrintNumberOfSolutions();
 
-        mergedFishModel = ModelMerger.mergeModels(naFishModel, europeFishModel, false);
-        solutionsMerged = mergedFishModel.solveAndPrintNumberOfSolutions();
+        MergedModel mergedFishModel = ModelMerger.mergeModels(naFishModel, europeFishModel, false);
+        int solutionsMerged = mergedFishModel.solveAndPrintNumberOfSolutions();
 
         assertEquals(solutionsMerged, solutionsNaBefore + solutionsEuBefore);
         assertTrue(Checker.checkConsistency(mergedFishModel));
         assertTrue(Checker.checkConsistencyByPropagation(mergedFishModel));
     }
+
 }

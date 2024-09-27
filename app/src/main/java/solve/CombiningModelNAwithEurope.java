@@ -1,7 +1,6 @@
 package solve;
 
 import fish.model.base.Region;
-import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
 import fish.model.impl.MergedModel;
 import fish.model.impl.NorthAmericaFishModel;

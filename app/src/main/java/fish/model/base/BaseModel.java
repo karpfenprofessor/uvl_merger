@@ -51,11 +51,11 @@ public abstract class BaseModel {
 
         for (Entry<String, IntVar> entry : variablesMap.entrySet()) {
             IntVar var = entry.getValue();
-            String varDetails = String.format("  Variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Value: %s",
+            String varDetails = String.format("  variable [%d]: Key: %s, Name: %s, Domain: [%d, %d], Value: %s",
                     cnt, entry.getKey(), var.getName(), var.getLB(), var.getUB(),
                     var.isInstantiated() ? String.valueOf(var.getValue()) : "null");
             cnt++;
-            if(showReifVariables && varDetails.contains("REIF_") || !varDetails.contains("REIF_")) {
+            if((showReifVariables && varDetails.contains("REIF_")) || !varDetails.contains("REIF_")) {
                 logger.info(varDetails);
             } 
         }
@@ -77,7 +77,7 @@ public abstract class BaseModel {
         logger.debug("[print] print constraints of model " + this.printRegion());
         int cnt = 0;
         for (Constraint c : this.getModel().getCstrs()) {
-            logger.info("  Constraint [" + cnt + "]: " + c.toString());
+            logger.info("  constraint [" + cnt + "]: " + c.toString());
             cnt++;
         }
 
