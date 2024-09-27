@@ -7,3 +7,4 @@ build
 app/bin/*
 logs/app.log
 app/logs/app.log
+*.gexf
