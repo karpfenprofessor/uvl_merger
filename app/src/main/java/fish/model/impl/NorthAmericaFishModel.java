@@ -39,6 +39,13 @@ public class NorthAmericaFishModel extends BaseModel {
                 model.ifThen(model.arithm(fishFamily, "=", 0),
                                 model.or(model.arithm(habitat, "=", 0), model.arithm(habitat, "=", 1)));
 
+                
+
+                // Constraint 4: Centrarchidae primarily freshwater and carnivorous
+                model.ifThen(model.arithm(fishFamily, "=", 3),
+                                model.and(model.arithm(habitat, "=", 0), model.arithm(diet, "=", 2)));
+/*
+
                 // Constraint 2: Ictaluridae primarily found in freshwater
                 model.ifThen(model.arithm(fishFamily, "=", 1),
                                 model.arithm(habitat, "=", 0));
@@ -46,11 +53,7 @@ public class NorthAmericaFishModel extends BaseModel {
                 // Constraint 3: Serranidae such as Red Grouper found in saltwater
                 model.ifThen(model.arithm(fishFamily, "=", 2),
                                 model.arithm(habitat, "=", 1));
-
-                // Constraint 4: Centrarchidae primarily freshwater and carnivorous
-                model.ifThen(model.arithm(fishFamily, "=", 3),
-                                model.and(model.arithm(habitat, "=", 0), model.arithm(diet, "=", 2)));
-
+                                
                 // Constraint 5: Large fish such as Black Sea Bass found in saltwater
                 model.ifThen(model.arithm(fishSpecies, "=", 4),
                                 model.arithm(habitat, "=", 1));
@@ -201,7 +204,7 @@ public class NorthAmericaFishModel extends BaseModel {
 
                 // Constraint 40: Large omnivorous fish are more common in saltwater
                 model.ifThen(model.and(model.arithm(size, "=", 2), model.arithm(habitat, "=", 1)),
-                                model.arithm(diet, "=", 1));
+                                model.arithm(diet, "=", 1));*/
         }
 
         @Override

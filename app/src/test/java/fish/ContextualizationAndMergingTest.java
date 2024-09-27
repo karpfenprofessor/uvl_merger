@@ -12,7 +12,7 @@ import fish.model.impl.EuropeFishModel;
 import fish.model.impl.MergedModel;
 import fish.model.impl.NorthAmericaFishModel;
 
-public class ContextualizationTest {
+public class ContextualizationAndMergingTest {
 
     @Test
     void createAllModelsAndContextualize() {
@@ -50,6 +50,16 @@ public class ContextualizationTest {
         int solutionsMerged = mergedFishModel.solveAndPrintNumberOfSolutions();
 
         assertEquals(solutionsMerged, solutionsAsiaBefore + solutionsEuBefore);
+        assertTrue(Checker.checkConsistency(mergedFishModel));
+        assertTrue(Checker.checkConsistencyByPropagation(mergedFishModel));
+
+        NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
+        int solutionsNaBefore = naFishModel.solveAndPrintNumberOfSolutions();
+
+        mergedFishModel = ModelMerger.mergeModels(naFishModel, europeFishModel, false);
+        solutionsMerged = mergedFishModel.solveAndPrintNumberOfSolutions();
+
+        assertEquals(solutionsMerged, solutionsNaBefore + solutionsEuBefore);
         assertTrue(Checker.checkConsistency(mergedFishModel));
         assertTrue(Checker.checkConsistencyByPropagation(mergedFishModel));
     }

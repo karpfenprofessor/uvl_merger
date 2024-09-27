@@ -46,11 +46,13 @@ public class ModelMerger {
         String prefix = baseModel1.printRegion();
 
         logger.debug("[merge] start merge " + baseModel.getNbCstrs() + " constraints of model "
-                + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " constraints");
+                + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + " with "
+                + mergedModel.getNbCstrs() + " constraints");
 
         for (Constraint c : baseModel.getCstrs()) {
             if (c instanceof org.chocosolver.solver.constraints.ReificationConstraint) {
-                for (@SuppressWarnings("rawtypes") Propagator p : c.getPropagators()) {
+                for (@SuppressWarnings("rawtypes")
+                Propagator p : c.getPropagators()) {
 
                     if (p instanceof PropEqualXC) {
                         PropEqualXC pMapped = (PropEqualXC) p;
@@ -90,7 +92,8 @@ public class ModelMerger {
 
                 }
             } else if (c instanceof org.chocosolver.solver.constraints.Arithmetic) {
-                for (@SuppressWarnings("rawtypes") Propagator p : c.getPropagators()) {
+                for (@SuppressWarnings("rawtypes")
+                Propagator p : c.getPropagators()) {
                     if (p instanceof PropGreaterOrEqualX_Y) {
                         PropGreaterOrEqualX_Y pMapped = (PropGreaterOrEqualX_Y) p;
 
@@ -113,21 +116,24 @@ public class ModelMerger {
         }
 
         logger.debug(
-                "[merge] finished merge constraints of model " + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " constraints");
-    
-            
+                "[merge] finished merge constraints of model " + baseModel1.printRegion() + " into "
+                        + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " constraints");
+
         logger.debug("[merge] start constrain variables with region variable");
 
-        Constraint isRegionModel = mergedModel.arithm(variablesMap.get("region"), "=", baseModel1.regionModel.ordinal());
-        
-        Constraint isFishFamilyModel = mergedModel.member(variablesMap.get("fishFamily"), baseModel1.fishFamily.getLB(), baseModel1.fishFamily.getUB());
+        Constraint isRegionModel = mergedModel.arithm(variablesMap.get("region"), "=",
+                baseModel1.regionModel.ordinal());
+
+        Constraint isFishFamilyModel = mergedModel.member(variablesMap.get("fishFamily"), baseModel1.fishFamily.getLB(),
+                baseModel1.fishFamily.getUB());
         mergedModel.ifOnlyIf(isRegionModel, isFishFamilyModel);
 
-        Constraint isFishSpeciesModel = mergedModel.member(variablesMap.get("fishSpecies"), baseModel1.fishSpecies.getLB(), baseModel1.fishSpecies.getUB());
+        Constraint isFishSpeciesModel = mergedModel.member(variablesMap.get("fishSpecies"),
+                baseModel1.fishSpecies.getLB(), baseModel1.fishSpecies.getUB());
         mergedModel.ifOnlyIf(isRegionModel, isFishSpeciesModel);
 
-        logger.debug("[merge] finished constrain variables [fishFamily, fishSpecies] of model " 
-                + baseMergedModel.printRegion() + " with region " + baseModel1.printRegion() 
+        logger.debug("[merge] finished constrain variables [fishFamily, fishSpecies] of model "
+                + baseMergedModel.printRegion() + " with region " + baseModel1.printRegion()
                 + " with " + mergedModel.getNbCstrs() + " Constraints");
     }
 
@@ -135,20 +141,26 @@ public class ModelMerger {
             HashMap<String, IntVar> variablesMap, boolean mergeReif) {
 
         logger.debug(
-                "[merge] start merge variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
+                "[merge] start merge variables of models " + baseModel1.printRegion() + " and "
+                        + baseModel2.printRegion());
         Model model1 = baseModel1.getModel();
         Model model2 = baseModel2.getModel();
         Model mergedModel = baseMergedModel.getModel();
+        int cntDomainVariables = 0;
+        int cntReifVariablesModel1 = 0;
+        int cntReifVariablesModel2 = 0;
 
         for (IntVar var : model1.retrieveIntVars(true)) {
             if (baseModel1.getVariableNames().contains(var.getName())) {
                 IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
                 variablesMap.put(var.getName(), mergedVar);
+                cntDomainVariables++;
             } else if (mergeReif) {
                 if (!var.getName().contains("not(")) {
                     String variableName = baseModel1.getRegionModel().printRegion() + "_" + var.getName();
                     IntVar mergedVar = mergedModel.intVar(variableName, var);
                     variablesMap.put(variableName, mergedVar);
+                    cntReifVariablesModel1++;
                 }
             }
         }
@@ -164,21 +176,27 @@ public class ModelMerger {
             } else if (baseModel2.getVariableNames().contains(var.getName())) {
                 IntVar mergedVar = mergedModel.intVar(var.getName(), var.getLB(), var.getUB());
                 variablesMap.put(var.getName(), mergedVar);
+                cntDomainVariables++;
             } else if (mergeReif) {
                 if (!var.getName().contains("not(")) {
                     String variableName = baseModel2.getRegionModel().printRegion() + "_" + var.getName();
                     IntVar mergedVar = mergedModel.intVar(variableName, var);
                     variablesMap.put(variableName, mergedVar);
+                    cntReifVariablesModel2++;
                 }
             }
         }
 
         logger.debug(
-                "[merge] finished merge variables of models " + baseModel1.printRegion() + " and " + baseModel2.printRegion());
+                "[merge] finished merge variables of models " + baseModel1.printRegion() + " and "
+                        + baseModel2.printRegion() + " with " + cntDomainVariables + " domain vars, "
+                        + cntReifVariablesModel1 + " reif vars from model " + baseModel1.printRegion() + " and "
+                        + cntReifVariablesModel2 + " reif vars from model " + baseModel2.printRegion());
     }
 
     public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
-        logger.debug("[contextualize] start contextualize of model " + model.printRegion() + " with " + model.getModel().getNbCstrs() + " constraints");
+        logger.debug("[contextualize] start contextualize of model " + model.printRegion() + " with "
+                + model.getModel().getNbCstrs() + " constraints");
 
         Constraint contextualizationConstraint = model.getModel()
                 .arithm(getVariablesAsMap(model.getModel()).get(variableName), "=", region.ordinal());
@@ -191,7 +209,8 @@ public class ModelMerger {
             }
         }
 
-        logger.debug("[contextualize] finished contextualize of model " + model.printRegion() + " with " + model.getModel().getNbCstrs() + " constraints");
+        logger.debug("[contextualize] finished contextualize of model " + model.printRegion() + " with "
+                + model.getModel().getNbCstrs() + " constraints");
     }
 
     private static HashMap<String, IntVar> getVariablesAsMap(Model m) {
