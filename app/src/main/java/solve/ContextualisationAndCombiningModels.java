@@ -4,6 +4,7 @@ import fish.model.base.Region;
 import fish.model.impl.AsiaFishModel;
 import fish.model.impl.EuropeFishModel;
 import fish.model.impl.MergedModel;
+import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
 public class ContextualisationAndCombiningModels {
@@ -39,5 +40,7 @@ public class ContextualisationAndCombiningModels {
         if(numberOfSolutions != 0) {
             throw new Exception("Merge failed");
         }
+
+        Checker.findIntersectionSolution(mergedModel, Region.EUROPE, Region.ASIA);
     }
 }
