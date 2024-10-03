@@ -31,7 +31,7 @@ public class ContextualizationAndMergingTest {
         assertTrue(CarChecker.checkConsistencyByPropagation(northAmericaCarModel));
     }
 
-    //@Test
+    @Test
     void mergeTwoModelsIntoMergedModel() {
         EuropeCarModel europeCarModel = new EuropeCarModel(true, 0);
         int solutionsEuropeBefore = europeCarModel.solveAndPrintNumberOfSolutions();

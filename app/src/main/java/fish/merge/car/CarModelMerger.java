@@ -58,6 +58,10 @@ public class CarModelMerger {
                         PropEqualXC pMapped = (PropEqualXC) p;
                         if (pMapped.isReified() && pMapped.reifiedWith() != null) {
                             IntVar reifiedVariable = pMapped.reifiedWith();
+                            if(reifiedVariable.getName().contains("not(")) {
+                                continue;
+                            }
+
                             IntVar storedReifiedVariable = variablesMap.get(prefix + "_" + reifiedVariable.getName());
                             IntVar arithmVariable = pMapped.getVar(0);
                             String arithmVariableName = arithmVariable.getName();
@@ -72,6 +76,24 @@ public class CarModelMerger {
                         }
                     } else if (p instanceof PropNotEqualXC) {
                         PropNotEqualXC pMapped = (PropNotEqualXC) p;
+                        if (pMapped.isReified() && pMapped.reifiedWith() != null) {
+                            IntVar reifiedVariable = pMapped.reifiedWith();
+                            if(reifiedVariable.getName().contains("not(")) {
+                                continue;
+                            }
+                            
+                            IntVar storedReifiedVariable = variablesMap.get(prefix + "_" + reifiedVariable.getName());
+                            IntVar arithmVariable = pMapped.getVar(0);
+                            String arithmVariableName = arithmVariable.getName();
+                            if (!baseModel1.getDomainVariablesAsString().contains(arithmVariable.getName())) {
+                                arithmVariableName = prefix + "_" + arithmVariableName;
+                            }
+                            IntVar storedArithmVariable = variablesMap.get(arithmVariableName);
+                            Integer constant = Integer.parseInt(pMapped.toString().split("=/=")[1].trim());
+
+                            Constraint arithmConstraint = mergedModel.arithm(storedArithmVariable, "!=", constant);
+                            arithmConstraint.reifyWith((BoolVar) storedReifiedVariable);
+                        }
                     } else if (p instanceof PropReif) {
                         PropReif pMapped = (PropReif) p;
                     } else if (p instanceof PropGreaterOrEqualX_Y) {
