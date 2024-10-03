@@ -1,10 +1,10 @@
-package solve;
+package solve.fish;
 
+import fish.merge.FishModelMerger;
 import fish.model.base.Region;
 import fish.model.fish.impl.EuropeFishModel;
 import fish.model.fish.impl.MergedFishModel;
 import fish.model.fish.impl.NorthAmericaFishModel;
-import fish.merge.ModelMerger;
 
 public class CombiningModelNAwithEurope {
 
@@ -12,30 +12,30 @@ public class CombiningModelNAwithEurope {
         int numberOfSolutions = 0;
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
         numberOfSolutions = europeFishModel.solveAndPrintNumberOfSolutions();
-        ModelMerger.contextualizeConstraints(europeFishModel, "region", Region.EUROPE);
+        FishModelMerger.contextualizeConstraints(europeFishModel, "region", Region.EUROPE);
         numberOfSolutions = numberOfSolutions - europeFishModel.solveAndPrintNumberOfSolutions();
-        if(numberOfSolutions != 0) {
+        if (numberOfSolutions != 0) {
             throw new Exception("Contextualization of Europe failed");
         }
 
         NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
         numberOfSolutions = naFishModel.solveAndPrintNumberOfSolutions();
-        ModelMerger.contextualizeConstraints(naFishModel, "region", Region.NORTH_AMERICA);
+        FishModelMerger.contextualizeConstraints(naFishModel, "region", Region.NORTH_AMERICA);
         numberOfSolutions = numberOfSolutions - naFishModel.solveAndPrintNumberOfSolutions();
-        if(numberOfSolutions != 0) {
+        if (numberOfSolutions != 0) {
             throw new Exception("Contextualization of NorthAmerica failed");
         }
-        
-        MergedFishModel mergedModel = ModelMerger.mergeModels(naFishModel, europeFishModel, true);
+
+        MergedFishModel mergedModel = FishModelMerger.mergeModels(naFishModel, europeFishModel, true);
         mergedModel.printAllVariables(true);
         mergedModel.printAllConstraints();
-        
+
         int numberOfSolutionsNa = naFishModel.solveAndPrintNumberOfSolutions();
         int numberOfSolutionsEu = europeFishModel.solveAndPrintNumberOfSolutions();
         numberOfSolutions = mergedModel.solveAndPrintNumberOfSolutions();
         numberOfSolutions = numberOfSolutions - numberOfSolutionsNa - numberOfSolutionsEu;
 
-        if(numberOfSolutions != 0) {
+        if (numberOfSolutions != 0) {
             throw new Exception("Merge failed");
         }
     }

@@ -13,19 +13,18 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
 
-import fish.model.base.BaseFishModel;
+import fish.model.base.BaseCarModel;
 import fish.model.base.Region;
-import fish.model.fish.impl.MergedFishModel;
-
+import fish.model.car.impl.MergedCarModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ModelMerger {
+public class CarModelMerger {
 
-    protected final static Logger logger = LogManager.getLogger(ModelMerger.class);
+    protected final static Logger logger = LogManager.getLogger(CarModelMerger.class);
 
-    public static MergedFishModel mergeModels(BaseFishModel base1, BaseFishModel base2, boolean alreadyContextualized) {
-        MergedFishModel baseMerged = new MergedFishModel(false, 0);
+    public static MergedCarModel mergeModels(BaseCarModel base1, BaseCarModel base2, boolean alreadyContextualized) {
+        MergedCarModel baseMerged = new MergedCarModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
         if (!alreadyContextualized) {
@@ -40,7 +39,7 @@ public class ModelMerger {
         return baseMerged;
     }
 
-    private static void mergeConstraints(BaseFishModel baseModel1, BaseFishModel baseMergedModel,
+    private static void mergeConstraints(BaseCarModel baseModel1, BaseCarModel baseMergedModel,
             HashMap<String, IntVar> variablesMap) {
         Model baseModel = baseModel1.getModel();
         Model mergedModel = baseMergedModel.getModel();
@@ -62,7 +61,7 @@ public class ModelMerger {
                             IntVar storedReifiedVariable = variablesMap.get(prefix + "_" + reifiedVariable.getName());
                             IntVar arithmVariable = pMapped.getVar(0);
                             String arithmVariableName = arithmVariable.getName();
-                            if(!baseModel1.getDomainVariablesAsString().contains(arithmVariable.getName())) {
+                            if (!baseModel1.getDomainVariablesAsString().contains(arithmVariable.getName())) {
                                 arithmVariableName = prefix + "_" + arithmVariableName;
                             }
                             IntVar storedArithmVariable = variablesMap.get(arithmVariableName);
@@ -124,25 +123,9 @@ public class ModelMerger {
                 "[merge] finished merge constraints of model " + baseModel1.printRegion() + " into "
                         + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " constraints");
 
-        logger.debug("[merge] start constrain variables with region variable");
-
-        Constraint isRegionModel = mergedModel.arithm(variablesMap.get("region"), "=",
-                baseModel1.regionModel.ordinal());
-
-        Constraint isFishFamilyModel = mergedModel.member(variablesMap.get("fishFamily"), baseModel1.fishFamily.getLB(),
-                baseModel1.fishFamily.getUB());
-        mergedModel.ifOnlyIf(isRegionModel, isFishFamilyModel);
-
-        Constraint isFishSpeciesModel = mergedModel.member(variablesMap.get("fishSpecies"),
-                baseModel1.fishSpecies.getLB(), baseModel1.fishSpecies.getUB());
-        mergedModel.ifOnlyIf(isRegionModel, isFishSpeciesModel);
-
-        logger.debug("[merge] finished constrain variables [fishFamily, fishSpecies] of model "
-                + baseMergedModel.printRegion() + " with region " + baseModel1.printRegion()
-                + " with " + mergedModel.getNbCstrs() + " Constraints");
     }
 
-    private static void mergeVariables(BaseFishModel baseModel1, BaseFishModel baseModel2, BaseFishModel baseMergedModel,
+    private static void mergeVariables(BaseCarModel baseModel1, BaseCarModel baseModel2, BaseCarModel baseMergedModel,
             HashMap<String, IntVar> variablesMap, boolean mergeReif) {
 
         logger.debug(
@@ -199,7 +182,7 @@ public class ModelMerger {
                         + cntReifVariablesModel2 + " reif vars from model " + baseModel2.printRegion());
     }
 
-    public static void contextualizeConstraints(BaseFishModel model, String variableName, Region region) {
+    public static void contextualizeConstraints(BaseCarModel model, String variableName, Region region) {
         logger.debug("[contextualize] start contextualize of model " + model.printRegion() + " with "
                 + model.getModel().getNbCstrs() + " constraints");
 

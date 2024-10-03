@@ -1,4 +1,4 @@
-package solve;
+package solve.fish;
 
 import fish.model.fish.impl.AsiaFishModel;
 import fish.model.fish.impl.EuropeFishModel;

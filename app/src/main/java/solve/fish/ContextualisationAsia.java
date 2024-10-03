@@ -1,9 +1,9 @@
-package solve;
+package solve.fish;
 
 import fish.model.base.Region;
 import fish.model.fish.impl.AsiaFishModel;
 import fish.merge.Checker;
-import fish.merge.ModelMerger;
+import fish.merge.FishModelMerger;
 
 public class ContextualisationAsia {
 
@@ -11,9 +11,9 @@ public class ContextualisationAsia {
         AsiaFishModel asiaFishModel = new AsiaFishModel(true, 0);
         asiaFishModel.solveAndPrintNumberOfSolutions();
         asiaFishModel.getSolver().constraintNetworkToGephi("asia_original.gexf");
-        
-        ModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
-       
+
+        FishModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
+
         asiaFishModel.solveAndPrintNumberOfSolutions();
         asiaFishModel.getSolver().constraintNetworkToGephi("asia_contextualized.gexf");
         Checker.checkConsistency(asiaFishModel);

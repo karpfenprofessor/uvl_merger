@@ -1,9 +1,9 @@
-package solve;
+package solve.fish;
 
 import fish.model.base.Region;
 import fish.model.fish.impl.EuropeFishModel;
 import fish.merge.Checker;
-import fish.merge.ModelMerger;
+import fish.merge.FishModelMerger;
 
 public class ContextualisationEU {
 
@@ -12,7 +12,7 @@ public class ContextualisationEU {
         model.solveAndPrintNumberOfSolutions();
         model.getSolver().constraintNetworkToGephi("eu_original.gexf");
         
-        ModelMerger.contextualizeConstraints(model, "region", Region.EUROPE);
+        FishModelMerger.contextualizeConstraints(model, "region", Region.EUROPE);
        
         model.solveAndPrintNumberOfSolutions();
         model.getSolver().constraintNetworkToGephi("eu_contextualized.gexf");

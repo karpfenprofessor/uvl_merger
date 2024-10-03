@@ -55,9 +55,9 @@ public abstract class BaseFishModel {
                     cnt, entry.getKey(), var.getName(), var.getLB(), var.getUB(),
                     var.isInstantiated() ? String.valueOf(var.getValue()) : "null");
             cnt++;
-            if((showReifVariables && varDetails.contains("REIF_")) || !varDetails.contains("REIF_")) {
+            if ((showReifVariables && varDetails.contains("REIF_")) || !varDetails.contains("REIF_")) {
                 logger.info(varDetails);
-            } 
+            }
         }
 
         logger.debug("[print] finished printing variables of model " + this.printRegion() + "\n");

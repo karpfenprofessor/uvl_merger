@@ -107,7 +107,7 @@ public class Checker {
             IntVar fishSpecies) {
         String returnString = String.format("%d %d %d %d %d %d", region.getValue(), habitat.getValue(), size.getValue(),
                 diet.getValue(), fishFamily.getValue(), fishSpecies.getValue());
-        //logger.info(returnString);
+        // logger.info(returnString);
         return returnString;
     }
 }
