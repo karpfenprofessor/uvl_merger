@@ -12,9 +12,10 @@ import org.chocosolver.solver.constraints.unary.PropNotEqualXC;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
-import fish.model.base.BaseModel;
+
+import fish.model.base.BaseFishModel;
 import fish.model.base.Region;
-import fish.model.impl.MergedModel;
+import fish.model.fish.impl.MergedFishModel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,8 +24,8 @@ public class ModelMerger {
 
     protected final static Logger logger = LogManager.getLogger(ModelMerger.class);
 
-    public static MergedModel mergeModels(BaseModel base1, BaseModel base2, boolean alreadyContextualized) {
-        MergedModel baseMerged = new MergedModel(false, 0);
+    public static MergedFishModel mergeModels(BaseFishModel base1, BaseFishModel base2, boolean alreadyContextualized) {
+        MergedFishModel baseMerged = new MergedFishModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
         if (!alreadyContextualized) {
@@ -39,7 +40,7 @@ public class ModelMerger {
         return baseMerged;
     }
 
-    private static void mergeConstraints(BaseModel baseModel1, BaseModel baseMergedModel,
+    private static void mergeConstraints(BaseFishModel baseModel1, BaseFishModel baseMergedModel,
             HashMap<String, IntVar> variablesMap) {
         Model baseModel = baseModel1.getModel();
         Model mergedModel = baseMergedModel.getModel();
@@ -141,7 +142,7 @@ public class ModelMerger {
                 + " with " + mergedModel.getNbCstrs() + " Constraints");
     }
 
-    private static void mergeVariables(BaseModel baseModel1, BaseModel baseModel2, BaseModel baseMergedModel,
+    private static void mergeVariables(BaseFishModel baseModel1, BaseFishModel baseModel2, BaseFishModel baseMergedModel,
             HashMap<String, IntVar> variablesMap, boolean mergeReif) {
 
         logger.debug(
@@ -198,7 +199,7 @@ public class ModelMerger {
                         + cntReifVariablesModel2 + " reif vars from model " + baseModel2.printRegion());
     }
 
-    public static void contextualizeConstraints(BaseModel model, String variableName, Region region) {
+    public static void contextualizeConstraints(BaseFishModel model, String variableName, Region region) {
         logger.debug("[contextualize] start contextualize of model " + model.printRegion() + " with "
                 + model.getModel().getNbCstrs() + " constraints");
 

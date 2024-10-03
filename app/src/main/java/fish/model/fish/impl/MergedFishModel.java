@@ -1,15 +1,15 @@
-package fish.model.impl;
+package fish.model.fish.impl;
 
-import fish.model.base.BaseModel;
+import fish.model.base.BaseFishModel;
 import fish.model.base.Region;
 
-public class MergedModel extends BaseModel {
+public class MergedFishModel extends BaseFishModel {
 
-    public MergedModel() {
+    public MergedFishModel() {
         this(false, 0);
     }
 
-    public MergedModel(boolean addConstraints, int number) {
+    public MergedFishModel(boolean addConstraints, int number) {
         super();
         regionModel = Region.MERGED;
 

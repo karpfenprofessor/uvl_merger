@@ -2,7 +2,7 @@
 package solve;
 
 import fish.model.base.Region;
-import fish.model.impl.NorthAmericaFishModel;
+import fish.model.fish.impl.NorthAmericaFishModel;
 import fish.merge.Checker;
 import fish.merge.ModelMerger;
 

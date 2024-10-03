@@ -1,9 +1,9 @@
 package solve;
 
 import fish.model.base.Region;
-import fish.model.impl.AsiaFishModel;
-import fish.model.impl.EuropeFishModel;
-import fish.model.impl.MergedModel;
+import fish.model.fish.impl.AsiaFishModel;
+import fish.model.fish.impl.EuropeFishModel;
+import fish.model.fish.impl.MergedFishModel;
 import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
@@ -28,7 +28,7 @@ public class ContextualisationAndCombiningModels {
             throw new Exception("Contextualization of Europe failed");
         }
         
-        MergedModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel, true);
+        MergedFishModel mergedModel = ModelMerger.mergeModels(asiaFishModel, europeFishModel, true);
         mergedModel.printAllVariables(true);
         mergedModel.printAllConstraints();
         

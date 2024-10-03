@@ -1,8 +1,9 @@
 package solve;
 
-import fish.model.impl.AsiaFishModel;
-import fish.model.impl.EuropeFishModel;
-import fish.model.impl.NorthAmericaFishModel;
+import fish.model.fish.impl.AsiaFishModel;
+import fish.model.fish.impl.EuropeFishModel;
+import fish.model.fish.impl.NorthAmericaFishModel;
+
 
 public class Merge {
 

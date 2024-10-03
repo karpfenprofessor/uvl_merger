@@ -18,7 +18,7 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class BaseModel {
+public abstract class BaseFishModel {
 
     // Define variables
     public IntVar region;
@@ -34,7 +34,7 @@ public abstract class BaseModel {
     protected final Logger logger;
     private Random random = new Random();
 
-    public BaseModel() {
+    public BaseFishModel() {
         model = new Model();
         constraintsSet = new HashSet<>();
         logger = LogManager.getLogger(this.getClass());

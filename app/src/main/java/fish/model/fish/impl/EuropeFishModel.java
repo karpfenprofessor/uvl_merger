@@ -1,9 +1,9 @@
-package fish.model.impl;
+package fish.model.fish.impl;
 
-import fish.model.base.BaseModel;
+import fish.model.base.BaseFishModel;
 import fish.model.base.Region;
 
-public class EuropeFishModel extends BaseModel {
+public class EuropeFishModel extends BaseFishModel {
 
         public EuropeFishModel() {
                 this(false, 0);

@@ -4,12 +4,11 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.exception.ContradictionException;
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fish.model.base.BaseModel;
+import fish.model.base.BaseFishModel;
 import fish.model.base.Region;
 
 import java.util.Set;
@@ -27,7 +26,7 @@ public class Checker {
      * @return true if a solution is found, indicating the model is consistent,
      *         false otherwise
      */
-    public static boolean checkConsistency(BaseModel model) {
+    public static boolean checkConsistency(BaseFishModel model) {
         boolean consistency = model.getSolver().findSolution() != null;
         ;
         logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
@@ -46,7 +45,7 @@ public class Checker {
      *         contradiction,
      *         false if a contradiction occurs, indicating an inconsistency
      */
-    public static boolean checkConsistencyByPropagation(BaseModel model) {
+    public static boolean checkConsistencyByPropagation(BaseFishModel model) {
         try {
             model.getSolver().propagate();
             logger.warn("[check] checkConsistencyByPropagation for model " + model.printRegion() + ": true");
@@ -59,7 +58,7 @@ public class Checker {
         }
     }
 
-    public static int findIntersectionSolution(BaseModel mergedModel, Region region1, Region region2) {
+    public static int findIntersectionSolution(BaseFishModel mergedModel, Region region1, Region region2) {
         logger.debug("[sol] start intersection solution of merged model with regions: " + region1.printRegion() + " | "
                 + region2.printRegion());
 

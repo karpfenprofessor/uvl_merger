@@ -1,8 +1,7 @@
 package solve;
 
 import fish.model.base.Region;
-import fish.model.impl.EuropeFishModel;
-
+import fish.model.fish.impl.EuropeFishModel;
 import fish.merge.Checker;
 import fish.merge.ModelMerger;
 
