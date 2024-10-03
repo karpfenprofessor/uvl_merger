@@ -1,4 +1,4 @@
-package fish.merge;
+package fish.merge.car;
 
 import java.util.HashMap;
 import org.chocosolver.solver.Model;

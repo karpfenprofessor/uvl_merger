@@ -2,8 +2,8 @@ package solve.fish;
 
 import fish.model.base.Region;
 import fish.model.fish.impl.AsiaFishModel;
-import fish.merge.Checker;
-import fish.merge.FishModelMerger;
+import fish.merge.fish.FishChecker;
+import fish.merge.fish.FishModelMerger;
 
 public class ContextualisationAsia {
 
@@ -16,7 +16,7 @@ public class ContextualisationAsia {
 
         asiaFishModel.solveAndPrintNumberOfSolutions();
         asiaFishModel.getSolver().constraintNetworkToGephi("asia_contextualized.gexf");
-        Checker.checkConsistency(asiaFishModel);
-        Checker.checkConsistencyByPropagation(asiaFishModel);
+        FishChecker.checkConsistency(asiaFishModel);
+        FishChecker.checkConsistencyByPropagation(asiaFishModel);
     }
 }

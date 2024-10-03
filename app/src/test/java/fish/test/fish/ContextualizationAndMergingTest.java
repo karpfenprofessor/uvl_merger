@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fish.merge.Checker;
-import fish.merge.FishModelMerger;
+import fish.merge.fish.FishChecker;
+import fish.merge.fish.FishModelMerger;
 import fish.model.base.Region;
 import fish.model.fish.impl.AsiaFishModel;
 import fish.model.fish.impl.EuropeFishModel;
@@ -21,22 +21,22 @@ public class ContextualizationAndMergingTest {
         int solutionsAsiaBefore = asiaFishModel.solveAndPrintNumberOfSolutions();
         FishModelMerger.contextualizeConstraints(asiaFishModel, "region", Region.ASIA);
         assertEquals(solutionsAsiaBefore, asiaFishModel.solveAndPrintNumberOfSolutions());
-        assertTrue(Checker.checkConsistency(asiaFishModel));
-        assertTrue(Checker.checkConsistencyByPropagation(asiaFishModel));
+        assertTrue(FishChecker.checkConsistency(asiaFishModel));
+        assertTrue(FishChecker.checkConsistencyByPropagation(asiaFishModel));
 
         EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
         int solutionsEuBefore = europeFishModel.solveAndPrintNumberOfSolutions();
         FishModelMerger.contextualizeConstraints(europeFishModel, "region", Region.EUROPE);
         assertEquals(solutionsEuBefore, europeFishModel.solveAndPrintNumberOfSolutions());
-        assertTrue(Checker.checkConsistency(europeFishModel));
-        assertTrue(Checker.checkConsistencyByPropagation(europeFishModel));
+        assertTrue(FishChecker.checkConsistency(europeFishModel));
+        assertTrue(FishChecker.checkConsistencyByPropagation(europeFishModel));
 
         NorthAmericaFishModel northAmericaFishModel = new NorthAmericaFishModel(true, 0);
         int solutionsNaBefore = northAmericaFishModel.solveAndPrintNumberOfSolutions();
         FishModelMerger.contextualizeConstraints(northAmericaFishModel, "region", Region.NORTH_AMERICA);
         assertEquals(solutionsNaBefore, northAmericaFishModel.solveAndPrintNumberOfSolutions());
-        assertTrue(Checker.checkConsistency(northAmericaFishModel));
-        assertTrue(Checker.checkConsistencyByPropagation(northAmericaFishModel));
+        assertTrue(FishChecker.checkConsistency(northAmericaFishModel));
+        assertTrue(FishChecker.checkConsistencyByPropagation(northAmericaFishModel));
     }
 
     @Test
@@ -51,8 +51,8 @@ public class ContextualizationAndMergingTest {
         int solutionsMerged = mergedFishModel.solveAndPrintNumberOfSolutions();
 
         assertEquals(solutionsMerged, solutionsAsiaBefore + solutionsEuBefore);
-        assertTrue(Checker.checkConsistency(mergedFishModel));
-        assertTrue(Checker.checkConsistencyByPropagation(mergedFishModel));
+        assertTrue(FishChecker.checkConsistency(mergedFishModel));
+        assertTrue(FishChecker.checkConsistencyByPropagation(mergedFishModel));
     }
 
     /*

@@ -1,4 +1,4 @@
-package fish.merge;
+package fish.merge.fish;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
@@ -15,9 +15,9 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.HashMap;
 
-public class Checker {
+public class FishChecker {
 
-    protected final static Logger logger = LogManager.getLogger(Checker.class);
+    protected final static Logger logger = LogManager.getLogger(FishChecker.class);
 
     /**
      * Checks the consistency of the given Choco model by trying to find a solution.
@@ -28,7 +28,6 @@ public class Checker {
      */
     public static boolean checkConsistency(BaseFishModel model) {
         boolean consistency = model.getSolver().findSolution() != null;
-        ;
         logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
         model.getSolver().reset();
         return consistency;

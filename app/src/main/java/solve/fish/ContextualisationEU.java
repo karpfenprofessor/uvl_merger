@@ -2,8 +2,8 @@ package solve.fish;
 
 import fish.model.base.Region;
 import fish.model.fish.impl.EuropeFishModel;
-import fish.merge.Checker;
-import fish.merge.FishModelMerger;
+import fish.merge.fish.FishChecker;
+import fish.merge.fish.FishModelMerger;
 
 public class ContextualisationEU {
 
@@ -16,7 +16,7 @@ public class ContextualisationEU {
        
         model.solveAndPrintNumberOfSolutions();
         model.getSolver().constraintNetworkToGephi("eu_contextualized.gexf");
-        Checker.checkConsistency(model);
-        Checker.checkConsistencyByPropagation(model);
+        FishChecker.checkConsistency(model);
+        FishChecker.checkConsistencyByPropagation(model);
     }
 }

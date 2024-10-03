@@ -33,7 +33,20 @@ public class EuropeCarModel extends BaseCarModel {
         }
 
         private void addLogicalConstraints() {
+                // Constraint c1ger: fuel != gas (fuel != 2)
+                model.arithm(fuel, "!=", 2).post();
 
+                // Constraint c2ger: fuel = electro → couplingdev = no
+                // (fuel == 0 → couplingdev == 1)
+                model.ifThen(
+                                model.arithm(fuel, "=", 0),
+                                model.arithm(couplingdev, "=", 1));
+
+                // Constraint c3ger: fuel = diesel → type != city
+                // (fuel == 1 → type != 2)
+                model.ifThen(
+                                model.arithm(fuel, "=", 1),
+                                model.arithm(type, "!=", 2));
         }
 
 }
