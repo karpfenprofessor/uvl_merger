@@ -47,23 +47,4 @@ public class ContextualizationAndMergingTest {
         assertTrue(CarChecker.checkConsistencyByPropagation(mergedModel));
     }
 
-    /*
-     * @Test
-     * void mergeTwoModelsIntoMergedModelWithMoreConstraints() {
-     * EuropeFishModel europeFishModel = new EuropeFishModel(true, 0);
-     * int solutionsEuBefore = europeFishModel.solveAndPrintNumberOfSolutions();
-     * 
-     * NorthAmericaFishModel naFishModel = new NorthAmericaFishModel(true, 0);
-     * int solutionsNaBefore = naFishModel.solveAndPrintNumberOfSolutions();
-     * 
-     * MergedFishModel mergedFishModel = ModelMerger.mergeModels(naFishModel,
-     * europeFishModel, false);
-     * int solutionsMerged = mergedFishModel.solveAndPrintNumberOfSolutions();
-     * 
-     * assertEquals(solutionsMerged, solutionsNaBefore + solutionsEuBefore);
-     * assertTrue(Checker.checkConsistency(mergedFishModel));
-     * assertTrue(Checker.checkConsistencyByPropagation(mergedFishModel));
-     * }
-     */
-
 }

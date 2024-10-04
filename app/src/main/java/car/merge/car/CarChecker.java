@@ -27,11 +27,11 @@ public class CarChecker {
             model.getSolver().propagate();
             logger.warn("[check] checkConsistencyByPropagation for model " + model.printRegion() + ": true");
             model.getSolver().reset();
-            return true; // Propagation successful, no inconsistencies detected
+            return true;
         } catch (ContradictionException e) {
             logger.error("[check] checkConsistencyByPropagation for model " + model.printRegion() + ": false");
             model.getSolver().reset();
-            return false; // Propagation failed, inconsistency detected
+            return false;
         }
     }
 

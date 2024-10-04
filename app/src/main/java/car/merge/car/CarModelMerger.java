@@ -26,7 +26,7 @@ public class CarModelMerger {
 
     public static MergedCarModel mergeModels(BaseCarModel base1, BaseCarModel base2, boolean alreadyContextualized) {
         logger.debug("[merge] start merging algorithm");
-        MergedCarModel baseMerged = new MergedCarModel(false, 0);
+        MergedCarModel mergedModel = new MergedCarModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
         if (!alreadyContextualized) {
@@ -34,12 +34,24 @@ public class CarModelMerger {
             contextualizeConstraints(base2, "region", base2.getRegionModel());
         }
 
-        mergeVariables(base1, base2, baseMerged, variablesMap, true);
-        mergeConstraints(base1, baseMerged, variablesMap);
-        mergeConstraints(base2, baseMerged, variablesMap);
+        mergeVariables(base1, base2, mergedModel, variablesMap, true);
+        mergeConstraints(base1, mergedModel, variablesMap);
+        mergeConstraints(base2, mergedModel, variablesMap);
+
+        MergedCarModel workingModel = new MergedCarModel(false, 0);
+        inconsistencyCheck(mergedModel, workingModel, variablesMap);
         logger.debug("[merge] finished merging algorithm");
 
-        return baseMerged;
+        return mergedModel;
+    }
+
+    private static void inconsistencyCheck(BaseCarModel mergedModel, BaseCarModel workingModel, HashMap<String, IntVar> variablesMap) {
+        logger.debug("[merge_inconsistency] start inconsistency check with " + mergedModel.getModel().getNbCstrs() + " constraints");
+        for(Constraint c : mergedModel.getModel().getCstrs()) {
+            logger.info(c.toString());
+        }
+
+        logger.debug("[merge_inconsistency] finished inconsistency check");
     }
 
     private static void mergeConstraints(BaseCarModel baseModel1, BaseCarModel baseMergedModel,
