@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import fish.merge.car.CarChecker;
-import fish.merge.car.CarModelMerger;
-import fish.model.base.Region;
-import fish.model.car.impl.EuropeCarModel;
-import fish.model.car.impl.MergedCarModel;
-import fish.model.car.impl.NorthAmericaCarModel;
+import car.merge.car.CarChecker;
+import car.merge.car.CarModelMerger;
+import car.model.base.Region;
+import car.model.car.impl.EuropeCarModel;
+import car.model.car.impl.MergedCarModel;
+import car.model.car.impl.NorthAmericaCarModel;
 
 public class ContextualizationAndMergingTest {
 

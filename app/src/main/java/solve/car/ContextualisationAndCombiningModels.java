@@ -1,11 +1,11 @@
 package solve.car;
 
-import fish.model.base.Region;
-import fish.model.car.impl.EuropeCarModel;
-import fish.model.car.impl.MergedCarModel;
-import fish.model.car.impl.NorthAmericaCarModel;
-import fish.merge.car.CarChecker;
-import fish.merge.car.CarModelMerger;
+import car.merge.car.CarChecker;
+import car.merge.car.CarModelMerger;
+import car.model.base.Region;
+import car.model.car.impl.EuropeCarModel;
+import car.model.car.impl.MergedCarModel;
+import car.model.car.impl.NorthAmericaCarModel;
 
 public class ContextualisationAndCombiningModels {
 

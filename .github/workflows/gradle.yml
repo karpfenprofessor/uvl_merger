@@ -2,7 +2,7 @@ name: Build and Test fish
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "forked-car-only" ]
   pull_request:
     branches: [ "main" ]
 

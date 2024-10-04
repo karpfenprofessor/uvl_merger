@@ -1,9 +1,9 @@
 package solve.car;
 
-import fish.merge.car.CarChecker;
-import fish.merge.car.CarModelMerger;
-import fish.model.base.Region;
-import fish.model.car.impl.EuropeCarModel;
+import car.merge.car.CarChecker;
+import car.merge.car.CarModelMerger;
+import car.model.base.Region;
+import car.model.car.impl.EuropeCarModel;
 
 public class ContextualisationEU {
 
