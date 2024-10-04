@@ -25,6 +25,7 @@ public class CarModelMerger {
     protected final static Logger logger = LogManager.getLogger(CarModelMerger.class);
 
     public static MergedCarModel mergeModels(BaseCarModel base1, BaseCarModel base2, boolean alreadyContextualized) {
+        logger.debug("[merge] start merging algorithm");
         MergedCarModel baseMerged = new MergedCarModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
@@ -36,6 +37,7 @@ public class CarModelMerger {
         mergeVariables(base1, base2, baseMerged, variablesMap, true);
         mergeConstraints(base1, baseMerged, variablesMap);
         mergeConstraints(base2, baseMerged, variablesMap);
+        logger.debug("[merge] finished merging algorithm");
 
         return baseMerged;
     }
@@ -46,7 +48,7 @@ public class CarModelMerger {
         Model mergedModel = baseMergedModel.getModel();
         String prefix = baseModel1.printRegion();
 
-        logger.debug("[merge] start merge " + baseModel.getNbCstrs() + " constraints of model "
+        logger.debug("[merge_con] start merge " + baseModel.getNbCstrs() + " constraints of model "
                 + baseModel1.printRegion() + " into " + baseMergedModel.printRegion() + " with "
                 + mergedModel.getNbCstrs() + " constraints");
 
@@ -114,7 +116,7 @@ public class CarModelMerger {
                     } else if (p instanceof PropGreaterOrEqualX_YC) {
                         PropGreaterOrEqualX_YC pMapped = (PropGreaterOrEqualX_YC) p;
                     } else {
-                        logger.error("[merge] propagation type not supported: " + p.getClass());
+                        logger.error("[merge_con] propagation type not supported: " + p.getClass());
                     }
 
                 }
@@ -133,17 +135,17 @@ public class CarModelMerger {
                                 storedArithmVariable2);
                         arithmConstraint.post();
                     } else {
-                        logger.error("[merge] propagation type not supported: " + p.getClass());
+                        logger.error("[merge_con] propagation type not supported: " + p.getClass());
                     }
 
                 }
             } else {
-                logger.error("[merge] constraint type not supported: " + c.getClass());
+                logger.error("[merge_con] constraint type not supported: " + c.getClass());
             }
         }
 
         logger.debug(
-                "[merge] finished merge constraints of model " + baseModel1.printRegion() + " into "
+                "[merge_con] finished merge constraints of model " + baseModel1.printRegion() + " into "
                         + baseMergedModel.printRegion() + " with " + mergedModel.getNbCstrs() + " constraints");
 
     }
@@ -152,7 +154,7 @@ public class CarModelMerger {
             HashMap<String, IntVar> variablesMap, boolean mergeReif) {
 
         logger.debug(
-                "[merge] start merge variables of models " + baseModel1.printRegion() + " and "
+                "[merge_var] start merge variables of models " + baseModel1.printRegion() + " and "
                         + baseModel2.printRegion());
         Model model1 = baseModel1.getModel();
         Model model2 = baseModel2.getModel();
@@ -199,7 +201,7 @@ public class CarModelMerger {
         }
 
         logger.debug(
-                "[merge] finished merge variables of models " + baseModel1.printRegion() + " and "
+                "[merge_var] finished merge variables of models " + baseModel1.printRegion() + " and "
                         + baseModel2.printRegion() + " with " + cntDomainVariables + " domain vars, "
                         + cntReifVariablesModel1 + " reif vars from model " + baseModel1.printRegion() + " and "
                         + cntReifVariablesModel2 + " reif vars from model " + baseModel2.printRegion());

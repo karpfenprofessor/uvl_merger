@@ -17,9 +17,9 @@ public class ContextualizationAndMergingTest {
     @Test
     void createAllModelsAndContextualize() {
         EuropeCarModel europeCarModel = new EuropeCarModel(true, 0);
-        int solutionsAsiaBefore = europeCarModel.solveAndPrintNumberOfSolutions();
+        int solutionsEuropeBefore = europeCarModel.solveAndPrintNumberOfSolutions();
         CarModelMerger.contextualizeConstraints(europeCarModel, "region", Region.EUROPE);
-        assertEquals(solutionsAsiaBefore, europeCarModel.solveAndPrintNumberOfSolutions());
+        assertEquals(solutionsEuropeBefore, europeCarModel.solveAndPrintNumberOfSolutions());
         assertTrue(CarChecker.checkConsistency(europeCarModel));
         assertTrue(CarChecker.checkConsistencyByPropagation(europeCarModel));
 
@@ -32,7 +32,7 @@ public class ContextualizationAndMergingTest {
     }
 
     @Test
-    void mergeTwoModelsIntoMergedModel() {
+    void mergeTwoModelsIntoMergedModelUncontextualized() {
         EuropeCarModel europeCarModel = new EuropeCarModel(true, 0);
         int solutionsEuropeBefore = europeCarModel.solveAndPrintNumberOfSolutions();
 
