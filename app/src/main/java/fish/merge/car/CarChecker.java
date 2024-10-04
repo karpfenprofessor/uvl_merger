@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import fish.model.base.BaseCarModel;
 import fish.model.base.Region;
+import fish.model.car.impl.NorthAmericaCarModel;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -39,37 +40,38 @@ public class CarChecker {
         }
     }
 
-    public static int findIntersectionSolution(BaseCarModel mergedModel, Region region1, Region region2) {
+    public static int findIntersectionSolution(BaseCarModel mergedModel, BaseCarModel model1, BaseCarModel model2,
+            Region region1, Region region2) {
         logger.debug("[sol] start intersection solution of merged model with regions: " + region1.printRegion() + " | "
                 + region2.printRegion());
 
         HashMap<String, IntVar> vars = mergedModel.getVariablesAsMap();
         Set<String> solutionsRegion1 = new HashSet<>();
-        Solver solverRegion1 = mergedModel.getSolver();
-        Model modelRegion1 = mergedModel.getModel();
-        Constraint region1VariableConstraint = modelRegion1.arithm(mergedModel.getVariablesAsMap().get("region"), "=",
+        Solver solverRegion1 = model1.getSolver();
+        //Model modelRegion1 = model1.getModel();
+        /*Constraint region1VariableConstraint = modelRegion1.arithm(mergedModel.getVariablesAsMap().get("region"), "=",
                 region1.ordinal());
-        region1VariableConstraint.post();
+        region1VariableConstraint.post();*/
         while (solverRegion1.solve()) {
             solutionsRegion1.add(solutionToString(vars.get("region"), vars.get("type"), vars.get("color"),
                     vars.get("engine"), vars.get("couplingdev"), vars.get("fuel"), vars.get("service")));
         }
 
-        modelRegion1.unpost(region1VariableConstraint);
+        //modelRegion1.unpost(region1VariableConstraint);
         solverRegion1.reset();
 
         Set<String> solutionsRegion2 = new HashSet<>();
-        Solver solverRegion2 = mergedModel.getSolver();
-        Model modelRegion2 = mergedModel.getModel();
-        Constraint region2VariableConstraint = modelRegion2.arithm(mergedModel.getVariablesAsMap().get("region"), "=",
+        Solver solverRegion2 = model2.getSolver();
+        Model modelRegion2 = model2.getModel();
+        /*Constraint region2VariableConstraint = modelRegion2.arithm(mergedModel.getVariablesAsMap().get("region"), "=",
                 region2.ordinal());
-        region2VariableConstraint.post();
+        region2VariableConstraint.post();*/
         while (solverRegion2.solve()) {
             solutionsRegion2.add(solutionToString(vars.get("region"), vars.get("type"), vars.get("color"),
                     vars.get("engine"), vars.get("couplingdev"), vars.get("fuel"), vars.get("service")));
         }
 
-        modelRegion2.unpost(region2VariableConstraint);
+        //modelRegion2.unpost(region2VariableConstraint);
         solverRegion2.reset();
 
         // Step 4: Find the intersection of both solution sets
@@ -86,10 +88,10 @@ public class CarChecker {
 
     private static String solutionToString(IntVar region, IntVar type, IntVar color, IntVar engine, IntVar couplingdev,
             IntVar fuel, IntVar service) {
-        String returnString = String.format("%d %d %d %d %d %d %d", region.getValue(), type.getValue(),
-                color.getValue(),
-                engine.getValue(), couplingdev.getValue(), fuel.getValue(), service.getValue());
-        // logger.info(returnString);
+        String returnString = String.format("%d %d %d %d %d %d %d", region.isInstantiated() ? region.getValue() : null, type.isInstantiated() ? type.getValue() : null,
+                color.isInstantiated() ? color.getValue() : null,
+                engine.isInstantiated() ? engine.getValue() : null, couplingdev.isInstantiated() ? couplingdev.getValue() : null, fuel.isInstantiated() ? fuel.getValue() : null, service.isInstantiated() ? service.getValue() : null);
+        logger.info(returnString);
         return returnString;
     }
 }

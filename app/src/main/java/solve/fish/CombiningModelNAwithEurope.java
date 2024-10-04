@@ -34,6 +34,7 @@ public class CombiningModelNAwithEurope {
         int numberOfSolutionsEu = europeFishModel.solveAndPrintNumberOfSolutions();
         numberOfSolutions = mergedModel.solveAndPrintNumberOfSolutions();
         numberOfSolutions = numberOfSolutions - numberOfSolutionsNa - numberOfSolutionsEu;
+        mergedModel.solveAndPrintSolution();
 
         if (numberOfSolutions != 0) {
             throw new Exception("Merge failed");

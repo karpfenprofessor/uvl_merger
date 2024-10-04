@@ -16,7 +16,6 @@ public class ContextualisationAndCombiningModels {
         numberOfSolutions = naCarModel.solveAndPrintNumberOfSolutions();
         CarModelMerger.contextualizeConstraints(naCarModel, "region", Region.NORTH_AMERICA);
         numberOfSolutions = numberOfSolutions - naCarModel.solveAndPrintNumberOfSolutions();
-
         if (numberOfSolutions != 0) {
             throw new Exception("Contextualization of NA failed");
         }
@@ -42,6 +41,6 @@ public class ContextualisationAndCombiningModels {
             throw new Exception("Merge failed");
         }
 
-        CarChecker.findIntersectionSolution(mergedModel, Region.NORTH_AMERICA, Region.EUROPE);
+        CarChecker.findIntersectionSolution(mergedModel, naCarModel, europeCarModel, Region.NORTH_AMERICA, Region.EUROPE);
     }
 }
