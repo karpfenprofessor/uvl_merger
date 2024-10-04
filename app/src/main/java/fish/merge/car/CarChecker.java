@@ -1,8 +1,5 @@
 package fish.merge.car;
 
-import org.chocosolver.solver.Model;
-import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
 import org.apache.logging.log4j.LogManager;
@@ -10,8 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import fish.model.base.BaseCarModel;
 import fish.model.base.Region;
-import fish.model.car.impl.NorthAmericaCarModel;
-
 import java.util.Set;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -40,58 +35,38 @@ public class CarChecker {
         }
     }
 
-    public static int findIntersectionSolution(BaseCarModel mergedModel, BaseCarModel model1, BaseCarModel model2,
-            Region region1, Region region2) {
-        logger.debug("[sol] start intersection solution of merged model with regions: " + region1.printRegion() + " | "
-                + region2.printRegion());
+    public static int findIntersectionSolution(BaseCarModel model1, BaseCarModel model2) {
+        logger.debug("[sol] start intersection solution of merged model with regions: " + model1.printRegion() + " | "
+                + model2.printRegion());
 
-        HashMap<String, IntVar> vars = mergedModel.getVariablesAsMap();
+        HashMap<String, IntVar> vars = model1.getVariablesAsMap();
         Set<String> solutionsRegion1 = new HashSet<>();
-        Solver solverRegion1 = model1.getSolver();
-        //Model modelRegion1 = model1.getModel();
-        /*Constraint region1VariableConstraint = modelRegion1.arithm(mergedModel.getVariablesAsMap().get("region"), "=",
-                region1.ordinal());
-        region1VariableConstraint.post();*/
-        while (solverRegion1.solve()) {
-            solutionsRegion1.add(solutionToString(vars.get("region"), vars.get("type"), vars.get("color"),
-                    vars.get("engine"), vars.get("couplingdev"), vars.get("fuel"), vars.get("service")));
-        }
-
-        //modelRegion1.unpost(region1VariableConstraint);
-        solverRegion1.reset();
-
         Set<String> solutionsRegion2 = new HashSet<>();
-        Solver solverRegion2 = model2.getSolver();
-        Model modelRegion2 = model2.getModel();
-        /*Constraint region2VariableConstraint = modelRegion2.arithm(mergedModel.getVariablesAsMap().get("region"), "=",
-                region2.ordinal());
-        region2VariableConstraint.post();*/
-        while (solverRegion2.solve()) {
-            solutionsRegion2.add(solutionToString(vars.get("region"), vars.get("type"), vars.get("color"),
+
+        while (model1.getSolver().solve()) {
+            solutionsRegion1.add(solutionToString(vars.get("type"), vars.get("color"),
                     vars.get("engine"), vars.get("couplingdev"), vars.get("fuel"), vars.get("service")));
         }
 
-        //modelRegion2.unpost(region2VariableConstraint);
-        solverRegion2.reset();
+        model1.getSolver().reset();
+        vars = model2.getVariablesAsMap();
+        while (model2.getSolver().solve()) {
+            solutionsRegion2.add(solutionToString(vars.get("type"), vars.get("color"),
+                    vars.get("engine"), vars.get("couplingdev"), vars.get("fuel"), vars.get("service")));
+        }
 
-        // Step 4: Find the intersection of both solution sets
+        model2.getSolver().reset();
         solutionsRegion1.retainAll(solutionsRegion2); // Keep only common elements
 
-        // Step 5: Output the intersection count and solutions
         logger.debug("[sol] number of intersection solutions: " + solutionsRegion1.size());
-        for (String solution : solutionsRegion1) {
-            logger.info("  [sol] intersection solution: " + solution);
-        }
-
         return solutionsRegion1.size();
     }
 
-    private static String solutionToString(IntVar region, IntVar type, IntVar color, IntVar engine, IntVar couplingdev,
+    private static String solutionToString(IntVar type, IntVar color, IntVar engine, IntVar couplingdev,
             IntVar fuel, IntVar service) {
-        String returnString = String.format("%d %d %d %d %d %d %d", region.isInstantiated() ? region.getValue() : null, type.isInstantiated() ? type.getValue() : null,
+        String returnString = String.format("%d %d %d %d %d %d", type.isInstantiated() ? type.getValue() : null,
                 color.isInstantiated() ? color.getValue() : null,
                 engine.isInstantiated() ? engine.getValue() : null, couplingdev.isInstantiated() ? couplingdev.getValue() : null, fuel.isInstantiated() ? fuel.getValue() : null, service.isInstantiated() ? service.getValue() : null);
-        logger.info(returnString);
         return returnString;
     }
 }

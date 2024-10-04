@@ -41,6 +41,6 @@ public class ContextualisationAndCombiningModels {
             throw new Exception("Merge failed");
         }
 
-        FishChecker.findIntersectionSolution(mergedModel, Region.EUROPE, Region.ASIA);
+        FishChecker.findIntersectionSolution(europeFishModel, asiaFishModel);
     }
 }

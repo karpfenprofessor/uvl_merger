@@ -41,6 +41,10 @@ public class ContextualisationAndCombiningModels {
             throw new Exception("Merge failed");
         }
 
-        CarChecker.findIntersectionSolution(mergedModel, naCarModel, europeCarModel, Region.NORTH_AMERICA, Region.EUROPE);
+        numberOfSolutions = CarChecker.findIntersectionSolution(naCarModel, europeCarModel);
+        
+        if (numberOfSolutions != 126) {
+            throw new Exception("Intersection failed");
+        }
     }
 }
