@@ -1,4 +1,4 @@
-package fish.model.base;
+package car.model.base;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.ModelAnalyser;

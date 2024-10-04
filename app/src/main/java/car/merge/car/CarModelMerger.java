@@ -1,4 +1,4 @@
-package fish.merge.car;
+package car.merge.car;
 
 import java.util.HashMap;
 import org.chocosolver.solver.Model;
@@ -13,9 +13,10 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
 
-import fish.model.base.BaseCarModel;
-import fish.model.base.Region;
-import fish.model.car.impl.MergedCarModel;
+import car.model.base.BaseCarModel;
+import car.model.base.Region;
+import car.model.car.impl.MergedCarModel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

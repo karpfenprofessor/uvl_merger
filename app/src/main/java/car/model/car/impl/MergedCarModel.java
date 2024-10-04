@@ -1,7 +1,7 @@
-package fish.model.car.impl;
+package car.model.car.impl;
 
-import fish.model.base.BaseCarModel;
-import fish.model.base.Region;
+import car.model.base.BaseCarModel;
+import car.model.base.Region;
 
 public class MergedCarModel extends BaseCarModel {
 

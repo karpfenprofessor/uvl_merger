@@ -1,4 +1,4 @@
-package fish.model.base;
+package car.model.base;
 
 public enum Region {
     NORTH_AMERICA(0),

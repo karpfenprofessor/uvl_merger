@@ -1,12 +1,12 @@
-package fish.merge.car;
+package car.merge.car;
 
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
+
+import car.model.base.BaseCarModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import fish.model.base.BaseCarModel;
-import fish.model.base.Region;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.HashMap;
