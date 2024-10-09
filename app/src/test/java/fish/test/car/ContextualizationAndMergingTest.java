@@ -39,7 +39,7 @@ public class ContextualizationAndMergingTest {
         NorthAmericaCarModel northAmericaCarModel = new NorthAmericaCarModel(true, 0);
         int solutionsNorthAmericaBefore = northAmericaCarModel.solveAndPrintNumberOfSolutions();
 
-        MergedCarModel mergedModel = CarModelMerger.mergeModels(europeCarModel, northAmericaCarModel, false);
+        MergedCarModel mergedModel = CarModelMerger.mergeModels(europeCarModel, northAmericaCarModel, false, true);
         int solutionsMerged = mergedModel.solveAndPrintNumberOfSolutions();
 
         assertEquals(solutionsMerged, solutionsEuropeBefore + solutionsNorthAmericaBefore);

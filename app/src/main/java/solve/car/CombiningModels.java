@@ -14,7 +14,7 @@ public class CombiningModels {
         NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(true, 0);
         EuropeCarModel europeCarModel = new EuropeCarModel(true, 0);
 
-        MergedCarModel mergedModel = CarModelMerger.mergeModels(naCarModel, europeCarModel, false);
+        MergedCarModel mergedModel = CarModelMerger.mergeModels(naCarModel, europeCarModel, false, false);
         //mergedModel.printAllVariables(true);
         //mergedModel.printAllConstraints();
 

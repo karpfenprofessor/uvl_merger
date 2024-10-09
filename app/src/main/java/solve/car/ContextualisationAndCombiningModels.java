@@ -28,7 +28,7 @@ public class ContextualisationAndCombiningModels {
             throw new Exception("Contextualization of Europe failed");
         }
 
-        MergedCarModel mergedModel = CarModelMerger.mergeModels(naCarModel, europeCarModel, true);
+        MergedCarModel mergedModel = CarModelMerger.mergeModels(naCarModel, europeCarModel, true, true);
         mergedModel.printAllVariables(true);
         mergedModel.printAllConstraints();
 
