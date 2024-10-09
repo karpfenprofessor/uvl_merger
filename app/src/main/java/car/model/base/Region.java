@@ -4,7 +4,8 @@ public enum Region {
     NORTH_AMERICA(0),
     EUROPE(1),
     ASIA(2),
-    MERGED(3);
+    MERGED(3),
+    TESTING(4);
 
     private final int value;
 
@@ -26,6 +27,8 @@ public enum Region {
                 return "ASIA";
             case 3:
                 return "MERGED";
+            case 4:
+                return "TESTING";
             default:
                 return "err";
         }
