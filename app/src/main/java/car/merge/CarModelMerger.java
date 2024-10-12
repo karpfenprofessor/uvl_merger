@@ -1,4 +1,4 @@
-package car.merge.car;
+package car.merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,11 +15,12 @@ import org.chocosolver.solver.constraints.unary.PropNotEqualXC;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
+
 import car.model.base.BaseCarModel;
 import car.model.base.Region;
-import car.model.car.impl.MergedCarModel;
-import car.model.car.impl.TestingCarModel;
-import car.model.car.impl.WorkingCarModel;
+import car.model.impl.MergedCarModel;
+import car.model.impl.TestingCarModel;
+import car.model.impl.WorkingCarModel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

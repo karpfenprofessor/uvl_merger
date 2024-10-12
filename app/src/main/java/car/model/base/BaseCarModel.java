@@ -8,8 +8,14 @@ import org.chocosolver.solver.constraints.Constraint;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
+
+import car.model.recreate.RecreationModel;
+import car.model.recreate.constraints.AbstractConstraint;
+import car.model.recreate.constraints.ImplicationConstraint;
+import car.model.recreate.constraints.SimpleConstraint;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,6 +43,56 @@ public abstract class BaseCarModel {
         model = new Model();
         constraintsSet = new HashSet<>();
         logger = LogManager.getLogger(this.getClass());
+    }
+
+    public void recreateFromRegionModel(RecreationModel recreationModel) {
+        for (AbstractConstraint constraint : recreationModel.getConstraints()) {
+            if (constraint instanceof SimpleConstraint) {
+                SimpleConstraint sc = (SimpleConstraint) constraint;
+                Constraint cCreate = buildSimpleConstraint(sc);
+
+                if (sc.isContextualized()) {
+                    model.ifThen(buildContextualizationConstraint(sc.getContextualizationValue()), cCreate);
+                } else {
+                    cCreate.post();
+                }
+            } else if (constraint instanceof ImplicationConstraint) {
+                ImplicationConstraint ic = (ImplicationConstraint) constraint;
+
+                Constraint antecedentConstraint = buildSimpleConstraint(ic.getAntecedent());
+                Constraint consequentConstraint = buildSimpleConstraint(ic.getConsequent());
+
+                if (ic.isContextualized()) {
+                    Constraint contextualizationConstraint = buildContextualizationConstraint(
+                            ic.getContextualizationValue());
+
+                    BoolVar antecedentBool = antecedentConstraint.reify();
+                    BoolVar contextualizationBool = contextualizationConstraint.reify();
+
+                    BoolVar combinedCondition = model.boolVar();
+                    model.and(antecedentBool, contextualizationBool).reifyWith(combinedCondition);
+
+                    model.ifThen(combinedCondition, consequentConstraint);
+                } else {
+                    model.ifThen(antecedentConstraint, consequentConstraint);
+                }
+            }
+        }
+    }
+
+    private Constraint buildSimpleConstraint(SimpleConstraint sc) {
+        IntVar var = getVariablesAsMap().get(sc.getVariable());
+        Integer value = sc.getValue();
+        String operator = sc.getOperator();
+
+        Constraint c = model.arithm(var, operator, value);
+        return c;
+    }
+
+    private Constraint buildContextualizationConstraint(Integer value) {
+        IntVar contextVar = getVariablesAsMap().get("region");
+
+        return model.arithm(contextVar, "=", value);
     }
 
     public String getDomainVariablesAsString() {

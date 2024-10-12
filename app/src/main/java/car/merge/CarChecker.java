@@ -1,4 +1,4 @@
-package car.merge.car;
+package car.merge;
 
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;

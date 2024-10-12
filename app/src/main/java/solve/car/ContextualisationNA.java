@@ -1,9 +1,9 @@
 package solve.car;
 
-import car.merge.car.CarChecker;
-import car.merge.car.CarModelMerger;
+import car.merge.CarChecker;
+import car.merge.CarModelMerger;
 import car.model.base.Region;
-import car.model.car.impl.NorthAmericaCarModel;
+import car.model.impl.NorthAmericaCarModel;
 
 public class ContextualisationNA {
 

@@ -1,17 +1,17 @@
-package car.model.car.impl;
+package car.model.impl;
 
 import car.model.base.BaseCarModel;
 import car.model.base.Region;
 
-public class WorkingCarModel extends BaseCarModel {
+public class MergedCarModel extends BaseCarModel {
 
-    public WorkingCarModel() {
+    public MergedCarModel() {
         this(false, 0);
     }
 
-    public WorkingCarModel(boolean addConstraints, int number) {
+    public MergedCarModel(boolean addConstraints, int number) {
         super();
-        regionModel = Region.WORKING;
+        regionModel = Region.MERGED;
 
         logger.info("[create] model " + regionModel.printRegion() + " with " + model.getNbCstrs()
                 + " constraints");

@@ -1,10 +1,10 @@
 package solve.car;
 
-import car.merge.car.CarChecker;
-import car.merge.car.CarModelMerger;
-import car.model.car.impl.EuropeCarModel;
-import car.model.car.impl.MergedCarModel;
-import car.model.car.impl.NorthAmericaCarModel;
+import car.merge.CarChecker;
+import car.merge.CarModelMerger;
+import car.model.impl.EuropeCarModel;
+import car.model.impl.MergedCarModel;
+import car.model.impl.NorthAmericaCarModel;
 
 public class CombiningModels {
 
