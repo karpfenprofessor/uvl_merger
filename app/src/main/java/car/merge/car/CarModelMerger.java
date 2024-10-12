@@ -28,7 +28,8 @@ public class CarModelMerger {
 
     protected final static Logger logger = LogManager.getLogger(CarModelMerger.class);
 
-    public static MergedCarModel mergeModels(BaseCarModel base1, BaseCarModel base2, boolean alreadyContextualized, boolean onlyMerge) {
+    public static MergedCarModel mergeModels(BaseCarModel base1, BaseCarModel base2, boolean alreadyContextualized,
+            boolean onlyMerge) {
         logger.debug("[merge] start merging algorithm");
         MergedCarModel mergedModel = new MergedCarModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
@@ -44,19 +45,21 @@ public class CarModelMerger {
 
         mergedModel.printAllConstraints();
 
-        if(onlyMerge) {
+        if (onlyMerge) {
             return mergedModel;
         }
 
         WorkingCarModel workingModel = new WorkingCarModel(false, 0);
-        inconsistencyCheck(mergedModel, workingModel, variablesMap);
+        HashMap<String, IntVar> variablesMapWorkingModel = (HashMap<String, IntVar>) variablesMap.clone();
+        
+        inconsistencyCheck(mergedModel, workingModel, variablesMap, variablesMapWorkingModel);
 
         logger.debug("[merge] finished merging algorithm");
         return mergedModel;
     }
 
     private static void inconsistencyCheck(BaseCarModel mergedModel, BaseCarModel workingModel,
-            HashMap<String, IntVar> variablesMap) {
+            HashMap<String, IntVar> variablesMap, HashMap<String, IntVar> variablesMapWorkingModel) {
         logger.debug("[merge_inconsistency] start inconsistency check with " + mergedModel.getModel().getNbCstrs()
                 + " constraints");
 
@@ -71,8 +74,8 @@ public class CarModelMerger {
                         PropEqualXC pMapped = (PropEqualXC) p;
                         for (Variable v : pMapped.getVars()) {
                             if (v.getName().matches("region")) {
-                                logger.debug("[merge_inconsistency] found contextualization constraint: " + c.toString()
-                                        + " with reification variable: " + pMapped.reifiedWith());
+                                logger.debug(
+                                        "[merge_inconsistency] found contextualization constraint: " + c.toString());
                                 contextualizationReifVariables.add(pMapped.reifiedWith());
                             }
                         }
@@ -89,7 +92,6 @@ public class CarModelMerger {
                         PropGreaterOrEqualX_Y pMapped = (PropGreaterOrEqualX_Y) p;
                         for (Variable v : pMapped.getVars()) {
                             if (contextualizationReifVariables.contains(v)) {
-                                // something is wrong with this - i have to go to the constraint that hangs on
                                 // the other variable
                                 Variable constraintVariable = pMapped.getVar(0);
                                 Constraint originalConstraint = findConstraintFromReificationVariable(
@@ -97,42 +99,64 @@ public class CarModelMerger {
                                 if (isInconsistent(originalConstraint, originalConstraint.getOpposite(), mergedModel,
                                         workingModel)) {
                                     // add constraint to workingmodel
-                                    // TODO rebuild constraint with own variables
-                                    Variable v1 = (IntVar) originalConstraint.getPropagator(0).getVar(0);
-                                    Variable v2 = (IntVar) originalConstraint.getPropagator(0).getVar(1);
+                                    Constraint addConstraint = null;
+                                    if (originalConstraint.getPropagator(1).getNbVars() == 1
+                                            && workingModel.getDomainVariablesAsString().contains(
+                                                    originalConstraint.getPropagator(1).getVar(0).getName())) {
+                                        Variable v1 = (IntVar) originalConstraint.getPropagator(1).getVar(0);
+                                        IntVar v1Neu = variablesMap.get(v1.getName());
+                                        Integer constant = Integer
+                                                .parseInt(originalConstraint.getPropagator(1).toString().split("=")[1].trim());
+                                        addConstraint = workingModel.getModel().arithm(v1Neu, "=", constant);
+                                    } else {
+                                        Variable v1 = (IntVar) originalConstraint.getPropagator(1).getVar(0);
+                                        Variable v2 = (IntVar) originalConstraint.getPropagator(1).getVar(1);
 
-                                    IntVar v1Neu = variablesMap.get(v1.getName());
-                                    IntVar v2Neu = variablesMap.get(v2.getName());
+                                        IntVar v1Neu = variablesMap.get(v1.getName());
+                                        IntVar v2Neu = variablesMap.get(v2.getName());
+                                        addConstraint = workingModel.getModel().arithm(v1Neu, ">=",
+                                                v2Neu);
+                                    }
 
-                                    Constraint addConstraint = workingModel.getModel().arithm(v1Neu, ">=", v2Neu);
                                     addConstraint.post();
                                     logger.info("[merge_inconsistency] created constraint in WORKING: "
                                             + addConstraint.toString());
                                 } else {
-                                    // add negation to workingmodel
-                                    // TODO rebuild constraint with own variables
+                                    // add contextualized constraint to working model
+                                    Constraint addConstraint = null;
+                                    /*if (originalConstraint.getPropagator(2).getNbVars() == 1
+                                            && workingModel.getDomainVariablesAsString().contains(
+                                                    originalConstraint.getPropagator(2).getVar(0).getName())) {
+                                        Variable v1 = (IntVar) originalConstraint.getPropagator(2).getVar(0);
+                                        IntVar v1Neu = variablesMap.get(v1.getName());
+                                        Integer constant = Integer
+                                                .parseInt(originalConstraint.getPropagator(2).toString().split("=")[1].trim());
+                                        addConstraint = workingModel.getModel().arithm(v1Neu, "=", constant);
+                                    } else {
+                                        Variable v1 = (IntVar) originalConstraint.getPropagator(2).getVar(0);
+                                        Variable v2 = (IntVar) originalConstraint.getPropagator(2).getVar(1);
 
-                                    Variable v1 = (IntVar) originalConstraint.getOpposite().getPropagator(0).getVar(0);
-                                    Variable v2 = (IntVar) originalConstraint.getOpposite().getPropagator(0).getVar(1);
+                                        IntVar v1Neu = variablesMap.get(v1.getName());
+                                        IntVar v2Neu = variablesMap.get(v2.getName());
 
-                                    IntVar v1Neu = variablesMap.get(v1.getName());
-                                    IntVar v2Neu = variablesMap.get(v2.getName());
+                                        addConstraint = workingModel.getModel().arithm(v1Neu, ">=",
+                                                v2Neu, "+", 1);
+                                    }
 
-                                    Constraint addConstraint = workingModel.getModel().arithm(v1Neu, ">=", v2Neu, "+",
-                                            1);
                                     addConstraint.post();
                                     logger.info("[merge_inconsistency] created constraint in WORKING: "
                                             + addConstraint.toString());
+                                            */
+                                    mergedModel.getModel().unpost(originalConstraint);
+                                    logger.info("[merge_inconsistency] removed constraint in MERGED: " + c.toString() + "\n");
                                 }
                             }
                         }
                     }
                 }
 
-                mergedModel.getModel().unpost(c);
-                logger.info("[merge_inconsistency] removed constraint in MERGED: " + c.toString() + "\n");
-                workingModel.printAllVariables(true);
-                workingModel.printAllConstraints();
+                //workingModel.printAllVariables(true);
+                //workingModel.printAllConstraints();
             }
         }
 
@@ -158,7 +182,6 @@ public class CarModelMerger {
 
     private static boolean isInconsistent(Constraint c, Constraint negation, BaseCarModel mergedModel,
             BaseCarModel workingModel) {
-        logger.debug("[merge_negation] start negation check for inconsistency, constraint: " + c.toString());
         TestingCarModel testingModel = new TestingCarModel(false, 0);
         HashMap<String, IntVar> variablesMap = new HashMap<>();
 
@@ -166,19 +189,34 @@ public class CarModelMerger {
         mergeConstraints(mergedModel, testingModel, variablesMap);
         mergeConstraints(workingModel, testingModel, variablesMap);
 
-        // TODO: rebuild constraint with own variables
-        String prefix = "MERGED";
-        Variable v1 = (IntVar) negation.getPropagator(0).getVar(0);
-        Variable v2 = (IntVar) negation.getPropagator(0).getVar(1);
+        Constraint testConstraint = null;
 
-        IntVar v1Neu = variablesMap.get(mergedModel.getDomainVariablesAsString().contains(v1.getName()) ? v1.getName() : prefix + "_" + v1.getName());
-        IntVar v2Neu = variablesMap.get(mergedModel.getDomainVariablesAsString().contains(v2.getName()) ? v2.getName() : prefix + "_" + v2.getName());
+        if (c.getPropagator(2).getNbVars() == 1
+                && mergedModel.getDomainVariablesAsString().contains(c.getPropagator(2).getVar(0).getName())) {
+            Variable v1 = (IntVar) c.getPropagator(2).getVar(0);
+            IntVar v1Neu = variablesMap.get(v1.getName());
+            Integer constant = Integer.parseInt(c.getPropagator(2).toString().split("=")[1].trim());
+            testConstraint = testingModel.getModel().arithm(v1Neu, "=", constant);
+        } else {
+            String prefix = "MERGED";
+            Variable v1 = (IntVar) c.getPropagator(2).getVar(0);
+            Variable v2 = (IntVar) c.getPropagator(2).getVar(1);
 
-        Constraint testConstraint = testingModel.getModel().arithm(v1Neu, ">=",
-                v2Neu, "+", 1);
+            IntVar v1Neu = variablesMap
+                    .get(mergedModel.getDomainVariablesAsString().contains(v1.getName()) ? v1.getName()
+                            : prefix + "_" + v1.getName());
+            IntVar v2Neu = variablesMap
+                    .get(mergedModel.getDomainVariablesAsString().contains(v2.getName()) ? v2.getName()
+                            : prefix + "_" + v2.getName());
+
+            testConstraint = testingModel.getModel().arithm(v1Neu, ">=",
+                    v2Neu, "+", 1);
+        }
+
         testConstraint.post();
+        logger.debug("[merge_negation] consistency check with: " + testConstraint.toString());
 
-        testingModel.printAllConstraints();
+        //testingModel.printAllConstraints();
         if (CarChecker.checkConsistency(testingModel)) {
             return false;
         } else {
