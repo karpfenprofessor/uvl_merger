@@ -84,6 +84,8 @@ public abstract class BaseCarModel {
                 }
             }
         }
+
+        //logger.debug("[recreate] put " + recreationModel.getConstraints().size() + " constraints into " + printRegion());
     }
 
     private Constraint buildSimpleConstraint(SimpleConstraint sc) {

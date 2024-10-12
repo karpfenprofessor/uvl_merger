@@ -70,14 +70,19 @@ public class RecreationModel {
     }
 
     public void contextualizeAllConstraints() {
+        logger.debug("[contextualize] region " + getRegion().printRegion());
         for (AbstractConstraint constraint : constraints) {
             constraint.setContextualize(region.ordinal());
         }
     }
 
     public void createRandomConstraints(int numberOfConstraints) {
+        createRandomConstraints(numberOfConstraints, Boolean.TRUE);
+    }
+
+    public void createRandomConstraints(int numberOfConstraints, boolean onlyImplication) {
         for (int i = 0; i < numberOfConstraints; i++) {
-            boolean isImplicationConstraint = random.nextDouble() < 0.66;
+            boolean isImplicationConstraint = onlyImplication ? onlyImplication : random.nextDouble() < 0.66;
             AbstractConstraint constraint = null;
             if (isImplicationConstraint) {
                 SimpleConstraint antecedent = createRandomSimpleConstraint(null);
@@ -94,6 +99,8 @@ public class RecreationModel {
                 i--;
             }
         }
+
+        logger.debug("[random] created " + constraints.size() + " constraints in " + region.printRegion());
     }
 
     private boolean isInconsistentGeneratingConstraints() {

@@ -20,28 +20,16 @@ public class RecreationMerger {
         mergedModel.addConstraints(naBaseRecreationModel.getConstraints());
         mergedModel.addConstraints(euBaseRecreationModel.getConstraints());
 
-        return mergedModel;
-    }
-
-    public static RecreationModel cleanup(RecreationModel mergedModel) {
-        Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
-        while (iterator.hasNext()) {
-            AbstractConstraint constraint = iterator.next();
-            constraint.setNegation(Boolean.TRUE);
-
-            if(isInconsistent(mergedModel)) {
-                iterator.remove();
-            } else {
-                constraint.setNegation(Boolean.FALSE);
-            }
-        }
+        logger.debug("[merge] merged " + naBaseRecreationModel.getConstraints().size() + " constraints from " + naBaseRecreationModel.getRegion().printRegion() + " and " + euBaseRecreationModel.getConstraints().size() + " constraints from " + euBaseRecreationModel.getRegion());
 
         return mergedModel;
     }
 
     public static RecreationModel inconsistencyCheck(RecreationModel mergedUnionModel) {
+        logger.debug("[inconsistency] check with " + mergedUnionModel.getConstraints().size() + " constraints");
         RecreationModel mergedModel = new RecreationModel(Region.MERGED);
         RecreationModel testingModel = null;
+        int cnt = 0;
 
         Iterator<AbstractConstraint> iterator = mergedUnionModel.getConstraints().iterator();
         while (iterator.hasNext()) {
@@ -55,17 +43,44 @@ public class RecreationMerger {
             if(isInconsistent(checkConstraint, testingModel)) {
                 originalConstraint.disableContextualize();
                 mergedModel.addConstraint(originalConstraint);
+                logger.info("  [incon_yes] constraint decontextualized: " + originalConstraint.toString());
+                cnt++;
             } else {
                 mergedModel.addConstraint(originalConstraint);
+                logger.info("  [incon_no] constraint is fine: " + originalConstraint.toString());
             }
 
             iterator.remove();
         }
 
+        logger.debug("[inconsistency] finished, decontextualized " + cnt + " constraints");
         return mergedModel;
     }
 
-    public static boolean isInconsistent(AbstractConstraint constraint, RecreationModel testingRecreationModel) {
+    public static RecreationModel cleanup(RecreationModel mergedModel) {
+        logger.debug("[cleanup] with " + mergedModel.getConstraints().size() + " constraints");
+        int cnt = 0;
+        Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
+        while (iterator.hasNext()) {
+            AbstractConstraint constraint = iterator.next();
+            constraint.setNegation(Boolean.TRUE);
+
+            if(isInconsistent(mergedModel)) {
+                iterator.remove();
+                logger.info("  [incon_yes] constraint: " + constraint.toString());
+                cnt++;
+            } else {
+                constraint.setNegation(Boolean.FALSE);
+            }
+        }
+
+        logger.debug("[cleanup] finished, removed " + cnt + " constraints");
+        return mergedModel;
+    }
+
+    
+
+    private static boolean isInconsistent(AbstractConstraint constraint, RecreationModel testingRecreationModel) {
         MergedCarModel testingModel = new MergedCarModel();
 
         constraint.disableContextualize();
@@ -81,7 +96,7 @@ public class RecreationMerger {
         }
     }
 
-    public static boolean isInconsistent(RecreationModel testingRecreationModel) {
+    private static boolean isInconsistent(RecreationModel testingRecreationModel) {
         MergedCarModel testingModel = new MergedCarModel();
         testingModel.recreateFromRegionModel(testingRecreationModel);
 
