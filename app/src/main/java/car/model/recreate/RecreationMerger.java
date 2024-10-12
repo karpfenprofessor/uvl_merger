@@ -23,6 +23,22 @@ public class RecreationMerger {
         return mergedModel;
     }
 
+    public static RecreationModel cleanup(RecreationModel mergedModel) {
+        Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
+        while (iterator.hasNext()) {
+            AbstractConstraint constraint = iterator.next();
+            constraint.setNegation(Boolean.TRUE);
+
+            if(isInconsistent(mergedModel)) {
+                iterator.remove();
+            } else {
+                constraint.setNegation(Boolean.FALSE);
+            }
+        }
+
+        return mergedModel;
+    }
+
     public static RecreationModel inconsistencyCheck(RecreationModel mergedUnionModel) {
         RecreationModel mergedModel = new RecreationModel(Region.MERGED);
         RecreationModel testingModel = null;
@@ -56,6 +72,17 @@ public class RecreationMerger {
         constraint.setNegation(Boolean.TRUE);
         testingRecreationModel.addConstraint(constraint);
 
+        testingModel.recreateFromRegionModel(testingRecreationModel);
+
+        if (CarChecker.checkConsistency(testingModel)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isInconsistent(RecreationModel testingRecreationModel) {
+        MergedCarModel testingModel = new MergedCarModel();
         testingModel.recreateFromRegionModel(testingRecreationModel);
 
         if (CarChecker.checkConsistency(testingModel)) {

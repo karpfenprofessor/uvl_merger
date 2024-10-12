@@ -14,7 +14,7 @@ public class NorthAmericaCarModel extends BaseCarModel {
                 regionModel = Region.NORTH_AMERICA;
 
                 // Initialize variables
-                region = model.intVar("region", 0, 0); // Europe
+                region = model.intVar("region", 0, 0); // NorthAmerica
                 type = model.intVar("type", 0, 3); // Combi: 0, Limo: 1, City: 2, Suv: 3
                 color = model.intVar("color", 0, 1); // White: 0, Black: 1
                 engine = model.intVar("engine", 0, 2); // 1l: 0, 1.5l: 1, 2l: 2
