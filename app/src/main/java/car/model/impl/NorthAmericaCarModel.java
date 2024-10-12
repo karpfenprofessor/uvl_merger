@@ -27,9 +27,6 @@ public class NorthAmericaCarModel extends BaseCarModel {
                 } else if (addConstraints) {
                         // addRandomConstraints(number);
                 }
-
-                logger.info("[create] model " + regionModel.printRegion() + " with " + model.getNbCstrs()
-                                + " constraints");
         }
 
         private void addLogicalConstraints() {

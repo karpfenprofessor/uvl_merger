@@ -1,6 +1,7 @@
 package solve.recreate;
 
 import car.merge.CarChecker;
+import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.MergedCarModel;
 import car.model.impl.NorthAmericaCarModel;
@@ -9,8 +10,11 @@ import car.model.recreate.RecreationModel;
 
 public class RecreationTest2Merge {
     public static void main(String[] args) throws Exception {
-        RecreationModel naBaseRecreationModel = RecreationModel.createNorthAmericaRegionModel();
-        RecreationModel euBaseRecreationModel = RecreationModel.createEuropeRegionModel();
+        RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA);
+        RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE);
+
+        naBaseRecreationModel.createLogicalNorthAmericaConstraints();
+        euBaseRecreationModel.createLogicalEuropeConstraints();
 
         NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(false, 0);
         naCarModel.recreateFromRegionModel(naBaseRecreationModel);

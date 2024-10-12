@@ -1,6 +1,9 @@
 package car.model.recreate;
 
+import car.merge.CarChecker;
+import car.model.base.BaseCarModel;
 import car.model.base.Region;
+import car.model.impl.MergedCarModel;
 import car.model.recreate.constraints.AbstractConstraint;
 import car.model.recreate.constraints.ImplicationConstraint;
 import car.model.recreate.constraints.SimpleConstraint;
@@ -9,20 +12,30 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.Random;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RecreationModel {
     private List<AbstractConstraint> constraints;
     private Region region;
 
     protected final Logger logger;
+    private Random random;
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
         this.region = region;
         logger = LogManager.getLogger(this.getClass());
+        random = new Random(1234);
+    }
 
+    public RecreationModel(Region region, Integer seed) {
+        this.constraints = new ArrayList<>();
+        this.region = region;
+        logger = LogManager.getLogger(this.getClass());
+        random = new Random(seed);
     }
 
     public void printConstraints() {
@@ -62,8 +75,73 @@ public class RecreationModel {
         }
     }
 
-    public static RecreationModel createNorthAmericaRegionModel() {
-        RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA);
+    public void createRandomConstraints(int numberOfConstraints) {
+        for (int i = 0; i < numberOfConstraints; i++) {
+            boolean isImplicationConstraint = random.nextDouble() < 0.66;
+            AbstractConstraint constraint = null;
+            if (isImplicationConstraint) {
+                SimpleConstraint antecedent = createRandomSimpleConstraint(null);
+                SimpleConstraint consequent = createRandomSimpleConstraint(antecedent.getVariable());
+                constraint = new ImplicationConstraint(antecedent, consequent);
+            } else {
+                constraint = createRandomSimpleConstraint(null);
+            }
+
+            constraints.add(constraint);
+
+            if(isInconsistentGeneratingConstraints()) {
+                constraints.remove(constraint);
+                i--;
+            }
+        }
+    }
+
+    private boolean isInconsistentGeneratingConstraints() {
+        BaseCarModel model = new MergedCarModel();
+        model.recreateFromRegionModel(this);
+
+        if(CarChecker.checkConsistency(model)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private SimpleConstraint createRandomSimpleConstraint(String alreadyInUse) {
+        List<String> variablesList = new ArrayList<>(Arrays.asList("type", "color", "engine", "couplingdev", "fuel", "service"));
+        String[] operators = {"=", "!=", ">", ">=", "<", "<="};
+
+        if (alreadyInUse != null) {
+            variablesList.remove(alreadyInUse);
+        }
+
+        String variable = variablesList.get(random.nextInt(variablesList.size()));
+        String operator = operators[random.nextInt(operators.length)];
+        Integer value = getRandomValueForVariable(variable);
+
+        return new SimpleConstraint(variable, operator, value);
+    }
+
+    private Integer getRandomValueForVariable(String variable) {
+        switch (variable) {
+            case "type":
+                return random.nextInt(4); // 0-3
+            case "color":
+                return random.nextInt(2); // 0-1
+            case "engine":
+                return random.nextInt(3); // 0-2
+            case "couplingdev":
+                return random.nextInt(2); // 0-1
+            case "fuel":
+                return random.nextInt(4); // 0-3
+            case "service":
+                return random.nextInt(3); // 0-2
+            default:
+                throw new IllegalArgumentException("Unknown variable: " + variable);
+        }
+    }
+
+    public void createLogicalNorthAmericaConstraints() {
         SimpleConstraint c1us = new SimpleConstraint("fuel", "!=", 3);
 
         SimpleConstraint c2us_1 = new SimpleConstraint("fuel", "=", 0);
@@ -74,15 +152,12 @@ public class RecreationModel {
         SimpleConstraint c3us_2 = new SimpleConstraint("color", "=", 1);
         ImplicationConstraint c3us = new ImplicationConstraint(c3us_1, c3us_2);
 
-        naBaseRecreationModel.addConstraint(c1us);
-        naBaseRecreationModel.addConstraint(c2us);
-        naBaseRecreationModel.addConstraint(c3us);
-
-        return naBaseRecreationModel;
+        addConstraint(c1us);
+        addConstraint(c2us);
+        addConstraint(c3us);
     }
 
-    public static RecreationModel createEuropeRegionModel() {
-        RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE);
+    public void createLogicalEuropeConstraints() {
         SimpleConstraint c1eu = new SimpleConstraint("fuel", "!=", 2);
 
         SimpleConstraint c2eu_1 = new SimpleConstraint("fuel", "=", 0);
@@ -93,10 +168,8 @@ public class RecreationModel {
         SimpleConstraint c3eu_2 = new SimpleConstraint("type", "!=", 2);
         ImplicationConstraint c3eu = new ImplicationConstraint(c3eu_1, c3eu_2);
 
-        euBaseRecreationModel.addConstraint(c1eu);
-        euBaseRecreationModel.addConstraint(c2eu);
-        euBaseRecreationModel.addConstraint(c3eu);
-
-        return euBaseRecreationModel;
+        addConstraint(c1eu);
+        addConstraint(c2eu);
+        addConstraint(c3eu);
     }
 }

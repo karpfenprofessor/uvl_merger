@@ -1,5 +1,6 @@
 package solve.recreate;
 
+import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.NorthAmericaCarModel;
 import car.model.recreate.RecreationModel;
@@ -7,8 +8,11 @@ import car.model.recreate.RecreationModel;
 public class RecreationTest1Contextualize {
 
     public static void main(String[] args) throws Exception {
-        RecreationModel naBaseRecreationModel = RecreationModel.createNorthAmericaRegionModel();
-        RecreationModel euBaseRecreationModel = RecreationModel.createEuropeRegionModel();
+        RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA);
+        RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE);
+
+        naBaseRecreationModel.createLogicalNorthAmericaConstraints();
+        euBaseRecreationModel.createLogicalEuropeConstraints();
 
         NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(false, 0);
         naCarModel.recreateFromRegionModel(naBaseRecreationModel);

@@ -92,10 +92,9 @@ public abstract class BaseCarModel {
         String operator = sc.getOperator();
 
         Constraint c = model.arithm(var, operator, value);
-        Constraint cOpposite = c.getOpposite();
         
         if(sc.isNegation()) {
-            return cOpposite;
+            return c.getOpposite();
         }
 
         return c;
