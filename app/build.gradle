@@ -28,7 +28,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'fish.App'
+    mainClass = 'car.App'
 }
 
 tasks.named('test') {
