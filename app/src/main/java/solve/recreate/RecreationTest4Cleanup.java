@@ -13,12 +13,10 @@ public class RecreationTest4Cleanup {
         euBaseRecreationModel.contextualizeAllConstraints();
 
         RecreationModel mergedUnionModel = RecreationMerger.merge(naBaseRecreationModel, euBaseRecreationModel);
-        mergedUnionModel.printConstraints();
         RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(mergedUnionModel);
-        mergedModel.printConstraints();
         RecreationModel cleanedModel = RecreationMerger.cleanup(mergedModel);
         cleanedModel.printConstraints();
-        
+
         MergedCarModel cleanedCarModel = new MergedCarModel();
         cleanedCarModel.recreateFromRegionModel(cleanedModel);
         cleanedCarModel.solveAndPrintNumberOfSolutions();
