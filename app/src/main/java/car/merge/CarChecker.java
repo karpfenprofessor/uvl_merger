@@ -17,7 +17,7 @@ public class CarChecker {
 
     public static boolean checkConsistency(BaseCarModel model) {
         boolean consistency = model.getSolver().findSolution() != null;
-        logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
+        //logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
         model.getSolver().reset();
         return consistency;
     }

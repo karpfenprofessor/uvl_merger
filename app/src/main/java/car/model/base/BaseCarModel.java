@@ -73,6 +73,12 @@ public abstract class BaseCarModel {
                     model.and(antecedentBool, contextualizationBool).reifyWith(combinedCondition);
 
                     model.ifThen(combinedCondition, consequentConstraint);
+                } else if(ic.isNegation()) {
+                    BoolVar antecedentBool = antecedentConstraint.reify();
+                    BoolVar notConsequentBool = consequentConstraint.getOpposite().reify();
+
+                    Constraint negationOfImplication = model.and(antecedentBool, notConsequentBool);
+                    negationOfImplication.post();
                 } else {
                     model.ifThen(antecedentConstraint, consequentConstraint);
                 }
@@ -86,6 +92,12 @@ public abstract class BaseCarModel {
         String operator = sc.getOperator();
 
         Constraint c = model.arithm(var, operator, value);
+        Constraint cOpposite = c.getOpposite();
+        
+        if(sc.isNegation()) {
+            return cOpposite;
+        }
+
         return c;
     }
 

@@ -20,6 +20,15 @@ public class SimpleConstraint extends AbstractConstraint {
         this.value = value;
     }
 
+    public SimpleConstraint(String variable, String operator, Integer value,
+            boolean isContextualized, Integer contextValue, boolean isNegation) {
+        super(isContextualized, contextValue);
+        this.variable = variable;
+        this.operator = operator;
+        this.value = value;
+        this.setNegation(isNegation);
+    }
+
     public String getVariable() {
         return variable;
     }
@@ -34,11 +43,18 @@ public class SimpleConstraint extends AbstractConstraint {
 
     @Override
     public String toString() {
-        String constraintStr = variable + " " + operator + " " + value;
+        String constraintStr = "(" + variable + " " + operator + " " + value + ")";
         if (isContextualized()) {
             constraintStr += " [Context: region" + " = " + getContextualizationValue() + "]";
         }
+        if(isNegation()) {
+            constraintStr += " [Negation: " + isNegation() + " ]";
+        }
 
         return constraintStr;
+    }
+
+    public SimpleConstraint copy() {
+        return new SimpleConstraint(this.variable, this.operator, this.value, this.isContextualized(), this.getContextualizationValue(), this.isNegation());
     }
 }

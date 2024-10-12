@@ -21,8 +21,5 @@ public class MergedCarModel extends BaseCarModel {
         couplingdev = model.intVar("couplingdev", 0, 1); // Yes: 0, No: 1
         fuel = model.intVar("fuel", 0, 3); // Electro: 0, Diesel: 1, Gas: 2, Hybrid: 3
         service = model.intVar("service", 0, 2); // 15k: 0, 20k: 1, 25k: 2
-
-        logger.info("[create] model " + regionModel.printRegion() + " with " + model.getNbCstrs()
-                + " constraints");
     }
 }

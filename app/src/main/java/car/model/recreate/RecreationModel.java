@@ -6,15 +6,33 @@ import car.model.recreate.constraints.ImplicationConstraint;
 import car.model.recreate.constraints.SimpleConstraint;
 
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 
 public class RecreationModel {
     private List<AbstractConstraint> constraints;
     private Region region;
 
+    protected final Logger logger;
+
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
         this.region = region;
+        logger = LogManager.getLogger(this.getClass());
+
+    }
+
+    public void printConstraints() {
+        logger.debug("[print] start printing constraints of recreation model: " + region.printRegion());
+        int cnt = 0;
+        for(AbstractConstraint c : constraints) {
+            logger.debug("  [" + cnt + "]: " + c.toString());
+            cnt++;
+        }
+        logger.debug("[print] finished printing constraints of recreation model: " + region.printRegion());
     }
 
     public List<AbstractConstraint> getConstraints() {
@@ -33,17 +51,21 @@ public class RecreationModel {
         constraints.addAll(c);
     }
 
+    public void addNegation(AbstractConstraint c) {
+        c.setNegation(Boolean.TRUE);
+        constraints.add(c);
+    }
+
     public void contextualizeAllConstraints() {
-        for(AbstractConstraint constraint : constraints) {
+        for (AbstractConstraint constraint : constraints) {
             constraint.setContextualize(region.ordinal());
         }
     }
 
-
     public static RecreationModel createNorthAmericaRegionModel() {
         RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA);
         SimpleConstraint c1us = new SimpleConstraint("fuel", "!=", 3);
-        
+
         SimpleConstraint c2us_1 = new SimpleConstraint("fuel", "=", 0);
         SimpleConstraint c2us_2 = new SimpleConstraint("couplingdev", "=", 1);
         ImplicationConstraint c2us = new ImplicationConstraint(c2us_1, c2us_2);
@@ -62,7 +84,7 @@ public class RecreationModel {
     public static RecreationModel createEuropeRegionModel() {
         RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE);
         SimpleConstraint c1eu = new SimpleConstraint("fuel", "!=", 2);
-        
+
         SimpleConstraint c2eu_1 = new SimpleConstraint("fuel", "=", 0);
         SimpleConstraint c2eu_2 = new SimpleConstraint("couplingdev", "=", 1);
         ImplicationConstraint c2eu = new ImplicationConstraint(c2eu_1, c2eu_2);
