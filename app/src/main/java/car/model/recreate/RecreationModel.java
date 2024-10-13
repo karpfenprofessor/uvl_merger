@@ -179,4 +179,10 @@ public class RecreationModel {
         addConstraint(c2eu);
         addConstraint(c3eu);
     }
+
+    public void solveAndPrintNumberOfSolutions() {
+        MergedCarModel model = new MergedCarModel();
+        model.recreateFromRegionModel(this);
+        model.solveAndPrintNumberOfSolutions();
+    }
 }

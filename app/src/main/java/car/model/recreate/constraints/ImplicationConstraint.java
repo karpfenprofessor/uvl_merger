@@ -37,10 +37,10 @@ public class ImplicationConstraint extends AbstractConstraint {
     public String toString() {
         String constraintStr = antecedent.toString() + " then " + consequent.toString();
         if (isContextualized()) {
-            constraintStr += " [Context: region" + " = " + getContextualizationValue() + "]";
+            constraintStr +=  "\t\t[context: region" + " = " + getContextualizationValue() + "]";
         }
         if(isNegation()) {
-            constraintStr += " [Negation: " + isNegation() + " ]";
+            constraintStr += "\t[negation: " + isNegation() + " ]";
         }
 
         return constraintStr;

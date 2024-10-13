@@ -1,4 +1,4 @@
-package solve.recreate;
+package solve;
 
 import car.model.base.Region;
 import car.model.impl.EuropeCarModel;

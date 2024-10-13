@@ -1,8 +1,8 @@
-package solve.recreate;
+package solve;
 
+import car.merge.RecreationMerger;
 import car.model.base.Region;
 import car.model.impl.MergedCarModel;
-import car.model.recreate.RecreationMerger;
 import car.model.recreate.RecreationModel;
 
 public class RecreationTest3Inconsistency {

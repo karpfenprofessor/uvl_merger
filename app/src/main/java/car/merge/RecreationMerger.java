@@ -1,18 +1,29 @@
-package car.model.recreate;
+package car.merge;
 
 import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import car.merge.CarChecker;
 import car.model.base.Region;
 import car.model.impl.MergedCarModel;
+import car.model.recreate.RecreationModel;
 import car.model.recreate.constraints.AbstractConstraint;
 
 public class RecreationMerger {
     
     protected final static Logger logger = LogManager.getLogger(RecreationMerger.class);
+
+    public static RecreationModel fullMerge(RecreationModel model1, RecreationModel model2) {
+        model1.contextualizeAllConstraints();
+        model2.contextualizeAllConstraints();
+        RecreationModel model = merge(model1, model2);
+        model = inconsistencyCheck(model);
+        model = cleanup(model);
+
+        logger.debug("[merge] finished merge with " + model.getConstraints().size() + " constraints");
+        return model;
+    }
 
     public static RecreationModel merge(RecreationModel naBaseRecreationModel, RecreationModel euBaseRecreationModel) {
         RecreationModel mergedModel = new RecreationModel(Region.MERGED);
@@ -20,7 +31,7 @@ public class RecreationMerger {
         mergedModel.addConstraints(naBaseRecreationModel.getConstraints());
         mergedModel.addConstraints(euBaseRecreationModel.getConstraints());
 
-        logger.debug("[merge] merged " + naBaseRecreationModel.getConstraints().size() + " constraints from " + naBaseRecreationModel.getRegion().printRegion() + " and " + euBaseRecreationModel.getConstraints().size() + " constraints from " + euBaseRecreationModel.getRegion());
+        logger.debug("[merge] " + naBaseRecreationModel.getConstraints().size() + " constraints from " + naBaseRecreationModel.getRegion().printRegion() + " and " + euBaseRecreationModel.getConstraints().size() + " constraints from " + euBaseRecreationModel.getRegion());
 
         return mergedModel;
     }
@@ -47,7 +58,7 @@ public class RecreationMerger {
                 cnt++;
             } else {
                 mergedModel.addConstraint(originalConstraint);
-                logger.info("  [incon_no] constraint is fine: " + originalConstraint.toString());
+                //logger.info("  [incon_no] constraint is fine: " + originalConstraint.toString());
             }
 
             iterator.remove();
@@ -67,7 +78,7 @@ public class RecreationMerger {
 
             if(isInconsistent(mergedModel)) {
                 iterator.remove();
-                logger.info("  [incon_yes] constraint: " + constraint.toString());
+                logger.info("  [incon_yes] constraint removed: " + constraint.toString());
                 cnt++;
             } else {
                 constraint.setNegation(Boolean.FALSE);

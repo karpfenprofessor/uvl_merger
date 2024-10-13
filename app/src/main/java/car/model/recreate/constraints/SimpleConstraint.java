@@ -45,10 +45,10 @@ public class SimpleConstraint extends AbstractConstraint {
     public String toString() {
         String constraintStr = "(" + variable + " " + operator + " " + value + ")";
         if (isContextualized()) {
-            constraintStr += " [Context: region" + " = " + getContextualizationValue() + "]";
+            constraintStr += "\t\t\t\t[context: region" + " = " + getContextualizationValue() + "]";
         }
         if(isNegation()) {
-            constraintStr += " [Negation: " + isNegation() + " ]";
+            constraintStr += "\t[negation: " + isNegation() + " ]";
         }
 
         return constraintStr;
