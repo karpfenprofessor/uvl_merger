@@ -210,6 +210,16 @@ public abstract class BaseCarModel {
         return cnt;
     }
 
+    public int solveWithNumberOfSolutions() {
+        int cnt = 0;
+        while (getSolver().solve()) {
+            cnt++;
+        }
+
+        getSolver().reset();
+        return cnt;
+    }
+
     // Method to solve the model and print the solution
     public void solveAndPrintSolution() {
         long startTime = System.currentTimeMillis();

@@ -3,7 +3,9 @@ package car.model.recreate;
 import car.merge.CarChecker;
 import car.model.base.BaseCarModel;
 import car.model.base.Region;
+import car.model.impl.EuropeCarModel;
 import car.model.impl.MergedCarModel;
+import car.model.impl.NorthAmericaCarModel;
 import car.model.recreate.constraints.AbstractConstraint;
 import car.model.recreate.constraints.ImplicationConstraint;
 import car.model.recreate.constraints.SimpleConstraint;
@@ -41,7 +43,7 @@ public class RecreationModel {
     public void printConstraints() {
         logger.debug("[print] start printing constraints of recreation model: " + region.printRegion());
         int cnt = 0;
-        for(AbstractConstraint c : constraints) {
+        for (AbstractConstraint c : constraints) {
             logger.debug("  [" + cnt + "]: " + c.toString());
             cnt++;
         }
@@ -69,6 +71,17 @@ public class RecreationModel {
         constraints.add(c);
     }
 
+    public void analyseModel() {
+        long contextualizedSize = 0;
+        long constraintsSize = 0;
+
+        constraintsSize = constraints.size();
+        contextualizedSize = constraints.stream().filter(c -> c.isContextualized()).count();
+
+        logger.debug("[analyse] model " + region.printRegion() + " has " + constraintsSize + " constraints, "
+                + contextualizedSize + " are contextualized constraints");
+    }
+
     public void contextualizeAllConstraints() {
         logger.debug("[contextualize] region " + getRegion().printRegion());
         for (AbstractConstraint constraint : constraints) {
@@ -77,10 +90,13 @@ public class RecreationModel {
     }
 
     public void createRandomConstraints(int numberOfConstraints) {
-        createRandomConstraints(numberOfConstraints, Boolean.TRUE);
+        createRandomConstraints(numberOfConstraints, Boolean.TRUE, Boolean.TRUE);
     }
 
-    public void createRandomConstraints(int numberOfConstraints, boolean onlyImplication) {
+    public void createRandomConstraints(int numberOfConstraints, boolean onlyImplication, boolean restricted) {
+        int numberOfSolutions = 0;
+        int oldNumberOfSolutions = 0;
+
         for (int i = 0; i < numberOfConstraints; i++) {
             boolean isImplicationConstraint = onlyImplication ? onlyImplication : random.nextDouble() < 0.66;
             AbstractConstraint constraint = null;
@@ -92,22 +108,43 @@ public class RecreationModel {
                 constraint = createRandomSimpleConstraint(null);
             }
 
+            constraint = new SimpleConstraint("service", "=", 0);
+
+            if(constraints.contains(constraint)) {
+                i--;
+                continue;
+            }
+            
             constraints.add(constraint);
 
-            if(isInconsistentGeneratingConstraints()) {
+            if (isInconsistentGeneratingConstraints(numberOfSolutions)) {
                 constraints.remove(constraint);
                 i--;
+            }
+
+
+            if (i > 0) {
+                oldNumberOfSolutions = numberOfSolutions;
+                numberOfSolutions = solveWithNumberOfSolutions();
+                float coefficient = (float) numberOfSolutions / oldNumberOfSolutions;
+                if (coefficient <= 0.90) {
+                    constraints.remove(constraint);
+                    i--;
+                    numberOfSolutions = oldNumberOfSolutions;
+                }
+            } else {
+                numberOfSolutions = solveWithNumberOfSolutions();
             }
         }
 
         logger.debug("[random] created " + constraints.size() + " constraints in " + region.printRegion());
     }
 
-    private boolean isInconsistentGeneratingConstraints() {
+    private boolean isInconsistentGeneratingConstraints(float numberOfSolutions) {
         BaseCarModel model = new MergedCarModel();
         model.recreateFromRegionModel(this);
 
-        if(CarChecker.checkConsistency(model)) {
+        if (CarChecker.checkConsistency(model)) {
             return false;
         } else {
             return true;
@@ -115,8 +152,9 @@ public class RecreationModel {
     }
 
     private SimpleConstraint createRandomSimpleConstraint(String alreadyInUse) {
-        List<String> variablesList = new ArrayList<>(Arrays.asList("type", "color", "engine", "couplingdev", "fuel", "service"));
-        String[] operators = {"=", "!=", ">", ">=", "<", "<="};
+        List<String> variablesList = new ArrayList<>(
+                Arrays.asList("type", "color", "engine", "couplingdev", "fuel", "service"));
+        String[] operators = { "=", "!=", ">", ">=", "<", "<=" };
 
         if (alreadyInUse != null) {
             variablesList.remove(alreadyInUse);
@@ -181,8 +219,32 @@ public class RecreationModel {
     }
 
     public void solveAndPrintNumberOfSolutions() {
-        MergedCarModel model = new MergedCarModel();
+        BaseCarModel model = null;
+        if (region == Region.EUROPE)
+            model = new EuropeCarModel();
+
+        if (region == Region.NORTH_AMERICA)
+            model = new NorthAmericaCarModel();
+
+        if (region == Region.MERGED)
+            model = new MergedCarModel();
+
         model.recreateFromRegionModel(this);
         model.solveAndPrintNumberOfSolutions();
+    }
+
+    public int solveWithNumberOfSolutions() {
+        BaseCarModel model = null;
+        if (region == Region.EUROPE)
+            model = new EuropeCarModel();
+
+        if (region == Region.NORTH_AMERICA)
+            model = new NorthAmericaCarModel();
+
+        if (region == Region.MERGED)
+            model = new MergedCarModel();
+
+        model.recreateFromRegionModel(this);
+        return model.solveWithNumberOfSolutions();
     }
 }

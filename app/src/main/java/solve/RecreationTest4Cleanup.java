@@ -24,5 +24,7 @@ public class RecreationTest4Cleanup {
         MergedCarModel cleanedCarModel = new MergedCarModel();
         cleanedCarModel.recreateFromRegionModel(cleanedModel);
         cleanedCarModel.solveAndPrintNumberOfSolutions();
+
+        cleanedModel.analyseModel();
     }
 }

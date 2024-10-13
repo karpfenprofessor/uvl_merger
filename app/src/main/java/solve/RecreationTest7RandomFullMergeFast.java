@@ -13,6 +13,10 @@ public class RecreationTest7RandomFullMergeFast {
 
         RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel);
         model.solveAndPrintNumberOfSolutions();
+        model.analyseModel();
+
+        naBaseRecreationModel.solveAndPrintNumberOfSolutions();
+        euBaseRecreationModel.solveAndPrintNumberOfSolutions();
     }
     
 }
