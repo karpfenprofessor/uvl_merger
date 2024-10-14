@@ -94,10 +94,10 @@ public class RecreationModel {
     }
 
     public void createRandomConstraints(int numberOfConstraints, boolean onlyImplication, boolean restricted) {
-        int numberOfSolutions = 0;
+        int numberOfSolutions = solveWithNumberOfSolutions();
         int oldNumberOfSolutions = 0;
 
-        for (int i = 0; i < numberOfConstraints; i++) {
+        for (int i = 0; i <= numberOfConstraints; i++) {
             boolean isImplicationConstraint = onlyImplication ? onlyImplication : random.nextDouble() < 0.66;
             AbstractConstraint constraint = null;
             if (isImplicationConstraint) {
@@ -108,53 +108,33 @@ public class RecreationModel {
                 constraint = createRandomSimpleConstraint(null);
             }
 
-            constraint = new SimpleConstraint("service", "=", 0);
-
-            if(constraints.contains(constraint)) {
+            if (constraints.contains(constraint)) {
                 i--;
+                logger.info("[rand] constraint already in model " + region.printRegion());
                 continue;
             }
-            
+
             constraints.add(constraint);
 
-            if (isInconsistentGeneratingConstraints(numberOfSolutions)) {
+            oldNumberOfSolutions = numberOfSolutions;
+            numberOfSolutions = solveWithNumberOfSolutions();
+            float coefficient = (float) numberOfSolutions / oldNumberOfSolutions;
+            if (restricted && coefficient <= 0.80) {
                 constraints.remove(constraint);
                 i--;
+                numberOfSolutions = oldNumberOfSolutions;
             }
 
-
-            if (i > 0) {
-                oldNumberOfSolutions = numberOfSolutions;
-                numberOfSolutions = solveWithNumberOfSolutions();
-                float coefficient = (float) numberOfSolutions / oldNumberOfSolutions;
-                if (coefficient <= 0.90) {
-                    constraints.remove(constraint);
-                    i--;
-                    numberOfSolutions = oldNumberOfSolutions;
-                }
-            } else {
-                numberOfSolutions = solveWithNumberOfSolutions();
-            }
+            i = (i < 0) ? i = 0:i;
         }
 
         logger.debug("[random] created " + constraints.size() + " constraints in " + region.printRegion());
     }
 
-    private boolean isInconsistentGeneratingConstraints(float numberOfSolutions) {
-        BaseCarModel model = new MergedCarModel();
-        model.recreateFromRegionModel(this);
-
-        if (CarChecker.checkConsistency(model)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     private SimpleConstraint createRandomSimpleConstraint(String alreadyInUse) {
         List<String> variablesList = new ArrayList<>(
                 Arrays.asList("type", "color", "engine", "couplingdev", "fuel", "service"));
-        String[] operators = { "=", "!=", ">", ">=", "<", "<=" };
+        String[] operators = { "=", "!=", ">", "<" };
 
         if (alreadyInUse != null) {
             variablesList.remove(alreadyInUse);
@@ -162,27 +142,63 @@ public class RecreationModel {
 
         String variable = variablesList.get(random.nextInt(variablesList.size()));
         String operator = operators[random.nextInt(operators.length)];
-        Integer value = getRandomValueForVariable(variable);
+        Integer value = getRandomValueForVariable(variable, operator);
 
         return new SimpleConstraint(variable, operator, value);
     }
 
-    private Integer getRandomValueForVariable(String variable) {
-        switch (variable) {
-            case "type":
-                return random.nextInt(4); // 0-3
-            case "color":
-                return random.nextInt(2); // 0-1
-            case "engine":
-                return random.nextInt(3); // 0-2
-            case "couplingdev":
-                return random.nextInt(2); // 0-1
-            case "fuel":
-                return random.nextInt(4); // 0-3
-            case "service":
-                return random.nextInt(3); // 0-2
-            default:
-                throw new IllegalArgumentException("Unknown variable: " + variable);
+    private Integer getRandomValueForVariable(String variable, String operator) {
+        if(operator.contains(">")) {
+            switch (variable) {
+                case "type":
+                    return random.nextInt(3); // 0-3
+                case "color":
+                    return random.nextInt(1); // 0-1
+                case "engine":
+                    return random.nextInt(2); // 0-2
+                case "couplingdev":
+                    return random.nextInt(1); // 0-1
+                case "fuel":
+                    return random.nextInt(3); // 0-3
+                case "service":
+                    return random.nextInt(2); // 0-2
+                default:
+                    throw new IllegalArgumentException("Unknown variable: " + variable);
+            }
+        } else if (operator.contains("<")) {
+            switch (variable) {
+                case "type":
+                    return random.nextInt(1,4); // 0-3
+                case "color":
+                    return random.nextInt(1, 2); // 0-1
+                case "engine":
+                    return random.nextInt(1, 3); // 0-2
+                case "couplingdev":
+                    return random.nextInt(1, 2); // 0-1
+                case "fuel":
+                    return random.nextInt(1, 4); // 0-3
+                case "service":
+                    return random.nextInt(1, 3); // 0-2
+                default:
+                    throw new IllegalArgumentException("Unknown variable: " + variable);
+            }
+        } else {
+            switch (variable) {
+                case "type":
+                    return random.nextInt(4); // 0-3
+                case "color":
+                    return random.nextInt(2); // 0-1
+                case "engine":
+                    return random.nextInt(3); // 0-2
+                case "couplingdev":
+                    return random.nextInt(2); // 0-1
+                case "fuel":
+                    return random.nextInt(4); // 0-3
+                case "service":
+                    return random.nextInt(3); // 0-2
+                default:
+                    throw new IllegalArgumentException("Unknown variable: " + variable);
+            }
         }
     }
 

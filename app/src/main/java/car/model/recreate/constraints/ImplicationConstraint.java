@@ -39,9 +39,6 @@ public class ImplicationConstraint extends AbstractConstraint {
         if (isContextualized()) {
             constraintStr +=  "\t\t[context: region" + " = " + getContextualizationValue() + "]";
         }
-        if(isNegation()) {
-            constraintStr += "\t[negation: " + isNegation() + " ]";
-        }
 
         return constraintStr;
     }
@@ -49,4 +46,37 @@ public class ImplicationConstraint extends AbstractConstraint {
     public ImplicationConstraint copy() {
         return new ImplicationConstraint(this.antecedent.copy(), this.consequent.copy(), this.isContextualized(), this.getContextualizationValue(), this.isNegation());
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((antecedent == null) ? 0 : antecedent.hashCode());
+        result = prime * result + ((consequent == null) ? 0 : consequent.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ImplicationConstraint other = (ImplicationConstraint) obj;
+        if (antecedent == null) {
+            if (other.antecedent != null)
+                return false;
+        } else if (!antecedent.equals(other.antecedent))
+            return false;
+        if (consequent == null) {
+            if (other.consequent != null)
+                return false;
+        } else if (!consequent.equals(other.consequent))
+            return false;
+        return true;
+    }
+
+    
 }

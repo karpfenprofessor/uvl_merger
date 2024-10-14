@@ -7,9 +7,9 @@ import car.model.recreate.RecreationModel;
 public class RecreationTest7RandomFullMergeFast {
     public static void main(String[] args) throws Exception {
         RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA, 123456789);
-        naBaseRecreationModel.createRandomConstraints(100);
+        naBaseRecreationModel.createRandomConstraints(200, Boolean.TRUE, Boolean.TRUE);
         RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE, 987654321);
-        euBaseRecreationModel.createRandomConstraints(100);
+        euBaseRecreationModel.createRandomConstraints(200, Boolean.TRUE, Boolean.TRUE);
 
         RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel);
         model.solveAndPrintNumberOfSolutions();
