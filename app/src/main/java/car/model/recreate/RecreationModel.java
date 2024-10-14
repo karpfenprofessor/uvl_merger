@@ -1,6 +1,5 @@
 package car.model.recreate;
 
-import car.merge.CarChecker;
 import car.model.base.BaseCarModel;
 import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
@@ -25,6 +24,8 @@ public class RecreationModel {
 
     protected final Logger logger;
     private Random random;
+    public long numberOfChecks = 0;
+    public long timeToMerge = 0;
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
@@ -71,7 +72,7 @@ public class RecreationModel {
         constraints.add(c);
     }
 
-    public void analyseModel() {
+    public float analyseContextualizationShare() {
         long contextualizedSize = 0;
         long constraintsSize = 0;
 
@@ -80,6 +81,8 @@ public class RecreationModel {
 
         logger.debug("[analyse] model " + region.printRegion() + " has " + constraintsSize + " constraints, "
                 + contextualizedSize + " are contextualized constraints");
+
+        return (float) contextualizedSize / constraintsSize;
     }
 
     public void contextualizeAllConstraints() {
@@ -262,5 +265,21 @@ public class RecreationModel {
 
         model.recreateFromRegionModel(this);
         return model.solveWithNumberOfSolutions();
+    }
+
+    public long getNumberOfChecks() {
+        return numberOfChecks;
+    }
+
+    public void setNumberOfChecks(long numberOfChecks) {
+        this.numberOfChecks = numberOfChecks;
+    }
+
+    public long getTimeToMerge() {
+        return timeToMerge;
+    }
+
+    public void setTimeToMerge(long timeToMerge) {
+        this.timeToMerge = timeToMerge;
     }
 }

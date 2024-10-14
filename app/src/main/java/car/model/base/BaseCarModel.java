@@ -174,15 +174,15 @@ public abstract class BaseCarModel {
         return model;
     }
 
-    public void solveXNumberOfTimes(int x) {
+    public long solveXNumberOfTimes(int x) {
         Solver solver = getSolver();
         int cnt = 0;
         long msSum = 0;
         do {
-            long startTime = System.currentTimeMillis();
+            long startTime = System.nanoTime();
             while (solver.solve()) {
             }
-            long endTime = System.currentTimeMillis();
+            long endTime = System.nanoTime();
             long executionTime = endTime - startTime;
             msSum = msSum + executionTime;
             getSolver().reset();
@@ -191,22 +191,24 @@ public abstract class BaseCarModel {
         } while (cnt < x);
 
         logger.debug("[sol] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
-                + (msSum / cnt) + " ms");
+                + (msSum / cnt) + " ns");
+
+        return (long) msSum / cnt;
     }
 
     // Method to solve the model and print the number of solutions
     public int solveAndPrintNumberOfSolutions() {
         int cnt = 0;
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         while (getSolver().solve()) {
             cnt++;
         }
 
-        long endTime = System.currentTimeMillis();
+        long endTime = System.nanoTime();
         long executionTime = endTime - startTime;
         getSolver().reset();
         logger.debug("[sol] Number of solutions in " + regionModel.printRegion() + " with calculation time "
-                + executionTime + " ms: " + cnt);
+                + executionTime + " ns: " + cnt);
         return cnt;
     }
 
@@ -222,14 +224,14 @@ public abstract class BaseCarModel {
 
     // Method to solve the model and print the solution
     public void solveAndPrintSolution() {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         getSolver().solve();
-        long endTime = System.currentTimeMillis();
+        long endTime = System.nanoTime();
         long executionTime = endTime - startTime;
         getSolver().reset();
 
         // Print solution
-        logger.debug("[sol] Solution found in " + executionTime + " ms");
+        logger.debug("[sol] Solution found in " + executionTime + " ns");
         logger.debug("  Region: " + regionModel.printRegion() + " | Type: " + getType(type.getValue())
                 + " | Color: " + getColor(color.getValue()));
         logger.debug("  Engine: " + getEngine(engine.getValue()) + " | Couplingdev: "

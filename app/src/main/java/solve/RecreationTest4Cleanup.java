@@ -23,8 +23,8 @@ public class RecreationTest4Cleanup {
 
         MergedCarModel cleanedCarModel = new MergedCarModel();
         cleanedCarModel.recreateFromRegionModel(cleanedModel);
+        cleanedCarModel.solveXNumberOfTimes(100);
         cleanedCarModel.solveAndPrintNumberOfSolutions();
-
-        cleanedModel.analyseModel();
+        cleanedModel.analyseContextualizationShare();
     }
 }

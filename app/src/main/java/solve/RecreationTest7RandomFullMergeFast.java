@@ -2,6 +2,7 @@ package solve;
 
 import car.merge.RecreationMerger;
 import car.model.base.Region;
+import car.model.impl.MergedCarModel;
 import car.model.recreate.RecreationModel;
 
 public class RecreationTest7RandomFullMergeFast {
@@ -12,11 +13,12 @@ public class RecreationTest7RandomFullMergeFast {
         euBaseRecreationModel.createRandomConstraints(200, Boolean.TRUE, Boolean.TRUE);
 
         RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel);
-        model.solveAndPrintNumberOfSolutions();
-        model.analyseModel();
+        model.analyseContextualizationShare();
 
-        naBaseRecreationModel.solveAndPrintNumberOfSolutions();
-        euBaseRecreationModel.solveAndPrintNumberOfSolutions();
+        MergedCarModel carModel = new MergedCarModel();
+        carModel.recreateFromRegionModel(model);
+        carModel.solveXNumberOfTimes(100);
+        carModel.solveAndPrintNumberOfSolutions();
     }
     
 }

@@ -50,6 +50,7 @@ public class RecreationMerger {
             testingModel = new RecreationModel(Region.TESTING);
             testingModel.addConstraints(mergedUnionModel.getConstraints());
             testingModel.addConstraints(mergedModel.getConstraints());
+            mergedModel.numberOfChecks++;
 
             if(isInconsistent(checkConstraint, testingModel)) {
                 originalConstraint.disableContextualize();
@@ -75,6 +76,7 @@ public class RecreationMerger {
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
             constraint.setNegation(Boolean.TRUE);
+            mergedModel.numberOfChecks++;
 
             if(isInconsistent(mergedModel)) {
                 iterator.remove();
