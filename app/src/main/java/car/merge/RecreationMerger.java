@@ -14,12 +14,12 @@ public class RecreationMerger {
     
     protected final static Logger logger = LogManager.getLogger(RecreationMerger.class);
 
-    public static RecreationModel fullMerge(RecreationModel model1, RecreationModel model2) {
+    public static RecreationModel fullMerge(RecreationModel model1, RecreationModel model2, boolean monitorTime) {
         model1.contextualizeAllConstraints();
         model2.contextualizeAllConstraints();
         RecreationModel model = merge(model1, model2);
-        model = inconsistencyCheck(model);
-        model = cleanup(model);
+        model = inconsistencyCheck(model, monitorTime);
+        model = cleanup(model, monitorTime);
 
         logger.debug("[merge] finished merge with " + model.getConstraints().size() + " constraints");
         return model;
@@ -37,6 +37,10 @@ public class RecreationMerger {
     }
 
     public static RecreationModel inconsistencyCheck(RecreationModel mergedUnionModel) {
+        return inconsistencyCheck(mergedUnionModel, Boolean.FALSE);
+    }
+
+    public static RecreationModel inconsistencyCheck(RecreationModel mergedUnionModel, boolean monitorTime) {
         logger.debug("[inconsistency] check with " + mergedUnionModel.getConstraints().size() + " constraints");
         RecreationModel mergedModel = new RecreationModel(Region.MERGED);
         RecreationModel testingModel = null;
@@ -52,7 +56,7 @@ public class RecreationMerger {
             testingModel.addConstraints(mergedModel.getConstraints());
             mergedModel.numberOfChecks++;
 
-            if(isInconsistent(checkConstraint, testingModel)) {
+            if(isInconsistent(checkConstraint, testingModel, monitorTime, mergedModel)) {
                 originalConstraint.disableContextualize();
                 mergedModel.addConstraint(originalConstraint);
                 logger.info("  [incon_yes] constraint decontextualized: " + originalConstraint.toString());
@@ -70,6 +74,10 @@ public class RecreationMerger {
     }
 
     public static RecreationModel cleanup(RecreationModel mergedModel) {
+        return cleanup(mergedModel, Boolean.FALSE);
+    }
+
+    public static RecreationModel cleanup(RecreationModel mergedModel, boolean monitorTime) {
         logger.debug("[cleanup] with " + mergedModel.getConstraints().size() + " constraints");
         int cnt = 0;
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
@@ -78,7 +86,7 @@ public class RecreationMerger {
             constraint.setNegation(Boolean.TRUE);
             mergedModel.numberOfChecks++;
 
-            if(isInconsistent(mergedModel)) {
+            if(isInconsistent(mergedModel, monitorTime)) {
                 iterator.remove();
                 logger.info("  [incon_yes] constraint removed: " + constraint.toString());
                 cnt++;
@@ -93,7 +101,7 @@ public class RecreationMerger {
 
     
 
-    private static boolean isInconsistent(AbstractConstraint constraint, RecreationModel testingRecreationModel) {
+    private static boolean isInconsistent(AbstractConstraint constraint, RecreationModel testingRecreationModel, boolean monitorTime, RecreationModel mergedModel) {
         MergedCarModel testingModel = new MergedCarModel();
 
         constraint.disableContextualize();
@@ -102,18 +110,18 @@ public class RecreationMerger {
 
         testingModel.recreateFromRegionModel(testingRecreationModel);
 
-        if (CarChecker.checkConsistency(testingModel)) {
+        if (CarChecker.checkConsistency(testingModel, mergedModel)) {
             return false;
         } else {
             return true;
         }
     }
 
-    private static boolean isInconsistent(RecreationModel testingRecreationModel) {
+    private static boolean isInconsistent(RecreationModel testingRecreationModel, boolean monitorTime) {
         MergedCarModel testingModel = new MergedCarModel();
         testingModel.recreateFromRegionModel(testingRecreationModel);
 
-        if (CarChecker.checkConsistency(testingModel)) {
+        if (CarChecker.checkConsistency(testingModel, testingRecreationModel)) {
             return false;
         } else {
             return true;

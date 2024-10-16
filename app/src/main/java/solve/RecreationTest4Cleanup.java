@@ -10,8 +10,8 @@ public class RecreationTest4Cleanup {
         RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA);
         RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE);
 
-        naBaseRecreationModel.createLogicalNorthAmericaConstraints();
-        euBaseRecreationModel.createLogicalEuropeConstraints();
+        naBaseRecreationModel.createPaperNorthAmericaConstraints();
+        euBaseRecreationModel.createPaperEuropeConstraints();
 
         naBaseRecreationModel.contextualizeAllConstraints();
         euBaseRecreationModel.contextualizeAllConstraints();

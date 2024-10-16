@@ -4,6 +4,8 @@ import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
 
 import car.model.base.BaseCarModel;
+import car.model.recreate.RecreationModel;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +21,16 @@ public class CarChecker {
         boolean consistency = model.getSolver().findSolution() != null;
         //logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
         model.getSolver().reset();
+        return consistency;
+    }
+
+    public static boolean checkConsistency(BaseCarModel model, RecreationModel recreationModel) {
+        long startTime = System.nanoTime();
+        boolean consistency = model.getSolver().findSolution() != null;
+        long endTime = System.nanoTime();
+        //logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
+        model.getSolver().reset();
+        recreationModel.timeToMerge = recreationModel.timeToMerge + (endTime - startTime);
         return consistency;
     }
 

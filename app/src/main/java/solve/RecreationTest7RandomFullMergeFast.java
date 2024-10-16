@@ -12,7 +12,7 @@ public class RecreationTest7RandomFullMergeFast {
         RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE, 987654321);
         euBaseRecreationModel.createRandomConstraints(200, Boolean.TRUE, Boolean.TRUE);
 
-        RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel);
+        RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel, Boolean.FALSE);
         model.analyseContextualizationShare();
 
         MergedCarModel carModel = new MergedCarModel();
