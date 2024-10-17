@@ -190,8 +190,8 @@ public abstract class BaseCarModel {
             cnt++;
         } while (cnt < x);
 
-        logger.debug("[sol] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
-                + (msSum / cnt) + " ns");
+        //logger.debug("[sol] Average calculation time in " + regionModel.printRegion() + " over " + cnt + " runs: "
+        //        + (msSum / cnt) + " ns");
 
         return (long) msSum / cnt;
     }

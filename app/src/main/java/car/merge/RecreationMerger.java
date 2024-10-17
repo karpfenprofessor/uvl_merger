@@ -24,7 +24,8 @@ public class RecreationMerger {
         returnModel = inconsistencyCheck(unionModel, monitorTime);
         cleanup(returnModel, monitorTime);
 
-        logger.debug("[merge] finished merge with " + returnModel.getConstraints().size() + " constraints");
+        returnModel.analyseContextualizationShare();
+        logger.debug("[merge] finished merge with " + returnModel.getConstraints().size() + " constraints\n");
         returnModel.numberOfConstraintsUnion = model1.getConstraints().size() + model2.getConstraints().size();
         returnModel.averageSolutionTimeUnion = unionModel.solveAndReturnAverageSolutionTime(100);
 
@@ -32,7 +33,7 @@ public class RecreationMerger {
     }
 
     public static RecreationModel merge(RecreationModel naBaseRecreationModel, RecreationModel euBaseRecreationModel) {
-        RecreationModel mergedModel = new RecreationModel(Region.MERGED);
+        RecreationModel mergedModel = new RecreationModel(Region.UNION);
 
         mergedModel.addConstraints(naBaseRecreationModel.getConstraints());
         mergedModel.addConstraints(euBaseRecreationModel.getConstraints());

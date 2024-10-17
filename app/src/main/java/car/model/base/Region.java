@@ -6,7 +6,7 @@ public enum Region {
     ASIA(2),
     MERGED(3),
     TESTING(4),
-    WORKING(5);
+    UNION(5);
 
     private final int value;
 
