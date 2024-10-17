@@ -32,7 +32,7 @@ public class RecreationTest9LogicalBenchmark {
             mergedCarModel.solveAndPrintNumberOfSolutions();
             
             benchmark.averageSolutionTimeMerged = mergedCarModel.solveXNumberOfTimes(100);
-            benchmark.numberOfConstraintsInput = i;
+            //benchmark.numberOfConstraintsInput = i;
             benchmark.contextualizationShare = model.analyseContextualizationShare();
             benchmark.timeToMerge = model.timeToMerge;
             benchmark.numberOfChecks = model.numberOfChecks;

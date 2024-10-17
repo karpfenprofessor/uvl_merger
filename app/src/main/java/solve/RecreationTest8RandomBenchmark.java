@@ -7,12 +7,10 @@ import car.benchmark.Benchmark;
 import car.benchmark.BenchmarkService;
 import car.merge.RecreationMerger;
 import car.model.base.Region;
-import car.model.impl.MergedCarModel;
 import car.model.recreate.RecreationModel;
 
 public class RecreationTest8RandomBenchmark {
     public static void main(String[] args) throws Exception {
-        MergedCarModel mergedCarModel = null;
 
         List<Benchmark> benchmarks = new ArrayList<>();
         for(int i = 10; i <= 100; i=i+10) {
@@ -25,11 +23,13 @@ public class RecreationTest8RandomBenchmark {
 
             RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel, Boolean.TRUE);
 
-            mergedCarModel = new MergedCarModel();
-            mergedCarModel.recreateFromRegionModel(model);
+            naBaseRecreationModel.solveAndPrintNumberOfSolutions();
+            euBaseRecreationModel.solveAndPrintNumberOfSolutions();
+            model.solveAndPrintNumberOfSolutions();
             
-            benchmark.averageSolutionTimeMerged = mergedCarModel.solveXNumberOfTimes(100);
-            benchmark.numberOfConstraintsInput = i;
+            benchmark.averageSolutionTimeUnion = model.averageSolutionTimeUnion;
+            benchmark.numberOfConstraintsUnion = model.numberOfConstraintsUnion;
+            benchmark.averageSolutionTimeMerged = model.solveAndReturnAverageSolutionTime(100);
             benchmark.numberOfConstraintsMerged = model.getConstraints().size();
             benchmark.contextualizationShare = model.analyseContextualizationShare();
             benchmark.timeToMerge = model.timeToMerge;

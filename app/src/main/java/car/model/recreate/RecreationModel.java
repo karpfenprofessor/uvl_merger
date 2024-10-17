@@ -26,6 +26,8 @@ public class RecreationModel {
     private Random random;
     public long numberOfChecks = 0;
     public long timeToMerge = 0;
+    public int numberOfConstraintsUnion = 0;
+    public long averageSolutionTimeUnion = 0;
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
@@ -98,7 +100,7 @@ public class RecreationModel {
         model.solveAndPrintNumberOfSolutions();
     }
 
-    public int solveWithNumberOfSolutions() {
+    public int solveAndReturnNumberOfSolutions() {
         BaseCarModel model = null;
         if (region == Region.EUROPE)
             model = new EuropeCarModel();
@@ -112,6 +114,23 @@ public class RecreationModel {
         model.recreateFromRegionModel(this);
         return model.solveWithNumberOfSolutions();
     }
+
+    public long solveAndReturnAverageSolutionTime(int runs) {
+        BaseCarModel model = null;
+        if (region == Region.EUROPE)
+            model = new EuropeCarModel();
+
+        if (region == Region.NORTH_AMERICA)
+            model = new NorthAmericaCarModel();
+
+        if (region == Region.MERGED)
+            model = new MergedCarModel();
+
+        model.recreateFromRegionModel(this);
+        return model.solveXNumberOfTimes(100);
+    }
+
+    
 
     public List<AbstractConstraint> getConstraints() {
         return constraints;
@@ -132,7 +151,7 @@ public class RecreationModel {
     }
 
     public void createRandomConstraints(int numberOfConstraints, boolean onlyImplication, boolean restricted) {
-        int numberOfSolutions = solveWithNumberOfSolutions();
+        int numberOfSolutions = solveAndReturnNumberOfSolutions();
         int oldNumberOfSolutions = 0;
 
         for (int i = 0; i <= numberOfConstraints; i++) {
@@ -155,7 +174,7 @@ public class RecreationModel {
             constraints.add(constraint);
 
             oldNumberOfSolutions = numberOfSolutions;
-            numberOfSolutions = solveWithNumberOfSolutions();
+            numberOfSolutions = solveAndReturnNumberOfSolutions();
             float coefficient = (float) numberOfSolutions / oldNumberOfSolutions;
             if (restricted && coefficient <= 0.7) {
                 constraints.remove(constraint);

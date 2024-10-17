@@ -17,12 +17,18 @@ public class RecreationMerger {
     public static RecreationModel fullMerge(RecreationModel model1, RecreationModel model2, boolean monitorTime) {
         model1.contextualizeAllConstraints();
         model2.contextualizeAllConstraints();
-        RecreationModel model = merge(model1, model2);
-        model = inconsistencyCheck(model, monitorTime);
-        model = cleanup(model, monitorTime);
+        RecreationModel unionModel = merge(model1, model2);
+        RecreationModel returnModel = null;
+        
 
-        logger.debug("[merge] finished merge with " + model.getConstraints().size() + " constraints");
-        return model;
+        returnModel = inconsistencyCheck(unionModel, monitorTime);
+        cleanup(returnModel, monitorTime);
+
+        logger.debug("[merge] finished merge with " + returnModel.getConstraints().size() + " constraints");
+        returnModel.numberOfConstraintsUnion = model1.getConstraints().size() + model2.getConstraints().size();
+        returnModel.averageSolutionTimeUnion = unionModel.solveAndReturnAverageSolutionTime(100);
+
+        return returnModel;
     }
 
     public static RecreationModel merge(RecreationModel naBaseRecreationModel, RecreationModel euBaseRecreationModel) {
