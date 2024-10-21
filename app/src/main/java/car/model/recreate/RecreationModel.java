@@ -1,12 +1,12 @@
 package car.model.recreate;
 
+import car.benchmark.Benchmark;
 import car.model.base.BaseCarModel;
 import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.MergedCarModel;
 import car.model.impl.NorthAmericaCarModel;
 import car.model.recreate.constraints.AbstractConstraint;
-import car.model.recreate.constraints.ConstraintGenerator;
 import car.model.recreate.constraints.ImplicationConstraint;
 import car.model.recreate.constraints.SimpleConstraint;
 
@@ -19,23 +19,21 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class RecreationModel extends ConstraintGenerator {
+public class RecreationModel {
     protected final Logger logger;
     private Random random;
 
     private List<AbstractConstraint> constraints;
     
     private Region region;
-    
-    public long numberOfChecks = 0;
-    public long timeToMerge = 0;
-    public int numberOfConstraintsUnion = 0;
-    public long averageSolutionTimeUnion = 0;
+
+    public Benchmark benchmark;
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
         this.region = region;
         logger = LogManager.getLogger(this.getClass());
+        benchmark = new Benchmark();
     }
 
     public RecreationModel(Region region, int seed) {
@@ -43,6 +41,7 @@ public class RecreationModel extends ConstraintGenerator {
         this.region = region;
         logger = LogManager.getLogger(this.getClass());
         random = new Random(seed);
+        benchmark = new Benchmark();
     }
 
     public void printConstraints() {
@@ -161,11 +160,12 @@ public class RecreationModel extends ConstraintGenerator {
             oldNumberOfSolutions = numberOfSolutions;
             numberOfSolutions = solveAndReturnNumberOfSolutions();
             float coefficient = (float) numberOfSolutions / oldNumberOfSolutions;
-            if (restricted && coefficient <= 0.7) {
+            if (restricted && (coefficient <= 0.7)) {
                 constraints.remove(constraint);
                 i--;
                 numberOfSolutions = oldNumberOfSolutions;
             }
+            logger.debug(i);
 
             i = (i < 0) ? i = 0 : i;
         }

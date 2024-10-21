@@ -24,11 +24,13 @@ public class RecreationMerger {
         returnModel = inconsistencyCheck(unionModel, monitorTime);
         cleanup(returnModel, monitorTime);
 
-        returnModel.analyseContextualizationShare();
-        logger.debug("[merge] finished merge with " + returnModel.getConstraints().size() + " constraints\n");
-        returnModel.numberOfConstraintsUnion = model1.getConstraints().size() + model2.getConstraints().size();
-        returnModel.averageSolutionTimeUnion = unionModel.solveAndReturnAverageSolutionTime(100);
+        returnModel.benchmark.numberOfConstraintsUnion = model1.getConstraints().size() + model2.getConstraints().size();
+        returnModel.benchmark.averageSolutionTimeUnion = unionModel.solveAndReturnAverageSolutionTime(100);
+        returnModel.benchmark.contextualizationShare = returnModel.analyseContextualizationShare();
+        returnModel.benchmark.averageSolutionTimeMerged = returnModel.solveAndReturnAverageSolutionTime(100);
+        returnModel.benchmark.numberOfConstraintsMerged = returnModel.getConstraints().size();
 
+        logger.debug("[merge] finished merge with " + returnModel.getConstraints().size() + " constraints\n");
         return returnModel;
     }
 
@@ -61,7 +63,7 @@ public class RecreationMerger {
             testingModel = new RecreationModel(Region.TESTING);
             testingModel.addConstraints(mergedUnionModel.getConstraints());
             testingModel.addConstraints(mergedModel.getConstraints());
-            mergedModel.numberOfChecks++;
+            mergedModel.benchmark.numberOfChecks++;
 
             if(isInconsistent(checkConstraint, testingModel, monitorTime, mergedModel)) {
                 originalConstraint.disableContextualize();
@@ -91,7 +93,7 @@ public class RecreationMerger {
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
             constraint.setNegation(Boolean.TRUE);
-            mergedModel.numberOfChecks++;
+            mergedModel.benchmark.numberOfChecks++;
 
             if(isInconsistent(mergedModel, monitorTime)) {
                 iterator.remove();

@@ -14,8 +14,6 @@ public class RecreationTest8RandomBenchmark {
 
         List<Benchmark> benchmarks = new ArrayList<>();
         for(int i = 10; i <= 100; i=i+10) {
-            Benchmark benchmark = new Benchmark("merged_" + i);
-
             RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA, 123456789);
             naBaseRecreationModel.createRandomConstraints(i, Boolean.TRUE, Boolean.TRUE);
             RecreationModel euBaseRecreationModel = new RecreationModel(Region.EUROPE, 987654321);
@@ -26,16 +24,7 @@ public class RecreationTest8RandomBenchmark {
             naBaseRecreationModel.solveAndPrintNumberOfSolutions();
             euBaseRecreationModel.solveAndPrintNumberOfSolutions();
             model.solveAndPrintNumberOfSolutions();
-            
-            benchmark.averageSolutionTimeUnion = model.averageSolutionTimeUnion;
-            benchmark.numberOfConstraintsUnion = model.numberOfConstraintsUnion;
-            benchmark.averageSolutionTimeMerged = model.solveAndReturnAverageSolutionTime(100);
-            benchmark.numberOfConstraintsMerged = model.getConstraints().size();
-            benchmark.contextualizationShare = model.analyseContextualizationShare();
-            benchmark.timeToMerge = model.timeToMerge;
-            benchmark.numberOfChecks = model.numberOfChecks;
-
-            benchmarks.add(benchmark);
+            benchmarks.add(model.benchmark);
         }
 
         BenchmarkService.printBenchmarks(benchmarks);

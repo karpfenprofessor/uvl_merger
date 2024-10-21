@@ -7,17 +7,13 @@ import car.benchmark.Benchmark;
 import car.benchmark.BenchmarkService;
 import car.merge.RecreationMerger;
 import car.model.base.Region;
-import car.model.impl.MergedCarModel;
 import car.model.recreate.RecreationModel;
 
 public class RecreationTest9LogicalBenchmark {
     public static void main(String[] args) throws Exception {
-        MergedCarModel mergedCarModel = null;
 
         List<Benchmark> benchmarks = new ArrayList<>();
         for(int i = 10; i <= 100; i=i+10) {
-            Benchmark benchmark = new Benchmark("logical_" + i);
-
             RecreationModel naBaseRecreationModel = new RecreationModel(Region.NORTH_AMERICA);
             naBaseRecreationModel.createSharedConstraints(i/2);
             naBaseRecreationModel.createLogicalNorthAmericaConstraints(i/2);
@@ -26,18 +22,9 @@ public class RecreationTest9LogicalBenchmark {
             euBaseRecreationModel.createLogicalEuropeConstraints(i/2);
 
             RecreationModel model = RecreationMerger.fullMerge(naBaseRecreationModel, euBaseRecreationModel, Boolean.TRUE);
+            model.solveAndPrintNumberOfSolutions();
 
-            mergedCarModel = new MergedCarModel();
-            mergedCarModel.recreateFromRegionModel(model);
-            mergedCarModel.solveAndPrintNumberOfSolutions();
-            
-            benchmark.averageSolutionTimeMerged = mergedCarModel.solveXNumberOfTimes(100);
-            //benchmark.numberOfConstraintsInput = i;
-            benchmark.contextualizationShare = model.analyseContextualizationShare();
-            benchmark.timeToMerge = model.timeToMerge;
-            benchmark.numberOfChecks = model.numberOfChecks;
-
-            benchmarks.add(benchmark);
+            benchmarks.add(model.benchmark);
         }
 
         BenchmarkService.printBenchmarks(benchmarks);

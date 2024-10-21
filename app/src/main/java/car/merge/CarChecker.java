@@ -30,7 +30,7 @@ public class CarChecker {
         long endTime = System.nanoTime();
         //logger.warn("[check] checkConsistency for model " + model.printRegion() + ": " + consistency);
         model.getSolver().reset();
-        recreationModel.timeToMerge = recreationModel.timeToMerge + (endTime - startTime);
+        recreationModel.benchmark.timeToMerge = recreationModel.benchmark.timeToMerge + (endTime - startTime);
         return consistency;
     }
 

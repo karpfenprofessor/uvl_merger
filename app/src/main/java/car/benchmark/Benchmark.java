@@ -1,8 +1,6 @@
 package car.benchmark;
 
 public class Benchmark {
-    public String id;
-
     public int numberOfConstraintsUnion;
     public int numberOfConstraintsMerged;
     public long averageSolutionTimeUnion;
@@ -11,17 +9,16 @@ public class Benchmark {
     public long numberOfChecks;
     public float contextualizationShare;
 
-    public Benchmark(String id) {
-        this.id = id;
+    public Benchmark() {
     }
 
     @Override
     public String toString() {
-        return "Benchmark [id=" + id + ", numberOfConstraintsUnion=" + numberOfConstraintsUnion
+        return "Benchmark [numberOfConstraintsUnion=" + numberOfConstraintsUnion
                 + ", numberOfConstraintsMerged=" + numberOfConstraintsMerged + ", averageSolutionTimeUnion="
                 + averageSolutionTimeUnion + ", averageSolutionTimeMerged=" + averageSolutionTimeMerged
-                + "\n\t\ttimeToMerge=" + timeToMerge + ", numberOfChecks=" + numberOfChecks + ", contextualizationShare="
-                + contextualizationShare + "]";
+                + "\n\t\ttimeToMerge=" + timeToMerge + ", numberOfChecks=" + numberOfChecks + ", timePerCheck=" + (timeToMerge/numberOfChecks) + ", contextualizationShare="
+                + contextualizationShare + "]\n";
     }
 
     
