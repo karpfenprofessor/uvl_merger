@@ -1,4 +1,4 @@
-name: Build and Test fish
+name: Build and Test car
 
 on:
   push:
