@@ -4,6 +4,8 @@ import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
 
 import car.model.base.BaseCarModel;
+import car.model.impl.EuropeCarModel;
+import car.model.impl.NorthAmericaCarModel;
 import car.model.recreate.RecreationModel;
 
 import org.apache.logging.log4j.LogManager;
@@ -45,6 +47,15 @@ public class CarChecker {
             model.getSolver().reset();
             return false;
         }
+    }
+
+    public static int findIntersectionSolution(RecreationModel model1, RecreationModel model2) {
+        NorthAmericaCarModel carModel1 = new NorthAmericaCarModel();
+        EuropeCarModel carModel2 = new EuropeCarModel();
+        carModel1.recreateFromRegionModel(model1);
+        carModel2.recreateFromRegionModel(model2);
+
+        return findIntersectionSolution(carModel1, carModel2);
     }
 
     public static int findIntersectionSolution(BaseCarModel model1, BaseCarModel model2) {
