@@ -1,8 +1,8 @@
-package solve;
+package car.solve;
 
-import car.merge.RecreationMerger;
 import car.model.base.Region;
-import car.model.recreate.RecreationModel;
+import merge.RecreationMerger;
+import model.recreate.RecreationModel;
 
 public class RecreationTest10LocialBenchmarkSimple {
     public static void main(String[] args) throws Exception {

@@ -12,10 +12,10 @@ import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
 
-import car.model.recreate.RecreationModel;
-import car.model.recreate.constraints.AbstractConstraint;
-import car.model.recreate.constraints.ImplicationConstraint;
-import car.model.recreate.constraints.SimpleConstraint;
+import model.recreate.RecreationModel;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.ImplicationConstraint;
+import model.recreate.constraints.SimpleConstraint;
 
 import java.util.HashSet;
 import java.util.Set;

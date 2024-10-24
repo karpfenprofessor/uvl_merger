@@ -1,9 +1,8 @@
-package solve;
-
-import car.merge.RecreationMerger;
+package car.solve;
 import car.model.base.Region;
 import car.model.impl.MergedCarModel;
-import car.model.recreate.RecreationModel;
+import merge.RecreationMerger;
+import model.recreate.RecreationModel;
 
 public class RecreationTest7RandomFullMergeFast {
     public static void main(String[] args) throws Exception {

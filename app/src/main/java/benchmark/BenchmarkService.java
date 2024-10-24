@@ -1,4 +1,4 @@
-package car.benchmark;
+package benchmark;
 
 import java.util.List;
 

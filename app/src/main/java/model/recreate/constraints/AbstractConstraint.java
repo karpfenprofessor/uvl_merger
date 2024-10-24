@@ -1,4 +1,4 @@
-package car.model.recreate.constraints;
+package model.recreate.constraints;
 
 public abstract class AbstractConstraint {
     private boolean isContextualized;

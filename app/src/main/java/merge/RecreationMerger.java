@@ -1,4 +1,4 @@
-package car.merge;
+package merge;
 
 import java.util.Iterator;
 
@@ -7,8 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import car.model.base.Region;
 import car.model.impl.MergedCarModel;
-import car.model.recreate.RecreationModel;
-import car.model.recreate.constraints.AbstractConstraint;
+import model.recreate.RecreationModel;
+import model.recreate.constraints.AbstractConstraint;
 
 public class RecreationMerger {
     

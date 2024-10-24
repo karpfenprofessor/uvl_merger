@@ -1,7 +1,7 @@
-package solve;
+package car.solve;
 
 import car.model.base.Region;
-import car.model.recreate.RecreationModel;
+import model.recreate.RecreationModel;
 
 public class CreateSharedConstraints {
     public static void main(String[] args) throws Exception {

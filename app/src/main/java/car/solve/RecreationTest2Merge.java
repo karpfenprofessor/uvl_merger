@@ -1,12 +1,12 @@
-package solve;
+package car.solve;
 
-import car.merge.CarChecker;
-import car.merge.RecreationMerger;
 import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.MergedCarModel;
 import car.model.impl.NorthAmericaCarModel;
-import car.model.recreate.RecreationModel;
+import merge.CarChecker;
+import merge.RecreationMerger;
+import model.recreate.RecreationModel;
 
 public class RecreationTest2Merge {
     public static void main(String[] args) throws Exception {

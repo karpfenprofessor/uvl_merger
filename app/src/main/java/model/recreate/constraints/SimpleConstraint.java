@@ -1,4 +1,4 @@
-package car.model.recreate.constraints;
+package model.recreate.constraints;
 
 public class SimpleConstraint extends AbstractConstraint {
     private String variable;

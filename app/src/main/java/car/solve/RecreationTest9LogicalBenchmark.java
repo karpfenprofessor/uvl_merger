@@ -1,13 +1,13 @@
-package solve;
+package car.solve;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import car.benchmark.Benchmark;
-import car.benchmark.BenchmarkService;
-import car.merge.RecreationMerger;
+import benchmark.Benchmark;
+import benchmark.BenchmarkService;
 import car.model.base.Region;
-import car.model.recreate.RecreationModel;
+import merge.RecreationMerger;
+import model.recreate.RecreationModel;
 
 public class RecreationTest9LogicalBenchmark {
     public static void main(String[] args) throws Exception {

@@ -1,19 +1,21 @@
-package car.model.recreate;
+package model.recreate;
 
-import car.benchmark.Benchmark;
 import car.model.base.BaseCarModel;
 import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.MergedCarModel;
 import car.model.impl.NorthAmericaCarModel;
-import car.model.recreate.constraints.AbstractConstraint;
-import car.model.recreate.constraints.ImplicationConstraint;
-import car.model.recreate.constraints.SimpleConstraint;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.ImplicationConstraint;
+import model.recreate.constraints.SimpleConstraint;
 
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import benchmark.Benchmark;
+
 import java.util.Random;
 
 import java.util.ArrayList;

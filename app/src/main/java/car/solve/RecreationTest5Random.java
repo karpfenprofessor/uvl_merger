@@ -1,9 +1,9 @@
-package solve;
+package car.solve;
 
 import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.NorthAmericaCarModel;
-import car.model.recreate.RecreationModel;
+import model.recreate.RecreationModel;
 
 public class RecreationTest5Random {
     public static void main(String[] args) throws Exception {

@@ -1,4 +1,4 @@
-package car.benchmark;
+package benchmark;
 
 public class Benchmark {
     public int numberOfConstraintsUnion;

@@ -1,4 +1,4 @@
-package car.merge;
+package merge;
 
 import org.chocosolver.solver.exception.ContradictionException;
 import org.chocosolver.solver.variables.IntVar;
@@ -6,7 +6,7 @@ import org.chocosolver.solver.variables.IntVar;
 import car.model.base.BaseCarModel;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.NorthAmericaCarModel;
-import car.model.recreate.RecreationModel;
+import model.recreate.RecreationModel;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
