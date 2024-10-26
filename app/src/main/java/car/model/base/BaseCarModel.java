@@ -1,7 +1,6 @@
 package car.model.base;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.ModelAnalyser;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
 
@@ -108,10 +107,6 @@ public abstract class BaseCarModel {
         return model.arithm(contextVar, "=", value);
     }
 
-    public String getDomainVariablesAsString() {
-        return "region type color engine couplingdev fuel service";
-    }
-
     public void printAllVariables(boolean showReifVariables) {
         logger.debug("[print] print variables of model " + this.printRegion());
         int cnt = 0;
@@ -150,12 +145,6 @@ public abstract class BaseCarModel {
         }
 
         logger.debug("[print] finished printing constraints of model " + this.printRegion() + "\n");
-    }
-
-    public void analyseModel() {
-        ModelAnalyser analyser = this.getModel().getModelAnalyser();
-        analyser.printVariableAnalysis();
-        analyser.printConstraintAnalysis();
     }
 
     public String printRegion() {
@@ -212,7 +201,7 @@ public abstract class BaseCarModel {
         return cnt;
     }
 
-    public int solveWithNumberOfSolutions() {
+    public int solveAndReturnNumberOfSolutions() {
         int cnt = 0;
         while (getSolver().solve()) {
             cnt++;
@@ -237,10 +226,6 @@ public abstract class BaseCarModel {
         logger.debug("  Engine: " + getEngine(engine.getValue()) + " | Couplingdev: "
                 + getCouplingdev(couplingdev.getValue())
                 + " | Fuel: " + getFuel(fuel.getValue()) + " | Service: " + getService(service.getValue()) + "\n");
-    }
-
-    public Set<String> getVariableNames() {
-        return Set.of("region", "type", "color", "engine", "couplingdev", "fuel", "service");
     }
 
     public String getType(int value) {

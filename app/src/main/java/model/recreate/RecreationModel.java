@@ -96,7 +96,7 @@ public class RecreationModel {
     }
 
     public int solveAndReturnNumberOfSolutions() {
-        return createChocoModel(this).solveWithNumberOfSolutions();
+        return createChocoModel(this).solveAndReturnNumberOfSolutions();
     }
 
     public long solveAndReturnAverageSolutionTime(int runs) {
@@ -111,7 +111,7 @@ public class RecreationModel {
         if (region == Region.NORTH_AMERICA)
             chocoModel = new NorthAmericaCarModel();
 
-        if (region == Region.MERGED || region == Region.TESTING || region == Region.UNION)
+        if (region == Region.MERGED || region == Region.TESTING || region == Region.UNION || chocoModel == null)
             chocoModel = new MergedCarModel();
 
         chocoModel.recreateFromRegionModel(model);

@@ -6,10 +6,10 @@ import car.model.base.Region;
 public class MergedCarModel extends BaseCarModel {
 
     public MergedCarModel() {
-        this(false, 0);
+        this(false);
     }
 
-    public MergedCarModel(boolean addConstraints, int number) {
+    public MergedCarModel(boolean addConstraints) {
         super();
         regionModel = Region.MERGED;
 

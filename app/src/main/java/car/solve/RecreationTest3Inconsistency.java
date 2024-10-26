@@ -16,13 +16,13 @@ public class RecreationTest3Inconsistency {
         RecreationModel mergedUnionModel = RecreationMerger.merge(naBaseRecreationModel, euBaseRecreationModel);
         mergedUnionModel.printConstraints();
 
-        MergedCarModel mergedCarUnionModel = new MergedCarModel(false, 0);
+        MergedCarModel mergedCarUnionModel = new MergedCarModel(false);
         mergedCarUnionModel.recreateFromRegionModel(mergedUnionModel);
         mergedCarUnionModel.solveAndPrintNumberOfSolutions();
 
         RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(mergedUnionModel);
         mergedModel.printConstraints();
-        MergedCarModel mergedCarModel = new MergedCarModel(false, 0);
+        MergedCarModel mergedCarModel = new MergedCarModel(false);
         mergedCarModel.recreateFromRegionModel(mergedModel);
         
         mergedCarModel.solveAndPrintNumberOfSolutions();

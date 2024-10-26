@@ -6,10 +6,10 @@ import car.model.base.Region;
 public class EuropeCarModel extends BaseCarModel {
 
         public EuropeCarModel() {
-                this(false, 0);
+                this(false);
         }
 
-        public EuropeCarModel(boolean addConstraints, int number) {
+        public EuropeCarModel(boolean addConstraints) {
                 super();
                 regionModel = Region.EUROPE;
 
@@ -22,10 +22,8 @@ public class EuropeCarModel extends BaseCarModel {
                 fuel = model.intVar("fuel", 0, 3); // Electro: 0, Diesel: 1, Gas: 2, Hybrid: 3
                 service = model.intVar("service", 0, 2); // 15k: 0, 20k: 1, 25k: 2
 
-                if (addConstraints && number == 0) {
+                if (addConstraints) {
                         addLogicalConstraints();
-                } else if (addConstraints) {
-                        // addRandomConstraints(number);
                 }
         }
 

@@ -14,10 +14,10 @@ public class RecreationTest1Contextualize {
         naBaseRecreationModel.createPaperNorthAmericaConstraints();
         euBaseRecreationModel.createPaperEuropeConstraints();
 
-        NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(false, 0);
+        NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(false);
         naCarModel.recreateFromRegionModel(naBaseRecreationModel);
 
-        EuropeCarModel europeCarModel = new EuropeCarModel(false, 0);
+        EuropeCarModel europeCarModel = new EuropeCarModel(false);
         europeCarModel.recreateFromRegionModel(euBaseRecreationModel);
 
         naCarModel.printAllConstraints();
@@ -29,10 +29,10 @@ public class RecreationTest1Contextualize {
         naBaseRecreationModel.contextualizeAllConstraints();
         euBaseRecreationModel.contextualizeAllConstraints();
 
-        NorthAmericaCarModel naCarModelContextualized = new NorthAmericaCarModel(false, 0);
+        NorthAmericaCarModel naCarModelContextualized = new NorthAmericaCarModel(false);
         naCarModelContextualized.recreateFromRegionModel(naBaseRecreationModel);
 
-        EuropeCarModel europeCarModelContextualized = new EuropeCarModel(false, 0);
+        EuropeCarModel europeCarModelContextualized = new EuropeCarModel(false);
         europeCarModelContextualized.recreateFromRegionModel(euBaseRecreationModel);
 
         naCarModelContextualized.printAllConstraints();

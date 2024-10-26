@@ -16,10 +16,10 @@ public class RecreationTest2Merge {
         naBaseRecreationModel.createPaperNorthAmericaConstraints();
         euBaseRecreationModel.createPaperEuropeConstraints();
 
-        NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(false, 0);
+        NorthAmericaCarModel naCarModel = new NorthAmericaCarModel(false);
         naCarModel.recreateFromRegionModel(naBaseRecreationModel);
 
-        EuropeCarModel europeCarModel = new EuropeCarModel(false, 0);
+        EuropeCarModel europeCarModel = new EuropeCarModel(false);
         europeCarModel.recreateFromRegionModel(euBaseRecreationModel);
 
         naCarModel.solveAndPrintNumberOfSolutions();
@@ -28,17 +28,17 @@ public class RecreationTest2Merge {
         naBaseRecreationModel.contextualizeAllConstraints();
         euBaseRecreationModel.contextualizeAllConstraints();
 
-        NorthAmericaCarModel naCarModelContextualized = new NorthAmericaCarModel(false, 0);
+        NorthAmericaCarModel naCarModelContextualized = new NorthAmericaCarModel(false);
         naCarModelContextualized.recreateFromRegionModel(naBaseRecreationModel);
 
-        EuropeCarModel euCarModelContextualized = new EuropeCarModel(false, 0);
+        EuropeCarModel euCarModelContextualized = new EuropeCarModel(false);
         euCarModelContextualized.recreateFromRegionModel(euBaseRecreationModel);
 
         naCarModelContextualized.solveAndPrintNumberOfSolutions();
         euCarModelContextualized.solveAndPrintNumberOfSolutions();
 
         RecreationModel mergedUnionModel = RecreationMerger.merge(naBaseRecreationModel, euBaseRecreationModel);
-        MergedCarModel mergedCarModel = new MergedCarModel(false, 0);
+        MergedCarModel mergedCarModel = new MergedCarModel(false);
         mergedCarModel.recreateFromRegionModel(mergedUnionModel);
 
         mergedCarModel.solveAndPrintNumberOfSolutions();
