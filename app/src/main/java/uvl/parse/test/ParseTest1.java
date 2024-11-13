@@ -1,21 +1,23 @@
-package uvl.parse;
+package uvl.parse.test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import uvl.UVLJavaBaseListener;
+import model.recreate.constraints.AbstractConstraint;
 import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
+import uvl.parse.FeatureModelMapper;
 
 public class ParseTest1 {
+
     public static void main(String[] args) throws Exception {
         Path filePath = Paths.get(ParseTest1.class.getClassLoader()
-                .getResource("uvl/model_test1.uvl").toURI());
+                .getResource("uvl/model_test2.uvl").toURI());
         String content = new String(Files.readAllBytes(filePath));
 
         CharStream charStream = CharStreams.fromString(content);
@@ -24,9 +26,8 @@ public class ParseTest1 {
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
         UVLJavaParser.FeatureModelContext featureModelContext = parser.featureModel();
 
-        ParseTreeWalker walker = new ParseTreeWalker();
-        walker.walk(new UVLJavaBaseListener(), featureModelContext);
+        List<AbstractConstraint> constraints = FeatureModelMapper.mapToConstraints(featureModelContext);
 
-        System.out.println(featureModelContext.toStringTree(parser));
+        constraints.forEach(System.out::println);
     }
 }
