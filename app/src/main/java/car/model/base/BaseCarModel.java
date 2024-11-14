@@ -87,6 +87,10 @@ public abstract class BaseCarModel {
         //logger.debug("[recreate] put " + recreationModel.getConstraints().size() + " constraints into " + printRegion());
     }
 
+    private Constraint buildSimpleConstraint(AbstractConstraint sc) {
+        return buildSimpleConstraint((SimpleConstraint) sc);
+    }
+
     private Constraint buildSimpleConstraint(SimpleConstraint sc) {
         IntVar var = getVariablesAsMap().get(sc.getVariable());
         Integer value = sc.getValue();

@@ -1,23 +1,33 @@
 package model.recreate.constraints;
 
 public class ImplicationConstraint extends AbstractConstraint {
-    private SimpleConstraint antecedent; // The "if" part
-    private SimpleConstraint consequent; // The "then" part
 
-    public ImplicationConstraint(SimpleConstraint antecedent, SimpleConstraint consequent) {
+    public enum Operator {
+        AND,
+        OR,
+        ALTERNATIVE,
+        OPTIONAL
+    }
+
+    private AbstractConstraint antecedent;
+    private Operator operator;
+    private AbstractConstraint consequent;
+
+    
+    public ImplicationConstraint(AbstractConstraint antecedent, AbstractConstraint consequent) {
         super(Boolean.FALSE, null);
         this.antecedent = antecedent;
         this.consequent = consequent;
     }
 
-    public ImplicationConstraint(SimpleConstraint antecedent, SimpleConstraint consequent,
+    public ImplicationConstraint(AbstractConstraint antecedent, AbstractConstraint consequent,
             boolean isContextualized, Integer contextValue) {
         super(isContextualized, contextValue);
         this.antecedent = antecedent;
         this.consequent = consequent;
     }
 
-    public ImplicationConstraint(SimpleConstraint antecedent, SimpleConstraint consequent,
+    public ImplicationConstraint(AbstractConstraint antecedent, AbstractConstraint consequent,
             boolean isContextualized, Integer contextValue, boolean isNegation) {
         super(isContextualized, contextValue);
         this.antecedent = antecedent;
@@ -25,26 +35,35 @@ public class ImplicationConstraint extends AbstractConstraint {
         this.setNegation(isNegation);
     }
 
-    public SimpleConstraint getAntecedent() {
+    public AbstractConstraint getAntecedent() {
         return antecedent;
     }
 
-    public SimpleConstraint getConsequent() {
+    public void setAntecedent(AbstractConstraint antecedent) {
+        this.antecedent = antecedent;
+    }
+
+    public AbstractConstraint getConsequent() {
         return consequent;
+    }
+
+    public void setConsequents(AbstractConstraint consequent) {
+        this.consequent = consequent;
     }
 
     @Override
     public String toString() {
-        String constraintStr = antecedent.toString() + " then " + consequent.toString();
+        String constraintStr = antecedent.toString() + " " + operator + " " + consequent.toString();
         if (isContextualized()) {
-            constraintStr +=  "\t\t[context: region" + " = " + getContextualizationValue() + "]";
+            constraintStr += "\t\t[context: region" + " = " + getContextualizationValue() + "]";
         }
 
         return constraintStr;
     }
 
     public ImplicationConstraint copy() {
-        return new ImplicationConstraint(this.antecedent.copy(), this.consequent.copy(), this.isContextualized(), this.getContextualizationValue(), this.isNegation());
+        return new ImplicationConstraint(this.antecedent.copy(), this.consequent.copy(), this.isContextualized(),
+                this.getContextualizationValue(), this.isNegation());
     }
 
     @Override
@@ -52,6 +71,7 @@ public class ImplicationConstraint extends AbstractConstraint {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((antecedent == null) ? 0 : antecedent.hashCode());
+        result = prime * result + ((operator == null) ? 0 : operator.hashCode());
         result = prime * result + ((consequent == null) ? 0 : consequent.hashCode());
         return result;
     }
@@ -70,6 +90,8 @@ public class ImplicationConstraint extends AbstractConstraint {
                 return false;
         } else if (!antecedent.equals(other.antecedent))
             return false;
+        if (operator != other.operator)
+            return false;
         if (consequent == null) {
             if (other.consequent != null)
                 return false;
@@ -77,6 +99,4 @@ public class ImplicationConstraint extends AbstractConstraint {
             return false;
         return true;
     }
-
-    
 }

@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
 
@@ -22,7 +24,26 @@ public class ParseTest1 {
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
         UVLJavaParser.FeatureModelContext featureModelContext = parser.featureModel();
+        
+        printTree(featureModelContext, parser);
+    }
 
-        System.out.println(featureModelContext.toStringTree(parser));
+    public static void printTree(ParseTree tree, UVLJavaParser parser) {
+        printTree(tree, parser, 0);
+    }
+
+    private static void printTree(ParseTree tree, UVLJavaParser parser, int level) {
+        String indent = " ".repeat(level);
+        String nodeText = tree.getText();
+
+        if (tree.getChildCount() > 0) {
+            nodeText = parser.getRuleNames()[((org.antlr.v4.runtime.RuleContext) tree).getRuleIndex()];
+        }
+
+        System.out.println(indent + nodeText);
+
+        for (int i = 0; i < tree.getChildCount(); i++) {
+            printTree(tree.getChild(i), parser, level + 1);
+        }
     }
 }

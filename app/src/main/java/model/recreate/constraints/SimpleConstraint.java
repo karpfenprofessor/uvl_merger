@@ -41,6 +41,18 @@ public class SimpleConstraint extends AbstractConstraint {
         return value;
     }
 
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
     @Override
     public String toString() {
         String constraintStr = "(" + variable + " " + operator + " " + value + ")";
