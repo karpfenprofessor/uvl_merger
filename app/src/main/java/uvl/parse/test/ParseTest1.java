@@ -3,15 +3,12 @@ package uvl.parse.test;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import model.recreate.constraints.AbstractConstraint;
 import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
-import uvl.parse.FeatureModelMapper;
 
 public class ParseTest1 {
 
@@ -26,8 +23,6 @@ public class ParseTest1 {
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
         UVLJavaParser.FeatureModelContext featureModelContext = parser.featureModel();
 
-        List<AbstractConstraint> constraints = FeatureModelMapper.mapToConstraints(featureModelContext);
-
-        constraints.forEach(System.out::println);
+        System.out.println(featureModelContext.toStringTree(parser));
     }
 }
