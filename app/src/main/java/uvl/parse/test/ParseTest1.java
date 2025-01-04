@@ -3,14 +3,12 @@ package uvl.parse.test;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
-
 import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
+import uvl.UVLJavaParser.GroupContext;
 
 public class ParseTest1 {
 
@@ -23,27 +21,26 @@ public class ParseTest1 {
         UVLJavaLexer lexer = new UVLJavaLexer(charStream);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
-        UVLJavaParser.FeatureModelContext featureModelContext = parser.featureModel();
-        
-        printTree(featureModelContext, parser);
-    }
+        UVLJavaParser.FeatureModelContext featureModelContext = parser.featureModel(); 
 
-    public static void printTree(ParseTree tree, UVLJavaParser parser) {
-        printTree(tree, parser, 0);
-    }
-
-    private static void printTree(ParseTree tree, UVLJavaParser parser, int level) {
-        String indent = " ".repeat(level);
-        String nodeText = tree.getText();
-
-        if (tree.getChildCount() > 0) {
-            nodeText = parser.getRuleNames()[((org.antlr.v4.runtime.RuleContext) tree).getRuleIndex()];
+        UVLJavaParser.FeaturesContext rootFeature = featureModelContext.features();
+        String rootFeatureName = rootFeature.toInfoString(parser);
+        System.out.println("rootFeatureTree:" + rootFeatureName);
+        UVLJavaParser.FeatureContext featureContext = rootFeature.feature();
+        String featureContextName = featureContext.toInfoString(parser);
+        System.out.println("featureContextTree: " + featureContextName);
+        if (!featureContext.group().isEmpty()) {
+            System.out.println("group: " + featureContext.group().size());
+            for(GroupContext g : featureContext.group()) {
+                System.out.println(g.toInfoString(parser));
+            }
         }
 
-        System.out.println(indent + nodeText);
-
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            printTree(tree.getChild(i), parser, level + 1);
+        if(!featureContext.children.isEmpty()) {
+            System.out.println("children: " + featureContext.children.size());
+            for(int i = 0; i < featureContext.children.size(); i++) {
+                System.out.println(featureContext.children.get(i).toString());
+            }
         }
     }
 }

@@ -13,8 +13,4 @@ public class BenchmarkService {
             logger.info(b.toString());
         }
     }
-
-    
-
-    
 }
