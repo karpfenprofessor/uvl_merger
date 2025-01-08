@@ -5,7 +5,10 @@ import car.model.base.Region;
 import car.model.impl.EuropeCarModel;
 import car.model.impl.MergedCarModel;
 import car.model.impl.NorthAmericaCarModel;
+import lombok.Getter;
+import lombok.Setter;
 import uvl.model.recreate.constraints.AbstractConstraint;
+import uvl.model.recreate.feature.Feature;
 
 import java.util.List;
 
@@ -14,20 +17,18 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class RecreationModel {
     protected final Logger logger;
+
     private List<AbstractConstraint> constraints;
+    private List<Feature> features;
     
     private Region region;
 
 
     public RecreationModel(Region region) {
-        this.constraints = new ArrayList<>();
-        this.region = region;
-        logger = LogManager.getLogger(this.getClass());
-    }
-
-    public RecreationModel(Region region, int seed) {
         this.constraints = new ArrayList<>();
         this.region = region;
         logger = LogManager.getLogger(this.getClass());
@@ -103,13 +104,5 @@ public class RecreationModel {
 
         //chocoModel.recreateFromRegionModel(model);
         return chocoModel;
-    }
-
-    public List<AbstractConstraint> getConstraints() {
-        return constraints;
-    }
-
-    public Region getRegion() {
-        return region;
     }
 }

@@ -1,5 +1,10 @@
 package uvl.model.recreate.constraints;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public abstract class AbstractConstraint {
     private boolean isContextualized;
     private Integer contextualizationValue;
@@ -17,22 +22,6 @@ public abstract class AbstractConstraint {
         this.isNegation = Boolean.FALSE;
     }
 
-    public boolean isContextualized() {
-        return isContextualized;
-    }
-
-    public boolean isNegation() {
-        return isNegation;
-    }
-
-    public void setNegation(boolean negation) {
-        this.isNegation = negation;
-    }
-
-    public Integer getContextualizationValue() {
-        return contextualizationValue;
-    }
-
     public void setContextualize(Integer value) {
         this.isContextualized = Boolean.TRUE;
         this.contextualizationValue = value;
@@ -41,7 +30,6 @@ public abstract class AbstractConstraint {
     public void disableContextualize() {
         this.isContextualized = Boolean.FALSE;
     }
-
    
     public abstract AbstractConstraint copy();
     public abstract String toString();

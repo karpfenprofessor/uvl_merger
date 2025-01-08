@@ -1,5 +1,12 @@
 package uvl.model.recreate.constraints;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class BinaryConstraint extends AbstractConstraint {
 
     public enum LogicalOperator {
@@ -11,56 +18,32 @@ public class BinaryConstraint extends AbstractConstraint {
     private Object consequent;
 
     
-    public BinaryConstraint(Object antecedent, Object consequent) {
+    public BinaryConstraint(Object antecedent, LogicalOperator operator, Object consequent) {
         super(Boolean.FALSE, null);
         this.antecedent = antecedent;
+        this.operator = operator;
         this.consequent = consequent;
     }
 
-    public BinaryConstraint(Object antecedent, Object consequent,
+    public BinaryConstraint(Object antecedent, LogicalOperator operator, Object consequent,
             boolean isContextualized, Integer contextValue) {
         super(isContextualized, contextValue);
         this.antecedent = antecedent;
+        this.operator = operator;
         this.consequent = consequent;
     }
 
-    public BinaryConstraint(Object antecedent, Object consequent,
+    public BinaryConstraint(Object antecedent, LogicalOperator operator, Object consequent,
             boolean isContextualized, Integer contextValue, boolean isNegation) {
         super(isContextualized, contextValue);
         this.antecedent = antecedent;
+        this.operator = operator;
         this.consequent = consequent;
         this.setNegation(isNegation);
     }
 
-    public Object getAntecedent() {
-        return antecedent;
-    }
-
-    public void setAntecedent(Object antecedent) {
-        this.antecedent = antecedent;
-    }
-
-    public Object getConsequent() {
-        return consequent;
-    }
-
-    public void setConsequents(Object consequent) {
-        this.consequent = consequent;
-    }
-
-    @Override
-    public String toString() {
-        String constraintStr = antecedent.toString() + " " + operator + " " + consequent.toString();
-        if (isContextualized()) {
-            constraintStr += "\t\t[context: region" + " = " + getContextualizationValue() + "]";
-        }
-
-        return constraintStr;
-    }
-
     @Override
     public AbstractConstraint copy() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'copy'");
     }
 }

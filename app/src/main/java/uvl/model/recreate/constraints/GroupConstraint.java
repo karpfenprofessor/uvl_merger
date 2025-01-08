@@ -2,8 +2,14 @@ package uvl.model.recreate.constraints;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import uvl.model.recreate.feature.Feature;
 
+@Getter
+@Setter
+@ToString
 public class GroupConstraint extends AbstractConstraint {
 
     private Feature parent;
@@ -36,40 +42,6 @@ public class GroupConstraint extends AbstractConstraint {
         this.lowerCardinality = lowerCardinality;
         this.upperCardinality = upperCardinality;
         this.setNegation(isNegation);
-    }
-
-    public Feature getParent() {
-        return parent;
-    }
-
-    public List<Feature> getChildren() {
-        return children;
-    }
-
-    public int getLowerCardinality() {
-        return lowerCardinality;
-    }
-
-    public int getUpperCardinality() {
-        return upperCardinality;
-    }
-
-    public void setParent(Feature parent) {
-        this.parent = parent;
-    }
-
-    public void setChildren(List<Feature> children) {
-        this.children = children;
-    }
-
-    @Override
-    public String toString() {
-        String constraintStr = "(" + children.toString() + ")";
-        if (isContextualized()) {
-            constraintStr += "\t\t\t\t[context: region" + " = " + getContextualizationValue() + "]";
-        }
-
-        return constraintStr;
     }
 
     @Override
