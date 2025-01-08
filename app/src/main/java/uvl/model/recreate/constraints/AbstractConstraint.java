@@ -1,4 +1,4 @@
-package model.recreate.constraints;
+package uvl.model.recreate.constraints;
 
 public abstract class AbstractConstraint {
     private boolean isContextualized;

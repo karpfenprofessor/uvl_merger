@@ -7,14 +7,8 @@ import org.chocosolver.solver.constraints.Constraint;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
-
-import model.recreate.RecreationModel;
-import model.recreate.constraints.AbstractConstraint;
-import model.recreate.constraints.ImplicationConstraint;
-import model.recreate.constraints.SimpleConstraint;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -42,73 +36,6 @@ public abstract class BaseCarModel {
         model = new Model();
         constraintsSet = new HashSet<>();
         logger = LogManager.getLogger(this.getClass());
-    }
-
-    public void recreateFromRegionModel(RecreationModel recreationModel) {
-        for (AbstractConstraint constraint : recreationModel.getConstraints()) {
-            if (constraint instanceof SimpleConstraint) {
-                SimpleConstraint sc = (SimpleConstraint) constraint;
-                Constraint cCreate = buildSimpleConstraint(sc);
-
-                if (sc.isContextualized()) {
-                    model.ifThen(buildContextualizationConstraint(sc.getContextualizationValue()), cCreate);
-                } else {
-                    cCreate.post();
-                }
-            } else if (constraint instanceof ImplicationConstraint) {
-                ImplicationConstraint ic = (ImplicationConstraint) constraint;
-
-                Constraint antecedentConstraint = buildSimpleConstraint(ic.getAntecedent());
-                Constraint consequentConstraint = buildSimpleConstraint(ic.getConsequent());
-
-                if (ic.isContextualized()) {
-                    Constraint contextualizationConstraint = buildContextualizationConstraint(
-                            ic.getContextualizationValue());
-
-                    BoolVar antecedentBool = antecedentConstraint.reify();
-                    BoolVar contextualizationBool = contextualizationConstraint.reify();
-
-                    BoolVar combinedCondition = model.boolVar();
-                    model.and(antecedentBool, contextualizationBool).reifyWith(combinedCondition);
-
-                    model.ifThen(combinedCondition, consequentConstraint);
-                } else if(ic.isNegation()) {
-                    BoolVar antecedentBool = antecedentConstraint.reify();
-                    BoolVar notConsequentBool = consequentConstraint.getOpposite().reify();
-
-                    Constraint negationOfImplication = model.and(antecedentBool, notConsequentBool);
-                    negationOfImplication.post();
-                } else {
-                    model.ifThen(antecedentConstraint, consequentConstraint);
-                }
-            }
-        }
-
-        //logger.debug("[recreate] put " + recreationModel.getConstraints().size() + " constraints into " + printRegion());
-    }
-
-    private Constraint buildSimpleConstraint(AbstractConstraint sc) {
-        return buildSimpleConstraint((SimpleConstraint) sc);
-    }
-
-    private Constraint buildSimpleConstraint(SimpleConstraint sc) {
-        IntVar var = getVariablesAsMap().get(sc.getVariable());
-        Integer value = sc.getValue();
-        String operator = sc.getOperator();
-
-        Constraint c = model.arithm(var, operator, value);
-        
-        if(sc.isNegation()) {
-            return c.getOpposite();
-        }
-
-        return c;
-    }
-
-    private Constraint buildContextualizationConstraint(Integer value) {
-        IntVar contextVar = getVariablesAsMap().get("region");
-
-        return model.arithm(contextVar, "=", value);
     }
 
     public void printAllVariables(boolean showReifVariables) {
@@ -214,100 +141,4 @@ public abstract class BaseCarModel {
         getSolver().reset();
         return cnt;
     }
-
-    // Method to solve the model and print the solution
-    public void solveAndPrintSolution() {
-        long startTime = System.nanoTime();
-        getSolver().solve();
-        long endTime = System.nanoTime();
-        long executionTime = endTime - startTime;
-        getSolver().reset();
-
-        // Print solution
-        logger.debug("[sol] Solution found in " + executionTime + " ns");
-        logger.debug("  Region: " + regionModel.printRegion() + " | Type: " + getType(type.getValue())
-                + " | Color: " + getColor(color.getValue()));
-        logger.debug("  Engine: " + getEngine(engine.getValue()) + " | Couplingdev: "
-                + getCouplingdev(couplingdev.getValue())
-                + " | Fuel: " + getFuel(fuel.getValue()) + " | Service: " + getService(service.getValue()) + "\n");
-    }
-
-    public String getType(int value) {
-        switch (value) {
-            case 0:
-                return "Combi";
-            case 1:
-                return "Limo";
-            case 2:
-                return "City";
-            case 3:
-                return "Suv";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public String getColor(int value) {
-        switch (value) {
-            case 0:
-                return "White";
-            case 1:
-                return "Black";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public String getEngine(int value) {
-        switch (value) {
-            case 0:
-                return "1l";
-            case 1:
-                return "1.5l";
-            case 2:
-                return "2l";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public String getCouplingdev(int value) {
-        switch (value) {
-            case 0:
-                return "Yes";
-            case 1:
-                return "No";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public String getFuel(int value) {
-        switch (value) {
-            case 0:
-                return "Electro";
-            case 1:
-                return "Diesel";
-            case 2:
-                return "Gas";
-            case 3:
-                return "Hybrid";
-            default:
-                return "Unknown";
-        }
-    }
-
-    public String getService(int value) {
-        switch (value) {
-            case 0:
-                return "15k";
-            case 1:
-                return "20k";
-            case 2:
-                return "25k";
-            default:
-                return "Unknown";
-        }
-    }
-
 }
