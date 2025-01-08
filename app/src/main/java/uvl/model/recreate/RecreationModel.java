@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class RecreationModel {
     protected final Logger logger;
 
+    private Feature rootFeature;
     private List<AbstractConstraint> constraints;
     private List<Feature> features;
     

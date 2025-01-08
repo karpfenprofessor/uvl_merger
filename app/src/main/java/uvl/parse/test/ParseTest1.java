@@ -12,14 +12,19 @@ import org.apache.logging.log4j.Logger;
 
 import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
+import uvl.model.recreate.RecreationModel;
+import uvl.parser.Parser;
 
 public class ParseTest1 {
 
     protected final static Logger logger = LogManager.getLogger(ParseTest1.class);
 
     public static void main(String[] args) throws Exception {
+        String filePathString = "uvl/model_test2.uvl";
+        String filePathString2 = "uvl/automotive02_parts/automotive02_01.uvl";
+        
         Path filePath = Paths.get(ParseTest1.class.getClassLoader()
-                .getResource("uvl/automotive02_parts/automotive02_01.uvl").toURI());
+                .getResource(filePathString).toURI());
         String content = new String(Files.readAllBytes(filePath));
 
         CharStream charStream = CharStreams.fromString(content);
@@ -27,13 +32,15 @@ public class ParseTest1 {
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
         UVLJavaParser.FeatureModelContext featureModelContext = parser.featureModel(); 
+        RecreationModel parseTest = new RecreationModel(null);
+        Parser.parseFeatureModel(featureModelContext, parseTest);
 
         String parseTreeString = featureModelContext.toStringTree(parser);
-        String formattedTree = parseTreeString
+        /*String formattedTree = parseTreeString
             .replace("\\t", "\t") // Replace literal "\t" with an actual tab
             .replace("\\n", "\n"); // Replace literal "\n" with an actual newline
         Files.write(Paths.get("logs/automotive02_parts_01.log"), formattedTree.getBytes(StandardCharsets.UTF_8));
-        logger.warn("Parse tree written to logs/parse_tree.log");
+        logger.warn("Parse tree written to logs/parse_tree.log");*/
 
 
         /*
