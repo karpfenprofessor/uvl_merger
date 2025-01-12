@@ -11,11 +11,13 @@ import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.feature.Feature;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Getter
 @Setter
@@ -24,7 +26,7 @@ public class RecreationModel {
 
     private Feature rootFeature;
     private List<AbstractConstraint> constraints;
-    private List<Feature> features;
+    private Map<String, Feature> features = new HashMap<>();
     
     private Region region;
 
@@ -43,6 +45,16 @@ public class RecreationModel {
             cnt++;
         }
         logger.debug("[print] finished printing constraints of recreation model: " + region.printRegion());
+    }
+
+    public void printFeatures() {
+        logger.debug("[print] start printing features of recreation model: " + region.printRegion() + " with root feature: " + rootFeature.toString());
+        int cnt = 0;
+        for (Feature f : features.values()) {
+            logger.debug("  [" + cnt + "]: " + f.toString());
+            cnt++;
+        }
+        logger.debug("[print] finished printing features of recreation model: " + region.printRegion());
     }
 
     public void contextualizeAllConstraints() {

@@ -12,18 +12,18 @@ public class ComparisonConstraint extends AbstractConstraint {
 
     public enum ComparisonOperator { EQ, NEQ, LT, GT, LTE, GTE }
     
-    private Feature feature;
+    private AbstractConstraint feature;
     private ComparisonOperator operator;
-    private Object value;
+    private AbstractConstraint value;
 
-    public ComparisonConstraint(Feature feature, ComparisonOperator operator, Object value) {
+    public ComparisonConstraint(AbstractConstraint feature, ComparisonOperator operator, AbstractConstraint value) {
         super(Boolean.FALSE, null);
         this.feature = feature;
         this.operator = operator;
         this.value = value;
     }
 
-    public ComparisonConstraint(Feature feature, ComparisonOperator operator, Object value,
+    public ComparisonConstraint(AbstractConstraint feature, ComparisonOperator operator, AbstractConstraint value,
             boolean isContextualized, Integer contextValue) {
         super(isContextualized, contextValue);
         this.feature = feature;
@@ -31,7 +31,7 @@ public class ComparisonConstraint extends AbstractConstraint {
         this.value = value;
     }
 
-    public ComparisonConstraint(Feature feature, ComparisonOperator operator, Object value,
+    public ComparisonConstraint(AbstractConstraint feature, ComparisonOperator operator, AbstractConstraint value,
             boolean isContextualized, Integer contextValue, boolean isNegation) {
         super(isContextualized, contextValue);
         this.feature = feature;

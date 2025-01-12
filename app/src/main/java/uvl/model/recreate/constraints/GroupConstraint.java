@@ -17,6 +17,11 @@ public class GroupConstraint extends AbstractConstraint {
     private int lowerCardinality;
     private int upperCardinality;
 
+    public GroupConstraint() 
+    {
+        super(Boolean.FALSE, null);
+    }
+
     public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality) {
         super(Boolean.FALSE, null);
         this.parent = parent;
