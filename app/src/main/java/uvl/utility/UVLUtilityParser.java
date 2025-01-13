@@ -1,4 +1,4 @@
-package uvl.parser;
+package uvl.utility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import uvl.model.recreate.constraints.GroupConstraint;
 import uvl.model.recreate.constraints.NotConstraint;
 import uvl.model.recreate.feature.Feature;
 
-public class Parser {
+public class UVLUtilityParser {
 
     // Parse the feature model
     public static void parseFeatureModel(FeatureModelContext featureModelCtx, RecreationModel model) {

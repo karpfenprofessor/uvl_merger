@@ -3,7 +3,6 @@ package uvl.model.recreate.constraints;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import uvl.model.recreate.feature.Feature;
 
 @Getter
 @Setter

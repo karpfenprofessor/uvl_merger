@@ -1,6 +1,5 @@
 package uvl.parse.test;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,11 +9,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import car.model.base.Region;
 import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
+import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
-import uvl.parser.Parser;
+import uvl.utility.UVLUtilityParser;
 
 public class ParseTest1 {
 
@@ -35,8 +34,8 @@ public class ParseTest1 {
         UVLJavaParser.FeatureModelContext featureContext = parser.featureModel(); 
 
         RecreationModel testModel = new RecreationModel(Region.TESTING);
-        Parser.parseFeatureModel(featureContext, testModel);
-        Parser.parseConstraints(featureContext.constraints(), testModel);
+        UVLUtilityParser.parseFeatureModel(featureContext, testModel);
+        UVLUtilityParser.parseConstraints(featureContext.constraints(), testModel);
 
         testModel.printConstraints();
         testModel.printFeatures();

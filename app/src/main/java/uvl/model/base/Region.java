@@ -1,12 +1,13 @@
-package car.model.base;
+package uvl.model.base;
 
 public enum Region {
-    NORTH_AMERICA(0),
-    EUROPE(1),
-    ASIA(2),
-    MERGED(3),
-    TESTING(4),
-    UNION(5);
+    A(0),
+    B(1),
+    C(2),
+    D(3),
+    UNION(4),
+    TESTING(5),
+    MERGED(6);
 
     private final int value;
 
@@ -21,17 +22,19 @@ public enum Region {
     public String printRegion() {
         switch (getValue()) {
             case 0:
-                return "NA";
+                return "A";
             case 1:
-                return "EU";
+                return "B";
             case 2:
-                return "ASIA";
+                return "C";
             case 3:
-                return "MERGED";
+                return "D";
             case 4:
-                return "TESTING";
+                return "UNION";
             case 5:
-                return "WORKING";
+                return "TESTING";
+            case 6:
+                return "MERGED";
             default:
                 return "err";
         }

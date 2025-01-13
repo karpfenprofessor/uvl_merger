@@ -1,14 +1,12 @@
 package uvl.model.recreate;
 
-import car.model.base.BaseCarModel;
-import car.model.base.Region;
-import car.model.impl.EuropeCarModel;
-import car.model.impl.MergedCarModel;
-import car.model.impl.NorthAmericaCarModel;
 import lombok.Getter;
 import lombok.Setter;
+import uvl.model.base.BaseModel;
+import uvl.model.base.Region;
 import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.feature.Feature;
+import uvl.utility.ChocoUtility;
 
 import java.util.List;
 import java.util.Map;
@@ -100,22 +98,7 @@ public class RecreationModel {
         return createChocoModel(this).solveAndReturnNumberOfSolutions();
     }
 
-    public long solveAndReturnAverageSolutionTime(int runs) {
-        return createChocoModel(this).solveXNumberOfTimes(100);
-    }
-
-    private BaseCarModel createChocoModel(RecreationModel model) {
-        BaseCarModel chocoModel = null;
-        if (region == Region.EUROPE)
-            chocoModel = new EuropeCarModel();
-
-        if (region == Region.NORTH_AMERICA)
-            chocoModel = new NorthAmericaCarModel();
-
-        if (region == Region.MERGED || region == Region.TESTING || region == Region.UNION || chocoModel == null)
-            chocoModel = new MergedCarModel();
-
-        //chocoModel.recreateFromRegionModel(model);
-        return chocoModel;
+    private BaseModel createChocoModel(RecreationModel model) {
+        return ChocoUtility.convertToChocoModel(model);
     }
 }
