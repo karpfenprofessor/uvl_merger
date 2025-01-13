@@ -61,17 +61,22 @@ public class BaseModel {
         );
     }
 
-    public int solveAndReturnNumberOfSolutions() {
+    public long solveAndReturnNumberOfSolutions() {
+        logger.info("[solveAndReturnNumberOfSolutions] start solving");
+
         Solver solver = model.getSolver();
-        int solutions = 0;
+        long solutions = 0;
         while (solver.solve()) {
             solutions++;
+            if (solutions % 100 == 0) {
+                logger.info("[solveAndReturnNumberOfSolutions] found " + solutions + " solutions so far");
+            }
         }
         return solutions;
     }
 
     public void solveAndPrintNumberOfSolutions() {
-        int solutions = solveAndReturnNumberOfSolutions();
-        logger.info("Number of solutions: " + solutions);
+        long solutions = solveAndReturnNumberOfSolutions();
+        logger.info("[solveAndPrintNumberOfSolutions] found solutions: " + solutions);
     }
 } 

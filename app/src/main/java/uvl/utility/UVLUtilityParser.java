@@ -2,6 +2,12 @@ package uvl.utility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import uvl.UVLJavaParser;
 import uvl.UVLJavaParser.AlternativeGroupContext;
 import uvl.UVLJavaParser.CardinalityGroupContext;
@@ -17,6 +23,7 @@ import uvl.UVLJavaParser.MandatoryGroupContext;
 import uvl.UVLJavaParser.OptionalGroupContext;
 import uvl.UVLJavaParser.OrGroupContext;
 import uvl.UVLJavaParser.ReferenceContext;
+import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
 import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.constraints.BinaryConstraint;
@@ -25,8 +32,39 @@ import uvl.model.recreate.constraints.FeatureReferenceConstraint;
 import uvl.model.recreate.constraints.GroupConstraint;
 import uvl.model.recreate.constraints.NotConstraint;
 import uvl.model.recreate.feature.Feature;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import uvl.UVLJavaLexer;
 
 public class UVLUtilityParser {
+
+    private static final Logger logger = LogManager.getLogger(UVLUtilityParser.class);
+
+    public static RecreationModel parseUVLFile(String filePathString) throws Exception {
+        return parseUVLFile(filePathString, Region.TESTING);
+    }
+
+    public static RecreationModel parseUVLFile(String filePathString, Region region) throws Exception {
+        logger.info("[parseUVLFile] start parsing file: " + filePathString);
+        Path filePath = Paths.get(UVLUtilityParser.class.getClassLoader()
+                .getResource(filePathString).toURI());
+        String content = new String(Files.readAllBytes(filePath));
+
+        CharStream charStream = CharStreams.fromString(content);
+        UVLJavaLexer lexer = new UVLJavaLexer(charStream);
+        CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+        UVLJavaParser parser = new UVLJavaParser(tokenStream);
+        UVLJavaParser.FeatureModelContext featureContext = parser.featureModel(); 
+
+        RecreationModel model = new RecreationModel(region);
+        parseFeatureModel(featureContext, model);
+        parseConstraints(featureContext.constraints(), model);
+
+        logger.info("[parseUVLFile] finished parsing file: " + filePathString);
+
+        return model;
+    }
 
     // Parse the feature model
     public static void parseFeatureModel(FeatureModelContext featureModelCtx, RecreationModel model) {
@@ -36,6 +74,7 @@ public class UVLUtilityParser {
         if (featureModelCtx.features() != null) {
             parseFeaturesSection(featureModelCtx.features(), model);
         }
+        logger.info("[parseFeatures] finished parsing features with " + model.getFeatures().size() + " features");
     }
 
     // Handle the 'features' section
@@ -177,7 +216,12 @@ public class UVLUtilityParser {
             return "UnknownRef";
         List<String> segments = new ArrayList<>();
         for (UVLJavaParser.IdContext part : idParts) {
-            segments.add(part.getText());
+            String text = part.getText();
+            // Remove surrounding quotes if they exist
+            if (text.startsWith("\"") && text.endsWith("\"")) {
+                text = text.substring(1, text.length() - 1);
+            }
+            segments.add(text);
         }
         return String.join(".", segments);
     }
@@ -208,6 +252,8 @@ public class UVLUtilityParser {
                 }
             }
         }
+
+        logger.info("[parseConstraints] finished parsing constraints with " + model.getConstraints().size() + " constraints");
     }
 
     // Recursively parse a constraint

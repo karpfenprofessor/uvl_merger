@@ -13,6 +13,7 @@ public class ChocoUtility {
     private static final Logger logger = LogManager.getLogger(ChocoUtility.class);
     
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
+        logger.info("[convertToChocoModel] start converting to choco model with " + recModel.getFeatures().size() + " features and " + recModel.getConstraints().size() + " constraints");
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {};
         
         // Create variables for all features
@@ -33,6 +34,8 @@ public class ChocoUtility {
                 logger.error("Error processing constraint: " + constraint, e);
             }
         }
+
+        logger.info("[convertToChocoModel] finished converting to choco model with " + chocoModel.getModel().getNbVars() + " features and " + chocoModel.getModel().getNbCstrs() + " constraints");
         
         return chocoModel;
     }

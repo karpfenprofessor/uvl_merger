@@ -1,4 +1,4 @@
-package uvl.parse.test;
+package uvl.test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

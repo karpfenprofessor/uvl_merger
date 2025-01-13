@@ -2,17 +2,16 @@ package uvl.model.recreate;
 
 import lombok.Getter;
 import lombok.Setter;
-import uvl.model.base.BaseModel;
 import uvl.model.base.Region;
 import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.feature.Feature;
-import uvl.utility.ChocoUtility;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.chocosolver.solver.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ public class RecreationModel {
     private Map<String, Feature> features = new HashMap<>();
     
     private Region region;
+    private Model model;
 
 
     public RecreationModel(Region region) {
@@ -88,17 +88,5 @@ public class RecreationModel {
                 + contextualizedSize + " are contextualized constraints, ratio: " + ratio);
 
         return ratio;
-    }
-
-    public void solveAndPrintNumberOfSolutions() {
-        createChocoModel(this).solveAndPrintNumberOfSolutions();
-    }
-
-    public int solveAndReturnNumberOfSolutions() {
-        return createChocoModel(this).solveAndReturnNumberOfSolutions();
-    }
-
-    private BaseModel createChocoModel(RecreationModel model) {
-        return ChocoUtility.convertToChocoModel(model);
     }
 }
