@@ -54,8 +54,6 @@ public class ChocoUtility {
     }
 
     private static void processNormalConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        Model model = chocoModel.getModel();
-
         if (constraint instanceof GroupConstraint gc) {
             processGroupConstraint(gc, chocoModel);
         } else if (constraint instanceof BinaryConstraint bc) {
@@ -85,27 +83,27 @@ public class ChocoUtility {
 
         // Any selected child implies parent selected
         for (BoolVar childVar : childVars) {
-            model.ifThen(childVar, parentVar);
+            model.ifThen(childVar, model.arithm(parentVar, "=", 1));
         }
     }
 
     private static void processBinaryConstraint(BinaryConstraint bc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
-        BoolVar left = getConstraintVar(bc.getLeft(), chocoModel);
-        BoolVar right = getConstraintVar(bc.getRight(), chocoModel);
+        BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
+        BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
 
         switch (bc.getOperator()) {
             case AND:
-                model.and(left, right).post();
+                model.and(antecedent, consequent).post();
                 break;
             case OR:
-                model.or(left, right).post();
+                model.or(antecedent, consequent).post();
                 break;
             case IMPLIES:
-                model.ifThen(left, right);
+                model.ifThen(antecedent, model.arithm(consequent, "=", 1));
                 break;
-            case EQUIVALENT:
-                model.reifyXXeqY(left, right, model.boolVar(true));
+            case IFF:
+                model.reifyXeqY(antecedent, consequent, model.boolVar(true));
                 break;
         }
     }
@@ -113,7 +111,7 @@ public class ChocoUtility {
     private static void processNotConstraint(NotConstraint nc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
-        model.not(inner).post();
+        model.arithm(inner, "=", 0).post();
     }
 
     private static BoolVar getConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {
@@ -130,22 +128,22 @@ public class ChocoUtility {
 
     private static BoolVar createAuxiliaryVar(BinaryConstraint bc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
-        BoolVar left = getConstraintVar(bc.getLeft(), chocoModel);
-        BoolVar right = getConstraintVar(bc.getRight(), chocoModel);
+        BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
+        BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
         BoolVar result = model.boolVar();
 
         switch (bc.getOperator()) {
             case AND:
-                model.and(left, right).reifyWith(result);
+                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
                 break;
             case OR:
-                model.or(left, right).reifyWith(result);
+                model.addClausesBoolOrArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
                 break;
             case IMPLIES:
-                model.ifThenElse(left, right, model.boolVar(true)).reifyWith(result);
+                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent.not(), consequent}, result);
                 break;
-            case EQUIVALENT:
-                model.reifyXXeqY(left, right, result);
+            case IFF:
+                model.reifyXeqY(antecedent, consequent, result);
                 break;
         }
         return result;
