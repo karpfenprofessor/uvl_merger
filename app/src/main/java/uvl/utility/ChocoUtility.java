@@ -18,7 +18,7 @@ public class ChocoUtility {
         
         // Create variables for all features
         createFeatureVariables(recModel, chocoModel);
-        
+    
         // Set root feature to true
         Feature rootFeature = recModel.getRootFeature();
         if (rootFeature != null) {

@@ -12,19 +12,16 @@ import uvl.model.recreate.RecreationModel;
 import uvl.utility.ChocoUtility;
 import uvl.utility.UVLUtilityParser;
 
-public class ParseTest3SolveAllFinancialParts {
-    protected final static Logger logger = LogManager.getLogger(ParseTest3SolveAllFinancialParts.class);
-    private static final String LOG_FILE = "logs/ParseTest3SolveAllFinancialParts_results.log";
+public class ParseTest4SolveAllAutomotiveParts {
+    protected final static Logger logger = LogManager.getLogger(ParseTest4SolveAllAutomotiveParts.class);
+    private static final String LOG_FILE = "logs/ParseTest4SolveAllAutomotiveParts_results.log";
     
     public static void main(String[] args) {
         String[] files = {
-            "uvl/financial_parts/financial_01.uvl",
-            "uvl/financial_parts/financial_02.uvl",
-            "uvl/financial_parts/financial_03.uvl",
-            "uvl/financial_parts/financial_04.uvl",
-            "uvl/financial_parts/financial_05.uvl",
-            "uvl/financial_parts/financial_06.uvl",
-            "uvl/financial_parts/financial_07.uvl"
+            "uvl/automotive02_parts/automotive02_01.uvl",
+            "uvl/automotive02_parts/automotive02_02.uvl",
+            "uvl/automotive02_parts/automotive02_03.uvl",
+            "uvl/automotive02_parts/automotive02_04.uvl"
         };
 
         try (FileWriter writer = new FileWriter(LOG_FILE, true)) {

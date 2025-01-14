@@ -68,7 +68,7 @@ public class BaseModel {
         long solutions = 0;
         while (solver.solve()) {
             solutions++;
-            if (solutions % 100 == 0) {
+            if (solutions % 10000 == 0) {
                 logger.info("[solveAndReturnNumberOfSolutions] found " + solutions + " solutions so far");
             }
         }

@@ -217,9 +217,13 @@ public class UVLUtilityParser {
         List<String> segments = new ArrayList<>();
         for (UVLJavaParser.IdContext part : idParts) {
             String text = part.getText();
-            // Remove surrounding quotes if they exist
-            if (text.startsWith("\"") && text.endsWith("\"")) {
-                text = text.substring(1, text.length() - 1);
+            // Remove all quotes at the beginning
+            while (text.startsWith("\"")) {
+                text = text.substring(1);
+            }
+            // Remove all quotes at the end
+            while (text.endsWith("\"")) {
+                text = text.substring(0, text.length() - 1);
             }
             segments.add(text);
         }
