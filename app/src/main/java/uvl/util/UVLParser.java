@@ -71,6 +71,7 @@ public class UVLParser {
         if (featureModelCtx == null)
             return;
         model.getFeatures().clear();
+        model.getConstraints().clear();
         if (featureModelCtx.features() != null) {
             parseFeaturesSection(featureModelCtx.features(), model);
         }
@@ -242,11 +243,14 @@ public class UVLParser {
 
     // Parse the constraints block
     public static void parseConstraints(ConstraintsContext constraintsCtx, RecreationModel model) {
+        logger.debug("[parseConstraints] start parsing constraints");
         if (constraintsCtx == null)
             return;
         List<ConstraintLineContext> lines = constraintsCtx.constraintLine();
         if (lines == null)
             return;
+        
+        int initialConstraints = model.getConstraints().size();
         for (ConstraintLineContext lineCtx : lines) {
             ConstraintContext cCtx = lineCtx.constraint();
             if (cCtx != null) {
@@ -257,7 +261,9 @@ public class UVLParser {
             }
         }
 
-        logger.info("[parseConstraints] finished parsing constraints with " + model.getConstraints().size() + " constraints");
+        logger.info("[parseConstraints] added {} new constraints (total: {})", 
+            model.getConstraints().size() - initialConstraints,
+            model.getConstraints().size());
     }
 
     // Recursively parse a constraint

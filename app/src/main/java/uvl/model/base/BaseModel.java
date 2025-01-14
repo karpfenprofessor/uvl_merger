@@ -65,6 +65,8 @@ public class BaseModel {
         logger.info("[solveAndReturnNumberOfSolutions] start solving");
 
         Solver solver = model.getSolver();
+        solver.reset();
+        
         long solutions = 0;
         while (solver.solve()) {
             solutions++;
