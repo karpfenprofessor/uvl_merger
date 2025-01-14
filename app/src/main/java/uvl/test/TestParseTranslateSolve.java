@@ -15,10 +15,13 @@ public class TestParseTranslateSolve {
 
     public static void main(String[] args) throws Exception {
         //String filePathString = "uvl/financial_parts/financial_01.uvl";
-        String filePathString = "uvl/onlineshop.uvl";
+        //String filePathString = "uvl/onlineshop.uvl";
+        String filePathString = "uvl/translation.uvl";
+
         RecreationModel recModel = UVLParser.parseUVLFile(filePathString);
         BaseModel chocoModel = ChocoTranslator.convertToChocoModel(recModel);
-        chocoModel.solveAndPrintNumberOfSolutions();
-        BaseModelAnalyser.printModel(chocoModel);
+        //chocoModel.solveAndPrintNumberOfSolutions();
+        //BaseModelAnalyser.printModel(chocoModel);
+        BaseModelAnalyser.checkConsistency(chocoModel);
     }
 } 
