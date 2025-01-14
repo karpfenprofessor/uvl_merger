@@ -1,0 +1,65 @@
+package uvl.util;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import uvl.model.recreate.RecreationModel;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class RecreationModelAnalyser {
+    private static final Logger logger = LogManager.getLogger(RecreationModelAnalyser.class);
+
+    public static float analyseContextualizationShare(RecreationModel model) {
+        long contextualizedSize = model.getConstraints().stream()
+                .filter(c -> c.isContextualized())
+                .count();
+        long constraintsSize = model.getConstraints().size();
+
+        float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
+
+        logger.debug("[analyseContextualizationShare] {} has {} constraints, {} are contextualized, ratio: {}",
+                model.getRegion().printRegion(),
+                constraintsSize,
+                contextualizedSize,
+                ratio);
+
+        return ratio;
+    }
+
+    public static float analyseSharedFeatures(RecreationModel... models) {
+        if (models.length < 2) {
+            logger.debug("[analyseSharedFeatures] Need at least 2 models to compare");
+            return 0;
+        }
+
+        List<Set<String>> featureSets = Arrays.stream(models)
+                .map(model -> new HashSet<>(model.getFeatures().keySet()))
+                .collect(Collectors.toList());
+
+        Set<String> sharedFeatures = new HashSet<>(featureSets.get(0));
+        for (int i = 1; i < featureSets.size(); i++) {
+            sharedFeatures.retainAll(featureSets.get(i));
+        }
+
+        int totalUniqueFeatures = featureSets.stream()
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet())
+                .size();
+
+        float shareRatio = totalUniqueFeatures > 0 ? (float) sharedFeatures.size() / totalUniqueFeatures : 0;
+
+        logger.debug("[analyseSharedFeatures] Comparing {} models:", models.length);
+        for (int i = 0; i < models.length; i++) {
+            logger.debug("  Model {}: {} features", i + 1, featureSets.get(i).size());
+        }
+        
+        logger.debug("  Shared features: {}", sharedFeatures.size());
+        logger.debug("  Total unique features: {}", totalUniqueFeatures);
+        logger.debug("  Share ratio: {}", shareRatio);
+
+        return shareRatio;
+    }
+}

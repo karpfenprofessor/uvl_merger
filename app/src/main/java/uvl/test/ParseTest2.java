@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import uvl.model.base.BaseModel;
 import uvl.model.recreate.RecreationModel;
-import uvl.utility.ChocoUtility;
-import uvl.utility.UVLUtilityParser;
+import uvl.util.ChocoTranslator;
+import uvl.util.UVLParser;
 
 public class ParseTest2 {
 
@@ -14,8 +14,8 @@ public class ParseTest2 {
 
     public static void main(String[] args) throws Exception {
         String filePathString = "uvl/financial_parts/financial_01.uvl";
-        RecreationModel testModel = UVLUtilityParser.parseUVLFile(filePathString);
-        BaseModel chocoModel = ChocoUtility.convertToChocoModel(testModel);
+        RecreationModel testModel = UVLParser.parseUVLFile(filePathString);
+        BaseModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
         chocoModel.solveAndPrintNumberOfSolutions();
     }
 } 

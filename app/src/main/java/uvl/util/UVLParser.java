@@ -1,4 +1,4 @@
-package uvl.utility;
+package uvl.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,9 +37,9 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import uvl.UVLJavaLexer;
 
-public class UVLUtilityParser {
+public class UVLParser {
 
-    private static final Logger logger = LogManager.getLogger(UVLUtilityParser.class);
+    private static final Logger logger = LogManager.getLogger(UVLParser.class);
 
     public static RecreationModel parseUVLFile(String filePathString) throws Exception {
         return parseUVLFile(filePathString, Region.TESTING);
@@ -47,7 +47,7 @@ public class UVLUtilityParser {
 
     public static RecreationModel parseUVLFile(String filePathString, Region region) throws Exception {
         logger.info("[parseUVLFile] start parsing file: " + filePathString);
-        Path filePath = Paths.get(UVLUtilityParser.class.getClassLoader()
+        Path filePath = Paths.get(UVLParser.class.getClassLoader()
                 .getResource(filePathString).toURI());
         String content = new String(Files.readAllBytes(filePath));
 

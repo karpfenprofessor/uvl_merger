@@ -1,4 +1,4 @@
-package uvl.utility;
+package uvl.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +9,8 @@ import uvl.model.recreate.constraints.*;
 import uvl.model.recreate.feature.Feature;
 import uvl.model.base.BaseModel;
 
-public class ChocoUtility {
-    private static final Logger logger = LogManager.getLogger(ChocoUtility.class);
+public class ChocoTranslator {
+    private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
     
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
         logger.info("[convertToChocoModel] start converting to choco model with " + recModel.getFeatures().size() + " features and " + recModel.getConstraints().size() + " constraints");

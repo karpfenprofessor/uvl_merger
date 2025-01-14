@@ -17,7 +17,6 @@ public class NotConstraint extends AbstractConstraint {
 
     @Override
     public AbstractConstraint copy() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'copy'");
     }
     

@@ -13,7 +13,7 @@ import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
-import uvl.utility.UVLUtilityParser;
+import uvl.util.UVLParser;
 
 public class ParseTest1 {
 
@@ -34,8 +34,8 @@ public class ParseTest1 {
         UVLJavaParser.FeatureModelContext featureContext = parser.featureModel(); 
 
         RecreationModel testModel = new RecreationModel(Region.TESTING);
-        UVLUtilityParser.parseFeatureModel(featureContext, testModel);
-        UVLUtilityParser.parseConstraints(featureContext.constraints(), testModel);
+        UVLParser.parseFeatureModel(featureContext, testModel);
+        UVLParser.parseConstraints(featureContext.constraints(), testModel);
 
         testModel.printConstraints();
         testModel.printFeatures();

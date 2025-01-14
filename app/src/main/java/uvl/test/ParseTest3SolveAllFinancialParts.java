@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter;
 
 import uvl.model.base.BaseModel;
 import uvl.model.recreate.RecreationModel;
-import uvl.utility.ChocoUtility;
-import uvl.utility.UVLUtilityParser;
+import uvl.util.ChocoTranslator;
+import uvl.util.UVLParser;
 
 public class ParseTest3SolveAllFinancialParts {
     protected final static Logger logger = LogManager.getLogger(ParseTest3SolveAllFinancialParts.class);
@@ -35,8 +35,8 @@ public class ParseTest3SolveAllFinancialParts {
                 try {
                     writer.write("\nProcessing: " + file + "\n");
 
-                    RecreationModel recModel = UVLUtilityParser.parseUVLFile(file);
-                    BaseModel chocoModel = ChocoUtility.convertToChocoModel(recModel);
+                    RecreationModel recModel = UVLParser.parseUVLFile(file);
+                    BaseModel chocoModel = ChocoTranslator.convertToChocoModel(recModel);
                     
                     long solutions = chocoModel.solveAndReturnNumberOfSolutions();
                     
