@@ -58,7 +58,7 @@ public class RecreationModelAnalyser {
         
         logger.debug("  Shared features: {}", sharedFeatures.size());
         logger.debug("  Total unique features: {}", totalUniqueFeatures);
-        logger.debug("  Share ratio: {}", shareRatio);
+        logger.debug("  Share ratio: {} %", shareRatio*100);
 
         return shareRatio;
     }

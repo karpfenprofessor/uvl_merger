@@ -11,35 +11,42 @@ public class ComparisonConstraint extends AbstractConstraint {
 
     public enum ComparisonOperator { EQ, NEQ, LT, GT, LTE, GTE }
     
-    private AbstractConstraint feature;
+    private AbstractConstraint leftOperand;
     private ComparisonOperator operator;
-    private AbstractConstraint value;
+    private AbstractConstraint rightOperand;
 
-    public ComparisonConstraint(AbstractConstraint feature, ComparisonOperator operator, AbstractConstraint value) {
+    public ComparisonConstraint(AbstractConstraint leftOperand, ComparisonOperator operator, AbstractConstraint rightOperand) {
         super(Boolean.FALSE, null);
-        this.feature = feature;
+        this.leftOperand = leftOperand;
         this.operator = operator;
-        this.value = value;
+        this.rightOperand = rightOperand;
     }
 
-    public ComparisonConstraint(AbstractConstraint feature, ComparisonOperator operator, AbstractConstraint value,
+    public ComparisonConstraint(AbstractConstraint leftOperand, ComparisonOperator operator, AbstractConstraint rightOperand,
             boolean isContextualized, Integer contextValue) {
         super(isContextualized, contextValue);
-        this.feature = feature;
+        this.leftOperand = leftOperand;
         this.operator = operator;
-        this.value = value;
+        this.rightOperand = rightOperand;
     }
 
-    public ComparisonConstraint(AbstractConstraint feature, ComparisonOperator operator, AbstractConstraint value,
+    public ComparisonConstraint(AbstractConstraint leftOperand, ComparisonOperator operator, AbstractConstraint rightOperand,
             boolean isContextualized, Integer contextValue, boolean isNegation) {
         super(isContextualized, contextValue);
-        this.feature = feature;
+        this.leftOperand = leftOperand;
         this.operator = operator;
-        this.value = value;
+        this.rightOperand = rightOperand;
         this.setNegation(isNegation);
     }
 
+    @Override
     public ComparisonConstraint copy() {
-        return new ComparisonConstraint(this.feature, this.operator, this.value, this.isContextualized(), this.getContextualizationValue(), this.isNegation());
+        return new ComparisonConstraint(
+            this.leftOperand.copy(),
+            this.operator,
+            this.rightOperand.copy(),
+            this.isContextualized(),
+            this.getContextualizationValue(),
+            this.isNegation());
     }
 }

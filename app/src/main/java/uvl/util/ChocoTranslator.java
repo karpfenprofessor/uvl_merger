@@ -48,10 +48,16 @@ public class ChocoTranslator {
 
     private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
         if (constraint.isContextualized()) {
+            // Process constraints from the current region
             if (chocoModel.getRegion().ordinal() == constraint.getContextualizationValue()) {
                 processNormalConstraint(constraint, chocoModel);
             }
+            // Process constraints from lower regions that affect this region
+            else if (chocoModel.getRegion().ordinal() > constraint.getContextualizationValue()) {
+                processNormalConstraint(constraint, chocoModel);
+            }
         } else {
+            // Process non-contextualized (global) constraints
             processNormalConstraint(constraint, chocoModel);
         }
     }
@@ -63,6 +69,8 @@ public class ChocoTranslator {
             processBinaryConstraint(bc, chocoModel);
         } else if (constraint instanceof NotConstraint nc) {
             processNotConstraint(nc, chocoModel);
+        } else {
+            throw new UnsupportedOperationException("Unsupported constraint type: " + constraint.getClass().getSimpleName());
         }
     }
 

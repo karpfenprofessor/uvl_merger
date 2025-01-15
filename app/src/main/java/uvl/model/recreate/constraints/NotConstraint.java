@@ -15,9 +15,20 @@ public class NotConstraint extends AbstractConstraint {
         this.inner = c;
     }
 
+    public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue) {
+        super(isContextualized, contextValue);
+        this.inner = c;
+    }   
+
+    public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue, boolean isNegation) {
+        super(isContextualized, contextValue);
+        this.inner = c;
+        this.setNegation(isNegation);
+    }
+
     @Override
     public AbstractConstraint copy() {
-        throw new UnsupportedOperationException("Unimplemented method 'copy'");
+        return new NotConstraint(this.inner.copy(), this.isContextualized(), this.getContextualizationValue(), this.isNegation());
     }
     
 }

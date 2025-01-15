@@ -3,6 +3,7 @@ package uvl.model.recreate.constraints;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import uvl.model.recreate.feature.Feature;
 
 @Getter
 @Setter
@@ -44,6 +45,22 @@ public class BinaryConstraint extends AbstractConstraint {
 
     @Override
     public AbstractConstraint copy() {
-        throw new UnsupportedOperationException("Unimplemented method 'copy'");
+        Object copiedAntecedent = (antecedent instanceof AbstractConstraint) ? 
+            ((AbstractConstraint) antecedent).copy() : 
+            (antecedent instanceof Feature) ? 
+                antecedent : antecedent;
+                
+        Object copiedConsequent = (consequent instanceof AbstractConstraint) ? 
+            ((AbstractConstraint) consequent).copy() : 
+            (consequent instanceof Feature) ? 
+                consequent : consequent;
+                
+        return new BinaryConstraint(
+            copiedAntecedent, 
+            this.operator, 
+            copiedConsequent, 
+            this.isContextualized(), 
+            this.getContextualizationValue(), 
+            this.isNegation());
     }
 }

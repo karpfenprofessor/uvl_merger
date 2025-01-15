@@ -16,9 +16,24 @@ public class FeatureReferenceConstraint extends AbstractConstraint
             this.feature = f;
         }
 
+        public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue) {
+            super(isContextualized, contextValue);
+            this.feature = f;
+        }
+
+        public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue, boolean isNegation) {
+            super(isContextualized, contextValue);
+            this.feature = f;
+            this.setNegation(isNegation);
+        }
+
         @Override
         public AbstractConstraint copy() {
-            throw new UnsupportedOperationException("Unimplemented method 'copy'");
+            return new FeatureReferenceConstraint(
+                this.feature,
+                this.isContextualized(),
+                this.getContextualizationValue(),
+                this.isNegation());
         }
 }
 

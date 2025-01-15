@@ -1,6 +1,7 @@
 package uvl.model.recreate.constraints;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -53,10 +54,11 @@ public class GroupConstraint extends AbstractConstraint {
     public GroupConstraint copy() {
         return new GroupConstraint(
                 this.getParent(),
-                children.stream().map(Feature::copy).toList(),
+                new ArrayList<>(children),
                 this.getLowerCardinality(),
                 this.getUpperCardinality(),
                 this.isContextualized(),
-                this.getContextualizationValue(), this.isNegation());
+                this.getContextualizationValue(),
+                this.isNegation());
     }
 }
