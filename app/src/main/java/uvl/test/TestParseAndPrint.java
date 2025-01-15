@@ -15,15 +15,15 @@ import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
 import uvl.util.UVLParser;
 
-public class ParseTest1 {
+public class TestParseAndPrint {
 
-    protected final static Logger logger = LogManager.getLogger(ParseTest1.class);
+    protected final static Logger logger = LogManager.getLogger(TestParseAndPrint.class);
 
     public static void main(String[] args) throws Exception {
         //String filePathString = "uvl/model_test2.uvl";
         String filePathString = "uvl/automotive02_parts/automotive02_01.uvl";
         
-        Path filePath = Paths.get(ParseTest1.class.getClassLoader()
+        Path filePath = Paths.get(TestParseAndPrint.class.getClassLoader()
                 .getResource(filePathString).toURI());
         String content = new String(Files.readAllBytes(filePath));
 

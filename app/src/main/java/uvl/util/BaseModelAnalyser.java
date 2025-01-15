@@ -39,7 +39,7 @@ public class BaseModelAnalyser {
         printModelConstraints(baseModel);
     }
 
-    public static long checkConsistency(BaseModel baseModel) {
+    public static long checkConsistency(BaseModel baseModel, boolean showOutput) {
         Model model = baseModel.getModel();
         model.getSolver().reset();  // Reset solver before checking
 
@@ -48,9 +48,9 @@ public class BaseModelAnalyser {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
 
-        if (hasSolution) {
+        if (showOutput && hasSolution) {
             logger.info("Model is consistent (solution found in {} ns)", duration);
-        } else {
+        } else if (showOutput) {
             logger.info("Model is inconsistent (checked in {} ns)", duration);
         }
 
