@@ -5,14 +5,13 @@ import lombok.Setter;
 import uvl.model.base.Region;
 import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.feature.Feature;
+import uvl.metrics.ModelMetrics;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.chocosolver.solver.Model;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,18 +19,18 @@ import java.util.HashMap;
 @Setter
 public class RecreationModel {
     protected final Logger logger;
+    private ModelMetrics metrics;
 
     private Feature rootFeature;
     private List<AbstractConstraint> constraints;
     private Map<String, Feature> features = new HashMap<>();
     
     private Region region;
-    private Model model;
-
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
         this.region = region;
+        this.metrics = new ModelMetrics();
         logger = LogManager.getLogger(this.getClass());
     }
 
@@ -73,20 +72,5 @@ public class RecreationModel {
     public void addNegation(AbstractConstraint c) {
         c.setNegation(Boolean.TRUE);
         constraints.add(c);
-    }
-
-    public float analyseContextualizationShare() {
-        long contextualizedSize = 0;
-        long constraintsSize = 0;
-
-        constraintsSize = constraints.size();
-        contextualizedSize = constraints.stream().filter(c -> c.isContextualized()).count();
-
-        float ratio = (float) contextualizedSize / constraintsSize;
-
-        logger.debug("[analyse] " + region.printRegion() + " has " + constraintsSize + " constraints, "
-                + contextualizedSize + " are contextualized constraints, ratio: " + ratio);
-
-        return ratio;
     }
 }

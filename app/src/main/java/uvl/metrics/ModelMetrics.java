@@ -2,9 +2,16 @@ package uvl.metrics;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import lombok.Getter;
+import lombok.Setter;
 import uvl.model.recreate.RecreationModel;
+import uvl.util.RecreationModelAnalyser;
+
 import java.util.*;
 
+@Getter
+@Setter
 public class ModelMetrics {
     private static final Logger logger = LogManager.getLogger(ModelMetrics.class);
     
@@ -53,7 +60,7 @@ public class ModelMetrics {
     
     public void setFinalModelMetrics(RecreationModel mergedModel) {
         this.finalConstraints = mergedModel.getConstraints().size();
-        this.contextualizationShare = mergedModel.analyseContextualizationShare();
+        this.contextualizationShare = RecreationModelAnalyser.analyseContextualizationShare(mergedModel);
     }
     
     public void setSolutionSpaceSize(long solutions) {
