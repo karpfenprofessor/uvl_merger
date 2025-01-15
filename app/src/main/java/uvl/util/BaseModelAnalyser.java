@@ -57,6 +57,12 @@ public class BaseModelAnalyser {
         return duration;
     }
 
+    public static boolean isConsistent(BaseModel baseModel) {
+        Model model = baseModel.getModel();
+        model.getSolver().reset();  // Reset solver before checking
+        return model.getSolver().solve();
+    }
+
     public static int findIntersectionSolutions(BaseModel model1, BaseModel model2) {
         logger.info("Finding intersection solutions between two models...");
         
