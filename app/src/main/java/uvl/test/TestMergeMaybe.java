@@ -30,7 +30,6 @@ public class TestMergeMaybe {
                 model2.getFeatures().size(), model2.getConstraints().size());
 
             // Perform merge
-            logger.info("Starting merge process...");
             RecreationModel mergedModel = RecreationMerger.fullMerge(model1, model2);
 
             // Print merged model statistics

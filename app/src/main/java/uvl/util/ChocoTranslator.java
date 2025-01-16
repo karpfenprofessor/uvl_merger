@@ -13,7 +13,6 @@ public class ChocoTranslator {
     private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
     
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
-        logger.info("[convertToChocoModel] start converting to choco model with " + recModel.getFeatures().size() + " features and " + recModel.getConstraints().size() + " constraints");
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {};
         
         // Create variables for all features
@@ -34,8 +33,6 @@ public class ChocoTranslator {
                 logger.error("Error processing constraint: " + constraint, e);
             }
         }
-
-        logger.info("[convertToChocoModel] finished converting to choco model with " + chocoModel.getModel().getNbVars() + " features and " + chocoModel.getModel().getNbCstrs() + " constraints");
         
         return chocoModel;
     }
@@ -63,66 +60,101 @@ public class ChocoTranslator {
     }
 
     private static void processNormalConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        if (constraint instanceof GroupConstraint gc) {
-            processGroupConstraint(gc, chocoModel);
-        } else if (constraint instanceof BinaryConstraint bc) {
-            processBinaryConstraint(bc, chocoModel);
-        } else if (constraint instanceof NotConstraint nc) {
-            processNotConstraint(nc, chocoModel);
+        Model model = chocoModel.getModel();
+        BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
+        
+        if (constraint.isContextualized()) {
+            BoolVar contextVar = model.boolVar("context_" + constraint.getContextualizationValue());
+            if (chocoModel.getRegion().ordinal() >= constraint.getContextualizationValue()) {
+                model.arithm(contextVar, "=", 1).post();
+            } else {
+                model.arithm(contextVar, "=", 0).post();
+            }
+            
+            // Handle negation properly in contextualized constraints
+            if (constraint.isNegation()) {
+                model.ifThen(contextVar, model.arithm(constraintVar, "=", 0));
+            } else {
+                model.ifThen(contextVar, model.arithm(constraintVar, "=", 1));
+            }
         } else {
-            throw new UnsupportedOperationException("Unsupported constraint type: " + constraint.getClass().getSimpleName());
+            model.arithm(constraintVar, "=", constraint.isNegation() ? 0 : 1).post();
         }
     }
 
-    private static void processGroupConstraint(GroupConstraint gc, BaseModel chocoModel) {
+    private static BoolVar createConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
+        BoolVar baseVar;
+        
+        if (constraint instanceof GroupConstraint gc) {
+            baseVar = createGroupConstraintVar(gc, chocoModel);
+        } else if (constraint instanceof BinaryConstraint bc) {
+            baseVar = createBinaryConstraintVar(bc, chocoModel);
+        } else if (constraint instanceof NotConstraint nc) {
+            baseVar = createNotConstraintVar(nc, chocoModel);
+        } else {
+            throw new UnsupportedOperationException("Unsupported constraint type: " + constraint.getClass().getSimpleName());
+        }
+        
+        // Handle negation if needed
+        return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
+    }
+
+    private static BoolVar createGroupConstraintVar(GroupConstraint gc, BaseModel chocoModel) {
+        Model model = chocoModel.getModel();
+        BoolVar result = model.boolVar();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
         
         BoolVar[] childVars = gc.getChildren().stream()
             .map(child -> chocoModel.getFeature(child.getName()))
             .toArray(BoolVar[]::new);
 
-        // Parent implies sum of children in range [lower..upper]
-        model.ifThen(
-            parentVar,
-            model.sum(childVars, ">=", gc.getLowerCardinality())
-        );
-        model.ifThen(
-            parentVar,
-            model.sum(childVars, "<=", gc.getUpperCardinality())
-        );
+        // Create group constraint logic
+        BoolVar sumInRange = model.boolVar();
+        var sumVar = model.sum("sum_" + gc.getParent().getName(), childVars);
+        model.addClausesBoolAndArrayEqVar(new BoolVar[]{
+            model.arithm(sumVar, ">=", gc.getLowerCardinality()).reify(),
+            model.arithm(sumVar, "<=", gc.getUpperCardinality()).reify()
+        }, sumInRange);
 
-        // Any selected child implies parent selected
+        // Link parent and children
+        model.addClausesBoolAndArrayEqVar(new BoolVar[]{parentVar, sumInRange}, result);
+        
+        // When parent is false, all children must be false
         for (BoolVar childVar : childVars) {
-            model.ifThen(childVar, model.arithm(parentVar, "=", 1));
+            model.ifThen(model.arithm(parentVar, "=", 0), model.arithm(childVar, "=", 0));
         }
+        
+        return result;
     }
 
-    private static void processBinaryConstraint(BinaryConstraint bc, BaseModel chocoModel) {
+    private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
+        BoolVar result = model.boolVar();
 
         switch (bc.getOperator()) {
             case AND:
-                model.and(antecedent, consequent).post();
+                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
                 break;
             case OR:
-                model.or(antecedent, consequent).post();
+                model.addClausesBoolOrArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
                 break;
             case IMPLIES:
-                model.ifThen(antecedent, model.arithm(consequent, "=", 1));
+                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent.not(), consequent}, result);
                 break;
             case IFF:
-                model.reifyXeqY(antecedent, consequent, model.boolVar(true));
+                model.reifyXeqY(antecedent, consequent, result);
                 break;
         }
+        return result;
     }
 
-    private static void processNotConstraint(NotConstraint nc, BaseModel chocoModel) {
+    private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
-        model.arithm(inner, "=", 0).post();
+        return model.boolNotView(inner);
     }
 
     private static BoolVar getConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {

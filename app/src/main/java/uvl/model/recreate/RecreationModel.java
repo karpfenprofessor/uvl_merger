@@ -55,7 +55,7 @@ public class RecreationModel {
     }
 
     public void contextualizeAllConstraints() {
-        logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().printRegion());
+        logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().printRegion() + " with region ordinal: " + region.ordinal());
         for (AbstractConstraint constraint : constraints) {
             constraint.setContextualize(region.ordinal());
         }

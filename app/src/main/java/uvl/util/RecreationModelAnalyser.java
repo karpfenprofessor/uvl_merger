@@ -32,6 +32,7 @@ public class RecreationModelAnalyser {
     public static float analyseSharedFeatures(RecreationModel... models) {
         if (models.length < 2) {
             logger.debug("[analyseSharedFeatures] Need at least 2 models to compare");
+            
             return 0;
         }
 
@@ -58,7 +59,7 @@ public class RecreationModelAnalyser {
         
         logger.debug("  Shared features: {}", sharedFeatures.size());
         logger.debug("  Total unique features: {}", totalUniqueFeatures);
-        logger.debug("  Share ratio: {} %", shareRatio*100);
+        logger.debug("  Share ratio: {} %", String.format("%.2f", shareRatio*100));
 
         return shareRatio;
     }
