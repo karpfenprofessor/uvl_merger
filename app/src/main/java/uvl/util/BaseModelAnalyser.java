@@ -110,4 +110,25 @@ public class BaseModelAnalyser {
 
         return solutionsModel1.size();
     }
+
+    public static long solveAndReturnNumberOfSolutions(BaseModel baseModel) {
+        logger.info("[solveAndReturnNumberOfSolutions] start solving");
+
+        Model model = baseModel.getModel();
+        model.getSolver().reset();
+        
+        long solutions = 0;
+        while (model.getSolver().solve()) {
+            solutions++;
+            if (solutions % 10000 == 0) {
+                logger.info("[solveAndReturnNumberOfSolutions] found " + solutions + " solutions so far");
+            }
+        }
+        return solutions;
+    }
+
+    public static void solveAndPrintNumberOfSolutions(BaseModel baseModel) {
+        long solutions = solveAndReturnNumberOfSolutions(baseModel);
+        logger.info("[solveAndPrintNumberOfSolutions] found solutions: " + solutions);
+    }
 } 

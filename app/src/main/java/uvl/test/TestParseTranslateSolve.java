@@ -25,5 +25,6 @@ public class TestParseTranslateSolve {
         //chocoModel.solveAndPrintNumberOfSolutions();
         //BaseModelAnalyser.printModel(chocoModel);
         BaseModelAnalyser.checkConsistency(chocoModel, true);
+        BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
     }
 } 
