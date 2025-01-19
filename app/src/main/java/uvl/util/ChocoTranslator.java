@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
+import org.chocosolver.solver.variables.IntVar;
 import uvl.model.recreate.RecreationModel;
 import uvl.model.recreate.constraints.*;
 import uvl.model.recreate.feature.Feature;
@@ -17,18 +18,16 @@ public class ChocoTranslator {
         
         // Create variables for all features
         createFeatureVariables(recModel, chocoModel);
-    
-        // Set root feature to true
-        Feature rootFeature = recModel.getRootFeature();
-        if (rootFeature != null) {
-            BoolVar rootVar = chocoModel.getFeature(rootFeature.getName());
-            chocoModel.getModel().arithm(rootVar, "=", 1).post();
-        }
+        
+        // Set root feature
+        chocoModel.setRootFeature(recModel.getRootFeature());
         
         // Process all constraints
         for (AbstractConstraint constraint : recModel.getConstraints()) {
             try {
                 processConstraint(constraint, chocoModel);
+                BaseModelAnalyser.printModelConstraints(chocoModel);
+                logger.info("Constraint processed: {}", constraint);
             } catch (Exception e) {
                 logger.error("Error processing constraint: " + constraint, e);
             }
@@ -52,14 +51,23 @@ public class ChocoTranslator {
         Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
         
-        if (constraint.isContextualized()) {
-            // Only apply constraint if we're in the correct region or higher
-            if (chocoModel.getRegion().ordinal() >= constraint.getContextualizationValue()) {
+        // Only force non-group constraints to be true
+        if (!(constraint instanceof GroupConstraint)) {
+            if (constraint.isContextualized()) {
+                if (chocoModel.getRegion().ordinal() >= constraint.getContextualizationValue()) {
+                    model.addClauseTrue(constraintVar);
+                }
+            } else {
                 model.addClauseTrue(constraintVar);
             }
-        } else {
-            // For non-contextualized constraints, always apply
-            model.addClauseTrue(constraintVar);
+        }
+        
+        // For root feature with mandatory children, force root to be true
+        if (constraint instanceof GroupConstraint gc) {
+            Feature parent = gc.getParent();
+            if (parent.equals(chocoModel.getRootFeature()) && gc.getLowerCardinality() > 0) {
+                model.addClauseTrue(constraintVar);
+            }
         }
     }
 
@@ -89,19 +97,19 @@ public class ChocoTranslator {
             .map(child -> chocoModel.getFeature(child.getName()))
             .toArray(BoolVar[]::new);
 
-        // Create sum constraint
-        var sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
+        // Create sum constraint for children selection
+        IntVar sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
         model.sum(childVars, "=", sumVar).post();
         
-        // Link parent with children cardinality
-        model.arithm(sumVar, ">=", gc.getLowerCardinality()).reifyWith(parentVar);
-        model.arithm(sumVar, "<=", gc.getUpperCardinality()).reifyWith(parentVar);
+        // When parent is true, cardinality constraints must be satisfied
+        model.ifThen(parentVar, 
+            model.and(
+                model.arithm(sumVar, ">=", gc.getLowerCardinality()),
+                model.arithm(sumVar, "<=", gc.getUpperCardinality())
+            ));
         
-        // When parent is false, all children must be false
-        for (BoolVar childVar : childVars) {
-            model.ifThen(model.arithm(parentVar, "=", 0), 
-                        model.arithm(childVar, "=", 0));
-        }
+        // When parent is false, no children can be selected
+        model.ifThen(parentVar.not(), model.arithm(sumVar, "=", 0));
         
         return parentVar;
     }

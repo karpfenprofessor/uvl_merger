@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uvl.model.recreate.constraints.AbstractConstraint;
+import uvl.model.recreate.feature.Feature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class BaseModel {
     protected Region region;
     protected Map<String, BoolVar> features;
     protected Set<AbstractConstraint> constraints;
+    private   Feature rootFeature;
     
 
     public BaseModel(Region region) {
