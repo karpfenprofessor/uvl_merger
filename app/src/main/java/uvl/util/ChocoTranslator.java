@@ -44,19 +44,8 @@ public class ChocoTranslator {
     }
 
     private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        if (constraint.isContextualized()) {
-            // Process constraints from the current region
-            if (chocoModel.getRegion().ordinal() == constraint.getContextualizationValue()) {
-                processNormalConstraint(constraint, chocoModel);
-            }
-            // Process constraints from lower regions that affect this region
-            else if (chocoModel.getRegion().ordinal() > constraint.getContextualizationValue()) {
-                processNormalConstraint(constraint, chocoModel);
-            }
-        } else {
-            // Process non-contextualized (global) constraints
-            processNormalConstraint(constraint, chocoModel);
-        }
+        // Process all constraints, regardless of contextualization
+        processNormalConstraint(constraint, chocoModel);
     }
 
     private static void processNormalConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
@@ -64,21 +53,13 @@ public class ChocoTranslator {
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
         
         if (constraint.isContextualized()) {
-            BoolVar contextVar = model.boolVar("context_" + constraint.getContextualizationValue());
+            // Only apply constraint if we're in the correct region or higher
             if (chocoModel.getRegion().ordinal() >= constraint.getContextualizationValue()) {
-                model.arithm(contextVar, "=", 1).post();
-            } else {
-                model.arithm(contextVar, "=", 0).post();
-            }
-            
-            // Handle negation properly in contextualized constraints
-            if (constraint.isNegation()) {
-                model.ifThen(contextVar, model.arithm(constraintVar, "=", 0));
-            } else {
-                model.ifThen(contextVar, model.arithm(constraintVar, "=", 1));
+                model.addClauseTrue(constraintVar);
             }
         } else {
-            model.arithm(constraintVar, "=", constraint.isNegation() ? 0 : 1).post();
+            // For non-contextualized constraints, always apply
+            model.addClauseTrue(constraintVar);
         }
     }
 
@@ -102,53 +83,54 @@ public class ChocoTranslator {
 
     private static BoolVar createGroupConstraintVar(GroupConstraint gc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
-        BoolVar result = model.boolVar();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
         
         BoolVar[] childVars = gc.getChildren().stream()
             .map(child -> chocoModel.getFeature(child.getName()))
             .toArray(BoolVar[]::new);
 
-        // Create group constraint logic
-        BoolVar sumInRange = model.boolVar();
-        var sumVar = model.sum("sum_" + gc.getParent().getName(), childVars);
-        model.addClausesBoolAndArrayEqVar(new BoolVar[]{
-            model.arithm(sumVar, ">=", gc.getLowerCardinality()).reify(),
-            model.arithm(sumVar, "<=", gc.getUpperCardinality()).reify()
-        }, sumInRange);
-
-        // Link parent and children
-        model.addClausesBoolAndArrayEqVar(new BoolVar[]{parentVar, sumInRange}, result);
+        // Create sum constraint
+        var sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
+        model.sum(childVars, "=", sumVar).post();
+        
+        // Link parent with children cardinality
+        model.arithm(sumVar, ">=", gc.getLowerCardinality()).reifyWith(parentVar);
+        model.arithm(sumVar, "<=", gc.getUpperCardinality()).reifyWith(parentVar);
         
         // When parent is false, all children must be false
         for (BoolVar childVar : childVars) {
-            model.ifThen(model.arithm(parentVar, "=", 0), model.arithm(childVar, "=", 0));
+            model.ifThen(model.arithm(parentVar, "=", 0), 
+                        model.arithm(childVar, "=", 0));
         }
         
-        return result;
+        return parentVar;
     }
 
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
-        BoolVar result = model.boolVar();
-
+        
         switch (bc.getOperator()) {
             case AND:
-                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
-                break;
+                BoolVar andResult = model.boolVar(antecedent.getName() + "_AND_" + consequent.getName());
+                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent, consequent}, andResult);
+                return andResult;
             case OR:
+                BoolVar result = model.boolVar(antecedent.getName() + "_OR_" + consequent.getName());
                 model.addClausesBoolOrArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
-                break;
+                return result;
             case IMPLIES:
-                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent.not(), consequent}, result);
-                break;
+                BoolVar impliesResult = model.boolVar(antecedent.getName() + "_IMPLIES_" + consequent.getName());
+                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent.not(), consequent}, impliesResult);
+                return impliesResult;
             case IFF:
-                model.reifyXeqY(antecedent, consequent, result);
-                break;
+                BoolVar iffResult = model.boolVar(antecedent.getName() + "_IFF_" + consequent.getName());
+                model.reifyXeqY(antecedent, consequent, iffResult);
+                return iffResult;
+            default:
+                throw new IllegalArgumentException("Unknown operator: " + bc.getOperator());
         }
-        return result;
     }
 
     private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {

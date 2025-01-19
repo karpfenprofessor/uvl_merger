@@ -171,12 +171,21 @@ public class UVLParser {
     }
 
     // Cardinality group => [1..n] (stub)
-    private static void parseCardinalityGroup(CardinalityGroupContext cardGroup, Feature parent,
-            RecreationModel model) {
+    private static void parseCardinalityGroup(CardinalityGroupContext cardGroup, Feature parent, RecreationModel model) {
         GroupSpecContext gSpec = cardGroup.groupSpec();
         List<Feature> children = parseGroupSpec(gSpec, model);
-        int lower = 1;
-        int upper = children.size();
+        if (children.isEmpty()) {
+            return;
+        }
+        
+        // Parse actual cardinality from cardGroup context
+        int lower = parseCardinalityLower(cardGroup);
+        int upper = parseCardinalityUpper(cardGroup, children.size());
+        
+        if (lower > upper || lower < 0 || upper > children.size()) {
+            throw new IllegalArgumentException("Invalid cardinality bounds");
+        }
+        
         createGroupConstraint(parent, children, lower, upper, model);
     }
 
@@ -210,11 +219,13 @@ public class UVLParser {
 
     // Parse a reference to string
     private static String parseReference(ReferenceContext refCtx) {
-        if (refCtx == null)
-            return "UnknownRef";
+        if (refCtx == null) {
+            throw new IllegalArgumentException("Reference context cannot be null");
+        }
         List<UVLJavaParser.IdContext> idParts = refCtx.id();
-        if (idParts.isEmpty())
-            return "UnknownRef";
+        if (idParts.isEmpty()) {
+            throw new IllegalArgumentException("Reference must have at least one identifier");
+        }
         List<String> segments = new ArrayList<>();
         for (UVLJavaParser.IdContext part : idParts) {
             String text = part.getText();
@@ -233,6 +244,10 @@ public class UVLParser {
 
     // Get or create a feature
     private static Feature getOrCreateFeature(String featureName, RecreationModel model) {
+        if (featureName == null || featureName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Feature name cannot be null or empty");
+        }
+
         if (model.getFeatures().containsKey(featureName)) {
             return model.getFeatures().get(featureName);
         }
@@ -376,5 +391,29 @@ public class UVLParser {
     private static AbstractConstraint createComparisonConstraint(AbstractConstraint left,
             ComparisonConstraint.ComparisonOperator op, AbstractConstraint right) {
         return new ComparisonConstraint(left, op, right);
+    }
+
+    private static int parseCardinalityLower(CardinalityGroupContext cardGroup) {
+        String cardText = cardGroup.getText();
+        // Extract number between [ and ..
+        int startIndex = cardText.indexOf('[') + 1;
+        int endIndex = cardText.indexOf("..");
+        if (startIndex >= 0 && endIndex >= 0) {
+            String lowerBound = cardText.substring(startIndex, endIndex).trim();
+            return lowerBound.isEmpty() ? 1 : Integer.parseInt(lowerBound);
+        }
+        return 1;
+    }
+
+    private static int parseCardinalityUpper(CardinalityGroupContext cardGroup, int maxSize) {
+        String cardText = cardGroup.getText();
+        // Extract number between .. and ]
+        int startIndex = cardText.indexOf("..") + 2;
+        int endIndex = cardText.indexOf(']');
+        if (startIndex >= 0 && endIndex >= 0) {
+            String upperBound = cardText.substring(startIndex, endIndex).trim();
+            return upperBound.equals("*") ? maxSize : Integer.parseInt(upperBound);
+        }
+        return maxSize;
     }
 }
