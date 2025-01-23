@@ -13,6 +13,7 @@ import uvl.UVLJavaLexer;
 import uvl.UVLJavaParser;
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
+import uvl.util.RecreationModelAnalyser;
 import uvl.util.UVLParser;
 
 public class TestParseAndPrint {
@@ -37,7 +38,7 @@ public class TestParseAndPrint {
         UVLParser.parseFeatureModel(featureContext, testModel);
         UVLParser.parseConstraints(featureContext.constraints(), testModel);
 
-        testModel.printConstraints();
-        testModel.printFeatures();
+        RecreationModelAnalyser.printFeatures(testModel);
+        RecreationModelAnalyser.printConstraints(testModel);
     }
 }

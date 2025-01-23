@@ -34,26 +34,6 @@ public class RecreationModel {
         logger = LogManager.getLogger(this.getClass());
     }
 
-    public void printConstraints() {
-        logger.debug("[print] start printing constraints of recreation model: " + region.printRegion());
-        int cnt = 0;
-        for (AbstractConstraint c : constraints) {
-            logger.debug("  [" + cnt + "]: " + c.toString());
-            cnt++;
-        }
-        logger.debug("[print] finished printing constraints of recreation model: " + region.printRegion());
-    }
-
-    public void printFeatures() {
-        logger.debug("[print] start printing features of recreation model: " + region.printRegion() + " with root feature: " + rootFeature.toString());
-        int cnt = 0;
-        for (Feature f : features.values()) {
-            logger.debug("  [" + cnt + "]: " + f.toString());
-            cnt++;
-        }
-        logger.debug("[print] finished printing features of recreation model: " + region.printRegion());
-    }
-
     public void contextualizeAllConstraints() {
         logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().printRegion() + " with region ordinal: " + region.ordinal());
         for (AbstractConstraint constraint : constraints) {

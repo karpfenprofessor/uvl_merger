@@ -3,6 +3,9 @@ package uvl.util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uvl.model.recreate.RecreationModel;
+import uvl.model.recreate.constraints.AbstractConstraint;
+import uvl.model.recreate.feature.Feature;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -62,5 +65,23 @@ public class RecreationModelAnalyser {
         logger.debug("  Share ratio: {} %", String.format("%.2f", shareRatio*100));
 
         return shareRatio;
+    }
+
+    public static void printConstraints(RecreationModel recModel) {
+        logger.info("Printing all constraints in Recreation model:");
+        int i = 0;
+        for (AbstractConstraint constraint : recModel.getConstraints()) {
+            logger.info("  [{}]: {}", i++, constraint.toString());
+        }
+        logger.info("Total constraints: {}", recModel.getConstraints().size());
+    }
+
+    public static void printFeatures(RecreationModel recModel) {
+        logger.info("Printing all features in Recreation model:");
+        int i = 0;
+        for (Feature feature : recModel.getFeatures().values()) {
+            logger.info("  [{}]: {}", i++, feature.toString());
+        }
+        logger.info("Total features: {}", recModel.getFeatures().size());
     }
 }

@@ -27,9 +27,14 @@ public class ChocoTranslator {
             try {
                 processConstraint(constraint, chocoModel);
                 BaseModelAnalyser.printModelConstraints(chocoModel);
-                logger.info("Constraint processed: {}", constraint);
+                if (!BaseModelAnalyser.isConsistent(chocoModel)) {
+                    throw new RuntimeException(String.format("Model became inconsistent after processing constraint: %s", constraint));
+                } else {
+                    //BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
+                }
             } catch (Exception e) {
                 logger.error("Error processing constraint: " + constraint, e);
+                throw e;
             }
         }
         
@@ -101,15 +106,31 @@ public class ChocoTranslator {
         IntVar sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
         model.sum(childVars, "=", sumVar).post();
         
-        // When parent is true, cardinality constraints must be satisfied
-        model.ifThen(parentVar, 
-            model.and(
-                model.arithm(sumVar, ">=", gc.getLowerCardinality()),
-                model.arithm(sumVar, "<=", gc.getUpperCardinality())
-            ));
-        
-        // When parent is false, no children can be selected
-        model.ifThen(parentVar.not(), model.arithm(sumVar, "=", 0));
+        if (gc.getParent().equals(chocoModel.getRootFeature())) {
+            // Root must be true
+            model.arithm(parentVar, "=", 1).post();
+        } 
+
+        // Handle group constraints
+        if (gc.getLowerCardinality() == gc.getUpperCardinality() && 
+            gc.getLowerCardinality() == childVars.length) {
+            // Mandatory groups (all children)
+            model.addClausesBoolAndArrayEqVar(childVars, parentVar);
+        } else {
+            // OR/Alternative groups
+            model.ifThen(parentVar, 
+                model.and(
+                    model.arithm(sumVar, ">=", gc.getLowerCardinality()),
+                    model.arithm(sumVar, "<=", gc.getUpperCardinality())
+                ));
+            model.ifThen(parentVar.not(), model.arithm(sumVar, "=", 0));
+        }
+
+        // For mandatory children of root
+        if (gc.getParent().equals(chocoModel.getRootFeature()) && 
+            gc.getLowerCardinality() == gc.getUpperCardinality()) {
+            model.arithm(parentVar, "=", 1).post();
+        }
         
         return parentVar;
     }

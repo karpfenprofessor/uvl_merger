@@ -59,7 +59,7 @@ public class BaseModelAnalyser {
 
     public static boolean isConsistent(BaseModel baseModel) {
         Model model = baseModel.getModel();
-        model.getSolver().reset();  // Reset solver before checking
+        model.getSolver().reset();
         return model.getSolver().solve();
     }
 
