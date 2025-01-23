@@ -14,7 +14,7 @@ import org.chocosolver.solver.variables.BoolVar;
 public class BaseModelAnalyser {
     private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
 
-    public static void printModelConstraints(BaseModel baseModel) {
+    public static void printConstraints(BaseModel baseModel) {
         Model model = baseModel.getModel();
         logger.info("Printing all constraints in Choco model:");
         Constraint[] constraints = model.getCstrs();
@@ -24,7 +24,7 @@ public class BaseModelAnalyser {
         logger.info("Total constraints: {}", constraints.length);
     }
 
-    public static void printModelVariables(BaseModel baseModel) {
+    public static void printVariables(BaseModel baseModel) {
         Model model = baseModel.getModel();
         logger.info("Printing all variables in Choco model:");
         Variable[] variables = model.getVars();
@@ -35,8 +35,8 @@ public class BaseModelAnalyser {
     }
 
     public static void printModel(BaseModel baseModel) {
-        printModelVariables(baseModel);
-        printModelConstraints(baseModel);
+        printVariables(baseModel);
+        printConstraints(baseModel);
     }
 
     public static long checkConsistency(BaseModel baseModel, boolean showOutput) {
