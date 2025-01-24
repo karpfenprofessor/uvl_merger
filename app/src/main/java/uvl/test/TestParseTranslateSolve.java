@@ -17,14 +17,17 @@ public class TestParseTranslateSolve {
 
     public static void main(String[] args) throws Exception {
         //String filePathString = "uvl/financial_parts/financial_01.uvl";
-        String filePathString = "uvl/maybe/maybe_04.uvl";
-        //String filePathString = "uvl/translation.uvl";
+        //String filePathString = "uvl/maybe/maybe_04.uvl";
+        //String filePathString = "uvl/onlineshop.uvl";
+        String filePathString = "uvl/test/test4.uvl";
+
 
         RecreationModel recModel = UVLParser.parseUVLFile(filePathString);
         recModel.setRegion(Region.A);
-        RecreationModelAnalyser.printFeatures(recModel);
         RecreationModelAnalyser.printConstraints(recModel);
-        //BaseModel chocoModel = ChocoTranslator.convertToChocoModel(recModel);
-        //BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
+        BaseModel chocoModel = ChocoTranslator.convertToChocoModel(recModel);
+        //BaseModelAnalyser.printConstraints(chocoModel);
+        //BaseModelAnalyser.printVariables(chocoModel);
+        BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
     }
 } 

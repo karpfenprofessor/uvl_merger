@@ -10,18 +10,52 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import org.chocosolver.solver.variables.BoolVar;
+import java.util.Arrays;
 
 public class BaseModelAnalyser {
     private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
 
     public static void printConstraints(BaseModel baseModel) {
         Model model = baseModel.getModel();
+        logger.info("----------------------------------------");
         logger.info("Printing all constraints in Choco model:");
+        logger.info("----------------------------------------");
+        
         Constraint[] constraints = model.getCstrs();
         for (int i = 0; i < constraints.length; i++) {
-            logger.info("  [{}]: {}", i, constraints[i].toString());
+            Constraint c = constraints[i];
+            String constraintType = c.getClass().getSimpleName();
+            String constraintStr = c.toString()
+                .replace("([", "[")
+                .replace("])", "]")
+                .replace("{", "")
+                .replace("}", "");
+                
+            logger.info("  [{}] Type: {}", i, constraintType);
+            logger.info("      {}", constraintStr);
+            
+            // Print involved variables
+            Set<Variable> vars = new HashSet<>();
+            Arrays.stream(c.getPropagators()).forEach(p -> {
+                for (Variable v : p.getVars()) {
+                    vars.add(v);
+                }
+            });
+            
+            if (!vars.isEmpty()) {
+                StringBuilder varStr = new StringBuilder("      Variables: ");
+                for (Variable v : vars) {
+                    varStr.append(v.getName())
+                          .append(" [")
+                          .append(v.getDomainSize())
+                          .append("], ");
+                }
+                logger.info(varStr.substring(0, varStr.length() - 2));
+            }
+            logger.info("----------------------------------------");
         }
         logger.info("Total constraints: {}", constraints.length);
+        logger.info("----------------------------------------");
     }
 
     public static void printVariables(BaseModel baseModel) {

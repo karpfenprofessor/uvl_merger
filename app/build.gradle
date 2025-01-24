@@ -28,6 +28,17 @@ dependencies {
     implementation group: 'io.github.universal-variability-language', name: 'uvl-parser', version: '0.3'
 }
 
+sourceSets {
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
 application {
     // Define the main class for the application.
     mainClass = 'car.App'

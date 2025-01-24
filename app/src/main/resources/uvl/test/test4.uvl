@@ -1,0 +1,12 @@
+features
+    "_r"
+        optional
+            "_r_1"
+                optional
+                    "_r_1_1"
+                optional
+                    "_r_1_2"
+        optional
+            "_r_2"
+                optional
+                    "_r_2_1"

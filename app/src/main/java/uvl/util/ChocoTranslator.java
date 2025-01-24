@@ -25,7 +25,8 @@ public class ChocoTranslator {
         
         // Set root feature
         chocoModel.setRootFeature(recModel.getRootFeature());
-        logger.info("[convertToChocoModel] set root feature: {}", recModel.getRootFeature().getName());
+        chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
+        logger.info("[convertToChocoModel] set and enforced root feature: {}", recModel.getRootFeature().getName());
         
         // Process all constraints
         int processedConstraints = 0;
@@ -97,6 +98,9 @@ public class ChocoTranslator {
     }
 
     private static BoolVar createGroupConstraintVar(GroupConstraint gc, BaseModel chocoModel) {
+        logger.info("[createGroupConstraintVar] creating group constraint for parent {} with {} children", 
+            gc.getParent().getName(), gc.getChildren().size());
+        
         Model model = chocoModel.getModel();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
         
@@ -107,32 +111,20 @@ public class ChocoTranslator {
         // Create sum constraint for children selection
         IntVar sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
         model.sum(childVars, "=", sumVar).post();
+
+        // Handle group cardinality constraint
+        model.ifThen(parentVar, 
+            model.and(
+                model.arithm(sumVar, ">=", gc.getLowerCardinality()),
+                model.arithm(sumVar, "<=", gc.getUpperCardinality())
+            ));
+
+        // If parent is false, all children must be false
+        model.ifThen(model.arithm(parentVar, "=", 0),
+        model.arithm(sumVar, "=", 0));
         
-        if (gc.getParent().equals(chocoModel.getRootFeature())) {
-            // Root must be true
-            model.arithm(parentVar, "=", 1).post();
-        } 
-
-        // Handle group constraints
-        if (gc.getLowerCardinality() == gc.getUpperCardinality() && 
-            gc.getLowerCardinality() == childVars.length) {
-            // Mandatory groups (all children)
-            model.addClausesBoolAndArrayEqVar(childVars, parentVar);
-        } else {
-            // OR/Alternative groups
-            model.ifThen(parentVar, 
-                model.and(
-            model.arithm(sumVar, ">=", gc.getLowerCardinality()), 
-                    model.arithm(sumVar, "<=", gc.getUpperCardinality())
-                ));
-            model.ifThen(parentVar.not(), model.arithm(sumVar, "=", 0));
-        }
-
-        // For mandatory children of root
-        if (gc.getParent().equals(chocoModel.getRootFeature()) && 
-            gc.getLowerCardinality() == gc.getUpperCardinality()) {
-            model.arithm(parentVar, "=", 1).post();
-        }
+        logger.info("[createGroupConstraintVar] created group constraint with cardinality [{},{}]", 
+            gc.getLowerCardinality(), gc.getUpperCardinality());
         
         return parentVar;
     }

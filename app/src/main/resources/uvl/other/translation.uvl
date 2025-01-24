@@ -22,6 +22,3 @@ features
 					"_id_11" 
 		optional
 			"page_preview" 
-constraints
-	"search_by_language" => "page_translation"
-	"page_preview" => !"svg"
