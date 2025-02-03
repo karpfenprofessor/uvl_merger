@@ -1,0 +1,41 @@
+features
+    "CKBus"
+        mandatory
+            "country"
+                alternative
+                    "GER"
+            "type"
+                alternative
+                    "combi"
+                    "limo"
+                    "city"
+                    "suv"
+            "color"
+                alternative
+                    "white"
+                    "black"
+            "engine"
+                alternative
+                    "1l"
+                    "1,5l"
+                    "2l"
+            "couplingdev"
+                alternative
+                    "yes"
+                    "no"
+            "fuel"
+                alternative
+                    "electro"
+                    "diesel"
+                    "gas"
+                    "hybrid"
+            "service"
+                alternative
+                    "15k"
+                    "20k"
+                    "25k"
+
+constraints
+    !"gas"                       
+    "electro" | !"yes"          
+    "diesel" | !"city"          

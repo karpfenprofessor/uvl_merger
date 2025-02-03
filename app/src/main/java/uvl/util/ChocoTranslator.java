@@ -51,7 +51,7 @@ public class ChocoTranslator {
     }
 
     private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        logger.info("[processConstraint] processing constraint: \n{}\n", constraint);
+        logger.info("\n[processConstraint] processing constraint: \n{}", constraint);
         processNormalConstraint(constraint, chocoModel);
     }
 
@@ -89,6 +89,8 @@ public class ChocoTranslator {
             baseVar = createBinaryConstraintVar(bc, chocoModel);
         } else if (constraint instanceof NotConstraint nc) {
             baseVar = createNotConstraintVar(nc, chocoModel);
+        } else if (constraint instanceof FeatureReferenceConstraint frc) {
+            baseVar = chocoModel.getFeature(frc.getFeature().getName());
         } else {
             throw new UnsupportedOperationException("Unsupported constraint type: " + constraint.getClass().getSimpleName());
         }
@@ -97,10 +99,7 @@ public class ChocoTranslator {
         return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
     }
 
-    private static BoolVar createGroupConstraintVar(GroupConstraint gc, BaseModel chocoModel) {
-        logger.info("[createGroupConstraintVar] creating group constraint for parent {} with {} children", 
-            gc.getParent().getName(), gc.getChildren().size());
-        
+    private static BoolVar createGroupConstraintVar(GroupConstraint gc, BaseModel chocoModel) {        
         Model model = chocoModel.getModel();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
         
@@ -123,16 +122,16 @@ public class ChocoTranslator {
         model.ifThen(model.arithm(parentVar, "=", 0),
         model.arithm(sumVar, "=", 0));
         
-        logger.info("[createGroupConstraintVar] created group constraint with cardinality [{},{}]", 
-            gc.getLowerCardinality(), gc.getUpperCardinality());
+        logger.info("[createGroupConstraintVar] created group constraint with parent {}, children {} with cardinality [{},{}]", 
+            gc.getParent().getName(), gc.getChildren().toString(),gc.getLowerCardinality(), gc.getUpperCardinality());
         
         return parentVar;
     }
 
-    private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
-        logger.info("[createBinaryConstraintVar] creating binary constraint with operator {}", bc.getOperator());
-        
+    private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {        
         Model model = chocoModel.getModel();
+        
+        // Original code for other cases
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
         
@@ -164,7 +163,6 @@ public class ChocoTranslator {
     }
 
     private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {
-        logger.info("[createNotConstraintVar] creating NOT constraint");
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
         BoolVar result = model.boolNotView(inner);

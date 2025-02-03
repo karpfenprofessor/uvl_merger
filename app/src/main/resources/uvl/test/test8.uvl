@@ -1,0 +1,11 @@
+features
+    "_r"
+        optional
+            "CONFIG_SELINUX"
+            "CONFIG_CHCON"
+            "CONFIG_GETSEBOOL"
+            "CONFIG_FEATURE_CHCON_LONG_OPTIONS"
+constraints
+    "CONFIG_SELINUX" | !"CONFIG_CHCON"
+    "CONFIG_SELINUX" | !"CONFIG_GETSEBOOL"
+    !"CONFIG_FEATURE_CHCON_LONG_OPTIONS" | "CONFIG_SELINUX" | "CONFIG_CHCON"

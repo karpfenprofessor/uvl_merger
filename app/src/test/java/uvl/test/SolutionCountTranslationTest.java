@@ -15,16 +15,23 @@ import uvl.util.UVLParser;
 public class SolutionCountTranslationTest {
     private static final Logger logger = LogManager.getLogger(SolutionCountTranslationTest.class);
 
-    private record TestCase(String filename, long expectedSolutions) {}
+    private record TestCase(String filename, long expectedSolutions) {
+    }
 
     private final TestCase[] TEST_CASES = {
-        new TestCase("uvl/test/test1.uvl", 1),    
-        new TestCase("uvl/test/test2.uvl", 2),    
-        new TestCase("uvl/test/test3.uvl", 7),   
-        new TestCase("uvl/test/test4.uvl", 15), 
-        new TestCase("uvl/test/test5.uvl", 8),  
-        new TestCase("uvl/test/test6.uvl", 18),
-        new TestCase("uvl/test/test7.uvl", 480)
+            new TestCase("uvl/test/test1.uvl", 1),
+            new TestCase("uvl/test/test2.uvl", 2),
+            new TestCase("uvl/test/test3.uvl", 7),
+            new TestCase("uvl/test/test4.uvl", 15),
+            new TestCase("uvl/test/test5.uvl", 8),
+            new TestCase("uvl/test/test6.uvl", 18),
+            new TestCase("uvl/test/test7.uvl", 480),
+            new TestCase("uvl/test/test8.uvl", 9)
+    };
+
+    private final TestCase[] TEST_CASES_PAPER = {
+        new TestCase("uvl/car_paper/us.uvl", 288),
+        new TestCase("uvl/car_paper/eu.uvl", 324)
     };
 
     private long getSolutionCount(String filename) throws Exception {
@@ -39,14 +46,30 @@ public class SolutionCountTranslationTest {
         for (TestCase testCase : TEST_CASES) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
-                logger.info("Testing {}: expected {}, got {}", 
-                    testCase.filename, testCase.expectedSolutions, actualSolutions);
-                assertEquals(testCase.expectedSolutions, actualSolutions, 
-                    "Solution count mismatch for " + testCase.filename);
+                logger.info("Testing {}: expected {}, got {}",
+                        testCase.filename, testCase.expectedSolutions, actualSolutions);
+                assertEquals(testCase.expectedSolutions, actualSolutions,
+                        "Solution count mismatch for " + testCase.filename);
             } catch (Exception e) {
                 logger.error("Error processing {}: {}", testCase.filename, e.getMessage());
                 throw new AssertionError("Test failed for " + testCase.filename, e);
             }
         }
     }
-} 
+
+    //@Test
+    public void testSolutionOfPaperCarModels() {
+        for (TestCase testCase : TEST_CASES_PAPER) {
+            try {
+                long actualSolutions = getSolutionCount(testCase.filename);
+                logger.info("Testing {}: expected {}, got {}",
+                        testCase.filename, testCase.expectedSolutions, actualSolutions);
+                assertEquals(testCase.expectedSolutions, actualSolutions,
+                        "Solution count mismatch for " + testCase.filename);
+            } catch (Exception e) {
+                logger.error("Error processing {}: {}", testCase.filename, e.getMessage());
+                throw new AssertionError("Test failed for " + testCase.filename, e);
+            }
+        }
+    }
+}

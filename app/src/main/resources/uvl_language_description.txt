@@ -1,0 +1,44 @@
+The Language
+On a high level, each feature model in UVL consists of five optional separated elements:
+
+A list of used language levels The model can use different concepts which are part of language levels. These levels can either be enumerated with the include keyword or be implicit.
+A namespace which can be used for references in other models
+A list of imports that can be used to reference external feature models The models are referenced by their file name and can be given an alias using a Java import like syntax. External models in subdirectories can be referenced like this: subdir.filename as fn
+The tree hierarchy consisting of: features, group types, and attributes whose relations are specified using nesting (indentation) Groups may have an arbitrary number of features as child nodes. A feature can also have a feature cardinality. Attributes consist of a key-value pair whose key is always a string and its value may be a boolean, number, string, a list attributes, a vector, or a constraint. If the value is a constraint the key must be constraint. If the value is a list of constraints the key must be constraints
+Cross-tree constraints Cross-tree constraints may be arbitrary propositional formulas with the following symbols: => (implies), <=> (iff), & (and), | (or), ! (not), or brackets. Through the usage of language levels cross-tree constraints can also contain equations (<,>,==) which consist of expressions (+,-,*,/) with numbers or numerical feature attributes as literals and aggregate functions (avg, sum).
+The following snippet shows a simplified server architecture in UVL. We provide more examples (e.g., to show the composition mechanism) in https://github.com/Universal-Variability-Language/uvl-models/tree/main/Feature_Models.
+
+namespace Server
+
+features
+  Server {abstract}
+    mandatory
+      FileSystem
+        or // with cardinality: [1..*]
+          NTFS
+          APFS
+          EXT4
+      OperatingSystem {abstract}
+        alternative
+          Windows
+          macOS
+          Debian
+    optional
+      Logging	{
+      default,
+      log_level "warn" // Feature Attribute
+    }
+
+constraints
+  Windows => NTFS
+  macOS => APFS
+In this snippet, we can recognize the following elements:
+
+The feature Server is abstract (i.e., corresponds to no implementation artifact.
+Each Server requires a FileSystemand an OperatingSystem denoted by the mandatory group
+The Server may have Logging denoted by the optional group
+A FileSystem requires at least one type of NTFS, APFS, and Ext4 denoted by the or group
+An OperatingSystem has exactly one type of Windows, macOS, and Debiandenoted by the alternative group
+Logging has the feature attribute log_level attached which is set to "warn"
+Windows requires NTFS denoted by the first cross-tree constraint
+macOSrequires APFS
