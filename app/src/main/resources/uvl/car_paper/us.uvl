@@ -4,31 +4,43 @@ features
             "country"
                 alternative
                     "US"
+
+        mandatory
             "type"
                 alternative
                     "combi"
                     "limo"
                     "city"
                     "suv"
+
+        mandatory
             "color"
                 alternative
                     "white"
                     "black"
+
+        mandatory
             "engine"
                 alternative
                     "1l"
                     "1,5l"
                     "2l"
+
+        mandatory
             "couplingdev"
                 alternative
                     "yes"
                     "no"
+
+        mandatory
             "fuel"
                 alternative
                     "electro"
                     "diesel"
                     "gas"
                     "hybrid"
+
+        mandatory
             "service"
                 alternative
                     "15k"
@@ -36,6 +48,6 @@ features
                     "25k"
 
 constraints
-    !"hybrid"                      
-    "electro" | !"yes"            
+    !"hybrid"
+    "electro" | !"yes"
     "diesel" | !"white"
