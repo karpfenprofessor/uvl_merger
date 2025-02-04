@@ -1,53 +1,38 @@
 features
-    "CKBus"
-        mandatory
-            "country"
-                alternative
-                    "GER"
-
-        mandatory
-            "type"
-                alternative
-                    "combi"
-                    "limo"
-                    "city"
-                    "suv"
-
-        mandatory
-            "color"
-                alternative
-                    "white"
-                    "black"
-
-        mandatory
-            "engine"
-                alternative
-                    "1l"
-                    "1,5l"
-                    "2l"
-
-        mandatory
-            "couplingdev"
-                alternative
-                    "yes"
-                    "no"
-
-        mandatory
-            "fuel"
-                alternative
-                    "electro"
-                    "diesel"
-                    "gas"
-                    "hybrid"
-
-        mandatory
-            "service"
-                alternative
-                    "15k"
-                    "20k"
-                    "25k"
+  "Car"
+    mandatory
+      "Type"
+        alternative
+          "Combi"
+          "Limo"
+          "City"
+          "SUV"
+      "Color"
+        alternative
+          "White"
+          "Black"
+      "Engine"
+        alternative
+          "1L"
+          "1,5L"
+          "2L"
+      "CouplingDevice"
+        alternative
+          "Yes"
+          "No"
+      "Fuel"
+        alternative
+          "Electro"
+          "Diesel"
+          "Gas"
+          "Hybrid"
+      "Service"
+        alternative
+          "15k"
+          "20k"
+          "25k"
 
 constraints
-    !"gas"
-    "electro" | !"yes"
-    "diesel" | !"city"
+  ! "Gas"
+  "Electro" => ! "Yes"
+  "Diesel" => ! "City"

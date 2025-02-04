@@ -3,6 +3,7 @@ package uvl.util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.nary.cnf.LogOp;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
 import uvl.model.recreate.RecreationModel;
@@ -147,7 +148,7 @@ public class ChocoTranslator {
                 break;
             case IMPLIES:
                 result = model.boolVar(antecedent.getName() + "_IMPLIES_" + consequent.getName());
-                model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent.not(), consequent}, result);
+                model.addClauses(LogOp.or(antecedent.not(), consequent));
                 break;
             case IFF:
                 result = model.boolVar(antecedent.getName() + "_IFF_" + consequent.getName());
