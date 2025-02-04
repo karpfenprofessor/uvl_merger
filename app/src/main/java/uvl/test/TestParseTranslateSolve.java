@@ -17,7 +17,7 @@ public class TestParseTranslateSolve {
 
     public static void main(String[] args) throws Exception {
         //String filePathString = "uvl/test/test9.uvl";	
-        String filePathString = "uvl/paper_test_models/eu.uvl";
+        String filePathString = "uvl/paper_test_models/car_generated.uvl";
 
         RecreationModel recModel = UVLParser.parseUVLFile(filePathString);
         recModel.setRegion(Region.A);

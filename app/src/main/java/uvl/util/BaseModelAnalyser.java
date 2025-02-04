@@ -98,8 +98,6 @@ public class BaseModelAnalyser {
     }
 
     public static int findIntersectionSolutions(BaseModel model1, BaseModel model2) {
-        logger.info("Finding intersection solutions between two models...");
-        
         // Get variables from both models
         Map<String, BoolVar> vars1 = model1.getFeatures();
         Map<String, BoolVar> vars2 = model2.getFeatures();
@@ -123,7 +121,7 @@ public class BaseModelAnalyser {
             }
             solutionsModel1.add(solution.toString());
         }
-        logger.debug("Found {} solutions in model 1", solutionsModel1.size());
+        logger.debug("[intersection] found {} solutions in model {}", solutionsModel1.size(), model1.getRegion().printRegion());
 
         // Collect all solutions from model 2
         while (model2.getModel().getSolver().solve()) {
@@ -136,18 +134,16 @@ public class BaseModelAnalyser {
             }
             solutionsModel2.add(solution.toString());
         }
-        logger.debug("Found {} solutions in model 2", solutionsModel2.size());
+        logger.debug("[intersection] found {} solutions in model  {}", solutionsModel2.size(), model2.getRegion().printRegion());
 
         // Find intersection
         solutionsModel1.retainAll(solutionsModel2);
-        logger.info("Found {} solutions in intersection", solutionsModel1.size());
+        logger.info("[intersection] found {} solutions", solutionsModel1.size());
 
         return solutionsModel1.size();
     }
 
     public static long solveAndReturnNumberOfSolutions(BaseModel baseModel) {
-        logger.info("[solveAndReturnNumberOfSolutions] start solving");
-
         Model model = baseModel.getModel();
         model.getSolver().reset();
         

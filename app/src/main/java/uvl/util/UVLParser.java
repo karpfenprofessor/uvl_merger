@@ -258,7 +258,6 @@ public class UVLParser {
 
     // Parse the constraints block
     public static void parseConstraints(ConstraintsContext constraintsCtx, RecreationModel model) {
-        logger.debug("[parseConstraints] start parsing constraints");
         if (constraintsCtx == null)
             return;
         List<ConstraintLineContext> lines = constraintsCtx.constraintLine();
@@ -276,7 +275,7 @@ public class UVLParser {
             }
         }
 
-        logger.info("[parseConstraints] added {} new constraints (total: {})", 
+        logger.info("[parseConstraints] finished parsing constraints with {} new cross tree constraints (total: {})", 
             model.getConstraints().size() - initialConstraints,
             model.getConstraints().size());
     }
