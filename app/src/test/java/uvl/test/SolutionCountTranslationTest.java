@@ -30,8 +30,9 @@ public class SolutionCountTranslationTest {
     };
 
     private final TestCase[] TEST_CASES_PAPER = {
-        new TestCase("uvl/car_paper/us.uvl", 288),
-        new TestCase("uvl/car_paper/eu.uvl", 324)
+        new TestCase("uvl/paper_test_models/us.uvl", 288),
+        new TestCase("uvl/paper_test_models/eu.uvl", 324),
+        new TestCase("uvl/paper_test_models/car_generated.uvl", 12)
     };
 
     private long getSolutionCount(String filename) throws Exception {
@@ -57,7 +58,7 @@ public class SolutionCountTranslationTest {
         }
     }
 
-    //@Test
+    @Test
     public void testSolutionOfPaperCarModels() {
         for (TestCase testCase : TEST_CASES_PAPER) {
             try {
