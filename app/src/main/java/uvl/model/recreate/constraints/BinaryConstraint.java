@@ -7,7 +7,7 @@ import uvl.model.recreate.feature.Feature;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class BinaryConstraint extends AbstractConstraint {
 
     public enum LogicalOperator {

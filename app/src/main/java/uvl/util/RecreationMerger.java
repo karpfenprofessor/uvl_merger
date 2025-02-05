@@ -18,9 +18,9 @@ public class RecreationMerger {
     private static final Logger logger = LogManager.getLogger(RecreationMerger.class);
 
     public static RecreationModel fullMerge(RecreationModel model1, RecreationModel model2) {
-        logger.info("[merge] starting full merge process between models from regions {} and {}", 
-            model1.getRegion(), model2.getRegion());
-        
+        logger.info("[merge] starting full merge process between models from regions {} and {}",
+                model1.getRegion(), model2.getRegion());
+
         // Contextualize constraints in both models
         BaseModel chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
         BaseModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
@@ -34,11 +34,14 @@ public class RecreationMerger {
         chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
         chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
 
-        assert solutionsModel1 == BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel1);
-        assert solutionsModel2 == BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel2);
+        long solutionsModel1AfterContextualize = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel1);
+        long solutionsModel2AfterContextualize = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel2);
+        assert solutionsModel1 == solutionsModel1AfterContextualize;
+        assert solutionsModel2 == solutionsModel2AfterContextualize;
 
         // Create union model and record initial metrics
         RecreationModel unionModel = union(model1, model2);
+        RecreationModelAnalyser.printConstraints(unionModel);
         BaseModel baseUnionModel = ChocoTranslator.convertToChocoModel(unionModel);
         long solutionsUnionModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(baseUnionModel);
         assert solutionsUnionModel == (solutionsModel1 + solutionsModel2);
@@ -46,7 +49,7 @@ public class RecreationMerger {
         // Perform inconsistency check and cleanup
         RecreationModel mergedModel = inconsistencyCheck(unionModel);
         cleanup(mergedModel);
-        
+
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return mergedModel;
     }
@@ -59,59 +62,133 @@ public class RecreationMerger {
 
         // Add features from both models to union model's feature map
         for (Feature feature : model1.getFeatures().values()) {
-            unionModel.getFeatures().put(feature.getName(), feature);  // Use original feature
+            unionModel.getFeatures().put(feature.getName(), feature); // Use original feature
         }
         for (Feature feature : model2.getFeatures().values()) {
             if (!unionModel.getFeatures().containsKey(feature.getName())) {
-                unionModel.getFeatures().put(feature.getName(), feature);  // Use original feature
+                unionModel.getFeatures().put(feature.getName(), feature); // Use original feature
             }
         }
 
+        // Handle root feature setting
+        handleRootFeature(model1, model2, unionModel);
+
+        handleRegionFeature(model1, model2, unionModel);
+
+        // Add all non-Region constraints
+        for (AbstractConstraint constraint : model1.getConstraints()) {
+            if (!(constraint instanceof GroupConstraint &&
+                    (((GroupConstraint) constraint).getParent().getName().equals("Region") ||
+                            ((GroupConstraint) constraint).getChildren().stream()
+                                    .anyMatch(f -> f.getName().equals("Region"))))) {
+                unionModel.addConstraint(constraint);
+            }
+        }
+
+        for (AbstractConstraint constraint : model2.getConstraints()) {
+            if (!(constraint instanceof GroupConstraint &&
+                    (((GroupConstraint) constraint).getParent().getName().equals("Region") ||
+                            ((GroupConstraint) constraint).getChildren().stream()
+                                    .anyMatch(f -> f.getName().equals("Region"))))) {
+                unionModel.addConstraint(constraint);
+            }
+        }
+
+        resetRootFeature(unionModel);
+
+        logger.info("[union] finished union with {} features and {} constraints", unionModel.getFeatures().size(),
+                unionModel.getConstraints().size());
+
+        return unionModel;
+    }
+
+    private static void resetRootFeature(RecreationModel unionModel) {
+        for (AbstractConstraint constraint : unionModel.getConstraints()) {
+            if (constraint instanceof GroupConstraint) {
+                GroupConstraint gc = (GroupConstraint) constraint;
+                if (gc.getParent().getName().equals(unionModel.getRootFeature().getName()) && !gc.getChildren().stream().anyMatch(f -> f.getName().equals("Region"))) {
+                    gc.setParent(unionModel.getFeatures().get("Region"));
+                    logger.info("[resetRootFeature] reset parent in constraint: {}", gc);
+                }
+            }
+        }
+    }
+
+    private static void handleRegionFeature(RecreationModel model1, RecreationModel model2,
+            RecreationModel unionModel) {
+        // Create unified Region structure
+        Feature regionFeature = unionModel.getFeatures().get("Region");
+        Feature region1Feature = unionModel.getFeatures().get(model1.getRegion().printRegion());
+        Feature region2Feature = unionModel.getFeatures().get(model2.getRegion().printRegion());
+
+        // Create single group constraint for Region to root
+        List<Feature> rootRegionChildren = new ArrayList<>();
+        rootRegionChildren.add(regionFeature);
+        GroupConstraint rootRegionGc = new GroupConstraint();
+        rootRegionGc.setParent(unionModel.getRootFeature());
+        rootRegionGc.setChildren(rootRegionChildren);
+        rootRegionGc.setLowerCardinality(1);
+        rootRegionGc.setUpperCardinality(1);
+        unionModel.addConstraint(rootRegionGc);
+
+        // Create single group constraint for Region's children
+        List<Feature> regionChildren = new ArrayList<>();
+        regionChildren.add(region1Feature);
+        regionChildren.add(region2Feature);
+        GroupConstraint regionGc = new GroupConstraint();
+        regionGc.setParent(regionFeature);
+        regionGc.setChildren(regionChildren);
+        regionGc.setLowerCardinality(1);
+        regionGc.setUpperCardinality(1);
+        unionModel.addConstraint(regionGc);
+    }
+
+    private static void handleRootFeature(RecreationModel model1, RecreationModel model2, RecreationModel unionModel) {
         // Set root feature for union model
         if (model1.getRootFeature() != null && model2.getRootFeature() != null) {
             if (model1.getRootFeature().getName().equals(model2.getRootFeature().getName())) {
                 unionModel.setRootFeature(unionModel.getFeatures().get(model1.getRootFeature().getName()));
-                logger.info("[union] root feature is the same in both models, setting root feature to {}", model1.getRootFeature().getName());
+                logger.info("[union] root feature is the same in both models, setting root feature to {}",
+                        model1.getRootFeature().getName());
             } else {
-                String newRootName = "NEW_ROOT:" + model1.getRootFeature().getName() + "_" + model2.getRootFeature().getName();
+                String newRootName = "NEW_ROOT:" + model1.getRootFeature().getName() + "_"
+                        + model2.getRootFeature().getName();
                 Feature newRoot = new Feature(newRootName);
                 unionModel.getFeatures().put(newRootName, newRoot);
                 unionModel.setRootFeature(newRoot);
-                
+
                 // Create mandatory group constraint for both original roots
                 List<Feature> children = new ArrayList<>();
                 children.add(unionModel.getFeatures().get(model1.getRootFeature().getName()));
                 children.add(unionModel.getFeatures().get(model2.getRootFeature().getName()));
-                
+
                 GroupConstraint gc = new GroupConstraint();
                 gc.setParent(newRoot);
                 gc.setChildren(children);
-                gc.setLowerCardinality(2);  // Both roots are mandatory
+                gc.setLowerCardinality(2); // Both roots are mandatory
                 gc.setUpperCardinality(2);
-                
+
                 unionModel.addConstraint(gc);
-                logger.info("[union] added mandatory group constraint for root features and created new super root feature: {}", newRootName);
+                logger.info(
+                        "[union] added mandatory group constraint for root features and created new super root feature: {}",
+                        newRootName);
             }
         } else if (model1.getRootFeature() != null) {
             unionModel.setRootFeature(unionModel.getFeatures().get(model1.getRootFeature().getName()));
-            logger.info("[union] root feature is only in model 1, setting root feature to {}", model1.getRootFeature().getName());
+            logger.info("[union] root feature is only in model 1, setting root feature to {}",
+                    model1.getRootFeature().getName());
         } else if (model2.getRootFeature() != null) {
             unionModel.setRootFeature(unionModel.getFeatures().get(model2.getRootFeature().getName()));
-            logger.info("[union] root feature is only in model 2, setting root feature to {}", model2.getRootFeature().getName());
+            logger.info("[union] root feature is only in model 2, setting root feature to {}",
+                    model2.getRootFeature().getName());
         }
-        
-        // Merge constraints
-        unionModel.addConstraints(model1.getConstraints());
-        unionModel.addConstraints(model2.getConstraints());
-        logger.info("[union] finished union with {} features and {} constraints", unionModel.getFeatures().size(), unionModel.getConstraints().size());
-        
-        return unionModel;
     }
 
     private static RecreationModel inconsistencyCheck(RecreationModel unionModel) {
-        logger.info("[inconsistencyCheck] start inconsistency check with {} features and {} constraints in union model", unionModel.getFeatures().size(), unionModel.getConstraints().size());
+        logger.info("[inconsistencyCheck] start inconsistency check with {} features and {} constraints in union model",
+                unionModel.getFeatures().size(), unionModel.getConstraints().size());
         RecreationModel mergedModel = new RecreationModel(Region.MERGED);
-        
+
         // Copy all features and root feature from union model to merged model
         mergedModel.getFeatures().putAll(unionModel.getFeatures());
         mergedModel.setRootFeature(unionModel.getRootFeature());
@@ -123,17 +200,18 @@ public class RecreationMerger {
             AbstractConstraint constraint = iterator.next();
             AbstractConstraint checkConstraint = constraint.copy();
             AbstractConstraint originalConstraint = constraint.copy();
-            
+
             // Create new testing model with features from union model
             testingModel = new RecreationModel(Region.TESTING);
             testingModel.getFeatures().putAll(unionModel.getFeatures());
             testingModel.setRootFeature(unionModel.getRootFeature());
-            
+
             testingModel.addConstraints(unionModel.getConstraints());
             testingModel.addConstraints(mergedModel.getConstraints());
-            logger.info("[inconsistencyCheck] created testing model with {} features and {} constraints", testingModel.getFeatures().size(), testingModel.getConstraints().size());
+            logger.info("[inconsistencyCheck] created testing model with {} features and {} constraints",
+                    testingModel.getFeatures().size(), testingModel.getConstraints().size());
 
-            if(isInconsistent(checkConstraint, testingModel)) {
+            if (isInconsistent(checkConstraint, testingModel)) {
                 logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to mergedModel");
                 originalConstraint.disableContextualize();
                 mergedModel.addConstraint(originalConstraint);
@@ -144,18 +222,20 @@ public class RecreationMerger {
 
             iterator.remove();
         }
-        logger.info("[inconsistencyCheck] finished inconsistency check with {} features and {} constraints", mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
+        logger.info("[inconsistencyCheck] finished inconsistency check with {} features and {} constraints",
+                mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
         return mergedModel;
     }
 
-    private static RecreationModel cleanup(RecreationModel mergedModel) {  
-        logger.info("[cleanup] start cleanup with {} features and {} constraints", mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
+    private static RecreationModel cleanup(RecreationModel mergedModel) {
+        logger.info("[cleanup] start cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
+                mergedModel.getConstraints().size());
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
             constraint.setNegation(Boolean.TRUE);
 
-            if(isInconsistent(mergedModel)) {
+            if (isInconsistent(mergedModel)) {
                 iterator.remove();
                 logger.info("[cleanup] removed constraint {} from mergedModel", constraint.toString());
             } else {
@@ -164,7 +244,8 @@ public class RecreationMerger {
             }
         }
 
-        logger.info("[cleanup] finished cleanup with {} features and {} constraints", mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
+        logger.info("[cleanup] finished cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
+                mergedModel.getConstraints().size());
         return mergedModel;
     }
 
@@ -180,7 +261,8 @@ public class RecreationMerger {
     }
 
     private static boolean isInconsistent(RecreationModel testingRecreationModel) {
-        logger.info("[isInconsistent2] checking if testing model is inconsistent with {} features and {} constraints", testingRecreationModel.getFeatures().size(), testingRecreationModel.getConstraints().size());
+        logger.info("[isInconsistent2] checking if testing model is inconsistent with {} features and {} constraints",
+                testingRecreationModel.getFeatures().size(), testingRecreationModel.getConstraints().size());
         BaseModel testingModel = ChocoTranslator.convertToChocoModel(testingRecreationModel);
         return !BaseModelAnalyser.isConsistent(testingModel);
     }

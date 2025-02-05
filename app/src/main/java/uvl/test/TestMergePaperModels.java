@@ -22,15 +22,16 @@ public class TestMergePaperModels {
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/eu.uvl");
             modelGer.setRegion(Region.B);
 
-            BaseModel baseModelUs = ChocoTranslator.convertToChocoModel(modelUs);
-            BaseModel baseModelGer = ChocoTranslator.convertToChocoModel(modelGer);
+            //BaseModel baseModelUs = ChocoTranslator.convertToChocoModel(modelUs);
+            //BaseModel baseModelGer = ChocoTranslator.convertToChocoModel(modelGer);
 
             // Perform merge
             RecreationModel mergedModel = RecreationMerger.fullMerge(modelUs, modelGer);
             BaseModel baseModelMerged = ChocoTranslator.convertToChocoModel(mergedModel);
+            //
 
             RecreationModelAnalyser.analyseContextualizationShare(mergedModel);
-            BaseModelAnalyser.findIntersectionSolutions(baseModelUs, baseModelGer);
+            //BaseModelAnalyser.findIntersectionSolutions(baseModelUs, baseModelGer);
             BaseModelAnalyser.solveAndPrintNumberOfSolutions(baseModelMerged);
         } catch (Exception e) {
             logger.error("Error during merge paper models test:", e);  

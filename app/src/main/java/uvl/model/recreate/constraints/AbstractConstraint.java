@@ -2,9 +2,11 @@ package uvl.model.recreate.constraints;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public abstract class AbstractConstraint {
     private boolean isContextualized;
     private Integer contextualizationValue;
@@ -32,5 +34,4 @@ public abstract class AbstractConstraint {
     }
    
     public abstract AbstractConstraint copy();
-    public abstract String toString();
 }

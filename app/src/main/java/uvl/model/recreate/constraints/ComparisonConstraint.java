@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class ComparisonConstraint extends AbstractConstraint {
 
     public enum ComparisonOperator { EQ, NEQ, LT, GT, LTE, GTE }

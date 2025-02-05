@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import uvl.model.recreate.feature.Feature;
 
-@ToString
+@ToString(callSuper = true)
 @Getter
 @Setter
 public class FeatureReferenceConstraint extends AbstractConstraint 

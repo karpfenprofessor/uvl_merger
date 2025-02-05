@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 public class NotConstraint extends AbstractConstraint {
 
     public AbstractConstraint inner;
