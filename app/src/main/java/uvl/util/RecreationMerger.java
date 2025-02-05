@@ -22,24 +22,27 @@ public class RecreationMerger {
             model1.getRegion(), model2.getRegion());
         
         // Contextualize constraints in both models
-        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model1);
-        long solutions = chocoTestModel.solveAndReturnNumberOfSolutions();
+        BaseModel chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
+        BaseModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
+
+        long solutionsModel1 = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel1);
+        long solutionsModel2 = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel2);
 
         model1.contextualizeAllConstraints();
-
-        chocoTestModel = ChocoTranslator.convertToChocoModel(model1);
-        assert solutions == chocoTestModel.solveAndReturnNumberOfSolutions();
-        chocoTestModel = ChocoTranslator.convertToChocoModel(model2);
-        solutions = chocoTestModel.solveAndReturnNumberOfSolutions();
-
         model2.contextualizeAllConstraints();
 
-        chocoTestModel = ChocoTranslator.convertToChocoModel(model2);
-        assert solutions == chocoTestModel.solveAndReturnNumberOfSolutions();
+        chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
+        chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
+
+        assert solutionsModel1 == BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel1);
+        assert solutionsModel2 == BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModel2);
 
         // Create union model and record initial metrics
         RecreationModel unionModel = union(model1, model2);
-        
+        BaseModel baseUnionModel = ChocoTranslator.convertToChocoModel(unionModel);
+        long solutionsUnionModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(baseUnionModel);
+        assert solutionsUnionModel == (solutionsModel1 + solutionsModel2);
+
         // Perform inconsistency check and cleanup
         RecreationModel mergedModel = inconsistencyCheck(unionModel);
         cleanup(mergedModel);

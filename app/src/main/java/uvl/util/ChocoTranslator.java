@@ -10,6 +10,7 @@ import uvl.model.recreate.RecreationModel;
 import uvl.model.recreate.constraints.*;
 import uvl.model.recreate.feature.Feature;
 import uvl.model.base.BaseModel;
+import uvl.model.base.Region;
 
 public class ChocoTranslator {
     private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
@@ -19,11 +20,11 @@ public class ChocoTranslator {
             recModel.getFeatures().size(), recModel.getConstraints().size());
         
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {};
-        
+
         // Create variables for all features
         createFeatureVariables(recModel, chocoModel);
         logger.info("[convertToChocoModel] created {} feature variables in chocoModel", chocoModel.getModel().getNbVars());
-        
+
         // Set root feature
         chocoModel.setRootFeature(recModel.getRootFeature());
         chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
@@ -60,22 +61,17 @@ public class ChocoTranslator {
         Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
         
-        // Only force non-group constraints to be true
         if (!(constraint instanceof GroupConstraint)) {
-            if (constraint.isContextualized()) {
-                if (chocoModel.getRegion().ordinal() >= constraint.getContextualizationValue()) {
-                    model.addClauseTrue(constraintVar);
-                }
+            if (constraint.isContextualized() && chocoModel.getRegion().ordinal() >= Region.UNION.ordinal()) {
+                BoolVar regionVar = chocoModel.getFeature(Region.values()[constraint.getContextualizationValue()].printRegion());
+                model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
             } else {
-                model.addClauseTrue(constraintVar);
+                model.post(model.arithm(constraintVar, "=", 1));
             }
-        }
-        
-        // For root feature with mandatory children, force root to be true
-        if (constraint instanceof GroupConstraint gc) {
+        } else if (constraint instanceof GroupConstraint gc) {
             Feature parent = gc.getParent();
-            if (parent.equals(chocoModel.getRootFeature()) && gc.getLowerCardinality() > 0) {
-                model.addClauseTrue(constraintVar);
+            if (parent.getName().equals("Region") || (parent.equals(chocoModel.getRootFeature()) && gc.getLowerCardinality() > 0)) {
+                model.post(model.arithm(constraintVar, "=", 1));
             }
         }
     }
@@ -132,7 +128,6 @@ public class ChocoTranslator {
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {        
         Model model = chocoModel.getModel();
         
-        // Original code for other cases
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
         
@@ -141,25 +136,27 @@ public class ChocoTranslator {
             case AND:
                 result = model.boolVar(antecedent.getName() + "_AND_" + consequent.getName());
                 model.addClausesBoolAndArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
+                model.and(antecedent, consequent).post();
                 break;
             case OR:
                 result = model.boolVar(antecedent.getName() + "_OR_" + consequent.getName());
                 model.addClausesBoolOrArrayEqVar(new BoolVar[]{antecedent, consequent}, result);
+                model.or(antecedent, consequent).post();
                 break;
             case IMPLIES:
                 result = model.boolVar(antecedent.getName() + "_IMPLIES_" + consequent.getName());
                 model.addClauses(LogOp.or(antecedent.not(), consequent));
+                model.ifThen(antecedent, model.arithm(consequent, "=", 1));
                 break;
             case IFF:
                 result = model.boolVar(antecedent.getName() + "_IFF_" + consequent.getName());
                 model.reifyXeqY(antecedent, consequent, result);
+                model.addClauses(LogOp.ifOnlyIf(antecedent, consequent));
                 break;
             default:
                 throw new IllegalArgumentException("Unknown operator: " + bc.getOperator());
         }
         
-        logger.info("[createBinaryConstraintVar] created binary constraint: {} {} {}", 
-            antecedent.getName(), bc.getOperator(), consequent.getName());
         return result;
     }
 

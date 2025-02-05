@@ -33,7 +33,7 @@ public class TestMergePaperModels {
             BaseModelAnalyser.findIntersectionSolutions(baseModelUs, baseModelGer);
             BaseModelAnalyser.solveAndPrintNumberOfSolutions(baseModelMerged);
         } catch (Exception e) {
-            logger.error("Error during merge paper models test:", e);
+            logger.error("Error during merge paper models test:", e);  
         }
     }
 }
