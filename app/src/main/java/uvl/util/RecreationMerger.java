@@ -107,7 +107,8 @@ public class RecreationMerger {
             if (constraint instanceof GroupConstraint) {
                 GroupConstraint gc = (GroupConstraint) constraint;
                 if (gc.getParent().getName().equals(unionModel.getRootFeature().getName()) && !gc.getChildren().stream().anyMatch(f -> f.getName().equals("Region"))) {
-                    gc.setParent(unionModel.getFeatures().get("Region"));
+                    Feature newRoot = unionModel.getFeatures().get(Region.values()[gc.getContextualizationValue()].printRegion());
+                    gc.setParent(newRoot);
                     logger.info("[resetRootFeature] reset parent in constraint: {}", gc);
                 }
             }

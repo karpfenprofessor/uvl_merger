@@ -57,7 +57,7 @@ public class ChocoTranslator {
     }
 
     private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        logger.info("\n[processConstraint] processing constraint: \n{}", constraint);
+        //logger.info("\n[processConstraint] processing constraint: \n{}", constraint);
         processNormalConstraint(constraint, chocoModel);
     }
 
@@ -65,11 +65,12 @@ public class ChocoTranslator {
         Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
 
-        if (constraint.isContextualized()) { // && !(constraint instanceof GroupConstraint)
+        if (constraint.isContextualized() && !(constraint instanceof GroupConstraint)) {
             BoolVar regionVar = chocoModel
                     .getFeature(Region.values()[constraint.getContextualizationValue()].printRegion());
             //model.ifThenElse(regionVar, model.arithm(constraintVar, "=", 1), model.arithm(constraintVar, "=", 0));
             model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
+            logger.info("[processNormalConstraint] contextualized constraint: {}", constraint.toString());
         } else {
             model.post(model.arithm(constraintVar, "=", 1));
         }
@@ -119,10 +120,10 @@ public class ChocoTranslator {
         model.ifThen(model.arithm(parentVar, "=", 0),
                 model.arithm(sumVar, "=", 0));
 
-        logger.info(
-                "[createGroupConstraintVar] created group constraint with parent {}, children {} with cardinality [{},{}]",
-                gc.getParent().getName(), gc.getChildren().toString(), gc.getLowerCardinality(),
-                gc.getUpperCardinality());
+        //logger.info(
+        //        "[createGroupConstraintVar] created group constraint with parent {}, children {} with cardinality [{},{}]",
+        //        gc.getParent().getName(), gc.getChildren().toString(), gc.getLowerCardinality(),
+        //        gc.getUpperCardinality());
 
         return parentVar;
     }
@@ -166,7 +167,7 @@ public class ChocoTranslator {
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
         BoolVar result = model.boolNotView(inner);
-        logger.info("[createNotConstraintVar] created NOT constraint: !{}", inner.getName());
+        //logger.info("[createNotConstraintVar] created NOT constraint: !{}", inner.getName());
         return result;
     }
 
