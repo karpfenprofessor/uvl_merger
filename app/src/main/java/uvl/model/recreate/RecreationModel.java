@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import uvl.model.base.Region;
 import uvl.model.recreate.constraints.AbstractConstraint;
-import uvl.model.recreate.constraints.FeatureReferenceConstraint;
 import uvl.model.recreate.constraints.GroupConstraint;
 import uvl.model.recreate.feature.Feature;
 import uvl.metrics.ModelMetrics;
@@ -69,10 +68,6 @@ public class RecreationModel {
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
         addConstraint(regionGc);
-
-        // Force selection of the specific region
-        //FeatureReferenceConstraint regionConstraint = new FeatureReferenceConstraint(specificRegion);
-        //	addConstraint(regionConstraint);
     }
 
     public void addConstraint(AbstractConstraint c) {

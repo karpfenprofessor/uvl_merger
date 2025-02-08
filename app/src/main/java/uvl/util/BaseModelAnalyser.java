@@ -161,4 +161,58 @@ public class BaseModelAnalyser {
         long solutions = solveAndReturnNumberOfSolutions(baseModel);
         logger.info("[solveAndPrintNumberOfSolutions] found solutions: " + solutions);
     }
+
+    public static void printAllSolutions(BaseModel baseModel) {
+        Model model = baseModel.getModel();
+        model.getSolver().reset();
+        
+        logger.info("----------------------------------------");
+        logger.info("Printing all solutions:");
+        logger.info("----------------------------------------");
+        
+        // Define feature order
+        String[] orderedFeatures = {
+            "Car",
+            "Region", "A", "B",
+            "Type", "Combi", "Limo", "City", "SUV",
+            "Color", "White", "Black",
+            "Engine", "1L", "1,5L", "2L",
+            "CouplingDevice", "Yes", "No",
+            "Fuel", "Electro", "Diesel", "Gas", "Hybrid",
+            "Service", "15k", "20k", "25k"
+        };
+        
+        // Print header
+        StringBuilder header = new StringBuilder("Sol# | ");
+        for (String featureName : orderedFeatures) {
+            header.append(featureName).append(" | ");
+        }
+        logger.info(header.toString());
+        
+        int solutionCount = 0;
+        Map<String, BoolVar> features = baseModel.getFeatures();
+        
+        while (model.getSolver().solve()) {
+            solutionCount++;
+            StringBuilder solution = new StringBuilder();
+            solution.append(String.format("%-4d | ", solutionCount));
+            
+            // Add each feature's value (0/1) to the line in specified order
+            for (String featureName : orderedFeatures) {
+                BoolVar featureVar = features.get(featureName);
+                if (featureVar != null) {
+                    int value = featureVar.getValue();
+                    solution.append(value).append(" | ");
+                } else {
+                    solution.append("- | ");
+                }
+            }
+            
+            logger.info(solution.toString());
+        }
+        
+        logger.info("----------------------------------------");
+        logger.info("Total number of solutions: {}", solutionCount);
+        logger.info("----------------------------------------");
+    }
 } 

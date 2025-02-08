@@ -31,6 +31,7 @@ public abstract class AbstractConstraint {
 
     public void disableContextualize() {
         this.isContextualized = Boolean.FALSE;
+        this.contextualizationValue = null;
     }
    
     public abstract AbstractConstraint copy();

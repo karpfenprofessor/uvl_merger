@@ -16,27 +16,27 @@ public class ChocoTranslator {
     private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
-        logger.info("[convertToChocoModel] starting conversion with {} features and {} constraints",
-                recModel.getFeatures().size(), recModel.getConstraints().size());
+        //logger.info("[convertToChocoModel] starting conversion with {} features and {} constraints",
+                //recModel.getFeatures().size(), recModel.getConstraints().size());
 
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
         };
 
         // Create variables for all features
         createFeatureVariables(recModel, chocoModel);
-        logger.info("[convertToChocoModel] created {} feature variables in chocoModel",
-                chocoModel.getModel().getNbVars());
+        //logger.info("[convertToChocoModel] created {} feature variables in chocoModel",
+                //chocoModel.getModel().getNbVars());
 
         // Set root feature
         chocoModel.setRootFeature(recModel.getRootFeature());
         chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
-        logger.info("[convertToChocoModel] set and enforced root feature: {}", recModel.getRootFeature().getName());
+        //logger.info("[convertToChocoModel] set and enforced root feature: {}", recModel.getRootFeature().getName());
 
         // Process all constraints
         int processedConstraints = 0;
         for (AbstractConstraint constraint : recModel.getConstraints()) {
             try {
-                processConstraint(constraint, chocoModel);
+                processNormalConstraint(constraint, chocoModel);
                 processedConstraints++;
             } catch (Exception e) {
                 logger.error("[convertToChocoModel] error processing constraint: " + constraint, e);
@@ -44,37 +44,24 @@ public class ChocoTranslator {
             }
         }
 
-        logger.info(
-                "[convertToChocoModel] finished conversion with {} constraints, there are {} constraints in chocoModel",
-                processedConstraints, chocoModel.getModel().getNbCstrs());
+        //logger.info(
+                //"[convertToChocoModel] finished conversion with {} constraints, there are {} constraints in chocoModel",
+                //processedConstraints, chocoModel.getModel().getNbCstrs());
         return chocoModel;
-    }
-
-    private static void createFeatureVariables(RecreationModel recModel, BaseModel chocoModel) {
-        for (Feature feature : recModel.getFeatures().values()) {
-            chocoModel.addFeature(feature.getName());
-        }
-    }
-
-    private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        //logger.info("\n[processConstraint] processing constraint: \n{}", constraint);
-        processNormalConstraint(constraint, chocoModel);
     }
 
     private static void processNormalConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
 
-        if (constraint.isContextualized() && !(constraint instanceof GroupConstraint)) {
+        if (constraint.isContextualized()) {
             BoolVar regionVar = chocoModel
                     .getFeature(Region.values()[constraint.getContextualizationValue()].printRegion());
-            //model.ifThenElse(regionVar, model.arithm(constraintVar, "=", 1), model.arithm(constraintVar, "=", 0));
+            
             model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
-            logger.info("[processNormalConstraint] contextualized constraint: {}", constraint.toString());
         } else {
             model.post(model.arithm(constraintVar, "=", 1));
         }
-
     }
 
     private static BoolVar createConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {
@@ -110,56 +97,38 @@ public class ChocoTranslator {
         IntVar sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
         model.sum(childVars, "=", sumVar).post();
 
-        // Handle group cardinality constraint
+        // If parent is true: enforce cardinality
         model.ifThen(parentVar,
                 model.and(
                         model.arithm(sumVar, ">=", gc.getLowerCardinality()),
                         model.arithm(sumVar, "<=", gc.getUpperCardinality())));
 
-        // If parent is false, all children must be false
-        model.ifThen(model.arithm(parentVar, "=", 0),
-                model.arithm(sumVar, "=", 0));
-
-        //logger.info(
-        //        "[createGroupConstraintVar] created group constraint with parent {}, children {} with cardinality [{},{}]",
-        //        gc.getParent().getName(), gc.getChildren().toString(), gc.getLowerCardinality(),
-        //        gc.getUpperCardinality());
+        // If parent is false: all children must be false
+        model.ifThen(model.boolNotView(parentVar), model.arithm(sumVar, "=", 0));
 
         return parentVar;
     }
 
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
-
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
+        BoolVar result = model.boolVar();
 
-        BoolVar result;
         switch (bc.getOperator()) {
             case AND:
-                result = model.boolVar(antecedent.getName() + "_AND_" + consequent.getName());
-                model.addClausesBoolAndArrayEqVar(new BoolVar[] { antecedent, consequent }, result);
-                model.and(antecedent, consequent).post();
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.and(antecedent, consequent)));
                 break;
             case OR:
-                result = model.boolVar(antecedent.getName() + "_OR_" + consequent.getName());
-                model.addClausesBoolOrArrayEqVar(new BoolVar[] { antecedent, consequent }, result);
-                model.or(antecedent, consequent).post();
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(antecedent, consequent)));
                 break;
             case IMPLIES:
-                result = model.boolVar(antecedent.getName() + "_IMPLIES_" + consequent.getName());
-                model.addClauses(LogOp.or(antecedent.not(), consequent));
-                model.ifThen(antecedent, model.arithm(consequent, "=", 1));
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.implies(antecedent, consequent)));
                 break;
             case IFF:
-                result = model.boolVar(antecedent.getName() + "_IFF_" + consequent.getName());
-                model.reifyXeqY(antecedent, consequent, result);
-                model.addClauses(LogOp.ifOnlyIf(antecedent, consequent));
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.ifOnlyIf(antecedent, consequent)));
                 break;
-            default:
-                throw new IllegalArgumentException("Unknown operator: " + bc.getOperator());
         }
-
         return result;
     }
 
@@ -167,7 +136,7 @@ public class ChocoTranslator {
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
         BoolVar result = model.boolNotView(inner);
-        //logger.info("[createNotConstraintVar] created NOT constraint: !{}", inner.getName());
+
         return result;
     }
 
@@ -178,31 +147,14 @@ public class ChocoTranslator {
             BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
             return chocoModel.getModel().boolNotView(inner);
         } else if (constraint instanceof BinaryConstraint bc) {
-            return createAuxiliaryVar(bc, chocoModel);
+            return createBinaryConstraintVar(bc, chocoModel);
         }
         return chocoModel.getModel().boolVar(false);
     }
 
-    private static BoolVar createAuxiliaryVar(BinaryConstraint bc, BaseModel chocoModel) {
-        Model model = chocoModel.getModel();
-        BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
-        BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
-        BoolVar result = model.boolVar();
-
-        switch (bc.getOperator()) {
-            case AND:
-                model.addClausesBoolAndArrayEqVar(new BoolVar[] { antecedent, consequent }, result);
-                break;
-            case OR:
-                model.addClausesBoolOrArrayEqVar(new BoolVar[] { antecedent, consequent }, result);
-                break;
-            case IMPLIES:
-                model.addClausesBoolAndArrayEqVar(new BoolVar[] { antecedent.not(), consequent }, result);
-                break;
-            case IFF:
-                model.reifyXeqY(antecedent, consequent, result);
-                break;
+    private static void createFeatureVariables(RecreationModel recModel, BaseModel chocoModel) {
+        for (Feature feature : recModel.getFeatures().values()) {
+            chocoModel.addFeature(feature.getName());
         }
-        return result;
     }
 }
