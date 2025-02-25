@@ -27,7 +27,8 @@ public class SolutionCountTranslationTest {
             new TestCase("uvl/test/test4.uvl", 192),
             new TestCase("uvl/test/test5.uvl", 8),
             new TestCase("uvl/test/test6.uvl", 18), 
-            new TestCase("uvl/test/test7.uvl", 480)
+            new TestCase("uvl/test/test7.uvl", 480),
+            new TestCase("uvl/test/test8.uvl", 336)
     };
 
     private final TestCase[] TEST_CASES_PAPER = {

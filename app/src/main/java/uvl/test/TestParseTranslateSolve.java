@@ -16,7 +16,7 @@ public class TestParseTranslateSolve {
     protected final static Logger logger = LogManager.getLogger(TestParseTranslateSolve.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/test/test4.uvl";	
+        String filePathString = "uvl/test/test8.uvl";	
         //String filePathString = "uvl/paper_test_models/eu.uvl";
     
 

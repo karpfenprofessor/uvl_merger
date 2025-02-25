@@ -1,11 +1,33 @@
 features
-    "_r"
+  System
+    mandatory
+      FeatureA
+        alternative
+          OptionA1
+          OptionA2
+            optional
+              SubOptionA2_1
+      FeatureC
+        mandatory
+          SubFeatureC1
         optional
-            "CONFIG_SELINUX"
-            "CONFIG_CHCON"
-            "CONFIG_GETSEBOOL"
-            "CONFIG_FEATURE_CHCON_LONG_OPTIONS"
-constraints
-    "CONFIG_SELINUX" | !"CONFIG_CHCON"
-    "CONFIG_SELINUX" | !"CONFIG_GETSEBOOL"
-    !"CONFIG_FEATURE_CHCON_LONG_OPTIONS" | "CONFIG_SELINUX" | "CONFIG_CHCON"
+          SubFeatureC2
+    optional
+      FeatureB
+        or // with cardinality: [1..*]
+          OptionB1
+            mandatory
+              SubOptionB1_1
+          OptionB2
+          OptionB3
+      FeatureD
+        mandatory
+          GroupAlt
+            alternative
+              OptionD1
+              OptionD2
+        mandatory
+          GroupOr
+            or // with cardinality: [1..*]
+              OptionD3
+              OptionD4
