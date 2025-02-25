@@ -16,21 +16,15 @@ public class ChocoTranslator {
     private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
-        //logger.info("[convertToChocoModel] starting conversion with {} features and {} constraints",
-                //recModel.getFeatures().size(), recModel.getConstraints().size());
-
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
         };
 
         // Create variables for all features
         createFeatureVariables(recModel, chocoModel);
-        //logger.info("[convertToChocoModel] created {} feature variables in chocoModel",
-                //chocoModel.getModel().getNbVars());
 
         // Set root feature
         chocoModel.setRootFeature(recModel.getRootFeature());
         chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
-        //logger.info("[convertToChocoModel] set and enforced root feature: {}", recModel.getRootFeature().getName());
 
         // Process all constraints
         int processedConstraints = 0;
@@ -44,9 +38,6 @@ public class ChocoTranslator {
             }
         }
 
-        //logger.info(
-                //"[convertToChocoModel] finished conversion with {} constraints, there are {} constraints in chocoModel",
-                //processedConstraints, chocoModel.getModel().getNbCstrs());
         return chocoModel;
     }
 
@@ -57,7 +48,7 @@ public class ChocoTranslator {
         if (constraint.isContextualized()) {
             BoolVar regionVar = chocoModel
                     .getFeature(Region.values()[constraint.getContextualizationValue()].printRegion());
-            
+
             model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
         } else {
             model.post(model.arithm(constraintVar, "=", 1));
@@ -149,7 +140,8 @@ public class ChocoTranslator {
         } else if (constraint instanceof BinaryConstraint bc) {
             return createBinaryConstraintVar(bc, chocoModel);
         }
-        return chocoModel.getModel().boolVar(false);
+
+        throw new UnsupportedOperationException("Unsupported constraint type encountered: " + constraint.getClass().getSimpleName());
     }
 
     private static void createFeatureVariables(RecreationModel recModel, BaseModel chocoModel) {

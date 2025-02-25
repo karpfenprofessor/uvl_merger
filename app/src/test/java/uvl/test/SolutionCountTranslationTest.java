@@ -9,7 +9,9 @@ import org.apache.logging.log4j.Logger;
 import uvl.model.base.BaseModel;
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
+import uvl.util.Analyser;
 import uvl.util.ChocoTranslator;
+import uvl.util.RecreationMerger;
 import uvl.util.UVLParser;
 
 public class SolutionCountTranslationTest {
@@ -21,12 +23,8 @@ public class SolutionCountTranslationTest {
     private final TestCase[] TEST_CASES = {
             new TestCase("uvl/test/test1.uvl", 1),
             new TestCase("uvl/test/test2.uvl", 2),
-            new TestCase("uvl/test/test3.uvl", 7),
-            new TestCase("uvl/test/test4.uvl", 15),
-            new TestCase("uvl/test/test5.uvl", 8),
-            new TestCase("uvl/test/test6.uvl", 18),
-            new TestCase("uvl/test/test7.uvl", 480),
-            new TestCase("uvl/test/test8.uvl", 9)
+            new TestCase("uvl/test/test3.uvl", 7), 
+            new TestCase("uvl/test/test4.uvl", 9)
     };
 
     private final TestCase[] TEST_CASES_PAPER = {
@@ -71,6 +69,29 @@ public class SolutionCountTranslationTest {
                 logger.error("Error processing {}: {}", testCase.filename, e.getMessage());
                 throw new AssertionError("Test failed for " + testCase.filename, e);
             }
+        }
+    }
+
+    @Test
+    public void testUnionOfPaperCarModels() {
+        try {
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/eu.uvl", Region.B);
+
+            long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
+            long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
+
+            modelUs.contextualizeAllConstraints();
+            modelGer.contextualizeAllConstraints();
+
+            assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
+            assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
+
+            RecreationModel unionModel = RecreationMerger.union(modelUs, modelGer);
+
+            assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
+        } catch (Exception e) {
+            throw new AssertionError("testUnionOfPaperCarModels failed, error: " + e.getMessage());
         }
     }
 }

@@ -1,12 +1,11 @@
 features
     "_r"
         optional
-            "_r_1"
-                optional
-                    "_r_1_1"
-                optional
-                    "_r_1_2"
-        optional
-            "_r_2"
-                optional
-                    "_r_2_1"
+            "CONFIG_SELINUX"
+            "CONFIG_CHCON"
+            "CONFIG_GETSEBOOL"
+            "CONFIG_FEATURE_CHCON_LONG_OPTIONS"
+constraints
+    "CONFIG_SELINUX" | !"CONFIG_CHCON"
+    "CONFIG_SELINUX" | !"CONFIG_GETSEBOOL"
+    !"CONFIG_FEATURE_CHCON_LONG_OPTIONS" | "CONFIG_SELINUX" | "CONFIG_CHCON"

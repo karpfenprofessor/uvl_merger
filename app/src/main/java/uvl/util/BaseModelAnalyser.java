@@ -163,6 +163,10 @@ public class BaseModelAnalyser {
     }
 
     public static void printAllSolutions(BaseModel baseModel) {
+        printAllSolutions(baseModel, false);
+    }
+
+    public static void printAllSolutions(BaseModel baseModel, boolean takeFeatureNamesFromModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
         
@@ -181,6 +185,10 @@ public class BaseModelAnalyser {
             "Fuel", "Electro", "Diesel", "Gas", "Hybrid",
             "Service", "15k", "20k", "25k"
         };
+
+        if (takeFeatureNamesFromModel) {
+            orderedFeatures = baseModel.getFeatures().keySet().toArray(new String[0]);
+        }
         
         // Print header
         StringBuilder header = new StringBuilder("Sol# | ");

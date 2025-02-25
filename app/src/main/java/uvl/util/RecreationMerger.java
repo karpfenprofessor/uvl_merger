@@ -75,7 +75,7 @@ public class RecreationMerger {
         return mergedModel;
     }
 
-    private static RecreationModel union(RecreationModel modelA, RecreationModel modelB) {
+    public static RecreationModel union(RecreationModel modelA, RecreationModel modelB) {
         RecreationModel unionModel = new RecreationModel(Region.UNION);
         RecreationModelAnalyser.analyseSharedFeatures(modelA, modelB);
 

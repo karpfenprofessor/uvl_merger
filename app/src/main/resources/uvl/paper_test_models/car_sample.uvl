@@ -1,0 +1,52 @@
+features
+  "Car"
+    mandatory
+      "Type"
+        alternative
+          "Combi"
+          "Limo"
+          "City"
+          "SUV"
+      "Color"
+        alternative
+          "White"
+          "Black"
+          "Red"
+          "Blue"
+      "Engine"
+        alternative
+          "1L"
+          "1,5L"
+          "2L"
+          "3L"
+      "CouplingDevice"
+        alternative
+          "Yes"
+          "No"
+      "Fuel"
+        alternative
+          "Electro"
+          "Diesel"
+          "Gas"
+          "Hybrid"
+          "Hydrogen"
+      "Service"
+        alternative
+          "10k"
+          "15k"
+          "20k"
+          "25k"
+          "30k"
+
+constraints
+  ! "Gas"
+  ! "Hybrid" | "Electro"
+  "Electro" => ! "Yes"
+  "Diesel" => ! "City"
+  "Hydrogen" => "3L"
+  "Diesel" | "Gas" => "Yes"
+  "SUV" | "Combi" => "2L" | "3L"
+  "City" <=> ! "3L"
+  "Hydrogen" <=> ! "10k"
+  ! "Blue" | "Diesel" => "2L"
+  "Red" & "3L" => "SUV"

@@ -16,15 +16,16 @@ public class TestParseTranslateSolve {
     protected final static Logger logger = LogManager.getLogger(TestParseTranslateSolve.class);
 
     public static void main(String[] args) throws Exception {
-        //String filePathString = "uvl/test/test9.uvl";	
-        String filePathString = "uvl/paper_test_models/car_generated.uvl";
+        //String filePathString = "uvl/test/.uvl";	
+        String filePathString = "uvl/paper_test_models/us.uvl";
+    
 
-        RecreationModel recModel = UVLParser.parseUVLFile(filePathString);
-        recModel.setRegion(Region.A);
+        RecreationModel recModel = UVLParser.parseUVLFile(filePathString, Region.A);
         RecreationModelAnalyser.printConstraints(recModel);
         BaseModel chocoModel = ChocoTranslator.convertToChocoModel(recModel);
         BaseModelAnalyser.printConstraints(chocoModel);
         //BaseModelAnalyser.printVariables(chocoModel);
         BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
+        BaseModelAnalyser.printAllSolutions(chocoModel, true);
     }
 } 
