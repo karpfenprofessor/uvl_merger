@@ -18,6 +18,11 @@ public class ChocoTranslator {
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
         };
 
+        if(recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
+            logger.warn("[convertToChocoModel] model has no features or constraints, returning empty model");
+            return chocoModel;
+        }
+
         // Create needed variables for all features in choco model
         createFeatureVariables(recModel, chocoModel);
 
@@ -129,6 +134,7 @@ public class ChocoTranslator {
                 model.addClauses(LogOp.ifOnlyIf(result, LogOp.ifOnlyIf(antecedent, consequent)));
                 break;
         }
+
         return result;
     }
 

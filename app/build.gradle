@@ -21,6 +21,7 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'com.google.guava:guava:31.1-jre'
     implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
     implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
@@ -44,16 +45,17 @@ application {
     mainClass = 'car.App'
 }
 
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
+test {
     useJUnitPlatform()
     testLogging {
-        // Optional: Customize test logging for better insights
-        events "passed", "skipped", "failed"
+        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
         showExceptions true
-        exceptionFormat "full"
         showCauses true
         showStackTraces true
+        exceptionFormat "full"
+        
+        // Enable this to see output in console
+        showStandardStreams = false
     }
 }
 

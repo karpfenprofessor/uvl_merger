@@ -15,7 +15,7 @@ public class BasicTests {
     private record TestCase(String filename, long expectedSolutions) {
     }
 
-    private final TestCase[] TEST_CASES = {
+    private final TestCase[] TEST_CASES_FEATURE_TREE = {
             new TestCase("uvl/testcases/featureTree1.uvl", 1),
             new TestCase("uvl/testcases/featureTree2.uvl", 2),
             new TestCase("uvl/testcases/featureTree3.uvl", 7), 
@@ -26,6 +26,18 @@ public class BasicTests {
             new TestCase("uvl/testcases/featureTree8.uvl", 336),
             new TestCase("uvl/testcases/featureTree9.uvl", 1944000)
     };
+
+    private final TestCase[] TEST_CASES_CROSS_TREE = {
+        new TestCase("uvl/testcases/crossTree1.uvl", 340),
+        new TestCase("uvl/testcases/crossTree2.uvl", 72),
+        new TestCase("uvl/testcases/crossTree3.uvl", 1), 
+        new TestCase("uvl/testcases/crossTree4.uvl", 1),
+        new TestCase("uvl/testcases/crossTree5.uvl", 1),
+        new TestCase("uvl/testcases/crossTree6.uvl", 1), 
+        new TestCase("uvl/testcases/crossTree7.uvl", 1),
+        new TestCase("uvl/testcases/crossTree8.uvl", 1),
+        new TestCase("uvl/testcases/crossTree9.uvl", 311616)
+};
 
     private final TestCase[] TEST_CASES_PAPER = {
         new TestCase("uvl/paper_test_models/us.uvl", 288),
@@ -40,13 +52,26 @@ public class BasicTests {
 
     @Test
     public void testSolutionCountsOfFeatureTreeGroupConstraints() {
-        for (TestCase testCase : TEST_CASES) {
+        for (TestCase testCase : TEST_CASES_FEATURE_TREE) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
                         "Solution count mismatch for " + testCase.filename);
             } catch (Exception e) {
                 throw new AssertionError("testSolutionCountsOfFeatureTreeGroupConstraints failed for " + testCase.filename, e);
+            }
+        }
+    }
+
+    @Test
+    public void testSolutionCountsOfCrossTreeConstraints() {
+        for (TestCase testCase : TEST_CASES_CROSS_TREE) {
+            try {
+                long actualSolutions = getSolutionCount(testCase.filename);
+                assertEquals(testCase.expectedSolutions, actualSolutions,
+                        "Solution count mismatch for " + testCase.filename);
+            } catch (Exception e) {
+                throw new AssertionError("testSolutionCountsOfCrossTreeConstraints failed for " + testCase.filename, e);
             }
         }
     }
