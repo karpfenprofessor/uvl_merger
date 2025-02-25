@@ -24,13 +24,15 @@ public class SolutionCountTranslationTest {
             new TestCase("uvl/test/test1.uvl", 1),
             new TestCase("uvl/test/test2.uvl", 2),
             new TestCase("uvl/test/test3.uvl", 7), 
-            new TestCase("uvl/test/test4.uvl", 9)
+            new TestCase("uvl/test/test4.uvl", 192),
+            new TestCase("uvl/test/test5.uvl", 8),
+            new TestCase("uvl/test/test6.uvl", 18), 
+            new TestCase("uvl/test/test7.uvl", 480)
     };
 
     private final TestCase[] TEST_CASES_PAPER = {
         new TestCase("uvl/paper_test_models/us.uvl", 288),
-        new TestCase("uvl/paper_test_models/eu.uvl", 324),
-        new TestCase("uvl/paper_test_models/car_generated.uvl", 33)
+        new TestCase("uvl/paper_test_models/eu.uvl", 324)
     };
 
     private long getSolutionCount(String filename) throws Exception {

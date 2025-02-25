@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+@ToString(of = {"name"})
 public class Feature {
     private String name;
     private boolean isOptional;

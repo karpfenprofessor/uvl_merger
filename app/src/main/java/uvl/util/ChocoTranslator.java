@@ -88,16 +88,28 @@ public class ChocoTranslator {
         IntVar sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
         model.sum(childVars, "=", sumVar).post();
 
-        // If parent is true: enforce cardinality
-        model.ifThen(parentVar,
-                model.and(
-                        model.arithm(sumVar, ">=", gc.getLowerCardinality()),
-                        model.arithm(sumVar, "<=", gc.getUpperCardinality())));
+        // Create reified variables for the conditions
+        BoolVar cardinalitySatisfied = model.and(
+                model.arithm(sumVar, ">=", gc.getLowerCardinality()),
+                model.arithm(sumVar, "<=", gc.getUpperCardinality())
+        ).reify();
+        BoolVar childrenAreZero = model.arithm(sumVar, "=", 0).reify();
 
-        // If parent is false: all children must be false
-        model.ifThen(model.boolNotView(parentVar), model.arithm(sumVar, "=", 0));
+        // Create the group satisfaction variable
+        BoolVar groupSat = model.boolVar("groupSat_" + gc.getParent().getName());
 
-        return parentVar;
+        // Post the bi-directional relationship:
+        // groupSat ⇔ (parent ∧ cardinalitySatisfied) ∨ (¬parent ∧ childrenAreZero)
+        BoolVar parentAndCardinality = model.and(parentVar, cardinalitySatisfied).reify();
+        BoolVar notParentAndZero = model.and(model.boolNotView(parentVar), childrenAreZero).reify();
+        model.addClauses(LogOp.ifOnlyIf(groupSat, LogOp.or(parentAndCardinality, notParentAndZero)));
+
+        // Also enforce that if any child is selected, parent must be true
+        for (BoolVar child : childVars) {
+            model.ifThen(child, model.arithm(parentVar, "=", 1));
+        }
+
+        return groupSat;
     }
 
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {

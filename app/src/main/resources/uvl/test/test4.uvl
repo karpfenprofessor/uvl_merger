@@ -1,11 +1,27 @@
 features
-    "_r"
+    "System"
+        mandatory
+            "UserInterface"
+                alternative
+                    "CLI"
+                    "GUI"
+                        optional
+                            "TouchSupport"
         optional
-            "CONFIG_SELINUX"
-            "CONFIG_CHCON"
-            "CONFIG_GETSEBOOL"
-            "CONFIG_FEATURE_CHCON_LONG_OPTIONS"
-constraints
-    "CONFIG_SELINUX" | !"CONFIG_CHCON"
-    "CONFIG_SELINUX" | !"CONFIG_GETSEBOOL"
-    !"CONFIG_FEATURE_CHCON_LONG_OPTIONS" | "CONFIG_SELINUX" | "CONFIG_CHCON"
+            "Networking"
+                or
+                    "WiFi"
+                    "Ethernet"
+                        mandatory
+                            "EthernetDriver"
+                    "Bluetooth"
+        mandatory
+            "Security"
+                or
+                    "Authentication"
+                        alternative
+                            "Password"
+                            "Biometric"
+                    "Encryption"
+                        optional
+                            "HardwareEncryption"
