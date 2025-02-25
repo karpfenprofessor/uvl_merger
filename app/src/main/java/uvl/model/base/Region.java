@@ -19,7 +19,7 @@ public enum Region {
         return value;
     }
 
-    public String printRegion() {
+    public String getRegionString() {
         switch (getValue()) {
             case 0:
                 return "A";

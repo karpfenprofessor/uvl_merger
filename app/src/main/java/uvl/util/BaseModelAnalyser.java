@@ -43,7 +43,7 @@ public class BaseModelAnalyser {
             });
             
             if (!vars.isEmpty()) {
-                StringBuilder varStr = new StringBuilder("      Variables: ");
+                StringBuilder varStr = new StringBuilder("      Features: ");
                 for (Variable v : vars) {
                     varStr.append(v.getName())
                           .append(" [")
@@ -58,19 +58,14 @@ public class BaseModelAnalyser {
         logger.info("----------------------------------------");
     }
 
-    public static void printVariables(BaseModel baseModel) {
+    public static void printFeatures(BaseModel baseModel) {
         Model model = baseModel.getModel();
-        logger.info("Printing all variables in Choco model:");
+        logger.info("Printing all features in Choco model:");
         Variable[] variables = model.getVars();
         for (int i = 0; i < variables.length; i++) {
             logger.info("  [{}]: {}", i, variables[i].toString());
         }
-        logger.info("Total variables: {}", variables.length);
-    }
-
-    public static void printModel(BaseModel baseModel) {
-        printVariables(baseModel);
-        printConstraints(baseModel);
+        logger.info("Total features: {}", variables.length);
     }
 
     public static long checkConsistency(BaseModel baseModel, boolean showOutput) {
@@ -121,7 +116,7 @@ public class BaseModelAnalyser {
             }
             solutionsModel1.add(solution.toString());
         }
-        logger.debug("[intersection] found {} solutions in model {}", solutionsModel1.size(), model1.getRegion().printRegion());
+        logger.debug("[intersection] found {} solutions in model {}", solutionsModel1.size(), model1.getRegionString());
 
         // Collect all solutions from model 2
         while (model2.getModel().getSolver().solve()) {
@@ -134,7 +129,7 @@ public class BaseModelAnalyser {
             }
             solutionsModel2.add(solution.toString());
         }
-        logger.debug("[intersection] found {} solutions in model  {}", solutionsModel2.size(), model2.getRegion().printRegion());
+        logger.debug("[intersection] found {} solutions in model  {}", solutionsModel2.size(), model2.getRegionString());
 
         // Find intersection
         solutionsModel1.retainAll(solutionsModel2);
@@ -150,9 +145,6 @@ public class BaseModelAnalyser {
         long solutions = 0;
         while (model.getSolver().solve()) {
             solutions++;
-            if (solutions % 10000 == 0) {
-                logger.info("[solveAndReturnNumberOfSolutions] found " + solutions + " solutions so far");
-            }
         }
         return solutions;
     }

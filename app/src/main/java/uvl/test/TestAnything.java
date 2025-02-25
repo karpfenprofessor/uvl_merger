@@ -11,12 +11,12 @@ import uvl.util.ChocoTranslator;
 import uvl.util.RecreationModelAnalyser;
 import uvl.util.UVLParser;
 
-public class TestParseTranslateSolve {
+public class TestAnything {
 
-    protected final static Logger logger = LogManager.getLogger(TestParseTranslateSolve.class);
+    protected final static Logger logger = LogManager.getLogger(TestAnything.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/test/test8.uvl";	
+        String filePathString = "uvl/test/test9.uvl";	
         //String filePathString = "uvl/paper_test_models/eu.uvl";
     
 
@@ -26,6 +26,6 @@ public class TestParseTranslateSolve {
         //BaseModelAnalyser.printConstraints(chocoModel);
         //BaseModelAnalyser.printVariables(chocoModel);
         BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
-        BaseModelAnalyser.printAllSolutions(chocoModel, true);
+        //BaseModelAnalyser.printAllSolutions(chocoModel, true);
     }
 } 

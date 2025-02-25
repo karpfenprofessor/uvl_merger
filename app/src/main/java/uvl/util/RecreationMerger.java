@@ -114,7 +114,7 @@ public class RecreationMerger {
             }
         }
 
-        logger.info("[union] added {} constraints from model {} to union model and {} constraints from model {} to union model", modelA.getConstraints().size(), modelA.getRegion().printRegion(), modelB.getConstraints().size(), modelB.getRegion().printRegion());
+        logger.info("[union] added {} constraints from model {} to union model and {} constraints from model {} to union model", modelA.getConstraints().size(), modelA.getRegion().getRegionString(), modelB.getConstraints().size(), modelB.getRegion().getRegionString());
 
         removeDuplicateContextualizedGroupConstraints(unionModel);
 
@@ -127,11 +127,11 @@ public class RecreationMerger {
     private static void handleRegionFeature(RecreationModel modelA, RecreationModel modelB,
             RecreationModel unionModel) {
            
-        logger.info("[handleRegionFeature] create unified Region structure with regions: {} and {}", modelA.getRegion().printRegion(), modelB.getRegion().printRegion());
+        logger.info("[handleRegionFeature] create unified Region structure with regions: {} and {}", modelA.getRegion().getRegionString(), modelB.getRegion().getRegionString());
         // Create unified Region structure
         Feature regionFeature = unionModel.getFeatures().get("Region");
-        Feature region1Feature = unionModel.getFeatures().get(modelA.getRegion().printRegion());
-        Feature region2Feature = unionModel.getFeatures().get(modelB.getRegion().printRegion());
+        Feature region1Feature = unionModel.getFeatures().get(modelA.getRegion().getRegionString());
+        Feature region2Feature = unionModel.getFeatures().get(modelB.getRegion().getRegionString());
 
         // Create single group constraint for Region to root
         List<Feature> rootRegionChildren = new ArrayList<>();

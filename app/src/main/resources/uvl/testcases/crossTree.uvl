@@ -1,0 +1,83 @@
+features
+  "Car"
+    mandatory
+      "Type"
+        alternative
+          "Combi"
+          "Limo"
+          "City"
+          "SUV"
+      "Color"
+        alternative
+          "White"
+          "Black"
+      "Engine"
+        alternative
+          "1L"
+          "1,5L"
+          "2L"
+      "CouplingDevice"
+        alternative
+          "Yes"
+          "No"
+      "Fuel"
+        alternative
+          "Electro"
+          "Diesel"
+          "Gas"
+          "Hybrid"
+      "Service"
+        alternative
+          "15k"
+          "20k"
+          "25k"
+    optional
+      "Interior"
+        mandatory
+          "SeatMaterial"
+            alternative
+              "Cloth"
+              "Leather"
+        optional
+          "Sunroof"
+      "Wheels"
+        mandatory
+          "WheelType"
+            alternative
+              "Alloy"
+              "Steel"
+        optional
+          "WheelSize"
+            alternative
+              "16"
+              "18"
+              "20"
+      "Entertainment"
+        mandatory
+          "AudioSystem"
+            alternative
+              "Standard"
+              "Premium"
+        optional
+          "Navigation"
+      "Safety"
+        mandatory
+          "Airbags"
+            or
+              "Front"
+              "Side"
+              "Curtain"
+        optional
+          "ABS"
+
+constraints
+  ! "Gas"
+  "Electro" => ! "Yes"
+  "Diesel" => ! "City"
+  "Hybrid" => "ABS"
+  "Leather" => "Premium"
+  "Sunroof" => "Premium"
+  "Navigation" => "Premium"
+  "SUV" => "ABS"
+  "City" => ! "Steel"
+  "Diesel" => ! "Cloth"

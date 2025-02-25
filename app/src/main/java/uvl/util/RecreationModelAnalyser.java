@@ -24,7 +24,7 @@ public class RecreationModelAnalyser {
         float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
 
         logger.debug("[analyseContextualizationShare] {} has {} constraints, {} are contextualized, ratio: {}",
-                model.getRegion().printRegion(),
+                model.getRegionString(),
                 constraintsSize,
                 contextualizedSize,
                 ratio);
@@ -68,7 +68,7 @@ public class RecreationModelAnalyser {
     }
 
     public static void printConstraints(RecreationModel recModel) {
-        logger.info("Printing all constraints in Recreation model with region: {}", recModel.getRegion().printRegion());
+        logger.info("Printing all constraints in Recreation model with region: {}", recModel.getRegion().getRegionString());
         int i = 0;
         for (AbstractConstraint constraint : recModel.getConstraints()) {
             logger.info("  [{}]: {}", i++, constraint.toString());
@@ -77,7 +77,7 @@ public class RecreationModelAnalyser {
     }
 
     public static void printFeatures(RecreationModel recModel) {
-        logger.info("Printing all features in Recreation model with region: {}", recModel.getRegion().printRegion());
+        logger.info("Printing all features in Recreation model with region: {}", recModel.getRegion().getRegionString());
         int i = 0;
         for (Feature feature : recModel.getFeatures().values()) {
             logger.info("  [{}]: {}", i++, feature.toString());

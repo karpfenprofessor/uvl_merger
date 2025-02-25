@@ -6,7 +6,6 @@ import uvl.model.base.Region;
 import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.constraints.GroupConstraint;
 import uvl.model.recreate.feature.Feature;
-import uvl.metrics.ModelMetrics;
 
 import java.util.List;
 import java.util.Map;
@@ -20,23 +19,21 @@ import java.util.HashMap;
 @Setter
 public class RecreationModel {
     protected final Logger logger;
-    private ModelMetrics metrics;
 
     private Feature rootFeature;
     private List<AbstractConstraint> constraints;
     private Map<String, Feature> features = new HashMap<>();
 
-    private Region region;
+    protected Region region;
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
         this.region = region;
-        this.metrics = new ModelMetrics();
         logger = LogManager.getLogger(this.getClass());
     }
 
     public void contextualizeAllConstraints() {
-        logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().printRegion()
+        logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
                 + " with region ordinal: " + region.ordinal());
 
         for (AbstractConstraint constraint : constraints) {
@@ -45,9 +42,9 @@ public class RecreationModel {
 
         // Create Region feature structure
         Feature regionFeature = new Feature("Region");
-        Feature specificRegion = new Feature(region.printRegion());
+        Feature specificRegion = new Feature(getRegionString());
         features.put("Region", regionFeature);
-        features.put(region.printRegion(), specificRegion);
+        features.put(getRegionString(), specificRegion);
 
         // Create mandatory group constraint connecting Region to root
         List<Feature> rootRegionChildren = new ArrayList<>();
@@ -81,5 +78,9 @@ public class RecreationModel {
     public void addNegation(AbstractConstraint c) {
         c.setNegation(Boolean.TRUE);
         constraints.add(c);
+    }
+
+    public String getRegionString() {
+        return region.getRegionString();
     }
 }

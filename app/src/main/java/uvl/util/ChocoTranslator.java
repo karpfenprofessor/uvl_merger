@@ -13,25 +13,22 @@ import uvl.model.base.BaseModel;
 import uvl.model.base.Region;
 
 public class ChocoTranslator {
-    private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
         };
 
-        // Create variables for all features
+        // Create needed variables for all features in choco model
         createFeatureVariables(recModel, chocoModel);
 
-        // Set root feature
+        // Set and enforce root feature
         chocoModel.setRootFeature(recModel.getRootFeature());
         chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
 
         // Process all constraints
-        int processedConstraints = 0;
         for (AbstractConstraint constraint : recModel.getConstraints()) {
             try {
-                processNormalConstraint(constraint, chocoModel);
-                processedConstraints++;
+                processConstraint(constraint, chocoModel);
             } catch (Exception e) {
                 logger.error("[convertToChocoModel] error processing constraint: " + constraint, e);
                 throw e;
@@ -41,13 +38,13 @@ public class ChocoTranslator {
         return chocoModel;
     }
 
-    private static void processNormalConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
+    private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
 
         if (constraint.isContextualized()) {
             BoolVar regionVar = chocoModel
-                    .getFeature(Region.values()[constraint.getContextualizationValue()].printRegion());
+                    .getFeature(Region.values()[constraint.getContextualizationValue()].getRegionString());
 
             model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
         } else {
@@ -72,7 +69,7 @@ public class ChocoTranslator {
                     "Unsupported constraint type: " + constraint.getClass().getSimpleName());
         }
 
-        // Handle negation if needed
+        // Handle negation if needed (not tested)
         return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
     }
 
@@ -161,4 +158,6 @@ public class ChocoTranslator {
             chocoModel.addFeature(feature.getName());
         }
     }
+
+    private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 }

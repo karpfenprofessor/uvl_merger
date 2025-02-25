@@ -1,7 +1,6 @@
 package uvl.model.base;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.variables.BoolVar;
 
 import lombok.Getter;
@@ -54,33 +53,7 @@ public class BaseModel {
         constraints.add(constraint);
     }
 
-    public void printAllFeatures() {
-        logger.debug("[print] print features of model in region: " + region.printRegion());
-        features.forEach((name, var) -> 
-            logger.debug(String.format("  Feature: %s, Value: %s",
-                name,
-                var.isInstantiated() ? String.valueOf(var.getValue()) : "not instantiated"))
-        );
-    }
-
-    public long solveAndReturnNumberOfSolutions() {
-        logger.info("[solveAndReturnNumberOfSolutions] start solving");
-
-        Solver solver = model.getSolver();
-        solver.reset();
-        
-        long solutions = 0;
-        while (solver.solve()) {
-            solutions++;
-            if (solutions % 10000 == 0) {
-                logger.info("[solveAndReturnNumberOfSolutions] found " + solutions + " solutions so far");
-            }
-        }
-        return solutions;
-    }
-
-    public void solveAndPrintNumberOfSolutions() {
-        long solutions = solveAndReturnNumberOfSolutions();
-        logger.info("[solveAndPrintNumberOfSolutions] found solutions: " + solutions);
+    public String getRegionString() {
+        return region.getRegionString();
     }
 } 
