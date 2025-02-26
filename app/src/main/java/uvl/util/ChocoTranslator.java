@@ -18,7 +18,7 @@ public class ChocoTranslator {
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
         };
 
-        if(recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
+        if (recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
             logger.warn("[convertToChocoModel] model has no features or constraints, returning empty model");
             return chocoModel;
         }
@@ -93,8 +93,7 @@ public class ChocoTranslator {
         // Create reified variables for the conditions
         BoolVar cardinalitySatisfied = model.and(
                 model.arithm(sumVar, ">=", gc.getLowerCardinality()),
-                model.arithm(sumVar, "<=", gc.getUpperCardinality())
-        ).reify();
+                model.arithm(sumVar, "<=", gc.getUpperCardinality())).reify();
         BoolVar childrenAreZero = model.arithm(sumVar, "=", 0).reify();
 
         // Create the group satisfaction variable
@@ -115,23 +114,64 @@ public class ChocoTranslator {
     }
 
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
+        /*
+         * Model model = chocoModel.getModel();
+         * BoolVar antecedent = getConstraintVar((AbstractConstraint)
+         * bc.getAntecedent(), chocoModel);
+         * BoolVar consequent = getConstraintVar((AbstractConstraint)
+         * bc.getConsequent(), chocoModel);
+         * BoolVar result = model.boolVar();
+         * 
+         * switch (bc.getOperator()) {
+         * case AND:
+         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.and(antecedent, consequent)));
+         * break;
+         * case OR:
+         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(antecedent, consequent)));
+         * break;
+         * case IMPLIES:
+         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.implies(antecedent,
+         * consequent)));
+         * break;
+         * case IFF:
+         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.ifOnlyIf(antecedent,
+         * consequent)));
+         * break;
+         * }
+         * 
+         * return result;
+         */
+
         Model model = chocoModel.getModel();
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
-        BoolVar result = model.boolVar();
+
+        // Create a named variable for better tracking
+        String opName = bc.getOperator().toString().toLowerCase();
+        BoolVar result = model.boolVar(opName + "_" + antecedent.getName() + "_" + consequent.getName());
 
         switch (bc.getOperator()) {
             case AND:
-                model.addClauses(LogOp.ifOnlyIf(result, LogOp.and(antecedent, consequent)));
+                // Use model.and to combine constraints
+                model.and(
+                        model.arithm(antecedent, "=", 1),
+                        model.arithm(consequent, "=", 1)).reifyWith(result);
                 break;
             case OR:
-                model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(antecedent, consequent)));
+                // Use model.or to combine constraints
+                model.or(
+                        model.arithm(antecedent, "=", 1),
+                        model.arithm(consequent, "=", 1)).reifyWith(result);
                 break;
             case IMPLIES:
-                model.addClauses(LogOp.ifOnlyIf(result, LogOp.implies(antecedent, consequent)));
+                // A implies B is equivalent to (!A or B)
+                model.or(
+                        model.arithm(antecedent, "=", 0),
+                        model.arithm(consequent, "=", 1)).reifyWith(result);
                 break;
             case IFF:
-                model.addClauses(LogOp.ifOnlyIf(result, LogOp.ifOnlyIf(antecedent, consequent)));
+                // A iff B is equivalent to A == B
+                model.arithm(antecedent, "=", consequent).reifyWith(result);
                 break;
         }
 
@@ -141,11 +181,11 @@ public class ChocoTranslator {
     private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
-        
+
         // Create an explicit variable instead of a view
         BoolVar notVar = model.boolVar("not_" + inner.getName());
         model.arithm(inner, "=", 0).reifyWith(notVar);
-        
+
         return notVar;
     }
 
@@ -158,7 +198,8 @@ public class ChocoTranslator {
             return createBinaryConstraintVar(bc, chocoModel);
         }
 
-        throw new UnsupportedOperationException("Unsupported constraint type encountered: " + constraint.getClass().getSimpleName());
+        throw new UnsupportedOperationException(
+                "Unsupported constraint type encountered: " + constraint.getClass().getSimpleName());
     }
 
     private static void createFeatureVariables(RecreationModel recModel, BaseModel chocoModel) {

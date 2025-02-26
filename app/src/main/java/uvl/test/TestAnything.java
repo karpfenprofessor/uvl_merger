@@ -16,7 +16,7 @@ public class TestAnything {
     protected final static Logger logger = LogManager.getLogger(TestAnything.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/testcases/crossTreeFish.uvl";	   
+        String filePathString = "uvl/smartwatch/miband6_realized.uvl";	   
         //String filePathString = "uvl/paper_test_models/eu.uvl";
     
 
@@ -26,6 +26,6 @@ public class TestAnything {
         //BaseModelAnalyser.printConstraints(chocoModel);
         //BaseModelAnalyser.printVariables(chocoModel);
         BaseModelAnalyser.solveAndPrintNumberOfSolutions(chocoModel);
-        //BaseModelAnalyser.printAllSolutions(chocoModel, true);
+        BaseModelAnalyser.printAllSolutions(chocoModel, true);
     }
 } 

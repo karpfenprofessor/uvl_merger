@@ -30,9 +30,9 @@ public class SmartwatchTest {
             new TestCase("uvl/smartwatch/miband1s_realized.uvl", 2),
             new TestCase("uvl/smartwatch/miband2_realized.uvl", 24),
             new TestCase("uvl/smartwatch/miband3_realized.uvl", 24),
-            //new TestCase("uvl/smartwatch/miband4_realized.uvl", 1),
-            //new TestCase("uvl/smartwatch/miband5_realized.uvl", 1),
-            //new TestCase("uvl/smartwatch/miband6_realized.uvl", 1),
+            new TestCase("uvl/smartwatch/miband4_realized.uvl", 72),
+            new TestCase("uvl/smartwatch/miband5_realized.uvl", 64),
+            new TestCase("uvl/smartwatch/miband6_realized.uvl", 22),
             //new TestCase("uvl/smartwatch/miband7_realized.uvl", 1),
             //new TestCase("uvl/smartwatch/miband8_realized.uvl", 1)
     };
