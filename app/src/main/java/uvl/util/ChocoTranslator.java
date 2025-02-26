@@ -114,68 +114,68 @@ public class ChocoTranslator {
     }
 
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
+
+        Model model = chocoModel.getModel();
+        BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
+        BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
+        BoolVar result = model.boolVar();
+
+        switch (bc.getOperator()) {
+            case AND:
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.and(antecedent, consequent)));
+                break;
+            case OR:
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(antecedent, consequent)));
+                break;
+            case IMPLIES:
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.implies(antecedent, consequent)));
+                break;
+            case IFF:
+                model.addClauses(LogOp.ifOnlyIf(result, LogOp.ifOnlyIf(antecedent, consequent)));
+                break;
+        }
+
+        return result;
+
         /*
          * Model model = chocoModel.getModel();
          * BoolVar antecedent = getConstraintVar((AbstractConstraint)
          * bc.getAntecedent(), chocoModel);
          * BoolVar consequent = getConstraintVar((AbstractConstraint)
          * bc.getConsequent(), chocoModel);
-         * BoolVar result = model.boolVar();
+         * 
+         * // Create a named variable for better tracking
+         * String opName = bc.getOperator().toString().toLowerCase();
+         * BoolVar result = model.boolVar(opName + "_" + antecedent.getName() + "_" +
+         * consequent.getName());
          * 
          * switch (bc.getOperator()) {
          * case AND:
-         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.and(antecedent, consequent)));
+         * // Use model.and to combine constraints
+         * model.and(
+         * model.arithm(antecedent, "=", 1),
+         * model.arithm(consequent, "=", 1)).reifyWith(result);
          * break;
          * case OR:
-         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(antecedent, consequent)));
+         * // Use model.or to combine constraints
+         * model.or(
+         * model.arithm(antecedent, "=", 1),
+         * model.arithm(consequent, "=", 1)).reifyWith(result);
          * break;
          * case IMPLIES:
-         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.implies(antecedent,
-         * consequent)));
+         * // A implies B is equivalent to (!A or B)
+         * model.or(
+         * model.arithm(antecedent, "=", 0),
+         * model.arithm(consequent, "=", 1)).reifyWith(result);
          * break;
          * case IFF:
-         * model.addClauses(LogOp.ifOnlyIf(result, LogOp.ifOnlyIf(antecedent,
-         * consequent)));
+         * // A iff B is equivalent to A == B
+         * model.arithm(antecedent, "=", consequent).reifyWith(result);
          * break;
          * }
          * 
          * return result;
          */
-
-        Model model = chocoModel.getModel();
-        BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
-        BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
-
-        // Create a named variable for better tracking
-        String opName = bc.getOperator().toString().toLowerCase();
-        BoolVar result = model.boolVar(opName + "_" + antecedent.getName() + "_" + consequent.getName());
-
-        switch (bc.getOperator()) {
-            case AND:
-                // Use model.and to combine constraints
-                model.and(
-                        model.arithm(antecedent, "=", 1),
-                        model.arithm(consequent, "=", 1)).reifyWith(result);
-                break;
-            case OR:
-                // Use model.or to combine constraints
-                model.or(
-                        model.arithm(antecedent, "=", 1),
-                        model.arithm(consequent, "=", 1)).reifyWith(result);
-                break;
-            case IMPLIES:
-                // A implies B is equivalent to (!A or B)
-                model.or(
-                        model.arithm(antecedent, "=", 0),
-                        model.arithm(consequent, "=", 1)).reifyWith(result);
-                break;
-            case IFF:
-                // A iff B is equivalent to A == B
-                model.arithm(antecedent, "=", consequent).reifyWith(result);
-                break;
-        }
-
-        return result;
     }
 
     private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {

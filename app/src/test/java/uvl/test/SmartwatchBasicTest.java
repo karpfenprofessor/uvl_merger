@@ -9,20 +9,20 @@ import uvl.model.recreate.RecreationModel;
 import uvl.util.Analyser;
 import uvl.util.UVLParser;
 
-public class SmartwatchTest {
+public class SmartwatchBasicTest {
     private record TestCase(String filename, long expectedSolutions) {
     }
 
     private final TestCase[] MIBAND_BASE_MODELS = {
             new TestCase("uvl/smartwatch/miband1.uvl", 1),
             new TestCase("uvl/smartwatch/miband1s.uvl", 2),
-            new TestCase("uvl/smartwatch/miband2.uvl", 8),
-            new TestCase("uvl/smartwatch/miband3.uvl", 24),
-            new TestCase("uvl/smartwatch/miband4.uvl", 72),
-            new TestCase("uvl/smartwatch/miband5.uvl", 108),
-            new TestCase("uvl/smartwatch/miband6.uvl", 216),
-            new TestCase("uvl/smartwatch/miband7.uvl", 432),
-            new TestCase("uvl/smartwatch/miband8.uvl", 864)
+            new TestCase("uvl/smartwatch/miband2.uvl", 5),
+            new TestCase("uvl/smartwatch/miband3.uvl", 7),
+            new TestCase("uvl/smartwatch/miband4.uvl", 9),
+            new TestCase("uvl/smartwatch/miband5.uvl", 11),
+            new TestCase("uvl/smartwatch/miband6.uvl", 13),
+            new TestCase("uvl/smartwatch/miband7.uvl", 15),
+            new TestCase("uvl/smartwatch/miband8.uvl", 17)
     };
 
     private final TestCase[] MIBAND_REALIZED_MODELS = {
@@ -33,8 +33,8 @@ public class SmartwatchTest {
             new TestCase("uvl/smartwatch/miband4_realized.uvl", 72),
             new TestCase("uvl/smartwatch/miband5_realized.uvl", 64),
             new TestCase("uvl/smartwatch/miband6_realized.uvl", 22),
-            //new TestCase("uvl/smartwatch/miband7_realized.uvl", 1),
-            //new TestCase("uvl/smartwatch/miband8_realized.uvl", 1)
+            new TestCase("uvl/smartwatch/miband7_realized.uvl", 24),
+            new TestCase("uvl/smartwatch/miband8_realized.uvl", 21)
     };
 
     private final TestCase[] MIBAND_PLANNED_MODELS = {
@@ -55,7 +55,7 @@ public class SmartwatchTest {
         return Analyser.returnNumberOfSolutions(recModel);
     }
 
-    //@Test
+    @Test
     public void testSolutionCountsOfBaseModels() {
         for (TestCase testCase : MIBAND_BASE_MODELS) {
             try {
@@ -90,6 +90,23 @@ public class SmartwatchTest {
                         "Solution count mismatch for " + testCase.filename);
             } catch (Exception e) {
                 throw new AssertionError("testSolutionCountsOfPlannedModels failed for " + testCase.filename, e);
+            }
+        }
+    }
+
+    @Test
+    public void testContextualizationOfSingleModels() {
+        for (TestCase testCase : MIBAND_BASE_MODELS) {
+            try {
+                RecreationModel model = UVLParser.parseUVLFile(testCase.filename, Region.A);
+                
+                long solutions = Analyser.returnNumberOfSolutions(model);
+
+                model.contextualizeAllConstraints();
+
+                assertEquals(solutions, Analyser.returnNumberOfSolutions(model), "Solution count mismatch for " + testCase.filename);
+            } catch (Exception e) {
+                throw new AssertionError("testContextualizationOfSingleModels failed for " + testCase.filename, e);
             }
         }
     }
