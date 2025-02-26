@@ -1,0 +1,50 @@
+features
+	SmartWatch {abstract true}
+		optional
+			Screen
+				optional
+					TouchScreen
+				mandatory
+					OLED
+						mandatory
+							CapacityButton
+		mandatory
+			Functionalities {abstract true}
+				mandatory
+					FitnessMonitor
+					SleepTracker
+					VibrateAlert
+						mandatory
+							Call
+							Notification
+				optional
+					ContactlessPayment
+			Sensors {abstract true}
+				mandatory
+					Pedometer
+						optional
+							MovementFilter
+					Accelerometer
+				optional
+					HeartRateSensor
+			Connectivity {abstract true}
+				mandatory
+					Bluetooth
+						alternative
+							BLE {abstract true}
+								alternative
+									BLEv40
+									BLEv42
+							BT40
+				optional
+					NFC
+
+constraints
+	MovementFilter => !HeartRateSensor & BLEv40
+	BLE => HeartRateSensor | MovementFilter
+	BT40 => !Screen
+	!Screen => BT40
+	TouchScreen => BLEv42
+	NFC => TouchScreen
+	ContactlessPayment => NFC
+	NFC => ContactlessPayment

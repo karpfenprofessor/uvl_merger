@@ -1,0 +1,21 @@
+features
+	SmartWatch {abstract true}
+		mandatory
+			Functionalities {abstract true}
+				mandatory
+					FitnessMonitor
+					SleepTracker
+					VibrateAlert
+						mandatory
+							Call
+							Notification
+			Sensors {abstract true}
+				mandatory
+					Pedometer
+					Accelerometer
+				optional
+					HeartRateSensor
+			Connectivity {abstract true}
+				mandatory
+					BT40
+

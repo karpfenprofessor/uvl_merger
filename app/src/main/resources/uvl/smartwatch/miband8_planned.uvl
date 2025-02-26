@@ -1,0 +1,61 @@
+features
+	SmartWatch {abstract true}
+		optional
+			Screen
+				mandatory
+					ScreenType {abstract true}
+						alternative
+							OLED
+								mandatory
+									CapacityButton
+							AMOLED
+								mandatory
+									CapacitivitySensing
+				optional
+					TouchScreen
+						optional
+							FullColor
+		mandatory
+			Functionalities {abstract true}
+				mandatory
+					FitnessMonitor
+					SleepTracker
+				optional
+					ContactlessPayment
+				mandatory
+					VibrateAlert
+						mandatory
+							Call
+							Notification
+			Sensors {abstract true}
+				mandatory
+					Pedometer
+						optional
+							MovementFilter
+					Accelerometer
+				optional
+					Gyroscope
+					Infrared
+					Microphone
+					ProximitySensor
+					HeartRateSensor
+						optional
+							Photoplethysmogram
+					SpO2
+			Connectivity {abstract true}
+				optional
+					NFC
+				mandatory
+					Bluetooth
+						alternative
+							BLE {abstract true}
+								alternative
+									BLEv40
+									BLEv42
+									BLEv50
+									BLEv52
+									BLEv51
+							BT40
+
+constraints
+	ContactlessPayment => NFC

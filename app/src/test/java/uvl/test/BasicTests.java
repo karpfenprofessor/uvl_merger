@@ -37,11 +37,16 @@ public class BasicTests {
         new TestCase("uvl/testcases/crossTree7.uvl", 1),
         new TestCase("uvl/testcases/crossTree8.uvl", 1),
         new TestCase("uvl/testcases/crossTree9.uvl", 311616)
-};
+    };
 
     private final TestCase[] TEST_CASES_PAPER = {
         new TestCase("uvl/paper_test_models/us.uvl", 288),
         new TestCase("uvl/paper_test_models/eu.uvl", 324)
+    };
+
+    private final TestCase[] TEST_CASES_FISH = {
+        new TestCase("uvl/testcases/featureTreeFish.uvl", 13824),
+        new TestCase("uvl/testcases/crossTreeFish.uvl", 448)
     };
 
     private long getSolutionCount(String filename) throws Exception {
@@ -79,6 +84,19 @@ public class BasicTests {
     @Test
     public void testSolutionOfPaperCarModels() {
         for (TestCase testCase : TEST_CASES_PAPER) {
+            try {
+                long actualSolutions = getSolutionCount(testCase.filename);
+                assertEquals(testCase.expectedSolutions, actualSolutions,
+                        "Solution count mismatch for " + testCase.filename);
+            } catch (Exception e) {
+                throw new AssertionError("Test failed for " + testCase.filename, e);
+            }
+        }
+    }
+
+    @Test
+    public void testSolutionOfFishTestModels() {
+        for (TestCase testCase : TEST_CASES_FISH) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,

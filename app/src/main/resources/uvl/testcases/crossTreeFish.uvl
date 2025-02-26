@@ -1,0 +1,65 @@
+features
+	"Fish"
+		mandatory
+			"CoreAttributes"
+				mandatory
+					"Species"
+						alternative
+							"Pike"
+							"Carp"
+							"Salmon"
+				optional
+					"Diet"
+						alternative
+							"Carnivore"
+							"Herbivore"
+							"Omnivore"
+				mandatory
+					"Environment"
+						optional
+							"WaterBody"
+								or
+									"River"
+									"Lake"
+									"Pond"
+						mandatory
+							"Salinity"
+								alternative
+									"Yes"
+									"No"
+									"Brackish"
+		mandatory
+			"Morphology"
+				mandatory
+					"Coloration"
+						alternative
+							"Red"
+							"Blue"
+							"Green"
+				optional
+					"Size"
+						alternative
+							"Small"
+							"Medium"
+							"Large"
+				optional
+					"Fins"
+						or
+							"Dorsal"
+							"Caudal"
+
+constraints
+	// A pike must be carnivorous.
+	"Pike" => "Carnivore"
+	// A carp must be herbivorous.
+	"Carp" => "Herbivore"
+	// A salmon always has Brackish salinity.
+	"Salmon" => "Brackish"
+	// If the fish lives in a River, it must be Small.
+	"River" => "Small"
+	// If it lives in a Lake or Pond, it must be Large.
+	"Lake" | "Pond" => "Large"
+	// If the coloration is Red or Blue then the fish cannot have Caudal fins.
+	"Red" | "Blue" => ! "Caudal"
+	// If the diet is Herbivore then the fish must live in a Lake (or a waterbody including Lake).
+	"Herbivore" => "Lake"
