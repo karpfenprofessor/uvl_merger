@@ -30,7 +30,7 @@ public class BasicTests {
     private final TestCase[] TEST_CASES_CROSS_TREE = {
         new TestCase("uvl/testcases/crossTree1.uvl", 340),
         new TestCase("uvl/testcases/crossTree2.uvl", 72),
-        new TestCase("uvl/testcases/crossTree3.uvl", 1), 
+        new TestCase("uvl/testcases/crossTree3.uvl", 18), 
         new TestCase("uvl/testcases/crossTree4.uvl", 1),
         new TestCase("uvl/testcases/crossTree5.uvl", 1),
         new TestCase("uvl/testcases/crossTree6.uvl", 1), 

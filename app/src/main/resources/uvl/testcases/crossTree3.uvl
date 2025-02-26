@@ -1,0 +1,19 @@
+features
+	"Car"
+		mandatory
+			"Powertrain"
+				optional
+					"Gas"
+					"Diesel"
+			"Electronics"
+				optional
+					"Electro"
+					"Battery"
+			"Configuration"
+				optional
+					"Yes"
+					"City"
+constraints
+	! "Gas"
+	"Electro" => ! "Yes"
+	"Diesel" => "City"

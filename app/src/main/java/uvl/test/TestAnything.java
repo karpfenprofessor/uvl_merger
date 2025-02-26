@@ -16,7 +16,7 @@ public class TestAnything {
     protected final static Logger logger = LogManager.getLogger(TestAnything.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/testcases/crossTree9.uvl";	
+        String filePathString = "uvl/testcases/crossTree3.uvl";	   
         //String filePathString = "uvl/paper_test_models/eu.uvl";
     
 
