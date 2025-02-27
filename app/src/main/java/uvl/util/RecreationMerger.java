@@ -23,38 +23,43 @@ public class RecreationMerger {
         logger.info("[merge] starting full merge process between models from regions {} and {}",
                 modelToMergeA.getRegion(), modelToMergeB.getRegion());
 
-        //Models for validation of contextualization and union
+        // Models for validation of contextualization and union
         BaseModel chocoTestModelABeforeDecontextualization = ChocoTranslator.convertToChocoModel(modelToMergeA);
         BaseModel chocoTestModelBBeforeDecontextualization = ChocoTranslator.convertToChocoModel(modelToMergeB);
 
-        //Get solutions before contextualization
-        long solutionsModelABeforeContextualization = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelABeforeDecontextualization);
-        long solutionsModelBBeforeContextualization = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelBBeforeDecontextualization);
+        // Get solutions before contextualization
+        long solutionsModelABeforeContextualization = BaseModelAnalyser
+                .solveAndReturnNumberOfSolutions(chocoTestModelABeforeDecontextualization);
+        long solutionsModelBBeforeContextualization = BaseModelAnalyser
+                .solveAndReturnNumberOfSolutions(chocoTestModelBBeforeDecontextualization);
 
-        //Contextualize both region models
+        // Contextualize both region models
         modelToMergeA.contextualizeAllConstraints();
         modelToMergeB.contextualizeAllConstraints();
 
-        //Get solutions after contextualization
+        // Get solutions after contextualization
         BaseModel chocoTestModelAAfterContextualization = ChocoTranslator.convertToChocoModel(modelToMergeA);
         BaseModel chocoTestModelBAfterContextualization = ChocoTranslator.convertToChocoModel(modelToMergeB);
-        long solutionsModelAAfterContextualize = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelAAfterContextualization);
-        long solutionsModelBAfterContextualize = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelBAfterContextualization);
-        
-        //validate solution spaces after contextualization
-        if(solutionsModelABeforeContextualization != solutionsModelAAfterContextualize){
+        long solutionsModelAAfterContextualize = BaseModelAnalyser
+                .solveAndReturnNumberOfSolutions(chocoTestModelAAfterContextualization);
+        long solutionsModelBAfterContextualize = BaseModelAnalyser
+                .solveAndReturnNumberOfSolutions(chocoTestModelBAfterContextualization);
+
+        // validate solution spaces after contextualization
+        if (solutionsModelABeforeContextualization != solutionsModelAAfterContextualize) {
             throw new RuntimeException("Solution space of model A should not change after contextualization");
-        } else if(solutionsModelBBeforeContextualization != solutionsModelBAfterContextualize){
+        } else if (solutionsModelBBeforeContextualization != solutionsModelBAfterContextualize) {
             throw new RuntimeException("Solution space of model B should not change after contextualization");
         }
-        
+
         logger.info("[merge] solution spaces are the same after contextualization, start with union");
 
         RecreationModel unionModel = union(modelToMergeA, modelToMergeB);
         BaseModel chocoTestModelUnion = ChocoTranslator.convertToChocoModel(unionModel);
         long solutionsUnionModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelUnion);
-        if(solutionsUnionModel != (solutionsModelABeforeContextualization + solutionsModelBBeforeContextualization)){
-            throw new RuntimeException("Solution space of union model should be the sum of the solution spaces of the two models before contextualization");
+        if (solutionsUnionModel != (solutionsModelABeforeContextualization + solutionsModelBBeforeContextualization)) {
+            throw new RuntimeException(
+                    "Solution space of union model should be the sum of the solution spaces of the two models before contextualization");
         }
 
         RecreationModelAnalyser.printConstraints(unionModel);
@@ -67,7 +72,7 @@ public class RecreationMerger {
 
         BaseModel chocoTestModelMerged = ChocoTranslator.convertToChocoModel(mergedModel);
         long solutionsMergedModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelMerged);
-        if(solutionsMergedModel != 126){
+        if (solutionsMergedModel != 126) {
             throw new RuntimeException("Solution space of merged model is not correct");
         }
 
@@ -114,7 +119,10 @@ public class RecreationMerger {
             }
         }
 
-        logger.info("[union] added {} constraints from model {} to union model and {} constraints from model {} to union model", modelA.getConstraints().size(), modelA.getRegion().getRegionString(), modelB.getConstraints().size(), modelB.getRegion().getRegionString());
+        logger.info(
+                "[union] added {} constraints from model {} to union model and {} constraints from model {} to union model",
+                modelA.getConstraints().size(), modelA.getRegion().getRegionString(), modelB.getConstraints().size(),
+                modelB.getRegion().getRegionString());
 
         removeDuplicateContextualizedGroupConstraints(unionModel);
 
@@ -126,8 +134,9 @@ public class RecreationMerger {
 
     private static void handleRegionFeature(RecreationModel modelA, RecreationModel modelB,
             RecreationModel unionModel) {
-           
-        logger.info("[handleRegionFeature] create unified Region structure with regions: {} and {}", modelA.getRegion().getRegionString(), modelB.getRegion().getRegionString());
+
+        logger.info("[handleRegionFeature] create unified Region structure with regions: {} and {}",
+                modelA.getRegion().getRegionString(), modelB.getRegion().getRegionString());
         // Create unified Region structure
         Feature regionFeature = unionModel.getFeatures().get("Region");
         Feature region1Feature = unionModel.getFeatures().get(modelA.getRegion().getRegionString());
@@ -221,19 +230,23 @@ public class RecreationMerger {
         }
 
         model.getConstraints().removeAll(constraintsToRemove);
-        logger.info("[removeDuplicates] removed {} duplicate group constraints from union model and decontextualized the rest", constraintsToRemove.size());
+        logger.info(
+                "[removeDuplicates] removed {} duplicate group constraints from union model and decontextualized the rest",
+                constraintsToRemove.size());
     }
 
     private static boolean areGroupConstraintsEqual(GroupConstraint gc1, GroupConstraint gc2) {
         return gc1.getParent().getName().equals(gc2.getParent().getName()) &&
-               gc1.getChildren().size() == gc2.getChildren().size() &&
-               gc1.getLowerCardinality() == gc2.getLowerCardinality() &&
-               gc1.getUpperCardinality() == gc2.getUpperCardinality() &&
-               gc1.getChildren().stream().map(Feature::getName)
-                   .collect(Collectors.toSet())
-                   .equals(gc2.getChildren().stream().map(Feature::getName)
-                   .collect(Collectors.toSet())) &&
-               gc1.getContextualizationValue() != gc2.getContextualizationValue();
+                gc1.getChildren().size() == gc2.getChildren().size() &&
+                gc1.getLowerCardinality() == gc2.getLowerCardinality() &&
+                gc1.getUpperCardinality() == gc2.getUpperCardinality() &&
+                gc1.getChildren().stream().map(Feature::getName)
+                        .collect(Collectors.toSet())
+                        .equals(gc2.getChildren().stream().map(Feature::getName)
+                                .collect(Collectors.toSet()))
+                &&
+                gc1.isContextualized() == gc2.isContextualized() &&
+                gc1.getContextualizationValue() != gc2.getContextualizationValue();
     }
 
     private static RecreationModel inconsistencyCheck(RecreationModel unionModel) {

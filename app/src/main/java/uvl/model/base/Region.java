@@ -5,9 +5,14 @@ public enum Region {
     B(1),
     C(2),
     D(3),
-    UNION(4),
-    TESTING(5),
-    MERGED(6);
+    E(4),
+    F(5),
+    G(6),
+    H(7),
+    I(8),
+    UNION(9),
+    TESTING(10),
+    MERGED(11);
 
     private final int value;
 
@@ -29,11 +34,21 @@ public enum Region {
                 return "C";
             case 3:
                 return "D";
-            case 4:
-                return "UNION";
+            case 4: 
+                return "E";
             case 5:
-                return "TESTING";
+                return "F";
             case 6:
+                return "G";
+            case 7:
+                return "H";
+            case 8:
+                return "I";
+            case 9:
+                return "UNION";
+            case 10:
+                return "TESTING";
+            case 11:
                 return "MERGED";
             default:
                 return "err";

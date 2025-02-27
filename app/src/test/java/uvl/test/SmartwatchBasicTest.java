@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
 import uvl.util.Analyser;
+import uvl.util.RecreationMerger;
 import uvl.util.UVLParser;
 
 public class SmartwatchBasicTest {
@@ -99,15 +100,51 @@ public class SmartwatchBasicTest {
         for (TestCase testCase : MIBAND_BASE_MODELS) {
             try {
                 RecreationModel model = UVLParser.parseUVLFile(testCase.filename, Region.A);
-                
+
                 long solutions = Analyser.returnNumberOfSolutions(model);
 
                 model.contextualizeAllConstraints();
 
-                assertEquals(solutions, Analyser.returnNumberOfSolutions(model), "Solution count mismatch for " + testCase.filename);
+                assertEquals(solutions, Analyser.returnNumberOfSolutions(model),
+                        "Solution count mismatch for " + testCase.filename);
             } catch (Exception e) {
                 throw new AssertionError("testContextualizationOfSingleModels failed for " + testCase.filename, e);
             }
+        }
+    }
+
+    //@Test
+    public void testUnionOfSmartwatchModels() {
+        try {
+            for (int i = 0; i < MIBAND_BASE_MODELS.length - 1; i++) {
+                RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i].filename, Region.A);
+                RecreationModel modelB = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i + 1].filename, Region.B);
+
+                assertEquals(MIBAND_BASE_MODELS[i].expectedSolutions, Analyser.returnNumberOfSolutions(modelA),
+                        "Solution count mismatch for " + MIBAND_BASE_MODELS[i].filename);
+                assertEquals(MIBAND_BASE_MODELS[i + 1].expectedSolutions, Analyser.returnNumberOfSolutions(modelB),
+                        "Solution count mismatch for " + MIBAND_BASE_MODELS[i + 1].filename);
+
+                modelA.contextualizeAllConstraints();
+                modelB.contextualizeAllConstraints();
+
+                assertEquals(MIBAND_BASE_MODELS[i].expectedSolutions, Analyser.returnNumberOfSolutions(modelA),
+                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[i].filename);
+                assertEquals(MIBAND_BASE_MODELS[i + 1].expectedSolutions, Analyser.returnNumberOfSolutions(modelB),
+                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[i + 1].filename);
+
+                long expectedSolutions = Long.sum(MIBAND_BASE_MODELS[i].expectedSolutions, MIBAND_BASE_MODELS[i+1].expectedSolutions);
+
+                // Union the models
+                RecreationModel unionModel = RecreationMerger.union(modelA, modelB);
+
+                // Verify the solution count after union
+                long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
+                assertEquals(expectedSolutions, actualSolutions,
+                        "Solution count mismatch after union of " + MIBAND_BASE_MODELS[i].filename + " and " + MIBAND_BASE_MODELS[i+1].filename);
+            }
+        } catch (Exception e) {
+            throw new AssertionError("testUnionOfSmartwatchModels failed: " + e.getMessage(), e);
         }
     }
 }
