@@ -2,8 +2,9 @@ package uvl.util;
 
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,8 @@ import uvl.model.base.BaseModel;
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
 import uvl.model.recreate.constraints.AbstractConstraint;
+import uvl.model.recreate.constraints.BinaryConstraint;
+import uvl.model.recreate.constraints.FeatureReferenceConstraint;
 import uvl.model.recreate.feature.Feature;
 import uvl.model.recreate.constraints.GroupConstraint;
 
@@ -124,7 +127,7 @@ public class RecreationMerger {
                 modelA.getConstraints().size(), modelA.getRegion().getRegionString(), modelB.getConstraints().size(),
                 modelB.getRegion().getRegionString());
 
-        removeDuplicateContextualizedGroupConstraints(unionModel);
+        // removeDuplicateContextualizedGroupConstraints(unionModel);
 
         logger.info("[union] finished union with {} features and {} constraints", unionModel.getFeatures().size(),
                 unionModel.getConstraints().size());
@@ -162,6 +165,56 @@ public class RecreationMerger {
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
         unionModel.addConstraint(regionGc);
+
+        // Find unique features in each model
+        Set<String> modelAFeatures = modelA.getFeatures().keySet();
+        Set<String> modelBFeatures = modelB.getFeatures().keySet();
+
+        // Find unique features in each model (features that exist in only one model)
+        Set<String> uniqueToA = new HashSet<>(modelAFeatures);
+        uniqueToA.removeAll(modelBFeatures);
+
+        Set<String> uniqueToB = new HashSet<>(modelBFeatures);
+        uniqueToB.removeAll(modelAFeatures);
+
+        logger.info("[handleRegionFeature] Found {} features unique to region A and {} features unique to region B",
+                uniqueToA.size(), uniqueToB.size());
+
+        // Add region implications only for unique features
+        addUniqueFeatureRegionImplications(modelA, unionModel, region1Feature, uniqueToA);
+        addUniqueFeatureRegionImplications(modelB, unionModel, region2Feature, uniqueToB);
+    }
+
+    private static void addUniqueFeatureRegionImplications(RecreationModel sourceModel,
+            RecreationModel unionModel,
+            Feature regionFeature, Set<String> uniqueFeatureNames) {
+
+        // Get special features that should be excluded
+        Set<String> excludedFeatures = new HashSet<>();
+        excludedFeatures.add(unionModel.getRootFeature().getName());
+        excludedFeatures.add("Region");
+        for (Region r : Region.values()) {
+            excludedFeatures.add(r.getRegionString());
+        }
+
+        // For each unique feature
+        for (String featureName : uniqueFeatureNames) {
+            if (!excludedFeatures.contains(featureName)) {
+                Feature feature = unionModel.getFeatures().get(featureName);
+                if (feature != null) {
+                    // Create implication: feature → region
+                    FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint(feature);
+                    FeatureReferenceConstraint consequent = new FeatureReferenceConstraint(regionFeature);
+                    BinaryConstraint implication = new BinaryConstraint(antecedent,
+                            BinaryConstraint.LogicalOperator.IMPLIES, consequent);
+
+                    // Add to union model
+                    unionModel.addConstraint(implication);
+                    logger.debug("[addUniqueFeatureRegionImplications] Added constraint: {} implies {}",
+                            featureName, regionFeature.getName());
+                }
+            }
+        }
     }
 
     private static void handleRootFeature(RecreationModel model1, RecreationModel model2, RecreationModel unionModel) {

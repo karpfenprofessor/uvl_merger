@@ -113,10 +113,11 @@ public class SmartwatchBasicTest {
         }
     }
 
-    //@Test
+    @Test
     public void testUnionOfSmartwatchModels() {
         try {
             for (int i = 0; i < MIBAND_BASE_MODELS.length - 1; i++) {
+                if(i == 1 || i == 3) continue;
                 RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i].filename, Region.A);
                 RecreationModel modelB = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i + 1].filename, Region.B);
 

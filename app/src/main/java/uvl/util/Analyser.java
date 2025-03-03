@@ -30,6 +30,15 @@ public class Analyser {
         BaseModelAnalyser.printConstraints(model);
     }
 
+    public static void printAllSolutions(BaseModel model) {
+        BaseModelAnalyser.printAllSolutions(model);
+    }
+
+    public static void printAllSolutions(RecreationModel model) {
+        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+        BaseModelAnalyser.printAllSolutions(chocoTestModel, true);
+    }
+
     
     
 }
