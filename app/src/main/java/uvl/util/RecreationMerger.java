@@ -302,7 +302,7 @@ public class RecreationMerger {
                 gc1.getContextualizationValue() != gc2.getContextualizationValue();
     }
 
-    private static RecreationModel inconsistencyCheck(RecreationModel unionModel) {
+    public static RecreationModel inconsistencyCheck(RecreationModel unionModel) {
         logger.info("[inconsistencyCheck] start inconsistency check with {} features and {} constraints in union model",
                 unionModel.getFeatures().size(), unionModel.getConstraints().size());
         RecreationModel mergedModel = new RecreationModel(Region.MERGED);
@@ -345,7 +345,7 @@ public class RecreationMerger {
         return mergedModel;
     }
 
-    private static RecreationModel cleanup(RecreationModel mergedModel) {
+    public static RecreationModel cleanup(RecreationModel mergedModel) {
         logger.info("[cleanup] start cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size());
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();

@@ -14,8 +14,8 @@ public class TestAnything {
     protected final static Logger logger = LogManager.getLogger(TestAnything.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/smartwatch/miband1s.uvl";	 
-        String filePathString2 = "uvl/smartwatch/miband2.uvl";	   
+        String filePathString = "uvl/smartwatch/miband5.uvl";	 
+        String filePathString2 = "uvl/smartwatch/miband8.uvl";	   
   
     
 
