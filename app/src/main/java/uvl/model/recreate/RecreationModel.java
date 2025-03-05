@@ -6,6 +6,7 @@ import uvl.model.base.Region;
 import uvl.model.recreate.constraints.AbstractConstraint;
 import uvl.model.recreate.constraints.GroupConstraint;
 import uvl.model.recreate.feature.Feature;
+import uvl.util.Analyser;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,8 @@ public class RecreationModel {
         logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
                 + " with region ordinal: " + region.ordinal());
 
+        long solutions = Analyser.returnNumberOfSolutions(this);
+
         for (AbstractConstraint constraint : constraints) {
             constraint.setContextualize(region.ordinal());
         }
@@ -65,6 +68,11 @@ public class RecreationModel {
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
         addConstraint(regionGc);
+
+        // validate solution spaces after contextualization
+        if (solutions != Analyser.returnNumberOfSolutions(this)) {
+            throw new RuntimeException("Solution space of model should not change after contextualization");
+        }
     }
 
     public void addConstraint(AbstractConstraint c) {

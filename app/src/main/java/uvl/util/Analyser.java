@@ -39,6 +39,13 @@ public class Analyser {
         BaseModelAnalyser.printAllSolutions(chocoTestModel, true);
     }
 
-    
-    
+    public static int printIntersectionSolutions(BaseModel model1, BaseModel model2) {
+        return BaseModelAnalyser.findIntersectionSolutions(model1, model2);
+    }
+
+    public static int printIntersectionSolutions(RecreationModel model1, RecreationModel model2) {
+        BaseModel chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
+        BaseModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
+        return BaseModelAnalyser.findIntersectionSolutions(chocoTestModel1, chocoTestModel2);
+    }
 }

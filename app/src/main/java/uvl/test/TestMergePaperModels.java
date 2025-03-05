@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
 import uvl.util.UVLParser;
-import uvl.util.RecreationModelAnalyser;
+import uvl.util.Analyser;
 import uvl.util.RecreationMerger;
 
 public class TestMergePaperModels {
@@ -14,15 +14,34 @@ public class TestMergePaperModels {
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/eu.uvl", Region.B);
 
-            RecreationModel mergedModel = RecreationMerger.fullMerge(modelUs, modelGer);
-            RecreationModelAnalyser.analyseContextualizationShare(mergedModel);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+
+            
+
+            System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
+            System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
+
+            int intersectionSolutions = Analyser.printIntersectionSolutions(modelUs, modelGer);
+            System.out.println("intersection solutions: " + intersectionSolutions);
+
+            modelUs.contextualizeAllConstraints();
+            modelGer.contextualizeAllConstraints();
+
+            System.out.println("solutions model us contextualized: " + Analyser.returnNumberOfSolutions(modelUs));
+            System.out.println("solutions model ger contextualized: " + Analyser.returnNumberOfSolutions(modelGer));
+
+            RecreationModel unionModel = RecreationMerger.union(modelUs, modelGer);
+
+            System.out.println("solutions union model: " + Analyser.returnNumberOfSolutions(unionModel));
+
+            RecreationMerger.inconsistencyCheck(unionModel);
+            RecreationMerger.cleanup(unionModel);
+
+            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(unionModel));
         } catch (Exception e) {
-            logger.error("Error during merge paper models test:", e);  
+            e.printStackTrace();
         }
     }
 }
-
-//test

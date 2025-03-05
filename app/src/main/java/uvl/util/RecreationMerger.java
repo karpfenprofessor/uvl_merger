@@ -72,13 +72,6 @@ public class RecreationMerger {
         cleanup(mergedModel);
 
         RecreationModelAnalyser.printConstraints(mergedModel);
-
-        BaseModel chocoTestModelMerged = ChocoTranslator.convertToChocoModel(mergedModel);
-        long solutionsMergedModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelMerged);
-        if (solutionsMergedModel != 126) {
-            throw new RuntimeException("Solution space of merged model is not correct");
-        }
-
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return mergedModel;
     }
@@ -134,6 +127,92 @@ public class RecreationMerger {
 
         return unionModel;
     }
+
+    public static RecreationModel inconsistencyCheck(RecreationModel unionModel) {
+        logger.info("[inconsistencyCheck] start inconsistency check with {} features and {} constraints in union model",
+                unionModel.getFeatures().size(), unionModel.getConstraints().size());
+        RecreationModel mergedModel = new RecreationModel(Region.MERGED);
+
+        // Copy all features and root feature from union model to merged model
+        mergedModel.getFeatures().putAll(unionModel.getFeatures());
+        mergedModel.setRootFeature(unionModel.getRootFeature());
+
+        RecreationModel testingModel = null;
+
+        Iterator<AbstractConstraint> iterator = unionModel.getConstraints().iterator();
+        while (iterator.hasNext()) {
+            AbstractConstraint constraint = iterator.next();
+            AbstractConstraint checkConstraint = constraint.copy();
+            AbstractConstraint originalConstraint = constraint.copy();
+
+            // Create new testing model with features from union model
+            testingModel = new RecreationModel(Region.TESTING);
+            testingModel.getFeatures().putAll(unionModel.getFeatures());
+            testingModel.setRootFeature(unionModel.getRootFeature());
+
+            testingModel.addConstraints(unionModel.getConstraints());
+            testingModel.addConstraints(mergedModel.getConstraints());
+            logger.info("[inconsistencyCheck] created testing model with {} features and {} constraints",
+                    testingModel.getFeatures().size(), testingModel.getConstraints().size());
+
+            if (isInconsistent(checkConstraint, testingModel)) {
+                logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to mergedModel");
+                originalConstraint.disableContextualize();
+                mergedModel.addConstraint(originalConstraint);
+            } else {
+                logger.info("[inconsistencyCheck] CONSISTENT, keep contextualized and add to mergedModel");
+                mergedModel.addConstraint(originalConstraint);
+            }
+
+            iterator.remove();
+        }
+
+        logger.info("[inconsistencyCheck] finished inconsistency check with {} features and {} constraints",
+                mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
+        return mergedModel;
+    }
+
+    public static RecreationModel cleanup(RecreationModel mergedModel) {
+        logger.info("[cleanup] start cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
+                mergedModel.getConstraints().size());
+        Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
+        while (iterator.hasNext()) {
+            AbstractConstraint constraint = iterator.next();
+            constraint.setNegation(Boolean.TRUE);
+
+            if (isInconsistent(mergedModel)) {
+                iterator.remove();
+                logger.info("[cleanup] removed constraint {} from mergedModel", constraint.toString());
+            } else {
+                constraint.setNegation(Boolean.FALSE);
+                logger.info("[cleanup] kept constraint {} in mergedModel", constraint.toString());
+            }
+        }
+
+        logger.info("[cleanup] finished cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
+                mergedModel.getConstraints().size());
+        return mergedModel;
+    }
+
+    private static boolean isInconsistent(AbstractConstraint constraint, RecreationModel testingRecreationModel) {
+        constraint.disableContextualize();
+        constraint.setNegation(Boolean.TRUE);
+        testingRecreationModel.addConstraint(constraint);
+        logger.info("[isInconsistent] added negated constraint {} to testing model", constraint.toString());
+
+        BaseModel testingModel = ChocoTranslator.convertToChocoModel(testingRecreationModel);
+
+        return !BaseModelAnalyser.isConsistent(testingModel);
+    }
+
+    private static boolean isInconsistent(RecreationModel testingRecreationModel) {
+        logger.info("[isInconsistent2] checking if testing model is inconsistent with {} features and {} constraints",
+                testingRecreationModel.getFeatures().size(), testingRecreationModel.getConstraints().size());
+        BaseModel testingModel = ChocoTranslator.convertToChocoModel(testingRecreationModel);
+        return !BaseModelAnalyser.isConsistent(testingModel);
+    }
+
+    
 
     private static void handleRegionFeature(RecreationModel modelA, RecreationModel modelB,
             RecreationModel unionModel) {
@@ -300,88 +379,5 @@ public class RecreationMerger {
                 &&
                 gc1.isContextualized() == gc2.isContextualized() &&
                 gc1.getContextualizationValue() != gc2.getContextualizationValue();
-    }
-
-    public static RecreationModel inconsistencyCheck(RecreationModel unionModel) {
-        logger.info("[inconsistencyCheck] start inconsistency check with {} features and {} constraints in union model",
-                unionModel.getFeatures().size(), unionModel.getConstraints().size());
-        RecreationModel mergedModel = new RecreationModel(Region.MERGED);
-
-        // Copy all features and root feature from union model to merged model
-        mergedModel.getFeatures().putAll(unionModel.getFeatures());
-        mergedModel.setRootFeature(unionModel.getRootFeature());
-
-        RecreationModel testingModel = null;
-
-        Iterator<AbstractConstraint> iterator = unionModel.getConstraints().iterator();
-        while (iterator.hasNext()) {
-            AbstractConstraint constraint = iterator.next();
-            AbstractConstraint checkConstraint = constraint.copy();
-            AbstractConstraint originalConstraint = constraint.copy();
-
-            // Create new testing model with features from union model
-            testingModel = new RecreationModel(Region.TESTING);
-            testingModel.getFeatures().putAll(unionModel.getFeatures());
-            testingModel.setRootFeature(unionModel.getRootFeature());
-
-            testingModel.addConstraints(unionModel.getConstraints());
-            testingModel.addConstraints(mergedModel.getConstraints());
-            logger.info("[inconsistencyCheck] created testing model with {} features and {} constraints",
-                    testingModel.getFeatures().size(), testingModel.getConstraints().size());
-
-            if (isInconsistent(checkConstraint, testingModel)) {
-                logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to mergedModel");
-                originalConstraint.disableContextualize();
-                mergedModel.addConstraint(originalConstraint);
-            } else {
-                logger.info("[inconsistencyCheck] CONSISTENT, keep contextualized and add to mergedModel");
-                mergedModel.addConstraint(originalConstraint);
-            }
-
-            iterator.remove();
-        }
-        logger.info("[inconsistencyCheck] finished inconsistency check with {} features and {} constraints",
-                mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
-        return mergedModel;
-    }
-
-    public static RecreationModel cleanup(RecreationModel mergedModel) {
-        logger.info("[cleanup] start cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
-                mergedModel.getConstraints().size());
-        Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
-        while (iterator.hasNext()) {
-            AbstractConstraint constraint = iterator.next();
-            constraint.setNegation(Boolean.TRUE);
-
-            if (isInconsistent(mergedModel)) {
-                iterator.remove();
-                logger.info("[cleanup] removed constraint {} from mergedModel", constraint.toString());
-            } else {
-                constraint.setNegation(Boolean.FALSE);
-                logger.info("[cleanup] kept constraint {} in mergedModel", constraint.toString());
-            }
-        }
-
-        logger.info("[cleanup] finished cleanup with {} features and {} constraints", mergedModel.getFeatures().size(),
-                mergedModel.getConstraints().size());
-        return mergedModel;
-    }
-
-    private static boolean isInconsistent(AbstractConstraint constraint, RecreationModel testingRecreationModel) {
-        constraint.disableContextualize();
-        constraint.setNegation(Boolean.TRUE);
-        testingRecreationModel.addConstraint(constraint);
-        logger.info("[isInconsistent] added negated constraint {} to testing model", constraint.toString());
-
-        BaseModel testingModel = ChocoTranslator.convertToChocoModel(testingRecreationModel);
-
-        return !BaseModelAnalyser.isConsistent(testingModel);
-    }
-
-    private static boolean isInconsistent(RecreationModel testingRecreationModel) {
-        logger.info("[isInconsistent2] checking if testing model is inconsistent with {} features and {} constraints",
-                testingRecreationModel.getFeatures().size(), testingRecreationModel.getConstraints().size());
-        BaseModel testingModel = ChocoTranslator.convertToChocoModel(testingRecreationModel);
-        return !BaseModelAnalyser.isConsistent(testingModel);
     }
 }

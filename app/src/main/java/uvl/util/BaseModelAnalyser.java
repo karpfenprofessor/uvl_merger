@@ -129,11 +129,11 @@ public class BaseModelAnalyser {
             }
             solutionsModel2.add(solution.toString());
         }
-        logger.debug("[intersection] found {} solutions in model  {}", solutionsModel2.size(), model2.getRegionString());
+        logger.debug("[intersection] found {} solutions in model {}", solutionsModel2.size(), model2.getRegionString());
 
         // Find intersection
         solutionsModel1.retainAll(solutionsModel2);
-        logger.info("[intersection] found {} solutions", solutionsModel1.size());
+        logger.info("[intersection] found {} intersection solutions", solutionsModel1.size());
 
         return solutionsModel1.size();
     }

@@ -41,7 +41,7 @@ public class BasicTests {
 
     private final TestCase[] TEST_CASES_PAPER = {
         new TestCase("uvl/paper_test_models/us.uvl", 288),
-        new TestCase("uvl/paper_test_models/eu.uvl", 324)
+        new TestCase("uvl/paper_test_models/ger.uvl", 324)
     };
 
     private final TestCase[] TEST_CASES_FISH = {
@@ -111,7 +111,7 @@ public class BasicTests {
     public void testContextualizationOfPaperCarModels() {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/eu.uvl", Region.B);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
 
             long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
@@ -130,7 +130,7 @@ public class BasicTests {
     public void testUnionOfPaperCarModels() {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/eu.uvl", Region.B);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
 
             long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
@@ -146,6 +146,36 @@ public class BasicTests {
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
         } catch (Exception e) {
             throw new AssertionError("testUnionOfPaperCarModels failed, error: " + e.getMessage());
+        }
+    }
+
+    //@Test
+    public void testMergeOfPaperCarModels() {
+        try {
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+
+            long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
+            assertEquals(TEST_CASES_PAPER[0].expectedSolutions, solutionsUs);
+            long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
+            assertEquals(TEST_CASES_PAPER[1].expectedSolutions, solutionsGer);
+
+            modelUs.contextualizeAllConstraints();
+            modelGer.contextualizeAllConstraints();
+
+            assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
+            assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
+
+            RecreationModel unionModel = RecreationMerger.union(modelUs, modelGer);
+
+            assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
+
+            RecreationMerger.inconsistencyCheck(unionModel);
+            RecreationMerger.cleanup(unionModel);
+
+            assertEquals(Analyser.printIntersectionSolutions(modelUs, modelGer), Analyser.returnNumberOfSolutions(unionModel));
+        } catch (Exception e) {
+            throw new AssertionError("testMergeOfPaperCarModels failed, error: " + e.getMessage());
         }
     }
 }
