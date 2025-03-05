@@ -48,4 +48,13 @@ public class Analyser {
         BaseModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
         return BaseModelAnalyser.findIntersectionSolutions(chocoTestModel1, chocoTestModel2);
     }
+
+    public static boolean isConsistent(BaseModel model) {
+        return BaseModelAnalyser.isConsistent(model);
+    }
+
+    public static boolean isConsistent(RecreationModel model) {
+        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+        return isConsistent(chocoTestModel);
+    }
 }
