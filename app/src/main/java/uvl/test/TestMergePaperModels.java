@@ -14,11 +14,8 @@ public class TestMergePaperModels {
 
     public static void main(String[] args) {
         try {
-
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
-
-            
 
             System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
             System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
@@ -41,6 +38,7 @@ public class TestMergePaperModels {
 
             System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
             Analyser.printFeatures(mergedModel);
+            Analyser.printConstraints(mergedModel);
         } catch (Exception e) {
             e.printStackTrace();
         }
