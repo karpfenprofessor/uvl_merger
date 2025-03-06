@@ -36,10 +36,11 @@ public class TestMergePaperModels {
 
             System.out.println("solutions union model: " + Analyser.returnNumberOfSolutions(unionModel));
 
-            unionModel = RecreationMerger.inconsistencyCheck(unionModel);
-            unionModel = RecreationMerger.cleanup(unionModel);
+            RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
+            mergedModel = RecreationMerger.cleanup(mergedModel);
 
-            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(unionModel));
+            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
+            Analyser.printFeatures(mergedModel);
         } catch (Exception e) {
             e.printStackTrace();
         }

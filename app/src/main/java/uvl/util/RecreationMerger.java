@@ -129,18 +129,20 @@ public class RecreationMerger {
     }
 
     public static RecreationModel inconsistencyCheck(RecreationModel unionModel) {
-        logger.info("[inconsistencyCheck] start with {} features and {} constraints in union model",
+        logger.info("[inconsistencyCheck] start constraint loop with {} features and {} constraints in union model",
                 unionModel.getFeatures().size(), unionModel.getConstraints().size());
-        
+
+        long solutions = Analyser.returnNumberOfSolutions(unionModel);
+
         RecreationModel CKB = new RecreationModel(Region.MERGED);
 
         // Copy all features and root feature from union model to merged model
         CKB.getFeatures().putAll(unionModel.getFeatures());
         CKB.setRootFeature(unionModel.getRootFeature());
 
-        RecreationModel testingModel = null;//test
+        RecreationModel testingModel = null;// test
 
-        //loop over every contextualized constraint (line 6 in pseudocode)
+        // loop over every contextualized constraint (line 6 in pseudocode)
         Iterator<AbstractConstraint> iterator = unionModel.getConstraints().iterator();
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
@@ -154,33 +156,45 @@ public class RecreationMerger {
 
             testingModel.addConstraints(unionModel.getConstraints());
             testingModel.addConstraints(CKB.getConstraints());
-            logger.info("[inconsistencyCheck] created testing model with {} features and {} constraints, has {} solutions",
-                    testingModel.getFeatures().size(), testingModel.getConstraints().size(), Analyser.returnNumberOfSolutions(testingModel));
+            logger.info(
+                    "[inconsistencyCheck] created testing model with {} features and {} constraints, has {} solutions",
+                    testingModel.getFeatures().size(), testingModel.getConstraints().size(),
+                    Analyser.returnNumberOfSolutions(testingModel));
 
             if (isInconsistentWithNegatedConstraint(checkConstraint, testingModel)) {
-                logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to CKB");
-                
-                //decontextualize constraint and add to merged model (line 8 in pseudocode)
+                logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to CKB, constraint: {}",
+                        originalConstraint.toString());
+
+                // decontextualize constraint and add to merged model (line 8 in pseudocode)
                 originalConstraint.disableContextualize();
                 CKB.addConstraint(originalConstraint);
             } else {
-                //add contextualized constraint to merged model (line 10 in pseudocode)
-                logger.info("[inconsistencyCheck] CONSISTENT, keep contextualized and add to CKB");
+                // add contextualized constraint to merged model (line 10 in pseudocode)
+                logger.info("[inconsistencyCheck] CONSISTENT, keep contextualized and add to CKB, constraint: {}",
+                        originalConstraint.toString());
                 CKB.addConstraint(originalConstraint);
             }
 
-            //remove constraint from union model (line 12 in pseudocode)
+            // remove constraint from union model (line 12 in pseudocode)
             iterator.remove();
         }
 
-        logger.info("[inconsistencyCheck] finished inconsistency check with {} features and {} constraints and {} solutions",
+        if (solutions != Analyser.returnNumberOfSolutions(CKB)) {
+            throw new RuntimeException(
+                    "Solution space of merged model after inconsistency check should be the same as the solution space of the union model");
+        }
+
+        logger.info("[inconsistencyCheck] finished with {} features, {} constraints and {} solutions",
                 CKB.getFeatures().size(), CKB.getConstraints().size(), Analyser.returnNumberOfSolutions(CKB));
         return CKB;
     }
 
     public static RecreationModel cleanup(RecreationModel mergedModel) {
-        logger.info("[cleanup] start cleanup with {} features and {} constraints and {} solutions", mergedModel.getFeatures().size(),
+        logger.info("[cleanup] start cleanup with {} features and {} constraints and {} solutions",
+                mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size(), Analyser.returnNumberOfSolutions(mergedModel));
+
+        long solutions = Analyser.returnNumberOfSolutions(mergedModel);
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
@@ -195,26 +209,29 @@ public class RecreationMerger {
             }
         }
 
-        logger.info("[cleanup] finished cleanup with {} features and {} constraints and {} solutions", mergedModel.getFeatures().size(),
+        if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
+            throw new RuntimeException(
+                    "Solution space of merged model after cleanup should be the same as the solution space of the merged model before cleanup");
+        }
+
+        logger.info("[cleanup] finished cleanup with {} features and {} constraints and {} solutions",
+                mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size(), Analyser.returnNumberOfSolutions(mergedModel));
         return mergedModel;
     }
 
-    private static boolean isInconsistentWithNegatedConstraint(AbstractConstraint constraintToNegate, RecreationModel testingModel) {
+    private static boolean isInconsistentWithNegatedConstraint(AbstractConstraint constraintToNegate,
+            RecreationModel testingModel) {
         constraintToNegate.disableContextualize();
         constraintToNegate.setNegation(Boolean.TRUE);
         testingModel.addConstraint(constraintToNegate);
-        logger.info("[isInconsistentWithNegatedConstraint] added negated constraint {} to testing model", constraintToNegate.toString());
 
         return !Analyser.isConsistent(testingModel);
     }
 
     private static boolean isInconsistent(RecreationModel testingModel) {
-        logger.info("[isInconsistent] checking if testing model is inconsistent");
         return !Analyser.isConsistent(testingModel);
     }
-
-    
 
     private static void handleRegionFeature(RecreationModel modelA, RecreationModel modelB,
             RecreationModel unionModel) {

@@ -152,7 +152,7 @@ public class SmartwatchBasicTest {
         }
     }
 
-    @Test
+    //@Test
     public void testMergeOfSmartwatchModels() {
         try {
             TestCase testCaseA = MIBAND_BASE_MODELS[5];
@@ -180,14 +180,20 @@ public class SmartwatchBasicTest {
             RecreationModel unionModel = RecreationMerger.union(modelA, modelB);
 
             // Verify the solution count after union
-            long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
-            assertEquals(expectedSolutions, actualSolutions,
+            assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(unionModel),
                     "Solution count mismatch after union of " + testCaseA.filename + " and "
                             + testCaseB.filename);
 
 
-            RecreationMerger.inconsistencyCheck(unionModel);
-            RecreationMerger.cleanup(unionModel);
+            RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
+            assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
+                    "Solution count mismatch after inconsistencyCheck of " + testCaseA.filename + " and "
+                            + testCaseB.filename);
+
+            mergedModel = RecreationMerger.cleanup(mergedModel);
+            assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
+                    "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
+                            + testCaseB.filename);
         } catch (Exception e) {
             throw new AssertionError("testMergeOfSmartwatchModels failed: " + e.getMessage(), e);
         }

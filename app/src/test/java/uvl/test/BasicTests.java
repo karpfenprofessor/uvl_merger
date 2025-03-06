@@ -149,7 +149,7 @@ public class BasicTests {
         }
     }
 
-    //@Test
+    @Test
     public void testMergeOfPaperCarModels() {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
@@ -159,6 +159,8 @@ public class BasicTests {
             assertEquals(TEST_CASES_PAPER[0].expectedSolutions, solutionsUs);
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
             assertEquals(TEST_CASES_PAPER[1].expectedSolutions, solutionsGer);
+
+            assertEquals(Analyser.printIntersectionSolutions(modelUs, modelGer), 126);
 
             modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
@@ -170,10 +172,13 @@ public class BasicTests {
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
 
-            RecreationMerger.inconsistencyCheck(unionModel);
-            RecreationMerger.cleanup(unionModel);
+            RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
 
-            assertEquals(Analyser.printIntersectionSolutions(modelUs, modelGer), Analyser.returnNumberOfSolutions(unionModel));
+            assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
+
+            mergedModel = RecreationMerger.cleanup(mergedModel);
+
+            assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
         } catch (Exception e) {
             throw new AssertionError("testMergeOfPaperCarModels failed, error: " + e.getMessage());
         }
