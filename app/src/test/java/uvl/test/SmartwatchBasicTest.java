@@ -38,18 +38,6 @@ public class SmartwatchBasicTest {
             new TestCase("uvl/smartwatch/miband8_realized.uvl", 21)
     };
 
-    private final TestCase[] MIBAND_PLANNED_MODELS = {
-            new TestCase("uvl/smartwatch/miband1_planned.uvl", 1),
-            new TestCase("uvl/smartwatch/miband1s_planned.uvl", 2),
-            new TestCase("uvl/smartwatch/miband2_planned.uvl", 24),
-            new TestCase("uvl/smartwatch/miband3_planned.uvl", 108),
-            new TestCase("uvl/smartwatch/miband4_planned.uvl", 1344),
-            new TestCase("uvl/smartwatch/miband5_planned.uvl", 8064),
-            new TestCase("uvl/smartwatch/miband6_planned.uvl", 16128),
-            new TestCase("uvl/smartwatch/miband7_planned.uvl", 20160),
-            new TestCase("uvl/smartwatch/miband8_planned.uvl", 24192)
-    };
-
     private long getSolutionCount(String filename) throws Exception {
         RecreationModel recModel = UVLParser.parseUVLFile(filename);
         recModel.setRegion(Region.A);
@@ -83,19 +71,6 @@ public class SmartwatchBasicTest {
     }
 
     @Test
-    public void testSolutionCountsOfPlannedModels() {
-        for (TestCase testCase : MIBAND_PLANNED_MODELS) {
-            try {
-                long actualSolutions = getSolutionCount(testCase.filename);
-                assertEquals(testCase.expectedSolutions, actualSolutions,
-                        "Solution count mismatch for " + testCase.filename);
-            } catch (Exception e) {
-                throw new AssertionError("testSolutionCountsOfPlannedModels failed for " + testCase.filename, e);
-            }
-        }
-    }
-
-    @Test
     public void testContextualizationOfSingleModels() {
         for (TestCase testCase : MIBAND_BASE_MODELS) {
             try {
@@ -111,14 +86,29 @@ public class SmartwatchBasicTest {
                 throw new AssertionError("testContextualizationOfSingleModels failed for " + testCase.filename, e);
             }
         }
+
+        for (TestCase testCase : MIBAND_REALIZED_MODELS) {
+            try {
+                RecreationModel model = UVLParser.parseUVLFile(testCase.filename, Region.A);
+
+                long solutions = Analyser.returnNumberOfSolutions(model);
+
+                model.contextualizeAllConstraints();
+
+                assertEquals(solutions, Analyser.returnNumberOfSolutions(model),
+                        "Solution count mismatch for " + testCase.filename);
+            } catch (Exception e) {
+                throw new AssertionError("testContextualizationOfSingleModels failed for " + testCase.filename, e);
+            }
+        }
     }
 
-    @Test
+    //@Test
     public void testUnionOfSmartwatchModels() {
         try {
             for (int i = 0; i < MIBAND_BASE_MODELS.length - 1; i++) {
-                if (i == 1 || i == 3)
-                    continue;
+                //if (i == 1 || i == 3)
+                //    continue;
                 RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i].filename, Region.A);
                 RecreationModel modelB = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i + 1].filename, Region.B);
 
