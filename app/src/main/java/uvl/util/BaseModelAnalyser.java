@@ -163,30 +163,24 @@ public class BaseModelAnalyser {
         Model model = baseModel.getModel();
         model.getSolver().reset();
         
-        logger.info("----------------------------------------");
-        logger.info("Printing all solutions:");
-        logger.info("----------------------------------------");
+        logger.info("--------------------------------------------------");
+        logger.info("Printing all solutions of model " + baseModel.getRegionString() + ":");
+        logger.info("--------------------------------------------------");
+       
+        String[] orderedFeatures = baseModel.getFeatures().keySet().toArray(new String[0]);
         
-        // Define feature order
-        String[] orderedFeatures = {
-            "Car",
-            "Region", "A", "B",
-            "Type", "Combi", "Limo", "City", "SUV",
-            "Color", "White", "Black",
-            "Engine", "1L", "1,5L", "2L",
-            "CouplingDevice", "Yes", "No",
-            "Fuel", "Electro", "Diesel", "Gas", "Hybrid",
-            "Service", "15k", "20k", "25k"
-        };
-
-        if (takeFeatureNamesFromModel) {
-            orderedFeatures = baseModel.getFeatures().keySet().toArray(new String[0]);
+        
+        // Calculate column widths based on feature names (minimum width of 3 to fit "0/1" or "-")
+        int[] columnWidths = new int[orderedFeatures.length];
+        for (int i = 0; i < orderedFeatures.length; i++) {
+            columnWidths[i] = Math.max(3, orderedFeatures[i].length());
         }
         
         // Print header
-        StringBuilder header = new StringBuilder("Sol# | ");
-        for (String featureName : orderedFeatures) {
-            header.append(featureName).append(" | ");
+        StringBuilder header = new StringBuilder(String.format("%-4s | ", "Sol#"));
+        for (int i = 0; i < orderedFeatures.length; i++) {
+            String featureName = orderedFeatures[i];
+            header.append(String.format("%-" + columnWidths[i] + "s | ", featureName));
         }
         logger.info(header.toString());
         
@@ -198,22 +192,23 @@ public class BaseModelAnalyser {
             StringBuilder solution = new StringBuilder();
             solution.append(String.format("%-4d | ", solutionCount));
             
-            // Add each feature's value (0/1) to the line in specified order
-            for (String featureName : orderedFeatures) {
+            // Add each feature's value (0/1) to the line in specified order with proper alignment
+            for (int i = 0; i < orderedFeatures.length; i++) {
+                String featureName = orderedFeatures[i];
                 BoolVar featureVar = features.get(featureName);
                 if (featureVar != null) {
                     int value = featureVar.getValue();
-                    solution.append(value).append(" | ");
+                    solution.append(String.format("%-" + columnWidths[i] + "d | ", value));
                 } else {
-                    solution.append("- | ");
+                    solution.append(String.format("%-" + columnWidths[i] + "s | ", "-"));
                 }
             }
             
             logger.info(solution.toString());
         }
         
-        logger.info("----------------------------------------");
-        logger.info("Total number of solutions: {}", solutionCount);
-        logger.info("----------------------------------------");
+        logger.info("--------------------------------------------------");
+        logger.info("Total number of solutions in model " + baseModel.getRegionString() + ": {}", solutionCount);
+        logger.info("--------------------------------------------------");
     }
 } 
