@@ -2,10 +2,8 @@ package uvl.model.recreate.constraints;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import uvl.model.recreate.feature.Feature;
 
-@ToString(callSuper = true)
 @Getter
 @Setter
 public class FeatureReferenceConstraint extends AbstractConstraint 
@@ -34,6 +32,14 @@ public class FeatureReferenceConstraint extends AbstractConstraint
                 this.isContextualized(),
                 this.getContextualizationValue(),
                 this.isNegation());
+        }
+        
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(super.toString());
+            sb.append("\tfeature\t\t\t: ").append(feature != null ? feature.getName() : "null").append("\n");
+            sb.append("\t}");
+            return sb.toString();
         }
 }
 

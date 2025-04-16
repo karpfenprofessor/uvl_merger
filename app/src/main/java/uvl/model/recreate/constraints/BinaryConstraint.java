@@ -2,12 +2,10 @@ package uvl.model.recreate.constraints;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import uvl.model.recreate.feature.Feature;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
 public class BinaryConstraint extends AbstractConstraint {
 
     public enum LogicalOperator {
@@ -62,5 +60,19 @@ public class BinaryConstraint extends AbstractConstraint {
             this.isContextualized(), 
             this.getContextualizationValue(), 
             this.isNegation());
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("\toperator\t\t: ").append(operator).append("\n");
+        sb.append("\tantecedent\t\t: ").append(antecedent instanceof Feature ? 
+                                                ((Feature)antecedent).getName() : 
+                                                antecedent.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\tconsequent\t\t: ").append(consequent instanceof Feature ? 
+                                                ((Feature)consequent).getName() : 
+                                                consequent.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\t}");
+        return sb.toString();
     }
 }

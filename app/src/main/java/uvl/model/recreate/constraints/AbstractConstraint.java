@@ -2,11 +2,9 @@ package uvl.model.recreate.constraints;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 public abstract class AbstractConstraint {
     private boolean isContextualized;
     private Integer contextualizationValue;
@@ -35,4 +33,18 @@ public abstract class AbstractConstraint {
     }
    
     public abstract AbstractConstraint copy();
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName()).append(" {\n");
+        sb.append("\tisNegation\t\t: ").append(isNegation).append("\n");
+        sb.append("\tisContextualized:\t ").append(isContextualized).append("\n");
+        
+        if (isContextualized && contextualizationValue != null) {
+            sb.append("\tcontextValue\t: ").append(contextualizationValue).append("\n");
+        }
+        
+        return sb.toString();
+    }
 }

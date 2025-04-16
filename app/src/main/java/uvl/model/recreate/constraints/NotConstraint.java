@@ -2,11 +2,9 @@ package uvl.model.recreate.constraints;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
 public class NotConstraint extends AbstractConstraint {
 
     public AbstractConstraint inner;
@@ -31,4 +29,11 @@ public class NotConstraint extends AbstractConstraint {
         return new NotConstraint(this.inner.copy(), this.isContextualized(), this.getContextualizationValue(), this.isNegation());
     }
     
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("\tinner\t\t\t: ").append(inner.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\t}");
+        return sb.toString();
+    }
 }

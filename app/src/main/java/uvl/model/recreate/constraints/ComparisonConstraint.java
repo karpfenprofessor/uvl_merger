@@ -2,11 +2,9 @@ package uvl.model.recreate.constraints;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
 public class ComparisonConstraint extends AbstractConstraint {
 
     public enum ComparisonOperator { EQ, NEQ, LT, GT, LTE, GTE }
@@ -48,5 +46,15 @@ public class ComparisonConstraint extends AbstractConstraint {
             this.isContextualized(),
             this.getContextualizationValue(),
             this.isNegation());
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("\toperator\t\t: ").append(operator).append("\n");
+        sb.append("\tleftOperand\t\t: ").append(leftOperand.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\trightOperand\t\t: ").append(rightOperand.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\t}");
+        return sb.toString();
     }
 }
