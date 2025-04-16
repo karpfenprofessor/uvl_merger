@@ -145,6 +145,7 @@ public class BaseModelAnalyser {
         long solutions = 0;
         while (model.getSolver().solve()) {
             solutions++;
+            //logger.info("solution: " + solutions);
         }
         return solutions;
     }

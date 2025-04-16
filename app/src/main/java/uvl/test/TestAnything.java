@@ -14,8 +14,8 @@ public class TestAnything {
     protected final static Logger logger = LogManager.getLogger(TestAnything.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/smartwatch/miband3.uvl";	 
-        String filePathString2 = "uvl/smartwatch/miband4.uvl";	   
+        String filePathString = "uvl/smartwatch/miband7_realized.uvl";	 
+        String filePathString2 = "uvl/smartwatch/miband8_realized.uvl";	   
   
         RecreationModel recModel = UVLParser.parseUVLFile(filePathString, Region.A);
         RecreationModel recModel2 = UVLParser.parseUVLFile(filePathString2, Region.B);
@@ -33,5 +33,14 @@ public class TestAnything {
         
         System.out.println("solutions union model: " + Analyser.returnNumberOfSolutions(unionModel));
         Analyser.printAllSolutions(unionModel);
+
+        RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
+
+        System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
+
+        mergedModel = RecreationMerger.cleanup(mergedModel);
+
+        System.out.println("solutions finished model: " + Analyser.returnNumberOfSolutions(mergedModel));
+        Analyser.printAllSolutions(mergedModel);
     }
 } 

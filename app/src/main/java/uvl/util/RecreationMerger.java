@@ -156,22 +156,22 @@ public class RecreationMerger {
 
             testingModel.addConstraints(unionModel.getConstraints());
             testingModel.addConstraints(CKB.getConstraints());
-            logger.info(
-                    "[inconsistencyCheck] created testing model with {} features and {} constraints, has {} solutions",
-                    testingModel.getFeatures().size(), testingModel.getConstraints().size(),
-                    Analyser.returnNumberOfSolutions(testingModel));
+            //logger.info(
+            //        "[inconsistencyCheck] created testing model with {} features and {} constraints, has {} solutions",
+            //        testingModel.getFeatures().size(), testingModel.getConstraints().size(),
+            //        Analyser.returnNumberOfSolutions(testingModel));
 
             if (isInconsistentWithNegatedConstraint(checkConstraint, testingModel)) {
-                logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to CKB, constraint: {}",
-                        originalConstraint.toString());
+                //logger.info("[inconsistencyCheck] INCONSISTENT, decontextualizing and add to CKB, constraint: {}",
+                //        originalConstraint.toString());
 
                 // decontextualize constraint and add to merged model (line 8 in pseudocode)
                 originalConstraint.disableContextualize();
                 CKB.addConstraint(originalConstraint);
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
-                logger.info("[inconsistencyCheck] CONSISTENT, keep contextualized and add to CKB, constraint: {}",
-                        originalConstraint.toString());
+                //logger.info("[inconsistencyCheck] CONSISTENT, keep contextualized and add to CKB, constraint: {}",
+                //        originalConstraint.toString());
                 CKB.addConstraint(originalConstraint);
             }
 
@@ -184,7 +184,7 @@ public class RecreationMerger {
                     "Solution space of merged model after inconsistency check should be the same as the solution space of the union model");
         }
 
-        logger.info("[inconsistencyCheck] finished with {} features, {} constraints and {} solutions",
+        logger.info("\n[inconsistencyCheck] finished with {} features, {} constraints and {} solutions",
                 CKB.getFeatures().size(), CKB.getConstraints().size(), Analyser.returnNumberOfSolutions(CKB));
         return CKB;
     }
@@ -198,23 +198,28 @@ public class RecreationMerger {
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
+
+            if (!constraint.isContextualized()) {
+                continue;
+            }
+
             constraint.setNegation(Boolean.TRUE);
 
             if (isInconsistent(mergedModel)) {
                 iterator.remove();
-                logger.info("[cleanup] removed constraint {} from mergedModel", constraint.toString());
+                logger.info("\n[cleanup] removed constraint {} from mergedModel", constraint.toString());
             } else {
                 constraint.setNegation(Boolean.FALSE);
-                logger.info("[cleanup] kept constraint {} in mergedModel", constraint.toString());
+                logger.info("\n[cleanup] kept constraint {} in mergedModel", constraint.toString());
             }
         }
 
         if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
             throw new RuntimeException(
-                    "Solution space of merged model after cleanup should be the same as the solution space of the merged model before cleanup");
+                    "Solution space of merged model after cleanup (" + Analyser.returnNumberOfSolutions(mergedModel) + ") should be the same as the solution space of the merged model before cleanup (" + solutions + ")");
         }
 
-        logger.info("[cleanup] finished cleanup with {} features and {} constraints and {} solutions",
+        logger.info("\n[cleanup] finished cleanup with {} features and {} constraints and {} solutions",
                 mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size(), Analyser.returnNumberOfSolutions(mergedModel));
         return mergedModel;
