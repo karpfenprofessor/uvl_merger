@@ -46,7 +46,7 @@ public class UVLParser {
     }
 
     public static RecreationModel parseUVLFile(String filePathString, Region region) throws Exception {
-        logger.info("[parseUVLFile] start parsing file: " + filePathString);
+        logger.debug("[parseUVLFile] start " + filePathString + " for region " + region.getRegionString());
         Path filePath = Paths.get(UVLParser.class.getClassLoader()
                 .getResource(filePathString).toURI());
         String content = new String(Files.readAllBytes(filePath));
@@ -55,19 +55,19 @@ public class UVLParser {
         UVLJavaLexer lexer = new UVLJavaLexer(charStream);
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
-        UVLJavaParser.FeatureModelContext featureContext = parser.featureModel(); 
+        UVLJavaParser.FeatureModelContext featureContext = parser.featureModel();
 
         RecreationModel model = new RecreationModel(region);
-        parseFeatureModel(featureContext, model);
+        parseFeatures(featureContext, model);
         parseConstraints(featureContext.constraints(), model);
-
-        logger.info("[parseUVLFile] finished parsing file: " + filePathString);
-
+        logger.debug("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString());
+        logger.debug("");
+        
         return model;
     }
 
     // Parse the feature model
-    public static void parseFeatureModel(FeatureModelContext featureModelCtx, RecreationModel model) {
+    public static void parseFeatures(FeatureModelContext featureModelCtx, RecreationModel model) {
         if (featureModelCtx == null)
             return;
         model.getFeatures().clear();
@@ -75,7 +75,8 @@ public class UVLParser {
         if (featureModelCtx.features() != null) {
             parseFeaturesSection(featureModelCtx.features(), model);
         }
-        logger.info("[parseFeatures] finished parsing features with " + model.getFeatures().size() + " features");
+
+        logger.info("\t[parseFeatures] finished with " + model.getFeatures().size() + " features");
     }
 
     // Handle the 'features' section
@@ -86,6 +87,7 @@ public class UVLParser {
         if (rootFeatureCtx != null) {
             Feature root = parseFeature(rootFeatureCtx, model);
             model.setRootFeature(root);
+            logger.info("\t[parseRootFeature] found root " + root.toString());
         }
     }
 
@@ -110,6 +112,7 @@ public class UVLParser {
                 parseGroup(gCtx, currentFeature, model);
             }
         }
+
         return currentFeature;
     }
 
@@ -171,21 +174,22 @@ public class UVLParser {
     }
 
     // Cardinality group => [1..n] (stub)
-    private static void parseCardinalityGroup(CardinalityGroupContext cardGroup, Feature parent, RecreationModel model) {
+    private static void parseCardinalityGroup(CardinalityGroupContext cardGroup, Feature parent,
+            RecreationModel model) {
         GroupSpecContext gSpec = cardGroup.groupSpec();
         List<Feature> children = parseGroupSpec(gSpec, model);
         if (children.isEmpty()) {
             return;
         }
-        
+
         // Parse actual cardinality from cardGroup context
         int lower = parseCardinalityLower(cardGroup);
         int upper = parseCardinalityUpper(cardGroup, children.size());
-        
+
         if (lower > upper || lower < 0 || upper > children.size()) {
             throw new IllegalArgumentException("Invalid cardinality bounds");
         }
-        
+
         createGroupConstraint(parent, children, lower, upper, model);
     }
 
@@ -263,7 +267,7 @@ public class UVLParser {
         List<ConstraintLineContext> lines = constraintsCtx.constraintLine();
         if (lines == null)
             return;
-        
+
         int initialConstraints = model.getConstraints().size();
         for (ConstraintLineContext lineCtx : lines) {
             ConstraintContext cCtx = lineCtx.constraint();
@@ -275,9 +279,9 @@ public class UVLParser {
             }
         }
 
-        logger.info("[parseConstraints] finished parsing constraints with {} new cross tree constraints (total: {})", 
-            model.getConstraints().size() - initialConstraints,
-            model.getConstraints().size());
+        logger.info("\t[parseConstraints] finished with {} cross tree and {} feature tree constraints",
+                model.getConstraints().size() - initialConstraints,
+                initialConstraints);
     }
 
     // Recursively parse a constraint

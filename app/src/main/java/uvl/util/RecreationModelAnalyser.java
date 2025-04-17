@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class RecreationModelAnalyser {
     private static final Logger logger = LogManager.getLogger(RecreationModelAnalyser.class);
 
-    public static float analyseContextualizationShare(RecreationModel model) {
+    public static void analyseContextualizationShare(RecreationModel model) {
         long contextualizedSize = model.getConstraints().stream()
                 .filter(c -> c.isContextualized())
                 .count();
@@ -27,16 +27,15 @@ public class RecreationModelAnalyser {
                 model.getRegionString(),
                 constraintsSize,
                 contextualizedSize,
-                ratio);
-
-        return ratio;
+                ratio);        
+        logger.debug("");
     }
 
-    public static float analyseSharedFeatures(RecreationModel... models) {
+    public static void analyseSharedFeatures(final RecreationModel... models) {
         if (models.length < 2) {
-            logger.debug("[analyseSharedFeatures] Need at least 2 models to compare");
-            
-            return 0;
+            logger.debug("[analyseSharedFeatures] need at least 2 models to compare");
+
+            return;
         }
 
         List<Set<String>> featureSets = Arrays.stream(models)
@@ -55,20 +54,31 @@ public class RecreationModelAnalyser {
 
         float shareRatio = totalUniqueFeatures > 0 ? (float) sharedFeatures.size() / totalUniqueFeatures : 0;
 
-        logger.debug("[analyseSharedFeatures] Comparing {} models:", models.length);
+        logger.debug("[analyseSharedFeatures] comparing {} models", models.length);
         for (int i = 0; i < models.length; i++) {
-            logger.debug("  Model {}: {} features", i + 1, featureSets.get(i).size());
+            logger.debug("\tmodel {}: {} features", i + 1, featureSets.get(i).size());
         }
-        
-        logger.debug("  Shared features: {}", sharedFeatures.size());
-        logger.debug("  Total unique features: {}", totalUniqueFeatures);
-        logger.debug("  Share ratio: {} %", String.format("%.2f", shareRatio*100));
 
-        return shareRatio;
+        logger.debug("\tshared features: {}", sharedFeatures.size());
+        logger.debug("\ttotal unique features: {}", totalUniqueFeatures);
+        logger.debug("\tshare ratio: {} %", String.format("%.2f", shareRatio * 100));
+        
+        // Find features that appear in exactly one model using streams
+        Set<String> exclusiveFeatures = featureSets.stream()
+                .flatMap(Set::stream)
+                .collect(Collectors.groupingBy(feature -> feature, Collectors.counting()))
+                .entrySet().stream()
+                .filter(entry -> entry.getValue() == 1)
+                .map(java.util.Map.Entry::getKey)
+                .collect(Collectors.toSet());
+                
+        logger.info("\tfeatures exclusive to one model: {}", exclusiveFeatures);
+        logger.debug("");
     }
 
     public static void printConstraints(RecreationModel recModel) {
-        logger.info("Printing all constraints in Recreation model with region: {}", recModel.getRegion().getRegionString());
+        logger.info("Printing all constraints in Recreation model with region: {}",
+                recModel.getRegion().getRegionString());
         int i = 0;
         for (AbstractConstraint constraint : recModel.getConstraints()) {
             logger.info("  [{}]: {}", i++, constraint.toString());
@@ -77,7 +87,8 @@ public class RecreationModelAnalyser {
     }
 
     public static void printFeatures(RecreationModel recModel) {
-        logger.info("Printing all features in Recreation model with region: {}", recModel.getRegion().getRegionString());
+        logger.info("Printing all features in Recreation model with region: {}",
+                recModel.getRegion().getRegionString());
         int i = 0;
         for (Feature feature : recModel.getFeatures().values()) {
             logger.info("  [{}]: {}", i++, feature.toString());

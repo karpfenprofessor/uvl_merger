@@ -22,7 +22,7 @@ public abstract class AbstractConstraint {
         this.isNegation = Boolean.FALSE;
     }
 
-    public void setContextualize(Integer value) {
+    public void doContextualize(Integer value) {
         this.isContextualized = Boolean.TRUE;
         this.contextualizationValue = value;
     }
@@ -39,7 +39,7 @@ public abstract class AbstractConstraint {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName()).append(" {\n");
         sb.append("\tisNegation\t\t: ").append(isNegation).append("\n");
-        sb.append("\tisContextualized:\t ").append(isContextualized).append("\n");
+        sb.append("\tisContextualized: ").append(isContextualized).append("\n");
         
         if (isContextualized && contextualizationValue != null) {
             sb.append("\tcontextValue\t: ").append(contextualizationValue).append("\n");

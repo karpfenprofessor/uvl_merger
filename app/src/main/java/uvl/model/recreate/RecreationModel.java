@@ -35,12 +35,12 @@ public class RecreationModel {
 
     public void contextualizeAllConstraints() {
         logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
-                + " with region ordinal: " + region.ordinal());
+                + " with region value " + region.ordinal());
 
-        long solutions = Analyser.returnNumberOfSolutions(this);
+        final long solutions = Analyser.returnNumberOfSolutions(this);
 
         for (AbstractConstraint constraint : constraints) {
-            constraint.setContextualize(region.ordinal());
+            constraint.doContextualize(region.ordinal());
         }
 
         // Create Region feature structure
@@ -48,6 +48,7 @@ public class RecreationModel {
         Feature specificRegion = new Feature(getRegionString());
         features.put("Region", regionFeature);
         features.put(getRegionString(), specificRegion);
+        logger.info("\t[contextualize] added root and contextualization features");
 
         // Create mandatory group constraint connecting Region to root
         List<Feature> rootRegionChildren = new ArrayList<>();
@@ -58,6 +59,7 @@ public class RecreationModel {
         rootRegionGc.setLowerCardinality(1);
         rootRegionGc.setUpperCardinality(1);
         addConstraint(rootRegionGc);
+        logger.info("\t[contextualize] constrain super root and region root features with " + rootRegionGc.toString());
 
         // Create group constraint for Region's children
         List<Feature> regionChildren = new ArrayList<>();
@@ -68,11 +70,14 @@ public class RecreationModel {
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
         addConstraint(regionGc);
+        logger.info("\t[contextualize] constrain region root contextualization features with " + regionGc.toString());
 
         // validate solution spaces after contextualization
         if (solutions != Analyser.returnNumberOfSolutions(this)) {
             throw new RuntimeException("Solution space of model should not change after contextualization");
         }
+        logger.debug("[contextualize] finished region " + getRegionString());
+        logger.debug("");
     }
 
     public void addConstraint(AbstractConstraint c) {
