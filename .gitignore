@@ -9,3 +9,4 @@ logs/app.log
 app/logs/app.log
 *.gexf
 logs/*
+app/.vscode/settings.json

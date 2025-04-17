@@ -38,11 +38,17 @@ public abstract class AbstractConstraint {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName()).append(" {\n");
-        sb.append("\tisNegation\t\t: ").append(isNegation).append("\n");
-        sb.append("\tisContextualized: ").append(isContextualized).append("\n");
         
-        if (isContextualized && contextualizationValue != null) {
-            sb.append("\tcontextValue\t: ").append(contextualizationValue).append("\n");
+        if (isNegation) {
+            sb.append("\tisNegation\t\t: ").append(isNegation).append("\n");
+        }
+        
+        if (isContextualized) {
+            sb.append("\tisContextualized: ").append(isContextualized).append("\n");
+            
+            if (contextualizationValue != null) {
+                sb.append("\tcontextValue\t: ").append(contextualizationValue).append("\n");
+            }
         }
         
         return sb.toString();
