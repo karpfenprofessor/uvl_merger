@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import uvl.model.base.Region;
 import uvl.model.recreate.RecreationModel;
+import uvl.util.Analyser;
 import uvl.util.RecreationMerger;
 import uvl.util.UVLParser;
 
@@ -23,7 +24,11 @@ public class TestMergeTwoModels {
         recModel2.contextualizeAllConstraints();
 
         RecreationModel unionModel = RecreationMerger.union(recModel, recModel2);
+        Analyser.printAllSolutions(unionModel);
+
         RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
         mergedModel = RecreationMerger.cleanup(mergedModel);
+
+        Analyser.printAllSolutions(mergedModel);
     }
 } 

@@ -41,6 +41,16 @@ public class BinaryConstraint extends AbstractConstraint {
         this.setNegation(isNegation);
     }
 
+    public BinaryConstraint(Object antecedent, LogicalOperator operator, Object consequent,
+            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+        super(isContextualized, contextValue);
+        this.antecedent = antecedent;
+        this.operator = operator;
+        this.consequent = consequent;
+        this.setNegation(isNegation);
+        this.setCustomConstraint(isCustomConstraint);
+    }
+
     @Override
     public AbstractConstraint copy() {
         Object copiedAntecedent = (antecedent instanceof AbstractConstraint) ? 
@@ -59,7 +69,8 @@ public class BinaryConstraint extends AbstractConstraint {
             copiedConsequent, 
             this.isContextualized(), 
             this.getContextualizationValue(), 
-            this.isNegation());
+            this.isNegation(),
+            this.isCustomConstraint());
     }
     
     @Override

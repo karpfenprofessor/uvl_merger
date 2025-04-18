@@ -49,6 +49,17 @@ public class GroupConstraint extends AbstractConstraint {
         this.setNegation(isNegation);
     }
 
+    public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality,
+            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+        super(isContextualized, contextValue);
+        this.parent = parent;
+        this.children = children;
+        this.lowerCardinality = lowerCardinality;
+        this.upperCardinality = upperCardinality;
+        this.setNegation(isNegation);
+        this.setCustomConstraint(isCustomConstraint);
+    }
+
     @Override
     public GroupConstraint copy() {
         return new GroupConstraint(
@@ -58,7 +69,8 @@ public class GroupConstraint extends AbstractConstraint {
                 this.getUpperCardinality(),
                 this.isContextualized(),
                 this.getContextualizationValue(),
-                this.isNegation());
+                this.isNegation(),
+                this.isCustomConstraint());
     }
     
     @Override

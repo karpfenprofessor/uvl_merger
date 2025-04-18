@@ -15,10 +15,10 @@ import java.util.Arrays;
 public class BaseModelAnalyser {
     private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
 
-    public static void printConstraints(BaseModel baseModel) {
+    public static void printConstraints(final BaseModel baseModel) {
         Model model = baseModel.getModel();
         logger.info("----------------------------------------");
-        logger.info("Printing all constraints in Choco model:");
+        logger.info("Printing all constraints in Choco model + " + baseModel.getRegionString() + ":");
         logger.info("----------------------------------------");
         
         Constraint[] constraints = model.getCstrs();
@@ -54,21 +54,21 @@ public class BaseModelAnalyser {
             }
             logger.info("----------------------------------------");
         }
-        logger.info("Total constraints: {}", constraints.length);
+        logger.info("Total constraints in model " + baseModel.getRegionString() + ": {}", constraints.length);
         logger.info("----------------------------------------");
     }
 
-    public static void printFeatures(BaseModel baseModel) {
+    public static void printFeatures(final BaseModel baseModel) {
         Model model = baseModel.getModel();
-        logger.info("Printing all features in Choco model:");
+        logger.info("Printing all features in Choco model " + baseModel.getRegionString() + ":");
         Variable[] variables = model.getVars();
         for (int i = 0; i < variables.length; i++) {
             logger.info("  [{}]: {}", i, variables[i].toString());
         }
-        logger.info("Total features: {}", variables.length);
+        logger.info("Total features in model " + baseModel.getRegionString() + ": {}", variables.length);
     }
 
-    public static long checkConsistency(BaseModel baseModel, boolean showOutput) {
+    public static long checkConsistency(final BaseModel baseModel, final boolean showOutput) {
         Model model = baseModel.getModel();
         model.getSolver().reset();  // Reset solver before checking
 
@@ -86,13 +86,13 @@ public class BaseModelAnalyser {
         return duration;
     }
 
-    public static boolean isConsistent(BaseModel baseModel) {
+    public static boolean isConsistent(final BaseModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
         return model.getSolver().solve();
     }
 
-    public static int findIntersectionSolutions(BaseModel model1, BaseModel model2) {
+    public static int findIntersectionSolutions(final BaseModel model1, final BaseModel model2) {
         // Get variables from both models
         Map<String, BoolVar> vars1 = model1.getFeatures();
         Map<String, BoolVar> vars2 = model2.getFeatures();
@@ -138,28 +138,28 @@ public class BaseModelAnalyser {
         return solutionsModel1.size();
     }
 
-    public static long solveAndReturnNumberOfSolutions(BaseModel baseModel) {
+    public static long solveAndReturnNumberOfSolutions(final BaseModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
         
         long solutions = 0;
         while (model.getSolver().solve()) {
             solutions++;
-            //logger.info("solution: " + solutions);
         }
+
         return solutions;
     }
 
-    public static void solveAndPrintNumberOfSolutions(BaseModel baseModel) {
+    public static void solveAndPrintNumberOfSolutions(final BaseModel baseModel) {
         long solutions = solveAndReturnNumberOfSolutions(baseModel);
         logger.info("[solveAndPrintNumberOfSolutions] found solutions: " + solutions);
     }
 
-    public static void printAllSolutions(BaseModel baseModel) {
+    public static void printAllSolutions(final BaseModel baseModel) {
         printAllSolutions(baseModel, false);
     }
 
-    public static void printAllSolutions(BaseModel baseModel, boolean takeFeatureNamesFromModel) {
+    public static void printAllSolutions(final BaseModel baseModel, final boolean takeFeatureNamesFromModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
         

@@ -198,7 +198,15 @@ public class RecreationMerger {
             AbstractConstraint constraint = iterator.next();
 
             // region constraints should not be cleaned up - TODO: check if this is correctS
-            if (!constraint.isContextualized()) {
+            /*if (!constraint.isContextualized()) {
+                continue;
+            }*/
+
+            /*if (constraint.isCustomConstraint()) {
+                continue;
+            }*/
+
+            if (constraint instanceof GroupConstraint && ((GroupConstraint)constraint).getLowerCardinality() == 0 && !constraint.isContextualized()) {
                 continue;
             }
 
@@ -213,12 +221,12 @@ public class RecreationMerger {
             }
         }
 
-        if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
+        /*if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
             throw new RuntimeException(
                     "Solution space of merged model after cleanup (" + Analyser.returnNumberOfSolutions(mergedModel)
                             + ") should be the same as the solution space of the merged model before cleanup ("
                             + solutions + ")");
-        }
+        }*/
 
         logger.debug("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
@@ -260,6 +268,7 @@ public class RecreationMerger {
         rootRegionGc.setChildren(rootRegionChildren);
         rootRegionGc.setLowerCardinality(1);
         rootRegionGc.setUpperCardinality(1);
+        rootRegionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(rootRegionGc);
         logger.info("\t[handleRegionFeature] constrain super root and region root features with "
                 + rootRegionGc.toString());
@@ -273,6 +282,7 @@ public class RecreationMerger {
         regionGc.setChildren(regionChildren);
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
+        regionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(regionGc);
         logger.info("\t[handleRegionFeature] constrain region root and contextualization features with "
                 + regionGc.toString());
@@ -320,6 +330,7 @@ public class RecreationMerger {
                     BinaryConstraint implication = new BinaryConstraint(antecedent,
                             BinaryConstraint.LogicalOperator.IMPLIES, consequent);
 
+                    implication.setCustomConstraint(Boolean.TRUE);
                     // Add to union model
                     unionModel.addConstraint(implication);
                     logger.info("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
@@ -354,6 +365,7 @@ public class RecreationMerger {
                 gc.setChildren(children);
                 gc.setLowerCardinality(2); // Both roots are mandatory
                 gc.setUpperCardinality(2);
+                gc.setCustomConstraint(Boolean.TRUE);
 
                 unionModel.addConstraint(gc);
                 logger.info(

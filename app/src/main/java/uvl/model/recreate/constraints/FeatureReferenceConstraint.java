@@ -25,13 +25,21 @@ public class FeatureReferenceConstraint extends AbstractConstraint
             this.setNegation(isNegation);
         }
 
+        public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+            super(isContextualized, contextValue);
+            this.feature = f;
+            this.setNegation(isNegation);
+            this.setCustomConstraint(isCustomConstraint);
+        }
+
         @Override
         public AbstractConstraint copy() {
             return new FeatureReferenceConstraint(
                 this.feature,
                 this.isContextualized(),
                 this.getContextualizationValue(),
-                this.isNegation());
+                this.isNegation(),
+                this.isCustomConstraint());
         }
         
         @Override
