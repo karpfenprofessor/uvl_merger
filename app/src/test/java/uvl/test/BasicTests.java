@@ -49,6 +49,13 @@ public class BasicTests {
         new TestCase("uvl/testcases/crossTreeFish.uvl", 448)
     };
 
+    private final TestCase[] TEST_CASES_RANDOM = {
+        new TestCase("uvl/testcases/model_test1.uvl", 24516),
+        new TestCase("uvl/testcases/model_test2.uvl", 18300),
+        new TestCase("uvl/testcases/model_test3.uvl", 234), //61
+        new TestCase("uvl/testcases/model_test4.uvl", 5004)
+    };
+
     private long getSolutionCount(String filename) throws Exception {
         RecreationModel recModel = UVLParser.parseUVLFile(filename);
         recModel.setRegion(Region.A);
@@ -84,6 +91,19 @@ public class BasicTests {
     @Test
     public void testSolutionOfPaperCarModels() {
         for (TestCase testCase : TEST_CASES_PAPER) {
+            try {
+                long actualSolutions = getSolutionCount(testCase.filename);
+                assertEquals(testCase.expectedSolutions, actualSolutions,
+                        "Solution count mismatch for " + testCase.filename);
+            } catch (Exception e) {
+                throw new AssertionError("Test failed for " + testCase.filename, e);
+            }
+        }
+    }
+
+    @Test
+    public void testSolutionOfRandomModels() {
+        for (TestCase testCase : TEST_CASES_RANDOM) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
