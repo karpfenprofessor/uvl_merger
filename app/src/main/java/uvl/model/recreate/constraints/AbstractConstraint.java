@@ -10,12 +10,14 @@ public abstract class AbstractConstraint {
     private Integer contextualizationValue;
     private boolean isNegation;
     private boolean isCustomConstraint;
+    private boolean isFeatureTreeConstraint;
 
     public AbstractConstraint() {
         this.isContextualized = Boolean.FALSE;
         this.isNegation = Boolean.FALSE;
         this.contextualizationValue = null;
         this.isCustomConstraint = Boolean.FALSE;
+        this.isFeatureTreeConstraint = Boolean.FALSE;
     }
 
     public AbstractConstraint(boolean isContextualized, Integer contextualizationValue) {
@@ -23,6 +25,7 @@ public abstract class AbstractConstraint {
         this.contextualizationValue = contextualizationValue;
         this.isNegation = Boolean.FALSE;
         this.isCustomConstraint = Boolean.FALSE;
+        this.isFeatureTreeConstraint = Boolean.FALSE;
     }
 
     public void doContextualize(Integer value) {
@@ -56,6 +59,10 @@ public abstract class AbstractConstraint {
 
         if (isCustomConstraint) {
             sb.append("\tisCustomConstraint\t\t: ").append(isCustomConstraint).append("\n");
+        }
+
+        if (isFeatureTreeConstraint) {
+            sb.append("\tisFeatureTreeConstraint\t: ").append(isFeatureTreeConstraint).append("\n");
         }
         
         return sb.toString();

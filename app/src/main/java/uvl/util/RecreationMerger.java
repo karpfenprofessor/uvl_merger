@@ -117,7 +117,7 @@ public class RecreationMerger {
             }
         }
 
-        // removeDuplicateContextualizedGroupConstraints(unionModel);
+        removeDuplicateContextualizedGroupConstraints(unionModel);
 
         logger.debug("[union] finished with {} features and {} constraints", unionModel.getFeatures().size(),
                 unionModel.getConstraints().size());
@@ -162,12 +162,14 @@ public class RecreationMerger {
                 originalConstraint.disableContextualize();
                 CKB.addConstraint(originalConstraint);
                 decontextualizeCounter++;
-                logger.info("\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}", originalConstraint.toString());
+                logger.info("\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
+                        originalConstraint.toString());
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
                 CKB.addConstraint(originalConstraint);
                 contextualizeCounter++;
-                logger.info("\t[inconsistencyCheck] consistent, add contextualized constraint {}", originalConstraint.toString());
+                logger.info("\t[inconsistencyCheck] consistent, add contextualized constraint {}",
+                        originalConstraint.toString());
             }
 
             // remove constraint from union model (line 12 in pseudocode)
@@ -198,22 +200,29 @@ public class RecreationMerger {
             AbstractConstraint constraint = iterator.next();
 
             // region constraints should not be cleaned up - TODO: check if this is correctS
-            /*if (!constraint.isContextualized()) {
-                continue;
-            }*/
+            /*
+             * if (!constraint.isContextualized()) {
+             * continue;
+             * }
+             */
 
-            /*if (constraint.isCustomConstraint()) {
-                continue;
-            }*/
-
-            if (constraint instanceof GroupConstraint && ((GroupConstraint)constraint).getLowerCardinality() == 0 && !constraint.isContextualized()) {
+            if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
                 continue;
             }
+
+            /*
+             * if (constraint.isCustomConstraint() || (constraint instanceof GroupConstraint
+             * &&
+             * ((GroupConstraint) constraint).getLowerCardinality() == 0)) {
+             * continue;
+             * }
+             */
 
             constraint.setNegation(Boolean.TRUE);
 
             if (isInconsistent(mergedModel)) {
                 iterator.remove();
+                constraint.setNegation(Boolean.FALSE);
                 logger.info("\t[cleanup] inconsistent, remove constraint {}", constraint.toString());
             } else {
                 constraint.setNegation(Boolean.FALSE);
@@ -221,12 +230,16 @@ public class RecreationMerger {
             }
         }
 
-        /*if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
-            throw new RuntimeException(
-                    "Solution space of merged model after cleanup (" + Analyser.returnNumberOfSolutions(mergedModel)
-                            + ") should be the same as the solution space of the merged model before cleanup ("
-                            + solutions + ")");
-        }*/
+        /*
+         * if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
+         * throw new RuntimeException(
+         * "Solution space of merged model after cleanup (" +
+         * Analyser.returnNumberOfSolutions(mergedModel)
+         * +
+         * ") should be the same as the solution space of the merged model before cleanup ("
+         * + solutions + ")");
+         * }
+         */
 
         logger.debug("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
@@ -236,12 +249,14 @@ public class RecreationMerger {
         return mergedModel;
     }
 
-    private static boolean isInconsistentWithNegatedContextualizedConstraint(final AbstractConstraint constraintToNegate,
+    private static boolean isInconsistentWithNegatedContextualizedConstraint(
+            final AbstractConstraint constraintToNegate,
             final RecreationModel testingModel) {
         constraintToNegate.disableContextualize();
         constraintToNegate.setNegation(Boolean.TRUE);
         testingModel.addConstraint(constraintToNegate);
-        //logger.info("\t[isInconsistentWithNegatedContextualizedConstraint] check {}", constraintToNegate.toString());
+        // logger.info("\t[isInconsistentWithNegatedContextualizedConstraint] check {}",
+        // constraintToNegate.toString());
 
         return !Analyser.isConsistent(testingModel);
     }
@@ -384,7 +399,7 @@ public class RecreationMerger {
     }
 
     private static void removeDuplicateContextualizedGroupConstraints(RecreationModel model) {
-        logger.info("[removeDuplicates] checking for duplicate contextualized group constraints");
+        logger.debug("[removeDuplicates] checking for duplicate contextualized group constraints");
         List<AbstractConstraint> constraintsToRemove = new ArrayList<>();
 
         for (AbstractConstraint c1 : model.getConstraints()) {
@@ -400,7 +415,7 @@ public class RecreationMerger {
                 GroupConstraint gc2 = (GroupConstraint) c2;
 
                 if (areGroupConstraintsEqual(gc1, gc2) && !constraintsToRemove.contains(gc2)) {
-                    logger.info("[removeDuplicates] found duplicate constraints: {} and {}", gc1, gc2);
+                    logger.info("\t[removeDuplicates] found duplicate constraints: {} and {}", gc1, gc2);
                     constraintsToRemove.add(gc2);
                     gc1.disableContextualize();
                 }
@@ -408,7 +423,7 @@ public class RecreationMerger {
         }
 
         model.getConstraints().removeAll(constraintsToRemove);
-        logger.info(
+        logger.debug(
                 "[removeDuplicates] removed {} duplicate group constraints from union model and decontextualized the rest",
                 constraintsToRemove.size());
     }

@@ -24,16 +24,17 @@ public class NotConstraint extends AbstractConstraint {
         this.setNegation(isNegation);
     }
 
-    public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+    public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
         super(isContextualized, contextValue);
         this.inner = c;
         this.setNegation(isNegation);
         this.setCustomConstraint(isCustomConstraint);
+        this.setFeatureTreeConstraint(isFeatureTreeConstraint);
     }
 
     @Override
     public AbstractConstraint copy() {
-        return new NotConstraint(this.inner.copy(), this.isContextualized(), this.getContextualizationValue(), this.isNegation(), this.isCustomConstraint());
+        return new NotConstraint(this.inner.copy(), this.isContextualized(), this.getContextualizationValue(), this.isNegation(), this.isCustomConstraint(), this.isFeatureTreeConstraint());
     }
     
     @Override

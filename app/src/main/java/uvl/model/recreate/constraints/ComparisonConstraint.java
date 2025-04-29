@@ -38,13 +38,14 @@ public class ComparisonConstraint extends AbstractConstraint {
     }
 
     public ComparisonConstraint(AbstractConstraint leftOperand, ComparisonOperator operator, AbstractConstraint rightOperand,
-            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
         super(isContextualized, contextValue);
         this.leftOperand = leftOperand;
         this.operator = operator;
         this.rightOperand = rightOperand;
         this.setNegation(isNegation);
         this.setCustomConstraint(isCustomConstraint);   
+        this.setFeatureTreeConstraint(isFeatureTreeConstraint);
     }
 
     @Override
@@ -56,7 +57,8 @@ public class ComparisonConstraint extends AbstractConstraint {
             this.isContextualized(),
             this.getContextualizationValue(),
             this.isNegation(),
-            this.isCustomConstraint());
+            this.isCustomConstraint(),
+            this.isFeatureTreeConstraint());
     }
     
     @Override

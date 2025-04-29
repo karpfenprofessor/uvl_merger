@@ -50,7 +50,7 @@ public class GroupConstraint extends AbstractConstraint {
     }
 
     public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality,
-            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
         super(isContextualized, contextValue);
         this.parent = parent;
         this.children = children;
@@ -58,6 +58,7 @@ public class GroupConstraint extends AbstractConstraint {
         this.upperCardinality = upperCardinality;
         this.setNegation(isNegation);
         this.setCustomConstraint(isCustomConstraint);
+        this.setFeatureTreeConstraint(isFeatureTreeConstraint);
     }
 
     @Override
@@ -70,7 +71,8 @@ public class GroupConstraint extends AbstractConstraint {
                 this.isContextualized(),
                 this.getContextualizationValue(),
                 this.isNegation(),
-                this.isCustomConstraint());
+                this.isCustomConstraint(),
+                this.isFeatureTreeConstraint());
     }
     
     @Override

@@ -42,13 +42,14 @@ public class BinaryConstraint extends AbstractConstraint {
     }
 
     public BinaryConstraint(Object antecedent, LogicalOperator operator, Object consequent,
-            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint) {
+            boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
         super(isContextualized, contextValue);
         this.antecedent = antecedent;
         this.operator = operator;
         this.consequent = consequent;
         this.setNegation(isNegation);
         this.setCustomConstraint(isCustomConstraint);
+        this.setFeatureTreeConstraint(isFeatureTreeConstraint);
     }
 
     @Override
@@ -70,7 +71,8 @@ public class BinaryConstraint extends AbstractConstraint {
             this.isContextualized(), 
             this.getContextualizationValue(), 
             this.isNegation(),
-            this.isCustomConstraint());
+            this.isCustomConstraint(),
+            this.isFeatureTreeConstraint());
     }
     
     @Override

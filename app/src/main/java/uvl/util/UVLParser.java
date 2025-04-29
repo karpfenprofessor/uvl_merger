@@ -218,6 +218,7 @@ public class UVLParser {
         gc.setChildren(children);
         gc.setLowerCardinality(lower);
         gc.setUpperCardinality(upper);
+        gc.setFeatureTreeConstraint(Boolean.TRUE);
         model.addConstraint(gc);
     }
 
