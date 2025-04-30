@@ -1,4 +1,4 @@
-package uvl.model.base;
+package model.base;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.variables.BoolVar;
@@ -8,8 +8,8 @@ import lombok.Setter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uvl.model.recreate.constraints.AbstractConstraint;
-import uvl.model.recreate.feature.Feature;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.feature.Feature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,10 +34,6 @@ public class BaseModel {
         this.constraints = new HashSet<>();
         this.logger = LogManager.getLogger(this.getClass());
         this.region = region;
-    }
-
-    public Model getModel() {
-        return model;
     }
 
     public void addFeature(String name) {

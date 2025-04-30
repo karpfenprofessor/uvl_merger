@@ -1,13 +1,13 @@
-package uvl.test;
+package test;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uvl.model.base.Region;
-import uvl.model.recreate.RecreationModel;
-import uvl.util.Analyser;
-import uvl.util.RecreationMerger;
-import uvl.util.UVLParser;
+import util.Analyser;
+import util.RecreationMerger;
+import util.UVLParser;
+import model.base.Region;
+import model.recreate.RecreationModel;
 
 public class TestMergeTwoModels {
 

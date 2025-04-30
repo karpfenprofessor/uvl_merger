@@ -1,4 +1,4 @@
-package uvl.util;
+package util;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,14 +10,14 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import uvl.model.base.BaseModel;
-import uvl.model.base.Region;
-import uvl.model.recreate.RecreationModel;
-import uvl.model.recreate.constraints.AbstractConstraint;
-import uvl.model.recreate.constraints.BinaryConstraint;
-import uvl.model.recreate.constraints.FeatureReferenceConstraint;
-import uvl.model.recreate.feature.Feature;
-import uvl.model.recreate.constraints.GroupConstraint;
+import model.base.BaseModel;
+import model.base.Region;
+import model.recreate.RecreationModel;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.BinaryConstraint;
+import model.recreate.constraints.FeatureReferenceConstraint;
+import model.recreate.feature.Feature;
+import model.recreate.constraints.GroupConstraint;
 
 public class RecreationMerger {
     private static final Logger logger = LogManager.getLogger(RecreationMerger.class);

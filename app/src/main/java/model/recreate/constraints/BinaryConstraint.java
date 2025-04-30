@@ -1,10 +1,10 @@
-package uvl.model.recreate.constraints;
+package model.recreate.constraints;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uvl.model.recreate.feature.Feature;
+import model.recreate.feature.Feature;
 
 @Getter
 @Setter

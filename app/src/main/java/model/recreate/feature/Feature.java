@@ -1,4 +1,4 @@
-package uvl.model.recreate.feature;
+package model.recreate.feature;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

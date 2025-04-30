@@ -1,5 +1,8 @@
-package uvl.model.base;
+package model.base;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum Region {
     A(0),
     B(1),
@@ -15,10 +18,6 @@ public enum Region {
     MERGED(11);
 
     private final int value;
-
-    private Region(int value) {
-        this.value = value;
-    }
 
     public int getValue() {
         return value;
@@ -54,5 +53,4 @@ public enum Region {
                 return "err";
         }
     }
-
 }

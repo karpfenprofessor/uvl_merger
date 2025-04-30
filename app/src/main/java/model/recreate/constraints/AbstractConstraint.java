@@ -1,4 +1,4 @@
-package uvl.model.recreate.constraints;
+package model.recreate.constraints;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

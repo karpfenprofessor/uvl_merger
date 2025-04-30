@@ -1,10 +1,10 @@
-package uvl.util;
+package util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uvl.model.recreate.RecreationModel;
-import uvl.model.recreate.constraints.AbstractConstraint;
-import uvl.model.recreate.feature.Feature;
+import model.recreate.RecreationModel;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.feature.Feature;
 
 import java.util.HashSet;
 import java.util.Set;

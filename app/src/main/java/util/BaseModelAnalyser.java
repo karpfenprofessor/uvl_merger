@@ -1,8 +1,8 @@
-package uvl.util;
+package util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import uvl.model.base.BaseModel;
+import model.base.BaseModel;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.Variable;

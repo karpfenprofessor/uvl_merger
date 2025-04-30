@@ -1,34 +1,49 @@
-i have to find my error and verify my solution
-our aim is it to translate our own java class structure of an variability model into a java choco variability model to solve it
-for that we have to translate our constraints into choco constraints
+package util;
 
-our model structure works like that:
-we have a collection of abstractconstraints, each of this constraints represents an constraint in our model
-its very important, that every constraint only enforces its own referenced features
-most of the feature tree constraining is represented through groupconstraints, which enforce a cardinality on a group of features
-cross tree constraints are represented through different constraint types, like binary constraints, not constraints, or implies constraints
-we have to make sure, that we dont over enforce things in the choco model
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.chocosolver.solver.Model;
+import org.chocosolver.solver.constraints.nary.cnf.LogOp;
+import org.chocosolver.solver.variables.BoolVar;
+import org.chocosolver.solver.variables.IntVar;
+import model.recreate.RecreationModel;
+import model.recreate.constraints.*;
+import model.recreate.feature.Feature;
+import model.base.BaseModel;
+import model.base.Region;
 
-the enforcement of the feature tree through groupconstraints seems to work fine
-but it seems i still have a problem with negated cross treeconstraints, i think they use the NotConstraint class
-a single negation of a feature seems to work but not if its contained in an implication or anything else
+public class ChocoTranslator {
 
+    public static BaseModel convertToChocoModel(RecreationModel recModel) {
+        BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
+        };
 
-here is an example
+        if (recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
+            logger.warn("[convertToChocoModel] model has no features or constraints, returning empty model");
+            return chocoModel;
+        }
 
-uvl cross treeconstraints
-  ! "Gas"
-  "Electro" => ! "Yes"
-  "Diesel" => ! "City"
+        // Create needed variables for all features in choco model
+        createFeatureVariables(recModel, chocoModel);
 
-recreationconstraints
-[21]: NotConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), inner=FeatureReferenceConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), feature=Feature(name=Gas)))
-[22]: BinaryConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), antecedent=FeatureReferenceConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), feature=Feature(name=Electro)), operator=IMPLIES, consequent=NotConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), inner=FeatureReferenceConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), feature=Feature(name=Yes))))
-[23]: BinaryConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), antecedent=FeatureReferenceConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), feature=Feature(name=Diesel)), operator=IMPLIES, consequent=NotConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), inner=FeatureReferenceConstraint(super=AbstractConstraint(isContextualized=false, contextualizationValue=null, isNegation=false), feature=Feature(name=City))))
+        // Set and enforce root feature
+        chocoModel.setRootFeature(recModel.getRootFeature());
+        chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
 
+        // Process all constraints
+        for (AbstractConstraint constraint : recModel.getConstraints()) {
+            try {
+                processConstraint(constraint, chocoModel);
+            } catch (Exception e) {
+                logger.error("[convertToChocoModel] error processing constraint: " + constraint, e);
+                throw e;
+            }
+        }
 
-and this is the translation code into java choco
-private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
+        return chocoModel;
+    }
+
+    private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
 
@@ -78,8 +93,7 @@ private static void processConstraint(AbstractConstraint constraint, BaseModel c
         // Create reified variables for the conditions
         BoolVar cardinalitySatisfied = model.and(
                 model.arithm(sumVar, ">=", gc.getLowerCardinality()),
-                model.arithm(sumVar, "<=", gc.getUpperCardinality())
-        ).reify();
+                model.arithm(sumVar, "<=", gc.getUpperCardinality())).reify();
         BoolVar childrenAreZero = model.arithm(sumVar, "=", 0).reify();
 
         // Create the group satisfaction variable
@@ -100,6 +114,7 @@ private static void processConstraint(AbstractConstraint constraint, BaseModel c
     }
 
     private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
+
         Model model = chocoModel.getModel();
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
@@ -121,27 +136,70 @@ private static void processConstraint(AbstractConstraint constraint, BaseModel c
         }
 
         return result;
+
+        /*
+         * Model model = chocoModel.getModel();
+         * BoolVar antecedent = getConstraintVar((AbstractConstraint)
+         * bc.getAntecedent(), chocoModel);
+         * BoolVar consequent = getConstraintVar((AbstractConstraint)
+         * bc.getConsequent(), chocoModel);
+         * 
+         * // Create a named variable for better tracking
+         * String opName = bc.getOperator().toString().toLowerCase();
+         * BoolVar result = model.boolVar(opName + "_" + antecedent.getName() + "_" +
+         * consequent.getName());
+         * 
+         * switch (bc.getOperator()) {
+         * case AND:
+         * // Use model.and to combine constraints
+         * model.and(
+         * model.arithm(antecedent, "=", 1),
+         * model.arithm(consequent, "=", 1)).reifyWith(result);
+         * break;
+         * case OR:
+         * // Use model.or to combine constraints
+         * model.or(
+         * model.arithm(antecedent, "=", 1),
+         * model.arithm(consequent, "=", 1)).reifyWith(result);
+         * break;
+         * case IMPLIES:
+         * // A implies B is equivalent to (!A or B)
+         * model.or(
+         * model.arithm(antecedent, "=", 0),
+         * model.arithm(consequent, "=", 1)).reifyWith(result);
+         * break;
+         * case IFF:
+         * // A iff B is equivalent to A == B
+         * model.arithm(antecedent, "=", consequent).reifyWith(result);
+         * break;
+         * }
+         * 
+         * return result;
+         */
     }
 
     private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
-        BoolVar result = model.boolNotView(inner);
 
-        return result;
+        // Create an explicit variable instead of a view
+        BoolVar notVar = model.boolVar("not_" + inner.getName());
+        model.arithm(inner, "=", 0).reifyWith(notVar);
+
+        return notVar;
     }
 
     private static BoolVar getConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {
         if (constraint instanceof FeatureReferenceConstraint frc) {
             return chocoModel.getFeature(frc.getFeature().getName());
         } else if (constraint instanceof NotConstraint nc) {
-            BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
-            return chocoModel.getModel().boolNotView(inner);
+            return createNotConstraintVar(nc, chocoModel);
         } else if (constraint instanceof BinaryConstraint bc) {
             return createBinaryConstraintVar(bc, chocoModel);
         }
 
-        throw new UnsupportedOperationException("Unsupported constraint type encountered: " + constraint.getClass().getSimpleName());
+        throw new UnsupportedOperationException(
+                "Unsupported constraint type encountered: " + constraint.getClass().getSimpleName());
     }
 
     private static void createFeatureVariables(RecreationModel recModel, BaseModel chocoModel) {
@@ -150,5 +208,5 @@ private static void processConstraint(AbstractConstraint constraint, BaseModel c
         }
     }
 
-first we want to know, do the translation into recreationconstraints seems fine?
-second we want to find the problem with enforcment of our cross tree constraints that lead to the wrong solution space in some cases?
+    private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
+}

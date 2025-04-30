@@ -1,12 +1,12 @@
-package uvl.model.recreate;
+package model.recreate;
 
 import lombok.Getter;
 import lombok.Setter;
-import uvl.model.base.Region;
-import uvl.model.recreate.constraints.AbstractConstraint;
-import uvl.model.recreate.constraints.GroupConstraint;
-import uvl.model.recreate.feature.Feature;
-import uvl.util.Analyser;
+import model.base.Region;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.GroupConstraint;
+import model.recreate.feature.Feature;
+import util.Analyser;
 
 import java.util.List;
 import java.util.Map;

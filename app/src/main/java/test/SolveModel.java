@@ -1,9 +1,9 @@
-package uvl.test;
+package test;
 
-import uvl.model.base.Region;
-import uvl.model.recreate.RecreationModel;
-import uvl.util.Analyser;
-import uvl.util.UVLParser;
+import util.Analyser;
+import util.UVLParser;
+import model.base.Region;
+import model.recreate.RecreationModel;
 
 public class SolveModel {
 

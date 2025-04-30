@@ -1,7 +1,7 @@
-package uvl.util;
+package util;
 
-import uvl.model.base.BaseModel;
-import uvl.model.recreate.RecreationModel;
+import model.base.BaseModel;
+import model.recreate.RecreationModel;
 
 public class Analyser {
 
