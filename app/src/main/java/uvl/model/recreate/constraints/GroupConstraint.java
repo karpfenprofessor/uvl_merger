@@ -4,61 +4,30 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uvl.model.recreate.feature.Feature;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class GroupConstraint extends AbstractConstraint {
 
-    private Feature parent;
-    private List<Feature> children;
-    private int lowerCardinality;
-    private int upperCardinality;
-
-    public GroupConstraint() 
-    {
-        super(Boolean.FALSE, null);
-    }
-
-    public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality) {
-        super(Boolean.FALSE, null);
-        this.parent = parent;
-        this.children = children;
-        this.lowerCardinality = lowerCardinality;
-        this.upperCardinality = upperCardinality;
-    }
-
-    public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality,
-            boolean isContextualized, Integer contextValue) {
-        super(isContextualized, contextValue);
-        this.parent = parent;
-        this.children = children;
-        this.lowerCardinality = lowerCardinality;
-        this.upperCardinality = upperCardinality;
-    }
-
-    public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality,
-            boolean isContextualized, Integer contextValue, boolean isNegation) {
-        super(isContextualized, contextValue);
-        this.parent = parent;
-        this.children = children;
-        this.lowerCardinality = lowerCardinality;
-        this.upperCardinality = upperCardinality;
-        this.setNegation(isNegation);
-    }
+    private Feature parent          = null;
+    private List<Feature> children  = null;
+    private int lowerCardinality    = 0;
+    private int upperCardinality    = 0;
 
     public GroupConstraint(Feature parent, List<Feature> children, int lowerCardinality, int upperCardinality,
             boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
-        super(isContextualized, contextValue);
+        super(isContextualized, contextValue, isNegation, isCustomConstraint, isFeatureTreeConstraint);
         this.parent = parent;
         this.children = children;
         this.lowerCardinality = lowerCardinality;
         this.upperCardinality = upperCardinality;
-        this.setNegation(isNegation);
-        this.setCustomConstraint(isCustomConstraint);
-        this.setFeatureTreeConstraint(isFeatureTreeConstraint);
     }
 
     @Override

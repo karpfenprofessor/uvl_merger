@@ -1,35 +1,21 @@
 package uvl.model.recreate.constraints;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotConstraint extends AbstractConstraint {
 
-    public AbstractConstraint inner;
-
-    public NotConstraint(AbstractConstraint c) {
-        this.inner = c;
-    }
-
-    public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue) {
-        super(isContextualized, contextValue);
-        this.inner = c;
-    }   
-
-    public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue, boolean isNegation) {
-        super(isContextualized, contextValue);
-        this.inner = c;
-        this.setNegation(isNegation);
-    }
+    public AbstractConstraint inner     = null;
 
     public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
-        super(isContextualized, contextValue);
+        super(isContextualized, contextValue, isNegation, isCustomConstraint, isFeatureTreeConstraint);
         this.inner = c;
-        this.setNegation(isNegation);
-        this.setCustomConstraint(isCustomConstraint);
-        this.setFeatureTreeConstraint(isFeatureTreeConstraint);
     }
 
     @Override

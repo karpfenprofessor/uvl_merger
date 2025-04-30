@@ -199,47 +199,30 @@ public class RecreationMerger {
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
 
-            // region constraints should not be cleaned up - TODO: check if this is correctS
-            /*
-             * if (!constraint.isContextualized()) {
-             * continue;
-             * }
-             */
-
             if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
                 continue;
             }
 
-            /*
-             * if (constraint.isCustomConstraint() || (constraint instanceof GroupConstraint
-             * &&
-             * ((GroupConstraint) constraint).getLowerCardinality() == 0)) {
-             * continue;
-             * }
-             */
-
-            constraint.setNegation(Boolean.TRUE);
+            constraint.doNegate();
 
             if (isInconsistent(mergedModel)) {
                 iterator.remove();
-                constraint.setNegation(Boolean.FALSE);
+                constraint.disableNegation();
                 logger.info("\t[cleanup] inconsistent, remove constraint {}", constraint.toString());
             } else {
-                constraint.setNegation(Boolean.FALSE);
+                constraint.disableNegation();
                 logger.info("\t[cleanup] consistent, keep unnegated constraint {}", constraint.toString());
             }
         }
 
-        /*
-         * if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
-         * throw new RuntimeException(
-         * "Solution space of merged model after cleanup (" +
-         * Analyser.returnNumberOfSolutions(mergedModel)
-         * +
-         * ") should be the same as the solution space of the merged model before cleanup ("
-         * + solutions + ")");
-         * }
-         */
+        if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
+            throw new RuntimeException(
+                    "Solution space of merged model after cleanup (" +
+                            Analyser.returnNumberOfSolutions(mergedModel)
+                            +
+                            ") should be the same as the solution space of the merged model before cleanup ("
+                            + solutions + ")");
+        }
 
         logger.debug("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
@@ -253,7 +236,7 @@ public class RecreationMerger {
             final AbstractConstraint constraintToNegate,
             final RecreationModel testingModel) {
         constraintToNegate.disableContextualize();
-        constraintToNegate.setNegation(Boolean.TRUE);
+        constraintToNegate.doNegate();
         testingModel.addConstraint(constraintToNegate);
         // logger.info("\t[isInconsistentWithNegatedContextualizedConstraint] check {}",
         // constraintToNegate.toString());

@@ -89,7 +89,7 @@ public class RecreationModel {
     }
 
     public void addNegation(AbstractConstraint c) {
-        c.setNegation(Boolean.TRUE);
+        c.doNegate();
         constraints.add(c);
     }
 

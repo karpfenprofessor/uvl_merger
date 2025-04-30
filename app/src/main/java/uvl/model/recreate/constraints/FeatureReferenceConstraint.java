@@ -1,36 +1,22 @@
 package uvl.model.recreate.constraints;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uvl.model.recreate.feature.Feature;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FeatureReferenceConstraint extends AbstractConstraint 
 {
-        public Feature feature;
-
-        public FeatureReferenceConstraint(Feature f) {
-            this.feature = f;
-        }
-
-        public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue) {
-            super(isContextualized, contextValue);
-            this.feature = f;
-        }
-
-        public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue, boolean isNegation) {
-            super(isContextualized, contextValue);
-            this.feature = f;
-            this.setNegation(isNegation);
-        }
+        public Feature feature = null;
 
         public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
-            super(isContextualized, contextValue);
+            super(isContextualized, contextValue, isNegation, isCustomConstraint, isFeatureTreeConstraint);
             this.feature = f;
-            this.setNegation(isNegation);
-            this.setCustomConstraint(isCustomConstraint);
-            this.setFeatureTreeConstraint(isFeatureTreeConstraint);
         }
 
         @Override
@@ -52,4 +38,3 @@ public class FeatureReferenceConstraint extends AbstractConstraint
             return sb.toString();
         }
 }
-

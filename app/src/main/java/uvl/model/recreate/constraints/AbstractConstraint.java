@@ -1,32 +1,21 @@
 package uvl.model.recreate.constraints;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractConstraint {
-    private boolean isContextualized;
-    private Integer contextualizationValue;
-    private boolean isNegation;
-    private boolean isCustomConstraint;
-    private boolean isFeatureTreeConstraint;
 
-    public AbstractConstraint() {
-        this.isContextualized = Boolean.FALSE;
-        this.isNegation = Boolean.FALSE;
-        this.contextualizationValue = null;
-        this.isCustomConstraint = Boolean.FALSE;
-        this.isFeatureTreeConstraint = Boolean.FALSE;
-    }
-
-    public AbstractConstraint(boolean isContextualized, Integer contextualizationValue) {
-        this.isContextualized = isContextualized;
-        this.contextualizationValue = contextualizationValue;
-        this.isNegation = Boolean.FALSE;
-        this.isCustomConstraint = Boolean.FALSE;
-        this.isFeatureTreeConstraint = Boolean.FALSE;
-    }
+    private boolean isContextualized        = Boolean.FALSE;
+    private Integer contextualizationValue  = null;
+    private boolean isNegation              = Boolean.FALSE;
+    private boolean isCustomConstraint      = Boolean.FALSE;
+    private boolean isFeatureTreeConstraint = Boolean.FALSE;
 
     public void doContextualize(Integer value) {
         this.isContextualized = Boolean.TRUE;
@@ -37,7 +26,15 @@ public abstract class AbstractConstraint {
         this.isContextualized = Boolean.FALSE;
         this.contextualizationValue = null;
     }
-   
+
+    public void doNegate() {
+        this.isNegation = Boolean.TRUE;
+    }
+
+    public void disableNegation() {
+        this.isNegation = Boolean.FALSE;
+    }
+
     public abstract AbstractConstraint copy();
     
     @Override
