@@ -4,7 +4,7 @@ This project implements a **consistency-based merging algorithm** for feature mo
 
 > *Mathias Uta, Alexander Felfernig, Gottfried Schenner, Johannes Spöcklberger (2019):  
 "Consistency-based Merging of Variability Models"*  
-([PDF](https://arxiv.org/pdf/1910.13234.pdf))
+([PDF]([https://arxiv.org/pdf/1910.13234.pdf](https://ceur-ws.org/Vol-2467/paper-02.pdf)))
 
 The goal is to **merge two or more feature models** from the same domain, each tailored to different regions or product variants, into a **single, consistent and semantics-preserving feature model**.
 
