@@ -1,8 +1,8 @@
-name: Build and Test car
+name: Build and Test merger
 
 on:
   push:
-    branches: [ "main", "forked-car-only" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
