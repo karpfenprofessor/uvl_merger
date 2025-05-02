@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import util.Analyser;
-import util.RecreationMerger;
+import util.Merger;
 import util.UVLParser;
 import model.base.Region;
 import model.recreate.RecreationModel;
@@ -161,7 +161,7 @@ public class BasicTests {
             assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
             assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = RecreationMerger.union(modelUs, modelGer);
+            RecreationModel unionModel = Merger.union(modelUs, modelGer);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
         } catch (Exception e) {
@@ -188,15 +188,15 @@ public class BasicTests {
             assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
             assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = RecreationMerger.union(modelUs, modelGer);
+            RecreationModel unionModel = Merger.union(modelUs, modelGer);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
 
-            RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
+            RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 
-            mergedModel = RecreationMerger.cleanup(mergedModel);
+            mergedModel = Merger.cleanup(mergedModel);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
         } catch (Exception e) {

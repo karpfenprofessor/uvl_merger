@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import util.Analyser;
-import util.RecreationMerger;
+import util.Merger;
 import util.UVLParser;
 import model.base.Region;
 import model.recreate.RecreationModel;
@@ -29,12 +29,12 @@ public class TestMergePaperModels {
             System.out.println("solutions model us contextualized: " + Analyser.returnNumberOfSolutions(modelUs));
             System.out.println("solutions model ger contextualized: " + Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = RecreationMerger.union(modelUs, modelGer);
+            RecreationModel unionModel = Merger.union(modelUs, modelGer);
 
             System.out.println("solutions union model: " + Analyser.returnNumberOfSolutions(unionModel));
 
-            RecreationModel mergedModel = RecreationMerger.inconsistencyCheck(unionModel);
-            mergedModel = RecreationMerger.cleanup(mergedModel);
+            RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
+            mergedModel = Merger.cleanup(mergedModel);
 
             System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
             Analyser.printFeatures(mergedModel);
