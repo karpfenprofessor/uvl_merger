@@ -4,7 +4,6 @@ import model.recreate.RecreationModel;
 import model.recreate.feature.Feature;
 import model.recreate.constraints.BinaryConstraint;
 import model.recreate.constraints.GroupConstraint;
-import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
 
 import java.util.ArrayList;
