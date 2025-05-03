@@ -3,6 +3,8 @@ package util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import model.base.BaseModel;
+import statistics.SolveStatistics;
+
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.Variable;
@@ -10,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import org.chocosolver.solver.variables.BoolVar;
+
+import java.time.Instant;
 import java.util.Arrays;
 
 public class BaseModelAnalyser {
@@ -148,6 +152,18 @@ public class BaseModelAnalyser {
         }
 
         return solutions;
+    }
+
+    public static void solveAndCreateStatistic(final BaseModel baseModel, final SolveStatistics solveStatistics) {
+        Model model = baseModel.getModel();
+        model.getSolver().reset();
+
+        model.getSolver().reset();
+        Instant startTime = Instant.now();  
+        if(model.getSolver().solve()) {
+            Instant endTime = Instant.now();
+            solveStatistics.addSolveTime(startTime, endTime);
+        }
     }
 
     public static void solveAndPrintNumberOfSolutions(final BaseModel baseModel) {

@@ -2,6 +2,7 @@ package util;
 
 import model.base.BaseModel;
 import model.recreate.RecreationModel;
+import statistics.SolveStatistics;
 
 public class Analyser {
 
@@ -56,5 +57,16 @@ public class Analyser {
     public static boolean isConsistent(final RecreationModel model) {
         BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
         return isConsistent(chocoTestModel);
+    }
+
+    public static SolveStatistics createSolveStatistics(final RecreationModel model) {
+        SolveStatistics solveStatistics = new SolveStatistics();
+
+        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+        for(int i = 0; i < 10; i++) {
+            BaseModelAnalyser.solveAndCreateStatistic(chocoTestModel, solveStatistics);
+        }
+
+        return solveStatistics;
     }
 }

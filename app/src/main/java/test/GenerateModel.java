@@ -72,7 +72,8 @@ public class GenerateModel {
         System.out.println("solutions model merged B: " + Analyser.returnNumberOfSolutions(mergedB));
         System.out.println("solutions model merged: " + Analyser.returnNumberOfSolutions(merged));
         RecreationModelAnalyser.analyseContextualizationShare(merged);
+        
         System.out.println(Merger.getMergeStatistics().toString());
+        System.out.println(Analyser.createSolveStatistics(merged).toString());    
     }
-    
 }
