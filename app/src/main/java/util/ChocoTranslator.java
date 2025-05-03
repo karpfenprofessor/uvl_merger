@@ -1,5 +1,9 @@
 package util;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.chocosolver.solver.Model;
@@ -15,12 +19,20 @@ import model.base.Region;
 public class ChocoTranslator {
 
     public static BaseModel convertToChocoModel(RecreationModel recModel) {
+        return convertToChocoModel(recModel, Boolean.FALSE);
+    }
+
+    public static BaseModel convertToChocoModel(RecreationModel recModel, boolean cleanModel) {
         BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
         };
 
         if (recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
             logger.warn("[convertToChocoModel] model has no features or constraints, returning empty model");
             return chocoModel;
+        }
+
+        if (cleanModel == Boolean.TRUE) {
+            cleanupFeaturesAndGroupConstraints(recModel);
         }
 
         // Create needed variables for all features in choco model
@@ -41,6 +53,69 @@ public class ChocoTranslator {
         }
 
         return chocoModel;
+    }
+
+    private static void cleanupFeaturesAndGroupConstraints(final RecreationModel recModel) {
+        // Count group constraints
+        long groupConstraintCount = recModel.getConstraints().stream()
+            .filter(c -> c instanceof GroupConstraint)
+            .count();
+
+        // Return immediately if there isn't exactly one group constraint
+        if (groupConstraintCount != 1) {
+            return;
+        }
+
+        // Get the single group constraint
+        GroupConstraint groupConstraint = (GroupConstraint) recModel.getConstraints().stream()
+            .filter(c -> c instanceof GroupConstraint)
+            .findFirst()
+            .get();
+
+        // Get all features referenced in non-group constraints
+        Set<String> referencedFeatures = recModel.getConstraints().stream()
+            .filter(c -> !(c instanceof GroupConstraint))
+            .flatMap(c -> findAllReferencedFeatures(c))
+            .map(Feature::getName)
+            .collect(Collectors.toSet());
+
+        // First remove unused features from the feature map
+        Set<String> unusedFeatures = groupConstraint.getChildren().stream()
+            .map(Feature::getName)
+            .filter(name -> !referencedFeatures.contains(name))
+            .collect(Collectors.toSet());
+
+        unusedFeatures.forEach(name -> recModel.getFeatures().remove(name));
+
+        // Then remove children that aren't referenced elsewhere
+        groupConstraint.getChildren().removeIf(child -> 
+            !referencedFeatures.contains(child.getName()));
+    }
+
+    private static Stream<Feature> findAllReferencedFeatures(AbstractConstraint constraint) {
+        if (constraint instanceof FeatureReferenceConstraint frc) {
+            return Stream.of(frc.getFeature());
+        } else if (constraint instanceof BinaryConstraint bc) {
+            Stream<Feature> antecedentFeatures = getFeatureFromExpression(bc.getAntecedent());
+            Stream<Feature> consequentFeatures = getFeatureFromExpression(bc.getConsequent());
+            return Stream.concat(antecedentFeatures, consequentFeatures);
+        } else if (constraint instanceof NotConstraint nc) {
+            return findAllReferencedFeatures(nc.inner);
+        }
+        return Stream.empty();
+    }
+
+    private static Stream<Feature> getFeatureFromExpression(Object expression) {
+        if (expression instanceof Feature) {
+            return Stream.of((Feature) expression);
+        } else if (expression instanceof BinaryConstraint) {
+            return findAllReferencedFeatures((BinaryConstraint) expression);
+        } else if (expression instanceof NotConstraint) {
+            return findAllReferencedFeatures((NotConstraint) expression);
+        } else if (expression instanceof FeatureReferenceConstraint) {
+            return findAllReferencedFeatures((FeatureReferenceConstraint) expression);
+        }
+        return Stream.empty();
     }
 
     private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
