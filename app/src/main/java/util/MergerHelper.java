@@ -102,13 +102,13 @@ public class MergerHelper {
                     FeatureReferenceConstraint consequent = new FeatureReferenceConstraint(regionFeature);
                     NotConstraint notConsequent = new NotConstraint(consequent);
 
-                    //BinaryConstraint implication = new BinaryConstraint(antecedent,
-                            //BinaryConstraint.LogicalOperator.IMPLIES, consequent);
+                    // BinaryConstraint implication = new BinaryConstraint(antecedent,
+                    // BinaryConstraint.LogicalOperator.IMPLIES, consequent);
                     BinaryConstraint implication = new BinaryConstraint(notConsequent,
                             BinaryConstraint.LogicalOperator.IMPLIES, notAntecedent);
 
                     implication.setCustomConstraint(Boolean.TRUE);
-                    
+
                     // Add to union model
                     unionModel.addConstraint(implication);
                     logger.info("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
@@ -161,7 +161,7 @@ public class MergerHelper {
         }
     }
 
-    public static void removeDuplicateContextualizedGroupConstraints(RecreationModel model) {
+    public static void removeDuplicateContextualizedGroupConstraints(final RecreationModel model) {
         logger.debug("[removeDuplicates] checking for duplicate contextualized group constraints");
         List<AbstractConstraint> constraintsToRemove = new ArrayList<>();
 
@@ -205,79 +205,42 @@ public class MergerHelper {
                 gc1.getContextualizationValue() != gc2.getContextualizationValue();
     }
 
-    public static void splitFeaturesWithMultipleParents(RecreationModel model) {
-        logger.debug("[splitFeatures] checking for features with multiple contextualized parents");
-    
-        List<AbstractConstraint> constraintsToSplit = new ArrayList<>();
-
+    public static void splitFeaturesWithMultipleParents(final RecreationModel model) {
+        logger.debug("[splitFeatures] checking feature tree for child group features with differentiating parents");
         for (AbstractConstraint c1 : model.getConstraints()) {
             if (!(c1 instanceof GroupConstraint) || !c1.isContextualized()) {
                 continue;
             }
 
             GroupConstraint gc1 = (GroupConstraint) c1;
-            Feature parent1 = gc1.getParent();
+            Set<String> children1 = gc1.getChildren().stream()
+                    .map(Feature::getName)
+                    .collect(Collectors.toSet());
 
             for (AbstractConstraint c2 : model.getConstraints()) {
                 if (c1 == c2 || !(c2 instanceof GroupConstraint) || !c2.isContextualized()) {
-                    continue; 
+                    continue;
                 }
 
                 GroupConstraint gc2 = (GroupConstraint) c2;
-                Feature parent2 = gc2.getParent();
+                Set<String> children2 = gc2.getChildren().stream()
+                        .map(Feature::getName)
+                        .collect(Collectors.toSet());
 
-                // Check if parents are the same but children differ
-                if (parent1.getName().equals(parent2.getName()) && 
-                    !gc1.getChildren().stream().map(Feature::getName)
-                         .collect(Collectors.toSet())
-                         .equals(gc2.getChildren().stream().map(Feature::getName)
-                                 .collect(Collectors.toSet()))) {
-                    
-                    logger.debug("\t[splitFeatures] found feature {} with different child sets, constraints: {} and {}", parent1.getName(), gc1.toString(), gc2.toString());
-                    if (!constraintsToSplit.contains(gc1)) {
-                        constraintsToSplit.add(gc1);
+                // Find common children between the two group constraints
+                Set<String> commonChildren = new HashSet<>(children1);
+                commonChildren.retainAll(children2);
+
+                // Check if any common child has different parents
+                for (String childName : commonChildren) {
+                    if (!gc1.getParent().getName().equals(gc2.getParent().getName())) {
+                        logger.error("\t[splitFeatures] found feature {} with different parents: {} and {}",
+                                childName, gc1.getParent().getName(), gc2.getParent().getName());
+                        throw new RuntimeException("Feature " + childName + " has different parents: " +
+                                gc1.getParent().getName() + " and " + gc2.getParent().getName());
                     }
                 }
             }
-        }
-    
-        logger.info("\t[splitFeatures] split {} features to avoid multi-parent conflicts", constraintsToSplit.size());
-    
-        for (AbstractConstraint c : constraintsToSplit) {
-            GroupConstraint gc = (GroupConstraint) c;
-            Feature oldParent = gc.getParent();
-            String oldParentName = oldParent.getName();
-            
-            // Find all group constraints with this parent
-            List<GroupConstraint> relatedConstraints = model.getConstraints().stream()
-                .filter(cons -> cons instanceof GroupConstraint)
-                .map(cons -> (GroupConstraint) cons)
-                .filter(groupCons -> groupCons.getParent().getName().equals(oldParentName))
-                .collect(Collectors.toList());
-                
-            // For each related constraint, create new constraint with new parent
-            for (GroupConstraint relatedGc : relatedConstraints) {
-                // Create new parent feature with contextualization value in name
-                Feature newParent = new Feature(relatedGc.getContextualizationValue() + "_" + oldParentName);
-                GroupConstraint newGc = new GroupConstraint(
-                    newParent,
-                    relatedGc.getChildren(),
-                    relatedGc.getLowerCardinality(),
-                    relatedGc.getUpperCardinality()
-                );
-                newGc.setContextualized(true);
-                newGc.setContextualizationValue(relatedGc.getContextualizationValue());
-                
-                // Remove old constraint and add new one
-                model.getConstraints().remove(relatedGc);
-                model.getConstraints().add(newGc);
-                model.getFeatures().put(newParent.getName(), newParent);
-                logger.info("\t[splitFeatures] changed feature {} to feature {} for constraint {}", oldParentName, newParent.getName(), newGc.toString());
-            }
-            
-            // Remove old parent feature from model's features
-            model.getFeatures().remove(oldParentName);
-            
         }
     }
 }

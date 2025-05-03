@@ -112,7 +112,7 @@ public class Merger extends MergerHelper {
         }
 
         removeDuplicateContextualizedGroupConstraints(unionModel);
-        //splitFeaturesWithMultipleParents(unionModel);
+        splitFeaturesWithMultipleParents(unionModel);
 
         logger.debug("[union] finished with {} features and {} constraints", unionModel.getFeatures().size(),
                 unionModel.getConstraints().size());
