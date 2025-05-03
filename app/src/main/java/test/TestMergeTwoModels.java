@@ -43,5 +43,9 @@ public class TestMergeTwoModels {
         System.out.println("Solutions 1 + 2: " + (solutions1 + solutions2));
         System.out.println("Solutions Union: " + solutionsUnion);
         System.out.println("Solutions Merged: " + solutionsMerged);
+
+        RecreationModel mergedModel2 = Merger.fullMerge(recModel, recModel2);
+        long solutionsMerged2 = Analyser.returnNumberOfSolutions(mergedModel2);
+        System.out.println("Solutions Merged 2: " + solutionsMerged2);
     }
 } 

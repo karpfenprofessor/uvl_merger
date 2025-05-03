@@ -59,13 +59,13 @@ public class Merger extends MergerHelper {
                     "Solution space of union model should be the sum of the solution spaces of the two models before contextualization");
         }
 
-        RecreationModelAnalyser.printConstraints(unionModel);
+        //RecreationModelAnalyser.printConstraints(unionModel);
 
         // Perform inconsistency check and cleanup
         RecreationModel mergedModel = inconsistencyCheck(unionModel);
         cleanup(mergedModel);
 
-        RecreationModelAnalyser.printConstraints(mergedModel);
+        //RecreationModelAnalyser.printConstraints(mergedModel);
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return mergedModel;
     }
