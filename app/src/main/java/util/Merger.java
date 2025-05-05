@@ -9,6 +9,7 @@ import model.base.BaseModel;
 import model.base.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.BinaryConstraint;
 import model.recreate.feature.Feature;
 import statistics.MergeStatistics;
 import model.recreate.constraints.GroupConstraint;
@@ -16,7 +17,7 @@ import model.recreate.constraints.GroupConstraint;
 public class Merger extends MergerHelper {
 
     private static final Logger logger = LogManager.getLogger(Merger.class);
-    private static MergeStatistics mergeStatistics = new MergeStatistics();
+    private static MergeStatistics mergeStatistics;
 
     public static MergeStatistics getMergeStatistics() {
         return mergeStatistics;
@@ -25,6 +26,8 @@ public class Merger extends MergerHelper {
     public static RecreationModel fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB) {
         logger.info("[merge] starting full merge process between models from regions {} and {}",
                 modelToMergeA.getRegion(), modelToMergeB.getRegion());
+
+        mergeStatistics = new MergeStatistics();  // Create new statistics object for this merge
 
         // Models for validation of contextualization and union
         BaseModel chocoTestModelABeforeDecontextualization = ChocoTranslator.convertToChocoModel(modelToMergeA);
@@ -64,13 +67,11 @@ public class Merger extends MergerHelper {
                     "Solution space of union model should be the sum of the solution spaces of the two models before contextualization");
         }
 
-        //RecreationModelAnalyser.printConstraints(unionModel);
-
         // Perform inconsistency check and cleanup
         RecreationModel mergedModel = inconsistencyCheck(unionModel);
+        
         cleanup(mergedModel);
 
-        //RecreationModelAnalyser.printConstraints(mergedModel);
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return mergedModel;
     }
@@ -78,7 +79,10 @@ public class Merger extends MergerHelper {
     public static RecreationModel union(final RecreationModel modelA, final RecreationModel modelB) {
         logger.debug("[union] with models from regions {} and {}", modelA.getRegion().getRegionString(),
                 modelB.getRegion().getRegionString());
-        mergeStatistics.startTimerUnion();
+        if(mergeStatistics != null) {
+            mergeStatistics.startTimerUnion();
+        }
+
         final RecreationModel unionModel = new RecreationModel(Region.UNION);
         RecreationModelAnalyser.analyseSharedFeatures(modelA, modelB);
 
@@ -120,7 +124,13 @@ public class Merger extends MergerHelper {
         removeDuplicateContextualizedGroupConstraints(unionModel);
         splitFeaturesWithMultipleParents(unionModel);
 
-        mergeStatistics.stopTimerUnion();
+        if(mergeStatistics != null) {
+            mergeStatistics.stopTimerUnion();
+            mergeStatistics.setContextualizationShareBeforeMerge(RecreationModelAnalyser.returnContextualizationShare(unionModel));
+            mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
+                    .filter(c -> c instanceof BinaryConstraint)
+                    .count());
+        }
 
         logger.debug("[union] finished with {} features and {} constraints", unionModel.getFeatures().size(),
                 unionModel.getConstraints().size());
@@ -144,7 +154,9 @@ public class Merger extends MergerHelper {
         CKB.setRootFeature(unionModel.getRootFeature());
 
         RecreationModel testingModel = null;
-        mergeStatistics.startTimerInconsistencyCheck();
+        if(mergeStatistics != null) {
+            mergeStatistics.startTimerInconsistencyCheck();
+        }
 
         // loop over every contextualized constraint (line 6 in pseudocode)
         Iterator<AbstractConstraint> iterator = unionModel.getConstraints().iterator();
@@ -187,7 +199,9 @@ public class Merger extends MergerHelper {
             iterator.remove();
         }
 
-        mergeStatistics.stopTimerInconsistencyCheck();
+        if(mergeStatistics != null) {
+            mergeStatistics.stopTimerInconsistencyCheck();
+        }
 
         if (solutions != Analyser.returnNumberOfSolutions(CKB)) {
             throw new RuntimeException(
@@ -209,7 +223,10 @@ public class Merger extends MergerHelper {
                 mergedModel.getConstraints().size());
 
         final long solutions = Analyser.returnNumberOfSolutions(mergedModel);
-        mergeStatistics.startTimerCleanup();
+        if(mergeStatistics != null) {
+            mergeStatistics.startTimerCleanup();
+        }
+
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
         while (iterator.hasNext()) {
             AbstractConstraint constraint = iterator.next();
@@ -230,7 +247,13 @@ public class Merger extends MergerHelper {
             }
         }
 
-        mergeStatistics.stopTimerCleanup();
+        if(mergeStatistics != null) {
+            mergeStatistics.stopTimerCleanup();
+            mergeStatistics.setNumberOfCrossTreeConstraintsAfterMerge(mergedModel.getConstraints().stream()
+                .filter(c -> c instanceof BinaryConstraint)
+                .count());
+            mergeStatistics.setContextualizationShareAfterMerge(RecreationModelAnalyser.returnContextualizationShare(mergedModel));
+        }
 
         if (solutions != Analyser.returnNumberOfSolutions(mergedModel)) {
             throw new RuntimeException(
@@ -255,16 +278,18 @@ public class Merger extends MergerHelper {
         constraintToNegate.disableContextualize();
         constraintToNegate.doNegate();
         testingModel.addConstraint(constraintToNegate);
-        // logger.info("\t[isInconsistentWithNegatedContextualizedConstraint] check {}",
-        // constraintToNegate.toString());
 
-        mergeStatistics.incrementInconsistencyCheckCounter();
+        if(mergeStatistics != null) {
+            mergeStatistics.incrementInconsistencyCheckCounter();
+        }
 
         return !Analyser.isConsistent(testingModel);
     }
 
     private static boolean isInconsistent(final RecreationModel testingModel) {
-        mergeStatistics.incrementCleanupCounter();
+        if(mergeStatistics != null) {   
+            mergeStatistics.incrementCleanupCounter();
+        }
         return !Analyser.isConsistent(testingModel);
     }
 }

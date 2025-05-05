@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.BinaryConstraint;
 import model.recreate.feature.Feature;
 
 import java.util.HashSet;
@@ -29,6 +30,17 @@ public class RecreationModelAnalyser {
                 contextualizedSize,
                 ratio);        
         logger.debug("");
+    }
+
+    public static float returnContextualizationShare(RecreationModel model) {
+        long contextualizedSize = model.getConstraints().stream()
+                .filter(c -> c.isContextualized() && c instanceof BinaryConstraint)
+                .count();
+        long constraintsSize = model.getConstraints().size() - 2;
+
+        float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
+
+        return ratio;
     }
 
     public static void analyseSharedFeatures(final RecreationModel... models) {

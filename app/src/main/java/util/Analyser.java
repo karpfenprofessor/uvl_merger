@@ -1,9 +1,12 @@
 package util;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import model.base.BaseModel;
 import model.recreate.RecreationModel;
+import statistics.MergeStatistics;
 import statistics.SolveStatistics;
 
 public class Analyser {
@@ -71,5 +74,20 @@ public class Analyser {
         }
 
         return solveStatistics;
+    }
+
+    public static List<MergeStatistics> createMergeStatistics(final RecreationModel modelA, final RecreationModel modelB) {
+        List<MergeStatistics> mergeStatisticsList = new ArrayList<>();
+
+        for(int i = 0; i < 10; i++) {
+            //Collections.shuffle(modelA.getConstraints());
+            //Collections.shuffle(modelB.getConstraints());
+
+            Merger.fullMerge(modelA, modelB);
+
+            mergeStatisticsList.add(Merger.getMergeStatistics());
+        }
+
+        return mergeStatisticsList;
     }
 }
