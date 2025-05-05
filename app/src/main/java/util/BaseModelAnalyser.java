@@ -24,20 +24,20 @@ public class BaseModelAnalyser {
         logger.info("----------------------------------------");
         logger.info("Printing all constraints in Choco model + " + baseModel.getRegionString() + ":");
         logger.info("----------------------------------------");
-        
+
         Constraint[] constraints = model.getCstrs();
         for (int i = 0; i < constraints.length; i++) {
             Constraint c = constraints[i];
             String constraintType = c.getClass().getSimpleName();
             String constraintStr = c.toString()
-                .replace("([", "[")
-                .replace("])", "]")
-                .replace("{", "")
-                .replace("}", "");
-                
+                    .replace("([", "[")
+                    .replace("])", "]")
+                    .replace("{", "")
+                    .replace("}", "");
+
             logger.info("  [{}] Type: {}", i, constraintType);
             logger.info("      {}", constraintStr);
-            
+
             // Print involved variables
             Set<Variable> vars = new HashSet<>();
             Arrays.stream(c.getPropagators()).forEach(p -> {
@@ -45,14 +45,14 @@ public class BaseModelAnalyser {
                     vars.add(v);
                 }
             });
-            
+
             if (!vars.isEmpty()) {
                 StringBuilder varStr = new StringBuilder("      Features: ");
                 for (Variable v : vars) {
                     varStr.append(v.getName())
-                          .append(" [")
-                          .append(v.getDomainSize())
-                          .append("], ");
+                            .append(" [")
+                            .append(v.getDomainSize())
+                            .append("], ");
                 }
                 logger.info(varStr.substring(0, varStr.length() - 2));
             }
@@ -74,7 +74,7 @@ public class BaseModelAnalyser {
 
     public static long checkConsistency(final BaseModel baseModel, final boolean showOutput) {
         Model model = baseModel.getModel();
-        model.getSolver().reset();  // Reset solver before checking
+        model.getSolver().reset(); // Reset solver before checking
 
         long startTime = System.nanoTime();
         boolean hasSolution = model.getSolver().solve();
@@ -100,7 +100,7 @@ public class BaseModelAnalyser {
         // Get variables from both models
         Map<String, BoolVar> vars1 = model1.getFeatures();
         Map<String, BoolVar> vars2 = model2.getFeatures();
-        
+
         // Sets to store solutions as strings
         Set<String> solutionsModel1 = new HashSet<>();
         Set<String> solutionsModel2 = new HashSet<>();
@@ -114,9 +114,9 @@ public class BaseModelAnalyser {
             StringBuilder solution = new StringBuilder();
             for (Map.Entry<String, BoolVar> entry : vars1.entrySet()) {
                 solution.append(entry.getKey())
-                       .append("=")
-                       .append(entry.getValue().getValue())
-                       .append(";");
+                        .append("=")
+                        .append(entry.getValue().getValue())
+                        .append(";");
             }
             solutionsModel1.add(solution.toString());
         }
@@ -127,9 +127,9 @@ public class BaseModelAnalyser {
             StringBuilder solution = new StringBuilder();
             for (Map.Entry<String, BoolVar> entry : vars2.entrySet()) {
                 solution.append(entry.getKey())
-                       .append("=")
-                       .append(entry.getValue().getValue())
-                       .append(";");
+                        .append("=")
+                        .append(entry.getValue().getValue())
+                        .append(";");
             }
             solutionsModel2.add(solution.toString());
         }
@@ -145,7 +145,7 @@ public class BaseModelAnalyser {
     public static long solveAndReturnNumberOfSolutions(final BaseModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
-        
+
         long solutions = 0;
         while (model.getSolver().solve()) {
             solutions++;
@@ -157,11 +157,9 @@ public class BaseModelAnalyser {
     public static void solveAndCreateStatistic(final BaseModel baseModel, final SolveStatistics solveStatistics) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
-
-        model.getSolver().reset();
-        Instant startTime = Instant.now();  
-        if(model.getSolver().solve()) {
-            Instant endTime = Instant.now();
+        long startTime = System.nanoTime();
+        if (model.getSolver().solve()) {
+            long endTime = System.nanoTime();
             solveStatistics.addSolveTime(startTime, endTime);
         }
     }
@@ -178,20 +176,20 @@ public class BaseModelAnalyser {
     public static void printAllSolutions(final BaseModel baseModel, final boolean takeFeatureNamesFromModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
-        
+
         logger.info("--------------------------------------------------");
         logger.info("Printing all solutions of model " + baseModel.getRegionString() + ":");
         logger.info("--------------------------------------------------");
-       
+
         String[] orderedFeatures = baseModel.getFeatures().keySet().toArray(new String[0]);
-        
-        
-        // Calculate column widths based on feature names (minimum width of 3 to fit "0/1" or "-")
+
+        // Calculate column widths based on feature names (minimum width of 3 to fit
+        // "0/1" or "-")
         int[] columnWidths = new int[orderedFeatures.length];
         for (int i = 0; i < orderedFeatures.length; i++) {
             columnWidths[i] = Math.max(3, orderedFeatures[i].length());
         }
-        
+
         // Print header
         StringBuilder header = new StringBuilder(String.format("%-4s | ", "Sol#"));
         for (int i = 0; i < orderedFeatures.length; i++) {
@@ -199,16 +197,17 @@ public class BaseModelAnalyser {
             header.append(String.format("%-" + columnWidths[i] + "s | ", featureName));
         }
         logger.info(header.toString());
-        
+
         int solutionCount = 0;
         Map<String, BoolVar> features = baseModel.getFeatures();
-        
+
         while (model.getSolver().solve()) {
             solutionCount++;
             StringBuilder solution = new StringBuilder();
             solution.append(String.format("%-4d | ", solutionCount));
-            
-            // Add each feature's value (0/1) to the line in specified order with proper alignment
+
+            // Add each feature's value (0/1) to the line in specified order with proper
+            // alignment
             for (int i = 0; i < orderedFeatures.length; i++) {
                 String featureName = orderedFeatures[i];
                 BoolVar featureVar = features.get(featureName);
@@ -219,12 +218,12 @@ public class BaseModelAnalyser {
                     solution.append(String.format("%-" + columnWidths[i] + "s | ", "-"));
                 }
             }
-            
+
             logger.info(solution.toString());
         }
-        
+
         logger.info("--------------------------------------------------");
         logger.info("Total number of solutions in model " + baseModel.getRegionString() + ": {}", solutionCount);
         logger.info("--------------------------------------------------");
     }
-} 
+}

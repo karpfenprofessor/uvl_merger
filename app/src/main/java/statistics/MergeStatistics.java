@@ -70,11 +70,11 @@ public class MergeStatistics {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[statistics] Merge operation statistics:\n");
-        sb.append("\t[statistics] Union operation duration: ").append(getTotalDurationUnion().toMillis()).append(" ms\n");
-        sb.append("\t[statistics] Inconsistency check duration: ").append(getTotalDurationInconsistencyCheck().toMillis()).append(" ms\n");
-        sb.append("\t[statistics] Cleanup duration: ").append(getTotalDurationCleanup().toMillis()).append(" ms\n");
+        sb.append("\t[statistics] Union operation duration: ").append(getTotalDurationUnion().toNanos()).append(" ns\n");
+        sb.append("\t[statistics] Inconsistency check duration: ").append(getTotalDurationInconsistencyCheck().toNanos()).append(" ns\n");
+        sb.append("\t[statistics] Cleanup duration: ").append(getTotalDurationCleanup().toNanos()).append(" ns\n");
         sb.append("\t[statistics] Number of inconsistency checks: ").append(inconsistencyCheckCounter).append("\n");
-        sb.append("\t[statistics] Number of cleanup operations: ").append(cleanupCounter).append("\n");
+        sb.append("\t[statistics] Number of cleanup checks: ").append(cleanupCounter).append("\n");
         return sb.toString();
     }
 }

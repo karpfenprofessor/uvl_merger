@@ -21,6 +21,11 @@ public class SolveStatistics {
         solveTimes.add(Duration.between(start, end));
     }
 
+    public void addSolveTime(long start, long end) {
+        long duration = end - start;
+        solveTimes.add(Duration.ofNanos(duration));
+    }
+
     public Duration getAverageSolveTime() {
         if (solveTimes.isEmpty()) {
             return Duration.ZERO;

@@ -1,5 +1,7 @@
 package util;
 
+import java.util.Collections;
+
 import model.base.BaseModel;
 import model.recreate.RecreationModel;
 import statistics.SolveStatistics;
@@ -62,8 +64,9 @@ public class Analyser {
     public static SolveStatistics createSolveStatistics(final RecreationModel model) {
         SolveStatistics solveStatistics = new SolveStatistics();
 
-        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
         for(int i = 0; i < 10; i++) {
+            Collections.shuffle(model.getConstraints());
+            BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
             BaseModelAnalyser.solveAndCreateStatistic(chocoTestModel, solveStatistics);
         }
 
