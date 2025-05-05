@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.HashSet;
 import org.chocosolver.solver.variables.BoolVar;
 
-import java.time.Instant;
 import java.util.Arrays;
 
 public class BaseModelAnalyser {
