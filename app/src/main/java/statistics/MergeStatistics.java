@@ -1,8 +1,5 @@
 package statistics;
 
-import java.time.Duration;
-import java.time.Instant;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,49 +10,49 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MergeStatistics {
-    private Instant startTimeUnion;
-    private Instant endTimeUnion;
-    private Instant startTimeInconsistencyCheck;
-    private Instant endTimeInconsistencyCheck;
-    private Instant startTimeCleanup;
-    private Instant endTimeCleanup;
+    private long startTimeUnion;
+    private long endTimeUnion;
+    private long startTimeInconsistencyCheck;
+    private long endTimeInconsistencyCheck;
+    private long startTimeCleanup;
+    private long endTimeCleanup;
     private long inconsistencyCheckCounter;
     private long cleanupCounter;
     
     public void startTimerUnion() {
-        startTimeUnion = Instant.now();
+        startTimeUnion = System.nanoTime();
     }
     
     public void stopTimerUnion() {
-        endTimeUnion = Instant.now();
+        endTimeUnion = System.nanoTime();
     }
 
     public void startTimerInconsistencyCheck() {
-        startTimeInconsistencyCheck = Instant.now();
+        startTimeInconsistencyCheck = System.nanoTime();
     }
 
     public void stopTimerInconsistencyCheck() {
-        endTimeInconsistencyCheck = Instant.now();
+        endTimeInconsistencyCheck = System.nanoTime();
     }
 
     public void startTimerCleanup() {
-        startTimeCleanup = Instant.now();
+        startTimeCleanup = System.nanoTime();
     }
 
     public void stopTimerCleanup() {
-        endTimeCleanup = Instant.now();
+        endTimeCleanup = System.nanoTime();
     }
     
-    public Duration getTotalDurationUnion() {
-        return Duration.between(startTimeUnion, endTimeUnion);
+    public long getTotalDurationUnion() {
+        return endTimeUnion - startTimeUnion;
     }
 
-    public Duration getTotalDurationInconsistencyCheck() {
-        return Duration.between(startTimeInconsistencyCheck, endTimeInconsistencyCheck);
+    public long getTotalDurationInconsistencyCheck() {
+        return endTimeInconsistencyCheck - startTimeInconsistencyCheck;
     }
 
-    public Duration getTotalDurationCleanup() {
-        return Duration.between(startTimeCleanup, endTimeCleanup);
+    public long getTotalDurationCleanup() {
+        return endTimeCleanup - startTimeCleanup;
     }
 
     public void incrementInconsistencyCheckCounter() {
@@ -70,9 +67,9 @@ public class MergeStatistics {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[statistics] Merge operation statistics:\n");
-        sb.append("\t[statistics] Union operation duration: ").append(getTotalDurationUnion().toNanos()).append(" ns\n");
-        sb.append("\t[statistics] Inconsistency check duration: ").append(getTotalDurationInconsistencyCheck().toNanos()).append(" ns\n");
-        sb.append("\t[statistics] Cleanup duration: ").append(getTotalDurationCleanup().toNanos()).append(" ns\n");
+        sb.append("\t[statistics] Union operation duration: ").append(getTotalDurationUnion()).append(" ns\n");
+        sb.append("\t[statistics] Inconsistency check duration: ").append(getTotalDurationInconsistencyCheck()).append(" ns\n");
+        sb.append("\t[statistics] Cleanup duration: ").append(getTotalDurationCleanup()).append(" ns\n");
         sb.append("\t[statistics] Number of inconsistency checks: ").append(inconsistencyCheckCounter).append("\n");
         sb.append("\t[statistics] Number of cleanup checks: ").append(cleanupCounter).append("\n");
         return sb.toString();
