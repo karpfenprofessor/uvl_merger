@@ -16,6 +16,9 @@ import java.util.HashMap;
 
 public class Generator {
     
+    // Store constraints from the last run
+    private static Set<String> lastRunConstraints = new HashSet<>();
+    
     public static void createFeatureTree(final RecreationModel model, final int number) {
         // Create root feature
         Feature root = new Feature("root");
@@ -31,15 +34,15 @@ public class Generator {
 
         // Create optional group constraint under root for all features
         GroupConstraint groupConstraint = new GroupConstraint(root, features, 0, features.size());
+        groupConstraint.setFeatureTreeConstraint(Boolean.TRUE);
         model.addConstraint(groupConstraint);
     }
 
     public static void createCrossTreeConstraints(final RecreationModel model, final int number, final long seed) {
         List<Feature> features = new ArrayList<>(model.getFeatures().values());
         java.util.Random random = new java.util.Random(seed);
-        Set<String> existingConstraints = new HashSet<>();
+        Set<String> existingConstraints = new HashSet<>(lastRunConstraints); // Initialize with last run's constraints
         Map<String, Integer> featureUsageCount = new HashMap<>();
-        int totalConstraints = model.getConstraints().size() - 1 + number;
         
         // Initialize usage count for all features
         for (Feature feature : features) {
@@ -64,7 +67,13 @@ public class Generator {
             }
         }
         
-        while (existingConstraints.size() < totalConstraints) {
+        // Clear last run's constraints before storing new ones
+        lastRunConstraints.clear();
+        
+        // Keep track of how many new constraints we've added
+        int newConstraintsAdded = 0;
+        
+        while (newConstraintsAdded < number) {
             // Find features with minimum usage
             int minUsage = Integer.MAX_VALUE;
             List<Feature> leastUsedFeatures = new ArrayList<>();
@@ -123,6 +132,8 @@ public class Generator {
                 BinaryConstraint binaryConstraint = new BinaryConstraint(ref1, operator, ref2);
                 model.addConstraint(binaryConstraint);
                 existingConstraints.add(constraintKey);
+                lastRunConstraints.add(constraintKey); // Store the new constraint
+                newConstraintsAdded++; // Increment counter for new constraints
                 
                 // Update usage counts for both features
                 featureUsageCount.merge(feature1.getName(), 1, Integer::sum);
@@ -138,5 +149,13 @@ public class Generator {
         String name1 = feature1.getName();
         String name2 = feature2.getName();
         return name1.compareTo(name2) < 0 ? name1 + "|" + name2 : name2 + "|" + name1;
+    }
+    
+    /**
+     * Clears the stored constraints from the last run.
+     * Call this method if you want to start fresh without excluding previous constraints.
+     */
+    public static void clearLastRunConstraints() {
+        lastRunConstraints.clear();
     }
 }

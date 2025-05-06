@@ -16,8 +16,8 @@ public class MergeStatistics {
     private long endTimeInconsistencyCheck;
     private long startTimeCleanup;
     private long endTimeCleanup;
-    private long inconsistencyCheckCounter;
-    private long cleanupCounter;
+    private long inconsistencyCheckCounter = 0;
+    private long cleanupCounter = 0;
     private float contextualizationShareBeforeMerge;
     private float contextualizationShareAfterMerge;
     private long numberOfCrossTreeConstraintsBeforeMerge;
