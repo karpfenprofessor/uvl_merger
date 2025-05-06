@@ -10,11 +10,15 @@ import model.recreate.constraints.AbstractConstraint;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 
 public class Generator {
+
+    private static final Logger logger = LogManager.getLogger(Generator.class);
     
     // Store constraints from the last run
     private static Set<String> lastRunConstraints = new HashSet<>();
@@ -89,7 +93,7 @@ public class Generator {
                 }
             }
             
-            // If we have less than 2 features with minimum usage, try with the next minimum
+            // If we have less than 2 features with minimum usage, find features with next higher usage
             if (leastUsedFeatures.size() < 2) {
                 // Find the next minimum usage
                 int nextMinUsage = Integer.MAX_VALUE;
@@ -105,11 +109,15 @@ public class Generator {
                     break;
                 }
                 
-                // Try again with the next minimum usage
-                continue;
+                // Add features with next minimum usage to our selection pool
+                for (Feature feature : features) {
+                    if (featureUsageCount.get(feature.getName()) == nextMinUsage) {
+                        leastUsedFeatures.add(feature);
+                    }
+                }
             }
             
-            // Randomly select two different features from least used features
+            // Randomly select two different features from our selection pool
             int index1 = random.nextInt(leastUsedFeatures.size());
             Feature feature1 = leastUsedFeatures.get(index1);
             
@@ -138,6 +146,7 @@ public class Generator {
                 // Update usage counts for both features
                 featureUsageCount.merge(feature1.getName(), 1, Integer::sum);
                 featureUsageCount.merge(feature2.getName(), 1, Integer::sum);
+                logger.info("[Generator] added constraint " + newConstraintsAdded);
             }
         }
 

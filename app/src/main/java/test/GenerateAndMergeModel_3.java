@@ -12,15 +12,17 @@ public class GenerateAndMergeModel_3 {
 
     public static void main(String[] args) throws Exception {
 
+        int numberOfCrossTreeConstraints = 30;
+
         RecreationModel mergedA = new RecreationModel(Region.A);
-        Generator.createFeatureTree(mergedA, 50);
-        Generator.createCrossTreeConstraints(mergedA, 50, 111111);
+        Generator.createFeatureTree(mergedA, 20);
+        Generator.createCrossTreeConstraints(mergedA, numberOfCrossTreeConstraints, 111111);
 
         Generator.clearLastRunConstraints();
 
         RecreationModel mergedB = new RecreationModel(Region.B);
-        Generator.createFeatureTree(mergedB, 50);
-        Generator.createCrossTreeConstraints(mergedB, 50, 111111);
+        Generator.createFeatureTree(mergedB, 20);
+        Generator.createCrossTreeConstraints(mergedB, numberOfCrossTreeConstraints, 111111);
 
         Generator.clearLastRunConstraints();
 
