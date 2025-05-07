@@ -36,7 +36,7 @@ public class RecreationModelAnalyser {
         long contextualizedSize = model.getConstraints().stream()
                 .filter(c -> c.isContextualized() && c instanceof BinaryConstraint)
                 .count();
-        long constraintsSize = model.getConstraints().size() - 2;
+        long constraintsSize = model.getConstraints().size() - 3;
 
         float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
 
