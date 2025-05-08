@@ -1,9 +1,6 @@
 package util;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.chocosolver.solver.Model;
@@ -17,32 +14,22 @@ import model.base.BaseModel;
 import model.base.Region;
 
 public class ChocoTranslator {
+    private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 
-    public static BaseModel convertToChocoModel(RecreationModel recModel) {
-        return convertToChocoModel(recModel, Boolean.FALSE);
-    }
-
-    public static BaseModel convertToChocoModel(RecreationModel recModel, boolean cleanModel) {
-        BaseModel chocoModel = new BaseModel(recModel.getRegion()) {
-        };
+    public static BaseModel convertToChocoModel(final RecreationModel recModel) {
+        logger.trace("[convertToChocoModel] converting model {} to choco", recModel.getRegionString());
+        final BaseModel chocoModel = new BaseModel(recModel.getRegion());
 
         if (recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
             logger.warn("[convertToChocoModel] model has no features or constraints, returning empty model");
             return chocoModel;
         }
 
-        if (cleanModel == Boolean.TRUE) {
-            cleanupFeaturesAndGroupConstraints(recModel);
-        }
+        createFeatures(recModel, chocoModel);
 
-        // Create needed variables for all features in choco model
-        createFeatureVariables(recModel, chocoModel);
-
-        // Set and enforce root feature
         chocoModel.setRootFeature(recModel.getRootFeature());
         chocoModel.getModel().arithm(chocoModel.getFeature(recModel.getRootFeature().getName()), "=", 1).post();
 
-        // Process all constraints
         for (AbstractConstraint constraint : recModel.getConstraints()) {
             try {
                 processConstraint(constraint, chocoModel);
@@ -52,74 +39,21 @@ public class ChocoTranslator {
             }
         }
 
+        logger.trace("\t[processConstraints] created {} constraints for choco model {}", recModel.getConstraints().size(), recModel.getRegionString());
+        logger.trace("[convertToChocoModel] finished converting model {} to choco", recModel.getRegionString());
         return chocoModel;
     }
 
-    private static void cleanupFeaturesAndGroupConstraints(final RecreationModel recModel) {
-        // Count group constraints
-        long groupConstraintCount = recModel.getConstraints().stream()
-            .filter(c -> c instanceof GroupConstraint)
-            .count();
-
-        // Return immediately if there isn't exactly one group constraint
-        if (groupConstraintCount != 1) {
-            return;
+    private static void createFeatures(final RecreationModel recModel, final BaseModel chocoModel) {
+        for (Feature feature : recModel.getFeatures().values()) {
+            chocoModel.addFeature(feature.getName());
         }
-
-        // Get the single group constraint
-        GroupConstraint groupConstraint = (GroupConstraint) recModel.getConstraints().stream()
-            .filter(c -> c instanceof GroupConstraint)
-            .findFirst()
-            .get();
-
-        // Get all features referenced in non-group constraints
-        Set<String> referencedFeatures = recModel.getConstraints().stream()
-            .filter(c -> !(c instanceof GroupConstraint))
-            .flatMap(c -> findAllReferencedFeatures(c))
-            .map(Feature::getName)
-            .collect(Collectors.toSet());
-
-        // First remove unused features from the feature map
-        Set<String> unusedFeatures = groupConstraint.getChildren().stream()
-            .map(Feature::getName)
-            .filter(name -> !referencedFeatures.contains(name))
-            .collect(Collectors.toSet());
-
-        unusedFeatures.forEach(name -> recModel.getFeatures().remove(name));
-
-        // Then remove children that aren't referenced elsewhere
-        groupConstraint.getChildren().removeIf(child -> 
-            !referencedFeatures.contains(child.getName()));
+        
+        logger.trace("\t[createFeatures] created {} features for choco model {}", recModel.getFeatures().size(), recModel.getRegionString());
     }
 
-    private static Stream<Feature> findAllReferencedFeatures(AbstractConstraint constraint) {
-        if (constraint instanceof FeatureReferenceConstraint frc) {
-            return Stream.of(frc.getFeature());
-        } else if (constraint instanceof BinaryConstraint bc) {
-            Stream<Feature> antecedentFeatures = getFeatureFromExpression(bc.getAntecedent());
-            Stream<Feature> consequentFeatures = getFeatureFromExpression(bc.getConsequent());
-            return Stream.concat(antecedentFeatures, consequentFeatures);
-        } else if (constraint instanceof NotConstraint nc) {
-            return findAllReferencedFeatures(nc.inner);
-        }
-        return Stream.empty();
-    }
-
-    private static Stream<Feature> getFeatureFromExpression(Object expression) {
-        if (expression instanceof Feature) {
-            return Stream.of((Feature) expression);
-        } else if (expression instanceof BinaryConstraint) {
-            return findAllReferencedFeatures((BinaryConstraint) expression);
-        } else if (expression instanceof NotConstraint) {
-            return findAllReferencedFeatures((NotConstraint) expression);
-        } else if (expression instanceof FeatureReferenceConstraint) {
-            return findAllReferencedFeatures((FeatureReferenceConstraint) expression);
-        }
-        return Stream.empty();
-    }
-
-    private static void processConstraint(AbstractConstraint constraint, BaseModel chocoModel) {
-        Model model = chocoModel.getModel();
+    private static void processConstraint(final AbstractConstraint constraint, final BaseModel chocoModel) {
+        final Model model = chocoModel.getModel();
         BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
 
         if (constraint.isContextualized()) {
@@ -132,8 +66,8 @@ public class ChocoTranslator {
         }
     }
 
-    private static BoolVar createConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {
-        Model model = chocoModel.getModel();
+    private static BoolVar createConstraintVar(final AbstractConstraint constraint, final BaseModel chocoModel) {
+        final Model model = chocoModel.getModel();
         BoolVar baseVar;
 
         if (constraint instanceof GroupConstraint gc) {
@@ -149,12 +83,11 @@ public class ChocoTranslator {
                     "Unsupported constraint type: " + constraint.getClass().getSimpleName());
         }
 
-        // Handle negation if needed (not tested)
         return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
     }
 
-    private static BoolVar createGroupConstraintVar(GroupConstraint gc, BaseModel chocoModel) {
-        Model model = chocoModel.getModel();
+    private static BoolVar createGroupConstraintVar(final GroupConstraint gc, final BaseModel chocoModel) {
+        final Model model = chocoModel.getModel();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
 
         BoolVar[] childVars = gc.getChildren().stream()
@@ -188,9 +121,8 @@ public class ChocoTranslator {
         return groupSat;
     }
 
-    private static BoolVar createBinaryConstraintVar(BinaryConstraint bc, BaseModel chocoModel) {
-
-        Model model = chocoModel.getModel();
+    private static BoolVar createBinaryConstraintVar(final BinaryConstraint bc, final BaseModel chocoModel) {
+        final Model model = chocoModel.getModel();
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
         BoolVar result = model.boolVar();
@@ -211,50 +143,10 @@ public class ChocoTranslator {
         }
 
         return result;
-
-        /*
-         * Model model = chocoModel.getModel();
-         * BoolVar antecedent = getConstraintVar((AbstractConstraint)
-         * bc.getAntecedent(), chocoModel);
-         * BoolVar consequent = getConstraintVar((AbstractConstraint)
-         * bc.getConsequent(), chocoModel);
-         * 
-         * // Create a named variable for better tracking
-         * String opName = bc.getOperator().toString().toLowerCase();
-         * BoolVar result = model.boolVar(opName + "_" + antecedent.getName() + "_" +
-         * consequent.getName());
-         * 
-         * switch (bc.getOperator()) {
-         * case AND:
-         * // Use model.and to combine constraints
-         * model.and(
-         * model.arithm(antecedent, "=", 1),
-         * model.arithm(consequent, "=", 1)).reifyWith(result);
-         * break;
-         * case OR:
-         * // Use model.or to combine constraints
-         * model.or(
-         * model.arithm(antecedent, "=", 1),
-         * model.arithm(consequent, "=", 1)).reifyWith(result);
-         * break;
-         * case IMPLIES:
-         * // A implies B is equivalent to (!A or B)
-         * model.or(
-         * model.arithm(antecedent, "=", 0),
-         * model.arithm(consequent, "=", 1)).reifyWith(result);
-         * break;
-         * case IFF:
-         * // A iff B is equivalent to A == B
-         * model.arithm(antecedent, "=", consequent).reifyWith(result);
-         * break;
-         * }
-         * 
-         * return result;
-         */
     }
 
-    private static BoolVar createNotConstraintVar(NotConstraint nc, BaseModel chocoModel) {
-        Model model = chocoModel.getModel();
+    private static BoolVar createNotConstraintVar(final NotConstraint nc, final BaseModel chocoModel) {
+        final Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
 
         // Create an explicit variable instead of a view
@@ -264,7 +156,7 @@ public class ChocoTranslator {
         return notVar;
     }
 
-    private static BoolVar getConstraintVar(AbstractConstraint constraint, BaseModel chocoModel) {
+    private static BoolVar getConstraintVar(final AbstractConstraint constraint, final BaseModel chocoModel) {
         if (constraint instanceof FeatureReferenceConstraint frc) {
             return chocoModel.getFeature(frc.getFeature().getName());
         } else if (constraint instanceof NotConstraint nc) {
@@ -277,11 +169,31 @@ public class ChocoTranslator {
                 "Unsupported constraint type encountered: " + constraint.getClass().getSimpleName());
     }
 
-    private static void createFeatureVariables(RecreationModel recModel, BaseModel chocoModel) {
-        for (Feature feature : recModel.getFeatures().values()) {
-            chocoModel.addFeature(feature.getName());
+    private static Stream<Feature> findAllReferencedFeatures(final AbstractConstraint constraint) {
+        if (constraint instanceof FeatureReferenceConstraint frc) {
+            return Stream.of(frc.getFeature());
+        } else if (constraint instanceof BinaryConstraint bc) {
+            Stream<Feature> antecedentFeatures = getFeatureFromExpression(bc.getAntecedent());
+            Stream<Feature> consequentFeatures = getFeatureFromExpression(bc.getConsequent());
+            return Stream.concat(antecedentFeatures, consequentFeatures);
+        } else if (constraint instanceof NotConstraint nc) {
+            return findAllReferencedFeatures(nc.inner);
         }
+
+        return Stream.empty();
     }
 
-    private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
+    private static Stream<Feature> getFeatureFromExpression(Object expression) {
+        if (expression instanceof Feature) {
+            return Stream.of((Feature) expression);
+        } else if (expression instanceof BinaryConstraint) {
+            return findAllReferencedFeatures((BinaryConstraint) expression);
+        } else if (expression instanceof NotConstraint) {
+            return findAllReferencedFeatures((NotConstraint) expression);
+        } else if (expression instanceof FeatureReferenceConstraint) {
+            return findAllReferencedFeatures((FeatureReferenceConstraint) expression);
+        }
+        
+        return Stream.empty();
+    }
 }

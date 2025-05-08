@@ -22,8 +22,7 @@ public class MergerHelper {
     private static final Logger logger = LogManager.getLogger(MergerHelper.class);
 
     public static void handleRegionFeature(final RecreationModel modelA, final RecreationModel modelB,
-            RecreationModel unionModel) {
-
+            final RecreationModel unionModel) {
         logger.debug("\t[handleRegionFeature] create unified Region structure with regions: {} and {}",
                 modelA.getRegion().getRegionString(), modelB.getRegion().getRegionString());
         // Create unified Region structure
@@ -80,7 +79,7 @@ public class MergerHelper {
 
     public static void addUniqueFeatureRegionImplications(final RecreationModel sourceModel,
             final RecreationModel unionModel,
-            Feature regionFeature, Set<String> uniqueFeatureNames) {
+            final Feature regionFeature, final Set<String> uniqueFeatureNames) {
 
         // Get special features that should be excluded
         Set<String> excludedFeatures = new HashSet<>();
@@ -102,14 +101,11 @@ public class MergerHelper {
                     FeatureReferenceConstraint consequent = new FeatureReferenceConstraint(regionFeature);
                     NotConstraint notConsequent = new NotConstraint(consequent);
 
-                    // BinaryConstraint implication = new BinaryConstraint(antecedent,
-                    // BinaryConstraint.LogicalOperator.IMPLIES, consequent);
                     BinaryConstraint implication = new BinaryConstraint(notConsequent,
                             BinaryConstraint.LogicalOperator.IMPLIES, notAntecedent);
 
+                    // TODO: should be Feature Tree Constraint
                     implication.setCustomConstraint(Boolean.TRUE);
-
-                    // Add to union model
                     unionModel.addConstraint(implication);
                     logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
                 }
@@ -162,7 +158,7 @@ public class MergerHelper {
     }
 
     public static void removeDuplicateContextualizedGroupConstraints(final RecreationModel model) {
-        logger.info("[removeDuplicates] checking for duplicate contextualized group constraints");
+        logger.debug("[removeDuplicates] checking for duplicate contextualized group constraints");
         List<AbstractConstraint> constraintsToRemove = new ArrayList<>();
 
         for (AbstractConstraint c1 : model.getConstraints()) {
@@ -175,6 +171,7 @@ public class MergerHelper {
                 if (c1 == c2 || !(c2 instanceof GroupConstraint) || !c2.isContextualized()) {
                     continue;
                 }
+
                 GroupConstraint gc2 = (GroupConstraint) c2;
 
                 if (areGroupConstraintsEqual(gc1, gc2) && !constraintsToRemove.contains(gc2)) {
@@ -186,7 +183,7 @@ public class MergerHelper {
         }
 
         model.getConstraints().removeAll(constraintsToRemove);
-        logger.info(
+        logger.debug(
                 "[removeDuplicates] removed {} duplicate group constraints from union model and decontextualized the rest",
                 constraintsToRemove.size());
     }
@@ -206,7 +203,7 @@ public class MergerHelper {
     }
 
     public static void splitFeaturesWithMultipleParents(final RecreationModel model) {
-        logger.info("[splitFeatures] checking feature tree for child group features with differentiating parents");
+        logger.debug("[splitFeatures] checking feature tree for child group features with differentiating parents");
         for (AbstractConstraint c1 : model.getConstraints()) {
             if (!(c1 instanceof GroupConstraint) || !c1.isContextualized()) {
                 continue;

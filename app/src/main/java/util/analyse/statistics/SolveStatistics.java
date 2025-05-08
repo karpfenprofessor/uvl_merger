@@ -1,4 +1,4 @@
-package statistics;
+package util.analyse.statistics;
 
 import java.util.ArrayList;
 import java.util.List;

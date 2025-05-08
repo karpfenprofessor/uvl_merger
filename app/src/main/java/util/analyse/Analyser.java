@@ -1,4 +1,4 @@
-package util;
+package util.analyse;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,8 +6,10 @@ import java.util.List;
 
 import model.base.BaseModel;
 import model.recreate.RecreationModel;
-import statistics.MergeStatistics;
-import statistics.SolveStatistics;
+import util.ChocoTranslator;
+import util.Merger;
+import util.analyse.statistics.MergeStatistics;
+import util.analyse.statistics.SolveStatistics;
 
 public class Analyser {
 
@@ -24,12 +26,12 @@ public class Analyser {
         RecreationModelAnalyser.printFeatures(model);
     }
 
-    public static void printConstraints(final RecreationModel model) {
-        RecreationModelAnalyser.printConstraints(model);
-    }
-
     public static void printFeatures(final BaseModel model) {
         BaseModelAnalyser.printFeatures(model);
+    }
+
+    public static void printConstraints(final RecreationModel model) {
+        RecreationModelAnalyser.printConstraints(model);
     }
 
     public static void printConstraints(final BaseModel model) {
@@ -42,7 +44,7 @@ public class Analyser {
 
     public static void printAllSolutions(final RecreationModel model) {
         BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
-        BaseModelAnalyser.printAllSolutions(chocoTestModel, true);
+        BaseModelAnalyser.printAllSolutions(chocoTestModel);
     }
 
     public static int printIntersectionSolutions(final BaseModel model1, final BaseModel model2) {

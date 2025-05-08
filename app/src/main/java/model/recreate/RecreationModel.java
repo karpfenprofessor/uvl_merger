@@ -6,7 +6,7 @@ import model.base.Region;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.GroupConstraint;
 import model.recreate.feature.Feature;
-import util.Analyser;
+import util.analyse.Analyser;
 
 import java.util.List;
 import java.util.Map;
@@ -16,16 +16,19 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+ * Our working model for the merge algorithm.
+ */
+
 @Getter
 @Setter
 public class RecreationModel {
     protected final Logger logger;
 
+    private Region region;
     private Feature rootFeature;
     private List<AbstractConstraint> constraints;
     private Map<String, Feature> features = new HashMap<>();
-
-    protected Region region;
 
     public RecreationModel(Region region) {
         this.constraints = new ArrayList<>();
@@ -52,10 +55,10 @@ public class RecreationModel {
 
         // Create Region feature structure
         Feature regionFeature = new Feature("Region");
-        Feature specificRegion = new Feature(getRegionString());
+        Feature specificRegionFeature = new Feature(getRegionString());
         features.put("Region", regionFeature);
-        features.put(getRegionString(), specificRegion);
-        logger.debug("\t[contextualize] added root and contextualization features");
+        features.put(getRegionString(), specificRegionFeature);
+        logger.debug("\t[contextualize] added root [{}] and contextualization feature [{}]", rootFeature, specificRegionFeature);
 
         // Create mandatory group constraint connecting Region to root
         List<Feature> rootRegionChildren = new ArrayList<>();
@@ -65,19 +68,19 @@ public class RecreationModel {
         rootRegionGc.setChildren(rootRegionChildren);
         rootRegionGc.setLowerCardinality(1);
         rootRegionGc.setUpperCardinality(1);
-        rootRegionGc.setCustomConstraint(true);
+        rootRegionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(rootRegionGc);
         logger.debug("\t[contextualize] constrain super root and region root features with " + rootRegionGc.toString());
 
         // Create group constraint for Region's children
         List<Feature> regionChildren = new ArrayList<>();
-        regionChildren.add(specificRegion);
+        regionChildren.add(specificRegionFeature);
         GroupConstraint regionGc = new GroupConstraint();
         regionGc.setParent(regionFeature);
         regionGc.setChildren(regionChildren);
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
-        regionGc.setCustomConstraint(true);
+        regionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(regionGc);
         logger.debug("\t[contextualize] constrain region root contextualization features with " + regionGc.toString());
 

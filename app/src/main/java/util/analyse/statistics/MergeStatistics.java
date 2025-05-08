@@ -1,4 +1,4 @@
-package statistics;
+package util.analyse.statistics;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

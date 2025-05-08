@@ -1,11 +1,11 @@
-package test;
+package testcases;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import util.Analyser;
 import util.Merger;
 import util.UVLParser;
+import util.analyse.Analyser;
 import model.base.Region;
 import model.recreate.RecreationModel;
 //

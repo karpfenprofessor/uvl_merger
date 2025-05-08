@@ -1,4 +1,4 @@
-package util;
+package util.analyse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class RecreationModelAnalyser {
     private static final Logger logger = LogManager.getLogger(RecreationModelAnalyser.class);
 
-    public static void analyseContextualizationShare(RecreationModel model) {
+    public static void analyseContextualizationShare(final RecreationModel model) {
         long contextualizedSize = model.getConstraints().stream()
                 .filter(c -> c.isContextualized() && c instanceof BinaryConstraint && !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                 .count();
@@ -34,9 +34,9 @@ public class RecreationModelAnalyser {
         logger.debug("");
     }
 
-    public static float returnContextualizationShare(RecreationModel model) {
+    public static float returnContextualizationShare(final RecreationModel model) {
         long contextualizedSize = model.getConstraints().stream()
-                .filter(c -> c.isContextualized() && c instanceof BinaryConstraint && !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
+                .filter(c -> c.isContextualized() && !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                 .count();
         long constraintsSize = model.getConstraints().stream()
                 .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
@@ -49,7 +49,7 @@ public class RecreationModelAnalyser {
 
     public static void analyseSharedFeatures(final RecreationModel... models) {
         if (models.length < 2) {
-            logger.debug("[analyseSharedFeatures] need at least 2 models to compare");
+            logger.warn("[analyseSharedFeatures] need at least 2 models to compare");
 
             return;
         }
@@ -70,7 +70,7 @@ public class RecreationModelAnalyser {
 
         float shareRatio = totalUniqueFeatures > 0 ? (float) sharedFeatures.size() / totalUniqueFeatures : 0;
 
-        logger.debug("[analyseSharedFeatures] comparing {} models", models.length);
+        logger.info("[analyseSharedFeatures] comparing {} models", models.length);
         for (int i = 0; i < models.length; i++) {
             logger.debug("\tmodel {}: {} features", i + 1, featureSets.get(i).size());
         }
@@ -89,7 +89,7 @@ public class RecreationModelAnalyser {
                 .collect(Collectors.toSet());
                 
         logger.info("\tfeatures exclusive to one model: {}", exclusiveFeatures);
-        logger.debug("");
+        logger.info("");
     }
 
     public static void printConstraints(RecreationModel recModel) {

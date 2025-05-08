@@ -1,9 +1,9 @@
-package util;
+package util.analyse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import model.base.BaseModel;
-import statistics.SolveStatistics;
+import util.analyse.statistics.SolveStatistics;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
@@ -17,6 +17,35 @@ import java.util.Arrays;
 
 public class BaseModelAnalyser {
     private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
+
+    public static boolean isConsistent(final BaseModel baseModel) {
+        Model model = baseModel.getModel();
+        model.getSolver().reset();
+        return model.getSolver().solve();
+    }
+
+    public static long solveAndReturnNumberOfSolutions(final BaseModel baseModel) {
+        Model model = baseModel.getModel();
+        model.getSolver().reset();
+
+        long solutions = 0;
+        while (model.getSolver().solve()) {
+            solutions++;
+            logger.info("Solution found: " + solutions);
+        }
+
+        return solutions;
+    }
+
+    public static void solveAndCreateStatistic(final BaseModel baseModel, final SolveStatistics solveStatistics) {
+        final Model model = baseModel.getModel();
+        model.getSolver().reset();
+        long startTime = System.nanoTime();
+        if (model.getSolver().solve()) {
+            long endTime = System.nanoTime();
+            solveStatistics.addSolveTime(startTime, endTime);
+        }
+    }
 
     public static void printConstraints(final BaseModel baseModel) {
         Model model = baseModel.getModel();
@@ -71,30 +100,6 @@ public class BaseModelAnalyser {
         logger.info("Total features in model " + baseModel.getRegionString() + ": {}", variables.length);
     }
 
-    public static long checkConsistency(final BaseModel baseModel, final boolean showOutput) {
-        Model model = baseModel.getModel();
-        model.getSolver().reset(); // Reset solver before checking
-
-        long startTime = System.nanoTime();
-        boolean hasSolution = model.getSolver().solve();
-        long endTime = System.nanoTime();
-        long duration = endTime - startTime;
-
-        if (showOutput && hasSolution) {
-            logger.info("Model is consistent (solution found in {} ns)", duration);
-        } else if (showOutput) {
-            logger.info("Model is inconsistent (checked in {} ns)", duration);
-        }
-
-        return duration;
-    }
-
-    public static boolean isConsistent(final BaseModel baseModel) {
-        Model model = baseModel.getModel();
-        model.getSolver().reset();
-        return model.getSolver().solve();
-    }
-
     public static int findIntersectionSolutions(final BaseModel model1, final BaseModel model2) {
         // Get variables from both models
         Map<String, BoolVar> vars1 = model1.getFeatures();
@@ -134,47 +139,14 @@ public class BaseModelAnalyser {
         }
         logger.info("[intersection] found {} solutions in model {}", solutionsModel2.size(), model2.getRegionString());
 
-        // Find intersection
         solutionsModel1.retainAll(solutionsModel2);
         logger.info("[intersection] found {} intersection solutions", solutionsModel1.size());
 
         return solutionsModel1.size();
     }
 
-    public static long solveAndReturnNumberOfSolutions(final BaseModel baseModel) {
-        Model model = baseModel.getModel();
-        model.getSolver().reset();
-
-        long solutions = 0;
-        while (model.getSolver().solve()) {
-            solutions++;
-            logger.info("Solution found: " + solutions);
-        }
-
-        return solutions;
-    }
-
-    public static void solveAndCreateStatistic(final BaseModel baseModel, final SolveStatistics solveStatistics) {
-        Model model = baseModel.getModel();
-        model.getSolver().reset();
-        long startTime = System.nanoTime();
-        if (model.getSolver().solve()) {
-            long endTime = System.nanoTime();
-            solveStatistics.addSolveTime(startTime, endTime);
-        }
-    }
-
-    public static void solveAndPrintNumberOfSolutions(final BaseModel baseModel) {
-        long solutions = solveAndReturnNumberOfSolutions(baseModel);
-        logger.info("[solveAndPrintNumberOfSolutions] found solutions: " + solutions);
-    }
-
     public static void printAllSolutions(final BaseModel baseModel) {
-        printAllSolutions(baseModel, false);
-    }
-
-    public static void printAllSolutions(final BaseModel baseModel, final boolean takeFeatureNamesFromModel) {
-        Model model = baseModel.getModel();
+        final Model model = baseModel.getModel();
         model.getSolver().reset();
 
         logger.info("--------------------------------------------------");

@@ -2,6 +2,7 @@ package util;
 
 import model.recreate.RecreationModel;
 import model.recreate.feature.Feature;
+import util.analyse.Analyser;
 import model.recreate.constraints.BinaryConstraint;
 import model.recreate.constraints.GroupConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
@@ -17,7 +18,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Generator {
-
     private static final Logger logger = LogManager.getLogger(Generator.class);
 
     // Store constraints from the last run

@@ -1,33 +1,31 @@
-package test;
+package testcases;
 
 
 import model.base.Region;
 import model.recreate.RecreationModel;
-import statistics.SolveStatistics;
-import util.Analyser;
 import util.Generator;
 import util.Merger;
+import util.analyse.Analyser;
+import util.analyse.statistics.SolveStatistics;
 
-public class GenerateAndMergeModel_3 {
+public class GenerateAndMergeModel_1 {
 
     public static void main(String[] args) throws Exception {
 
-        int numberOfCrossTreeConstraints = 4;
-
         RecreationModel mergedA = new RecreationModel(Region.A);
-        Generator.createFeatureTree(mergedA, 10);
-        Generator.createCrossTreeConstraints(mergedA, numberOfCrossTreeConstraints, 111111);
+        Generator.createFeatureTree(mergedA, 50);
+        Generator.createCrossTreeConstraints(mergedA, 30, 111111);
 
         Generator.clearLastRunConstraints();
 
         RecreationModel mergedB = new RecreationModel(Region.B);
-        Generator.createFeatureTree(mergedB, 10);
-        Generator.createCrossTreeConstraints(mergedB, numberOfCrossTreeConstraints, 111111);
+        Generator.createFeatureTree(mergedB, 50);
+        Generator.createCrossTreeConstraints(mergedB, 30, 111111);
 
         Generator.clearLastRunConstraints();
 
-        Generator.createCrossTreeConstraints(mergedA, 1, 123456);
-        Generator.createCrossTreeConstraints(mergedB, 1, 654321);
+        Generator.createCrossTreeConstraints(mergedA, 20, 123456);
+        Generator.createCrossTreeConstraints(mergedB, 20, 654321);
         
         //List<MergeStatistics> mergeStatisticsList = Analyser.createMergeStatistics(mergedA, mergedB);
 

@@ -5,9 +5,6 @@ import org.chocosolver.solver.variables.BoolVar;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.feature.Feature;
 
@@ -19,20 +16,17 @@ import java.util.HashSet;
 @Getter
 @Setter
 public class BaseModel {
-
-    protected final Logger logger;
-    protected Model model;
-    protected Region region;
-    protected Map<String, BoolVar> features;
-    protected Set<AbstractConstraint> constraints;
-    private   Feature rootFeature;
-    
+  
+    private Model model;                            // Choco model
+    private Region region;                          // Region Identifier of the model
+    private Map<String, BoolVar> features;          // Map of features in the model
+    private Set<AbstractConstraint> constraints;    // Set of constraints in the model
+    private Feature rootFeature;                    // Root feature of the model
 
     public BaseModel(Region region) {
         this.model = new Model();
         this.features = new HashMap<>();
         this.constraints = new HashSet<>();
-        this.logger = LogManager.getLogger(this.getClass());
         this.region = region;
     }
 

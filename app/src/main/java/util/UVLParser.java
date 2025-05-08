@@ -38,7 +38,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import uvl.UVLJavaLexer;
 
 public class UVLParser {
-
     private static final Logger logger = LogManager.getLogger(UVLParser.class);
 
     public static RecreationModel parseUVLFile(String filePathString) throws Exception {

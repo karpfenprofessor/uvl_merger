@@ -1,12 +1,12 @@
-package test;
+package testcases;
 
 
 import model.base.Region;
 import model.recreate.RecreationModel;
-import statistics.SolveStatistics;
-import util.Analyser;
 import util.Generator;
 import util.Merger;
+import util.analyse.Analyser;
+import util.analyse.statistics.SolveStatistics;
 
 public class GenerateAndMergeModel_2 {
 

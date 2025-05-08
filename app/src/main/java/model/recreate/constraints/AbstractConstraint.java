@@ -17,6 +17,7 @@ public abstract class AbstractConstraint {
     private boolean isCustomConstraint      = Boolean.FALSE;
     private boolean isFeatureTreeConstraint = Boolean.FALSE;
 
+    //contextualize the constraint with a given value representing the region
     public void doContextualize(Integer value) {
         this.isContextualized = Boolean.TRUE;
         this.contextualizationValue = value;

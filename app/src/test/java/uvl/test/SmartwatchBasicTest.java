@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import util.Analyser;
 import util.Merger;
 import util.UVLParser;
+import util.analyse.Analyser;
 import model.base.Region;
 import model.recreate.RecreationModel;
 
