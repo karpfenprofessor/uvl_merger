@@ -46,7 +46,7 @@ public class UVLParser {
     }
 
     public static RecreationModel parseUVLFile(String filePathString, Region region) throws Exception {
-        logger.debug("[parseUVLFile] start " + filePathString + " for region " + region.getRegionString());
+        logger.info("[parseUVLFile] start " + filePathString + " for region " + region.getRegionString());
         Path filePath = Paths.get(UVLParser.class.getClassLoader()
                 .getResource(filePathString).toURI());
         String content = new String(Files.readAllBytes(filePath));
@@ -60,8 +60,8 @@ public class UVLParser {
         RecreationModel model = new RecreationModel(region);
         parseFeatures(featureContext, model);
         parseConstraints(featureContext.constraints(), model);
-        logger.debug("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString());
-        logger.debug("");
+        logger.info("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString());
+        logger.info("");
         
         return model;
     }
@@ -76,7 +76,7 @@ public class UVLParser {
             parseFeaturesSection(featureModelCtx.features(), model);
         }
 
-        logger.info("\t[parseFeatures] finished with " + model.getFeatures().size() + " features");
+        logger.debug("\t[parseFeatures] finished with " + model.getFeatures().size() + " features");
     }
 
     // Handle the 'features' section
@@ -87,7 +87,7 @@ public class UVLParser {
         if (rootFeatureCtx != null) {
             Feature root = parseFeature(rootFeatureCtx, model);
             model.setRootFeature(root);
-            logger.info("\t[parseRootFeature] found root " + root.toString());
+            logger.debug("\t[parseRootFeature] found root " + root.toString());
         }
     }
 

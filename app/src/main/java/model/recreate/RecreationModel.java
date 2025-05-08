@@ -34,10 +34,17 @@ public class RecreationModel {
     }
 
     public void contextualizeAllConstraints() {
-        logger.debug("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
+        contextualizeAllConstraints(Boolean.FALSE);
+    }
+
+    public void contextualizeAllConstraints(boolean validate) {
+        logger.info("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
                 + " with region value " + region.ordinal());
 
-        final long solutions = Analyser.returnNumberOfSolutions(this);
+        long solutions = 0;
+        if(validate) {
+            solutions = Analyser.returnNumberOfSolutions(this);
+        }
 
         for (AbstractConstraint constraint : constraints) {
             constraint.doContextualize(region.ordinal());
@@ -48,7 +55,7 @@ public class RecreationModel {
         Feature specificRegion = new Feature(getRegionString());
         features.put("Region", regionFeature);
         features.put(getRegionString(), specificRegion);
-        logger.info("\t[contextualize] added root and contextualization features");
+        logger.debug("\t[contextualize] added root and contextualization features");
 
         // Create mandatory group constraint connecting Region to root
         List<Feature> rootRegionChildren = new ArrayList<>();
@@ -58,8 +65,9 @@ public class RecreationModel {
         rootRegionGc.setChildren(rootRegionChildren);
         rootRegionGc.setLowerCardinality(1);
         rootRegionGc.setUpperCardinality(1);
+        rootRegionGc.setCustomConstraint(true);
         addConstraint(rootRegionGc);
-        logger.info("\t[contextualize] constrain super root and region root features with " + rootRegionGc.toString());
+        logger.debug("\t[contextualize] constrain super root and region root features with " + rootRegionGc.toString());
 
         // Create group constraint for Region's children
         List<Feature> regionChildren = new ArrayList<>();
@@ -69,15 +77,16 @@ public class RecreationModel {
         regionGc.setChildren(regionChildren);
         regionGc.setLowerCardinality(1);
         regionGc.setUpperCardinality(1);
+        regionGc.setCustomConstraint(true);
         addConstraint(regionGc);
-        logger.info("\t[contextualize] constrain region root contextualization features with " + regionGc.toString());
+        logger.debug("\t[contextualize] constrain region root contextualization features with " + regionGc.toString());
 
         // validate solution spaces after contextualization
-        if (solutions != Analyser.returnNumberOfSolutions(this)) {
+        if (validate && solutions != Analyser.returnNumberOfSolutions(this)) {
             throw new RuntimeException("Solution space of model should not change after contextualization");
         }
-        logger.debug("[contextualize] finished region " + getRegionString());
-        logger.debug("");
+        logger.info("[contextualize] finished region " + getRegionString());
+        logger.info("");
     }
 
     public void addConstraint(AbstractConstraint c) {

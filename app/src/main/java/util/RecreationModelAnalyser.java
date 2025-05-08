@@ -18,9 +18,11 @@ public class RecreationModelAnalyser {
 
     public static void analyseContextualizationShare(RecreationModel model) {
         long contextualizedSize = model.getConstraints().stream()
-                .filter(c -> c.isContextualized())
+                .filter(c -> c.isContextualized() && c instanceof BinaryConstraint && !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                 .count();
-        long constraintsSize = model.getConstraints().size();
+        long constraintsSize = model.getConstraints().stream()
+                .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
+                .count();
 
         float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
 
@@ -34,9 +36,11 @@ public class RecreationModelAnalyser {
 
     public static float returnContextualizationShare(RecreationModel model) {
         long contextualizedSize = model.getConstraints().stream()
-                .filter(c -> c.isContextualized() && c instanceof BinaryConstraint)
+                .filter(c -> c.isContextualized() && c instanceof BinaryConstraint && !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                 .count();
-        long constraintsSize = model.getConstraints().size() - 3;
+        long constraintsSize = model.getConstraints().stream()
+                .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
+                .count();
 
         float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
 

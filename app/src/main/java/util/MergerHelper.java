@@ -41,7 +41,7 @@ public class MergerHelper {
         rootRegionGc.setUpperCardinality(1);
         rootRegionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(rootRegionGc);
-        logger.info("\t[handleRegionFeature] constrain super root and region root features with "
+        logger.debug("\t[handleRegionFeature] constrain super root and region root features with "
                 + rootRegionGc.toString());
 
         // Create single group constraint for Region's children
@@ -55,7 +55,7 @@ public class MergerHelper {
         regionGc.setUpperCardinality(1);
         regionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(regionGc);
-        logger.info("\t[handleRegionFeature] constrain region root and contextualization features with "
+        logger.debug("\t[handleRegionFeature] constrain region root and contextualization features with "
                 + regionGc.toString());
 
         // Find unique features in each model
@@ -69,7 +69,7 @@ public class MergerHelper {
         Set<String> uniqueToB = new HashSet<>(modelBFeatures);
         uniqueToB.removeAll(modelAFeatures);
 
-        logger.info(
+        logger.debug(
                 "\t[handleRegionFeature] found {} features unique to region A and {} features unique to region B (including the contextualization feature per region)",
                 uniqueToA.size(), uniqueToB.size());
 
@@ -111,7 +111,7 @@ public class MergerHelper {
 
                     // Add to union model
                     unionModel.addConstraint(implication);
-                    logger.info("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
+                    logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
                 }
             }
         }
@@ -123,7 +123,7 @@ public class MergerHelper {
         if (model1.getRootFeature() != null && model2.getRootFeature() != null) {
             if (model1.getRootFeature().getName().equals(model2.getRootFeature().getName())) {
                 unionModel.setRootFeature(unionModel.getFeatures().get(model1.getRootFeature().getName()));
-                logger.info(
+                logger.debug(
                         "\t[handleRootFeature] root feature is the same in both models, setting union root feature to {}",
                         model1.getRootFeature().getName());
             } else {
@@ -146,23 +146,23 @@ public class MergerHelper {
                 gc.setCustomConstraint(Boolean.TRUE);
 
                 unionModel.addConstraint(gc);
-                logger.info(
+                logger.debug(
                         "\t[handleRootFeature] added mandatory group constraint for root features and created new super root feature: {}",
                         newRoot.toString());
             }
         } else if (model1.getRootFeature() != null) {
             unionModel.setRootFeature(unionModel.getFeatures().get(model1.getRootFeature().getName()));
-            logger.info("\t[handleRootFeature] root feature is only in model 1, setting root feature to {}",
+            logger.debug("\t[handleRootFeature] root feature is only in model 1, setting root feature to {}",
                     model1.getRootFeature().getName());
         } else if (model2.getRootFeature() != null) {
             unionModel.setRootFeature(unionModel.getFeatures().get(model2.getRootFeature().getName()));
-            logger.info("\t[handleRootFeature] root feature is only in model 2, setting root feature to {}",
+            logger.debug("\t[handleRootFeature] root feature is only in model 2, setting root feature to {}",
                     model2.getRootFeature().getName());
         }
     }
 
     public static void removeDuplicateContextualizedGroupConstraints(final RecreationModel model) {
-        logger.debug("[removeDuplicates] checking for duplicate contextualized group constraints");
+        logger.info("[removeDuplicates] checking for duplicate contextualized group constraints");
         List<AbstractConstraint> constraintsToRemove = new ArrayList<>();
 
         for (AbstractConstraint c1 : model.getConstraints()) {
@@ -178,7 +178,7 @@ public class MergerHelper {
                 GroupConstraint gc2 = (GroupConstraint) c2;
 
                 if (areGroupConstraintsEqual(gc1, gc2) && !constraintsToRemove.contains(gc2)) {
-                    logger.info("\t[removeDuplicates] found duplicate constraints: {} and {}", gc1, gc2);
+                    logger.debug("\t[removeDuplicates] found duplicate constraints: {} and {}", gc1, gc2);
                     constraintsToRemove.add(gc2);
                     gc1.disableContextualize();
                 }
@@ -186,7 +186,7 @@ public class MergerHelper {
         }
 
         model.getConstraints().removeAll(constraintsToRemove);
-        logger.debug(
+        logger.info(
                 "[removeDuplicates] removed {} duplicate group constraints from union model and decontextualized the rest",
                 constraintsToRemove.size());
     }
@@ -206,7 +206,7 @@ public class MergerHelper {
     }
 
     public static void splitFeaturesWithMultipleParents(final RecreationModel model) {
-        logger.debug("[splitFeatures] checking feature tree for child group features with differentiating parents");
+        logger.info("[splitFeatures] checking feature tree for child group features with differentiating parents");
         for (AbstractConstraint c1 : model.getConstraints()) {
             if (!(c1 instanceof GroupConstraint) || !c1.isContextualized()) {
                 continue;

@@ -119,7 +119,7 @@ public class BaseModelAnalyser {
             }
             solutionsModel1.add(solution.toString());
         }
-        logger.debug("[intersection] found {} solutions in model {}", solutionsModel1.size(), model1.getRegionString());
+        logger.info("[intersection] found {} solutions in model {}", solutionsModel1.size(), model1.getRegionString());
 
         // Collect all solutions from model 2
         while (model2.getModel().getSolver().solve()) {
@@ -132,7 +132,7 @@ public class BaseModelAnalyser {
             }
             solutionsModel2.add(solution.toString());
         }
-        logger.debug("[intersection] found {} solutions in model {}", solutionsModel2.size(), model2.getRegionString());
+        logger.info("[intersection] found {} solutions in model {}", solutionsModel2.size(), model2.getRegionString());
 
         // Find intersection
         solutionsModel1.retainAll(solutionsModel2);
@@ -148,6 +148,7 @@ public class BaseModelAnalyser {
         long solutions = 0;
         while (model.getSolver().solve()) {
             solutions++;
+            logger.info("Solution found: " + solutions);
         }
 
         return solutions;
