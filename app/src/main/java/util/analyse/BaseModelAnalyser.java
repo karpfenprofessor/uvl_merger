@@ -31,7 +31,7 @@ public class BaseModelAnalyser {
         long solutions = 0;
         while (model.getSolver().solve()) {
             solutions++;
-            logger.info("Solution found: " + solutions);
+            if(solutions % 1000 == 0) logger.info("Solution found: " + solutions);
         }
 
         return solutions;

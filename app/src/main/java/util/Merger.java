@@ -9,7 +9,6 @@ import model.base.BaseModel;
 import model.base.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
-import model.recreate.constraints.BinaryConstraint;
 import model.recreate.feature.Feature;
 import util.analyse.Analyser;
 import util.analyse.BaseModelAnalyser;
@@ -161,13 +160,19 @@ public class Merger extends MergerHelper {
             mergeStatistics.setContextualizationShareBeforeMerge(
                     RecreationModelAnalyser.returnContextualizationShare(unionModel));
             mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
-                    .filter(c -> c instanceof BinaryConstraint && !c.isCustomConstraint()
-                            && !c.isFeatureTreeConstraint())
+                    .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                     .count());
         }
 
-        logger.info("[union] finished with {} features and {} constraints", unionModel.getFeatures().size(),
-                unionModel.getConstraints().size());
+        logger.info(
+                "[union] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints",
+                unionModel.getFeatures().size(),
+                unionModel.getConstraints().size(),
+                unionModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count(),
+                unionModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count(),
+                unionModel.getConstraints().stream()
+                        .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+                        .count());
         logger.info("");
 
         return unionModel;
@@ -175,8 +180,9 @@ public class Merger extends MergerHelper {
 
     public static RecreationModel inconsistencyCheck(final RecreationModel unionModel, final boolean validate) {
         logger.info(
-                "[inconsistencyCheck] start looping {} constraints in union model",
-                unionModel.getConstraints().size());
+                "[inconsistencyCheck] start looping {} constraints in union model (excluding feature tree and custom constraints)",
+                unionModel.getConstraints().stream()
+                        .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint()).count());
 
         long solutions = 0;
 
@@ -228,7 +234,7 @@ public class Merger extends MergerHelper {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
                 CKB.addConstraint(originalConstraint);
                 contextualizeCounter++;
-                logger.trace("\t[inconsistencyCheck] consistent, add contextualized constraint {}",
+                logger.debug("\t[inconsistencyCheck] consistent, add contextualized constraint {}",
                         originalConstraint.toString());
             }
 
@@ -245,8 +251,10 @@ public class Merger extends MergerHelper {
                     "Solution space of merged model after inconsistency check should be the same as the solution space of the union model");
         }
 
-        logger.info("[inconsistencyCheck] added {} decontextualized and {} contextualized constraints to merged model",
-                decontextualizeCounter, contextualizeCounter);
+        logger.info(
+                "[inconsistencyCheck] added {} decontextualized, {} contextualized and {} not checked constraints to merged model",
+                decontextualizeCounter, contextualizeCounter,
+                CKB.getConstraints().size() - decontextualizeCounter - contextualizeCounter);
         logger.info("[inconsistencyCheck] finished with {} features and {} constraints",
                 CKB.getFeatures().size(), CKB.getConstraints().size());
         logger.info("");
@@ -255,12 +263,14 @@ public class Merger extends MergerHelper {
     }
 
     public static RecreationModel cleanup(final RecreationModel mergedModel, final boolean validate) {
-        logger.info("[cleanup] start with {} features and {} constraints",
-                mergedModel.getFeatures().size(),
-                mergedModel.getConstraints().size());
+        logger.info(
+                "[cleanup] start looping {} constraints in merged model (excluding feature tree and custom constraints)",
+                mergedModel.getConstraints().stream()
+                        .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint()).count());
 
         long solutions = 0;
         long deletionCounter = 0;
+        long customAndFeatureTreeConstraintsCounter = 0;
 
         if (validate) {
             solutions = Analyser.returnNumberOfSolutions(mergedModel);
@@ -275,6 +285,7 @@ public class Merger extends MergerHelper {
             AbstractConstraint constraint = iterator.next();
 
             if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
+                customAndFeatureTreeConstraintsCounter++;
                 continue;
             }
 
@@ -294,8 +305,7 @@ public class Merger extends MergerHelper {
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerCleanup();
             mergeStatistics.setNumberOfCrossTreeConstraintsAfterMerge(mergedModel.getConstraints().stream()
-                    .filter(c -> c instanceof BinaryConstraint && !c.isCustomConstraint()
-                            && !c.isFeatureTreeConstraint())
+                    .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                     .count());
             mergeStatistics.setContextualizationShareAfterMerge(
                     RecreationModelAnalyser.returnContextualizationShare(mergedModel));
@@ -310,9 +320,11 @@ public class Merger extends MergerHelper {
                             + solutions + ")");
         }
 
-        logger.info("[cleanup] finished with {} features and {} constraints, removed {} constraints",
+        logger.info("[cleanup] removed {} constraints", deletionCounter);
+        logger.info("[cleanup] kept {} custom and feature treeconstraints without checking", customAndFeatureTreeConstraintsCounter); 
+        logger.info("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
-                mergedModel.getConstraints().size(), deletionCounter);
+                mergedModel.getConstraints().size());
         logger.info("");
 
         return mergedModel;

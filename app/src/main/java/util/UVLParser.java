@@ -59,7 +59,8 @@ public class UVLParser {
         RecreationModel model = new RecreationModel(region);
         parseFeatures(featureContext, model);
         parseConstraints(featureContext.constraints(), model);
-        logger.info("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString());
+        logger.info("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString() 
+        + " with " + model.getFeatures().size() + " features and " + model.getConstraints().size() + " constraints");
         logger.info("");
         
         return model;

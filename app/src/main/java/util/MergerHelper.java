@@ -104,8 +104,9 @@ public class MergerHelper {
                     BinaryConstraint implication = new BinaryConstraint(notConsequent,
                             BinaryConstraint.LogicalOperator.IMPLIES, notAntecedent);
 
-                    // TODO: should be Feature Tree Constraint
-                    implication.setCustomConstraint(Boolean.TRUE);
+                    // TODO: should be Feature Tree Constraint?
+                    //implication.setCustomConstraint(Boolean.TRUE);
+                    implication.setFeatureTreeConstraint(Boolean.TRUE);
                     unionModel.addConstraint(implication);
                     logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
                 }
@@ -238,6 +239,7 @@ public class MergerHelper {
                     }
                 }
             }
+            logger.trace("\t[splitFeatures] ok");
         }
     }
 }

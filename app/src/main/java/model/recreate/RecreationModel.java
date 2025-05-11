@@ -82,7 +82,7 @@ public class RecreationModel {
         regionGc.setUpperCardinality(1);
         regionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(regionGc);
-        logger.debug("\t[contextualize] constrain region root contextualization features with " + regionGc.toString());
+        logger.debug("\t[contextualize] constrain region root and contextualization features with " + regionGc.toString());
 
         // validate solution spaces after contextualization
         if (validate && solutions != Analyser.returnNumberOfSolutions(this)) {
