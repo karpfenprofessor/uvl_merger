@@ -21,7 +21,19 @@ public class BaseModelAnalyser {
     public static boolean isConsistent(final BaseModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
-        return model.getSolver().solve();
+        //model.getSolver().showStatistics();
+        boolean solved = model.getSolver().solve();
+
+        if(false && !solved) {
+            logger.trace("Solver failed to find a solution. Statistics:");
+            logger.trace("Time: {} ms", model.getSolver().getTimeCount());
+            logger.trace("Nodes: {}", model.getSolver().getNodeCount());
+            logger.trace("Backtracks: {}", model.getSolver().getBackTrackCount());
+            logger.trace("Fails: {}", model.getSolver().getFailCount());
+            logger.trace("Restarts: {}", model.getSolver().getRestartCount());
+        }
+
+        return solved;
     }
 
     public static long solveAndReturnNumberOfSolutions(final BaseModel baseModel) {

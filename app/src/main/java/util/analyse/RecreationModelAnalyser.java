@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
 
 public class RecreationModelAnalyser {
     private static final Logger logger = LogManager.getLogger(RecreationModelAnalyser.class);
@@ -47,11 +49,12 @@ public class RecreationModelAnalyser {
         return ratio;
     }
 
-    public static void analyseSharedFeatures(final RecreationModel... models) {
+    public static Map<RecreationModel, Set<String>> analyseSharedFeatures(final RecreationModel... models) {
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = new HashMap<>();
+        
         if (models.length < 2) {
             logger.warn("[analyseSharedFeatures] need at least 2 models to compare");
-
-            return;
+            return uniqueFeaturesPerModel;
         }
 
         List<Set<String>> featureSets = Arrays.stream(models)
@@ -63,10 +66,20 @@ public class RecreationModelAnalyser {
             sharedFeatures.retainAll(featureSets.get(i));
         }
 
-        int totalUniqueFeatures = featureSets.stream()
-                .flatMap(Set::stream)
-                .collect(Collectors.toSet())
-                .size();
+        // Calculate total unique features as shared features plus sum of unique features per model
+        int totalUniqueFeatures = sharedFeatures.size();
+        for (int i = 0; i < models.length; i++) {
+            Set<String> modelFeatures = featureSets.get(i);
+            Set<String> exclusiveToThisModel = new HashSet<>(modelFeatures);
+            
+            // Remove features that appear in any other model
+            for (int j = 0; j < models.length; j++) {
+                if (i != j) {
+                    exclusiveToThisModel.removeAll(featureSets.get(j));
+                }
+            }
+            totalUniqueFeatures += exclusiveToThisModel.size();
+        }
 
         float shareRatio = totalUniqueFeatures > 0 ? (float) sharedFeatures.size() / totalUniqueFeatures : 0;
 
@@ -79,17 +92,32 @@ public class RecreationModelAnalyser {
         logger.debug("\ttotal unique features: {}", totalUniqueFeatures);
         logger.debug("\tshare ratio: {} %", String.format("%.2f", shareRatio * 100));
         
-        // Find features that appear in exactly one model using streams
-        Set<String> exclusiveFeatures = featureSets.stream()
-                .flatMap(Set::stream)
-                .collect(Collectors.groupingBy(feature -> feature, Collectors.counting()))
-                .entrySet().stream()
-                .filter(entry -> entry.getValue() == 1)
-                .map(java.util.Map.Entry::getKey)
-                .collect(Collectors.toSet());
-                
-        logger.info("\tfeatures exclusive to one model: {}", exclusiveFeatures);
+        // Find features exclusive to each model
+        for (int i = 0; i < models.length; i++) {
+            Set<String> modelFeatures = featureSets.get(i);
+            Set<String> exclusiveToThisModel = new HashSet<>(modelFeatures);
+            
+            // Remove features that appear in any other model
+            for (int j = 0; j < models.length; j++) {
+                if (i != j) {
+                    exclusiveToThisModel.removeAll(featureSets.get(j));
+                }
+            }
+            
+            uniqueFeaturesPerModel.put(models[i], exclusiveToThisModel);
+            
+            if (!exclusiveToThisModel.isEmpty()) {
+                logger.info("\tfeatures exclusive to model {} ({}):", 
+                    i + 1, 
+                    models[i].getRegion().getRegionString());
+                for (String feature : exclusiveToThisModel) {
+                    logger.info("\t\t- {}", feature);
+                }
+            }
+        }
+        
         logger.info("");
+        return uniqueFeaturesPerModel;
     }
 
     public static void printConstraints(RecreationModel recModel) {

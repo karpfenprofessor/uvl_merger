@@ -1,6 +1,8 @@
 package util;
 
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +23,10 @@ public class Merger extends MergerHelper {
 
     public static MergeStatistics getMergeStatistics() {
         return mergeStatistics;
+    }
+
+    public static void resetMergeStatistics() {
+        mergeStatistics = new MergeStatistics();
     }
 
     public static RecreationModel fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB,
@@ -131,27 +137,6 @@ public class Merger extends MergerHelper {
             }
         }
 
-        // Add all non-Region constraints
-        /*
-         * for (AbstractConstraint constraint : modelA.getConstraints()) {
-         * if (!(constraint instanceof GroupConstraint &&
-         * (((GroupConstraint) constraint).getParent().getName().equals("Region") ||
-         * ((GroupConstraint) constraint).getChildren().stream()
-         * .anyMatch(f -> f.getName().equals("Region"))))) {
-         * unionModel.addConstraint(constraint);
-         * }
-         * }
-         * 
-         * for (AbstractConstraint constraint : modelB.getConstraints()) {
-         * if (!(constraint instanceof GroupConstraint &&
-         * (((GroupConstraint) constraint).getParent().getName().equals("Region") ||
-         * ((GroupConstraint) constraint).getChildren().stream()
-         * .anyMatch(f -> f.getName().equals("Region"))))) {
-         * unionModel.addConstraint(constraint);
-         * }
-         * }
-         */
-
         removeDuplicateContextualizedGroupConstraints(unionModel);
         splitFeaturesWithMultipleParents(unionModel);
 
@@ -212,6 +197,8 @@ public class Merger extends MergerHelper {
             if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
                 CKB.addConstraint(originalConstraint);
                 iterator.remove();
+                logger.debug("\t[inconsistencyCheck] skip and add constraint {}",
+                        originalConstraint.toString());
                 continue;
             }
 
@@ -223,12 +210,14 @@ public class Merger extends MergerHelper {
             testingModel.addConstraints(unionModel.getConstraints());
             testingModel.addConstraints(CKB.getConstraints());
 
+            logger.debug("\t[inconsistencyCheck] check constraint: {}", checkConstraint.toString());
+
             if (isInconsistentWithNegatedContextualizedConstraint(checkConstraint, testingModel)) {
                 // decontextualize constraint and add to merged model (line 8 in pseudocode)
                 originalConstraint.disableContextualize();
                 CKB.addConstraint(originalConstraint);
                 decontextualizeCounter++;
-                logger.trace("\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
+                logger.debug("\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
                         originalConstraint.toString());
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
@@ -300,7 +289,11 @@ public class Merger extends MergerHelper {
                 constraint.disableNegation();
                 logger.trace("\t[cleanup] consistent, keep unnegated constraint {}", constraint.toString());
             }
+
+            System.out.print(".");
         }
+
+        System.out.print("\n");
 
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerCleanup();
@@ -321,7 +314,7 @@ public class Merger extends MergerHelper {
         }
 
         logger.info("[cleanup] removed {} constraints", deletionCounter);
-        logger.info("[cleanup] kept {} custom and feature treeconstraints without checking", customAndFeatureTreeConstraintsCounter); 
+        logger.info("[cleanup] kept {} custom and feature tree constraints without checking", customAndFeatureTreeConstraintsCounter); 
         logger.info("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size());
@@ -365,5 +358,75 @@ public class Merger extends MergerHelper {
 
     public static RecreationModel fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB) {
         return fullMerge(modelToMergeA, modelToMergeB, Boolean.FALSE);
+    }
+
+    public static RecreationModel unionMultiple(final RecreationModel... models) {
+        if (models == null || models.length < 2 || models.length > 9) {
+            throw new IllegalArgumentException("Number of models to union must be between 2 and 9");
+        }
+        
+        StringBuilder regionStrings = new StringBuilder();
+        for (int i = 0; i < models.length; i++) {
+            regionStrings.append(models[i].getRegion().getRegionString());
+            if (i < models.length - 1) {
+                regionStrings.append(", ");
+            }
+        }
+        logger.info("[unionMultiple] with models from regions {}", regionStrings);
+
+        if (mergeStatistics != null) {
+            mergeStatistics.startTimerUnion();
+        }
+
+        final RecreationModel unionModel = new RecreationModel(Region.UNION);
+
+        // Add features from both models to union model's feature map
+        for (RecreationModel model : models) {
+            for (Feature feature : model.getFeatures().values()) {
+                if (!unionModel.getFeatures().containsKey(feature.getName())) {
+                    unionModel.getFeatures().put(feature.getName(), feature); // Use original feature
+                }
+            }
+        }
+
+        logger.debug("\t[unionMultiple] added {} unique features to union model", unionModel.getFeatures().size());
+
+        handleRootFeature(unionModel, models);
+
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationModelAnalyser.analyseSharedFeatures(models);
+        handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
+
+        for (RecreationModel model : models) {
+            for (AbstractConstraint constraint : model.getConstraints()) {
+                if (!constraint.isCustomConstraint()) {
+                    unionModel.addConstraint(constraint);
+                }
+            }
+        }
+
+        removeDuplicateContextualizedGroupConstraints(unionModel);
+        splitFeaturesWithMultipleParents(unionModel);
+
+        if (mergeStatistics != null) {
+            mergeStatistics.stopTimerUnion();
+            mergeStatistics.setContextualizationShareBeforeMerge(
+                    RecreationModelAnalyser.returnContextualizationShare(unionModel));
+            mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
+                    .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
+                    .count());
+        }
+
+        logger.info(
+                "[unionMultiple] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints",
+                unionModel.getFeatures().size(),
+                unionModel.getConstraints().size(),
+                unionModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count(),
+                unionModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count(),
+                unionModel.getConstraints().stream()
+                        .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+                        .count());
+        logger.info("");
+
+        return unionModel;
     }
 }
