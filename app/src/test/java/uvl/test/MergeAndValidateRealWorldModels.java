@@ -10,7 +10,7 @@ import util.Validator;
 import model.base.Region;
 import model.recreate.RecreationModel;
 
-public class BusyBoxTest {
+public class MergeAndValidateRealWorldModels {
         private record TestCase(String filename, Region region) {
         }
 
@@ -20,6 +20,18 @@ public class BusyBoxTest {
                         new TestCase("uvl/busybox/busybox_3.uvl", Region.C),
                         new TestCase("uvl/busybox/busybox_4.uvl", Region.D),
                         new TestCase("uvl/busybox/busybox_5.uvl", Region.E)
+        };
+
+        private final TestCase[] FINANCE_MODELS = {
+                        new TestCase("uvl/finance/finance_1.uvl", Region.A),
+                        new TestCase("uvl/finance/finance_2.uvl", Region.B),
+                        new TestCase("uvl/finance/finance_3.uvl", Region.C),
+                        new TestCase("uvl/finance/finance_4.uvl", Region.D),
+                        new TestCase("uvl/finance/finance_5.uvl", Region.E), 
+                        new TestCase("uvl/finance/finance_6.uvl", Region.F),
+                        new TestCase("uvl/finance/finance_7.uvl", Region.G),
+                        new TestCase("uvl/finance/finance_8.uvl", Region.H),
+                        new TestCase("uvl/finance/finance_9.uvl", Region.I)
         };
 
         @Test
@@ -40,25 +52,21 @@ public class BusyBoxTest {
                 }
         }
 
-        //@Test
-        public void testMergeOfBusyboxModels() {
+        @Test
+        public void testMergeOfFinanceModel() {
                 try {
-                        for (int i = 0; i < BUSYBOX_MODELS.length; i++) {
-                                for (int j = i + 1; j < BUSYBOX_MODELS.length; j++) {
-                                        RecreationModel modelA = UVLParser.parseUVLFile(BUSYBOX_MODELS[i].filename,
-                                                        BUSYBOX_MODELS[i].region);
-                                        RecreationModel modelB = UVLParser.parseUVLFile(BUSYBOX_MODELS[j].filename,
-                                                        BUSYBOX_MODELS[j].region);
+                        RecreationModel modelA = UVLParser.parseUVLFile(FINANCE_MODELS[1].filename,
+                                        FINANCE_MODELS[1].region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(FINANCE_MODELS[2].filename,
+                                        FINANCE_MODELS[2].region);
 
-                                        RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
+                        RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
 
-                                        assertTrue(Validator.validateMerge(mergedModel, modelA, modelB),
-                                                        "Merge validation failed for " + BUSYBOX_MODELS[i].filename
-                                                                        + " and " + BUSYBOX_MODELS[j].filename);
-                                }
-                        }
+                        assertTrue(Validator.validateMerge(mergedModel, modelA, modelB),
+                                        "Merge validation failed for " + FINANCE_MODELS[1].filename
+                                                        + " and " + FINANCE_MODELS[2].filename);
                 } catch (Exception e) {
-                        throw new AssertionError("testMergeOfBusyboxModels failed: " + e.getMessage(), e);
+                        throw new AssertionError("testMergeOfFinanceModel failed: " + e.getMessage(), e);
                 }
         }
 }
