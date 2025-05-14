@@ -1,11 +1,13 @@
 package uvl.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import util.Merger;
 import util.UVLParser;
+import util.Validator;
 import util.analyse.Analyser;
 import model.base.Region;
 import model.recreate.RecreationModel;
@@ -151,6 +153,8 @@ public class SmartwatchBasicTest {
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                         "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                                                         + testCaseB.filename);
+
+                        assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
                 } catch (Exception e) {
                         throw new AssertionError("testMergeOfSmartwatchModels failed: " + e.getMessage(), e);
                 }
@@ -301,6 +305,8 @@ public class SmartwatchBasicTest {
                                                 "Solution count mismatch after cleanup of "
                                                                 + MIBAND_BASE_MODELS[i].filename + " and "
                                                                 + MIBAND_BASE_MODELS[i + 1].filename);
+
+                                assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
                         }
 
                         for (int i = 0; i < MIBAND_REALIZED_MODELS.length - 1; i++) {
@@ -356,6 +362,8 @@ public class SmartwatchBasicTest {
                                                 "Solution count mismatch after cleanup of "
                                                                 + MIBAND_REALIZED_MODELS[i].filename + " and "
                                                                 + MIBAND_REALIZED_MODELS[i + 1].filename);
+
+                                assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
                         }
                 } catch (Exception e) {
                         throw new AssertionError("testUnionOfSmartwatchModels failed: " + e.getMessage(), e);

@@ -23,7 +23,8 @@ public class Validator {
      * @return true if the merge is correct (no extra or missing solutions), false
      *         otherwise
      */
-    public static boolean validateMerge(RecreationModel mergedKB, RecreationModel kb1, RecreationModel kb2) {
+    public static boolean validateMerge(final RecreationModel mergedKB, final RecreationModel kb1,
+            final RecreationModel kb2) {
         logger.info("[validateMerge] Starting validation of merged model");
 
         boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2);
@@ -32,7 +33,8 @@ public class Validator {
         boolean isValid = noExtraSolutions && noMissingSolutions;
 
         if (isValid) {
-            logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({}) union Sol({})", kb1.getRegionString(), kb2.getRegionString());
+            logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({}) union Sol({})",
+                    kb1.getRegionString(), kb2.getRegionString());
         } else {
             logger.warn("[validateMerge] Merge validation FAILED");
             logger.warn("[validateMerge] - No extra solutions: {}", noExtraSolutions);
@@ -53,7 +55,8 @@ public class Validator {
      * @return true if no extra solutions exist (UNSAT), false if extra solutions
      *         exist (SAT)
      */
-    public static boolean validateNoExtraSolutions(RecreationModel mergedKB, RecreationModel kb1, RecreationModel kb2) {
+    public static boolean validateNoExtraSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
+            final RecreationModel kb2) {
         logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
 
         // Create a test model with the region set to TESTING
@@ -88,10 +91,13 @@ public class Validator {
 
         if (isSatisfiable) {
             logger.warn(
-                    "[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} union {} (merge too loose)", kb1.getRegionString(), kb2.getRegionString());
+                    "\t[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} union {} (merge too loose)",
+                    kb1.getRegionString(), kb2.getRegionString());
             return false;
         } else {
-            logger.info("[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside {} union {}", kb1.getRegionString(), kb2.getRegionString());
+            logger.info(
+                    "\t[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside {} union {}",
+                    kb1.getRegionString(), kb2.getRegionString());
             return true;
         }
     }
@@ -110,8 +116,8 @@ public class Validator {
      * @return true if no solutions are missing (both checks are UNSAT), false
      *         otherwise
      */
-    public static boolean validateNoMissingSolutions(RecreationModel mergedKB, RecreationModel kb1,
-            RecreationModel kb2) {
+    public static boolean validateNoMissingSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
+            final RecreationModel kb2) {
         logger.info("[validateNoMissingSolutions] Test Case 2 - Checking for missing solutions");
 
         // Check KB₁
@@ -149,7 +155,7 @@ public class Validator {
         // Add negation of all constraints from the merged KB
         for (AbstractConstraint constraint : mergedKB.getConstraints()) {
             AbstractConstraint negatedConstraint = constraint.copy();
-            if(negatedConstraint.isNegation()) {
+            if (negatedConstraint.isNegation()) {
                 negatedConstraint.disableNegation();
             } else {
                 negatedConstraint.doNegate();
@@ -164,12 +170,12 @@ public class Validator {
 
         if (isSatisfiable) {
             logger.warn(
-                    "[validateNoMissingSolutions] Test Case 2 for {} FAILED: KBMerge excludes valid configurations (merge too strict)",
+                    "\t[validateNoMissingSolutions] Test Case 2 for {} FAILED: KBMerge excludes valid configurations (merge too strict)",
                     originalKB.getRegionString());
             return true;
         } else {
             logger.info(
-                    "[validateNoMissingSolutions] Test Case 2 for {} PASSED: KBMerge includes all valid configurations",
+                    "\t[validateNoMissingSolutions] Test Case 2 for {} PASSED: KBMerge includes all valid configurations",
                     originalKB.getRegionString());
             return false;
         }

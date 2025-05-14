@@ -1,11 +1,13 @@
 package uvl.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import util.Merger;
 import util.UVLParser;
+import util.Validator;
 import util.analyse.Analyser;
 import model.base.Region;
 import model.recreate.RecreationModel;
@@ -199,6 +201,8 @@ public class BasicTests {
             mergedModel = Merger.cleanup(mergedModel);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
+
+            assertTrue(Validator.validateMerge(mergedModel, modelUs, modelGer));
         } catch (Exception e) {
             throw new AssertionError("testMergeOfPaperCarModels failed, error: " + e.getMessage());
         }
