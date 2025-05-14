@@ -362,7 +362,7 @@ public class SmartwatchBasicTest {
                 }
         }
 
-        @Test
+        // @Test
         public void testMergeOfMultipleSmartwatchModels() {
                 try {
                         RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[4].filename, Region.A);

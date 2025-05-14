@@ -36,6 +36,10 @@ public abstract class AbstractConstraint {
         this.isNegation = Boolean.FALSE;
     }
 
+    public boolean isSpecialConstraint() {
+        return isCustomConstraint || isFeatureTreeConstraint;
+    }
+
     public abstract AbstractConstraint copy();
     
     @Override
