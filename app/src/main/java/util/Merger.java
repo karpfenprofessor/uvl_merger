@@ -138,7 +138,7 @@ public class Merger extends MergerHelper {
         }
 
         removeDuplicateContextualizedGroupConstraints(unionModel);
-        splitFeaturesWithMultipleParents(unionModel);
+        //splitFeaturesWithMultipleParents(unionModel);
 
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerUnion();

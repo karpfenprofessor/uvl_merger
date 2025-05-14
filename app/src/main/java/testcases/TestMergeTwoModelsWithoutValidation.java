@@ -31,6 +31,14 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelFinanceHString = "uvl/finance/finance_8.uvl";
         String modelFinanceIString = "uvl/finance/finance_9.uvl";
 
+        String modelAutomotiveAString = "uvl/automotive/automotive02_01.uvl";
+        String modelAutomotiveBString = "uvl/automotive/automotive02_02.uvl";
+        String modelAutomotiveCString = "uvl/automotive/automotive02_03.uvl";
+        String modelAutomotiveDString = "uvl/automotive/automotive02_04.uvl";
+
+        String modelCdlAString = "uvl/cdl/vrc4373.uvl";
+        String modelCdlBString = "uvl/cdl/vrc4375.uvl";
+
         RecreationModel modelA = UVLParser.parseUVLFile(modelAString, Region.A);
         RecreationModel modelB = UVLParser.parseUVLFile(modelBString, Region.B);
         RecreationModel modelC = UVLParser.parseUVLFile(modelCString, Region.C);
@@ -46,6 +54,14 @@ public class TestMergeTwoModelsWithoutValidation {
         RecreationModel modelFinanceG = UVLParser.parseUVLFile(modelFinanceGString, Region.G);
         RecreationModel modelFinanceH = UVLParser.parseUVLFile(modelFinanceHString, Region.H);
         RecreationModel modelFinanceI = UVLParser.parseUVLFile(modelFinanceIString, Region.I);
+
+        RecreationModel modelAutomotiveA = UVLParser.parseUVLFile(modelAutomotiveAString, Region.A);
+        RecreationModel modelAutomotiveB = UVLParser.parseUVLFile(modelAutomotiveBString, Region.B);
+        RecreationModel modelAutomotiveC = UVLParser.parseUVLFile(modelAutomotiveCString, Region.C);
+        RecreationModel modelAutomotiveD = UVLParser.parseUVLFile(modelAutomotiveDString, Region.D);
+
+        RecreationModel modelCdlA = UVLParser.parseUVLFile(modelCdlAString, Region.A);
+        RecreationModel modelCdlB = UVLParser.parseUVLFile(modelCdlBString, Region.B);
 
         modelA.contextualizeAllConstraints();
         modelB.contextualizeAllConstraints();
@@ -63,12 +79,18 @@ public class TestMergeTwoModelsWithoutValidation {
         modelFinanceH.contextualizeAllConstraints();
         modelFinanceI.contextualizeAllConstraints();
 
+        modelAutomotiveA.contextualizeAllConstraints();
+        modelAutomotiveB.contextualizeAllConstraints();
+        modelAutomotiveC.contextualizeAllConstraints();
+        modelAutomotiveD.contextualizeAllConstraints();
+
+        modelCdlA.contextualizeAllConstraints();
+        modelCdlB.contextualizeAllConstraints();
+
         Merger.resetMergeStatistics();
 
-        RecreationModel originalA = modelFinanceB;
-        RecreationModel originalB = modelFinanceC;
-
-        //b und c
+        RecreationModel originalA = modelCdlA;
+        RecreationModel originalB = modelCdlB;
 
 
         RecreationModel mergedModel = Merger.fullMerge(originalA, originalB);

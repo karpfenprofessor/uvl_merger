@@ -8,7 +8,7 @@ import model.recreate.RecreationModel;
 public class SolveModel {
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/finance/finance_2.uvl";	 
+        String filePathString = "uvl/automotive/automotive02_02.uvl";	 
   
         RecreationModel recModel = UVLParser.parseUVLFile(filePathString, Region.A);
         //Analyser.printConstraints(recModel);
