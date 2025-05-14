@@ -5,51 +5,41 @@ import org.apache.logging.log4j.Logger;
 
 import util.Merger;
 import util.UVLParser;
+import util.Validator;
 import util.analyse.Analyser;
 import model.base.Region;
 import model.recreate.RecreationModel;
 
 public class TestMergeTwoModelsWithoutValidation {
 
-    protected final static Logger logger = LogManager.getLogger(TestMergeTwoModelsWithoutValidation.class);
+    protected final static Logger logger = LogManager.getLogger(TestMergeMultipleModelsWithValidation.class);
 
     public static void main(String[] args) throws Exception {
-        String filePathString = "uvl/smartwatch/miband4.uvl";
-        String filePathString5 = "uvl/smartwatch/miband5.uvl";
-        String filePathString6 = "uvl/smartwatch/miband6.uvl";
-        String filePathString7 = "uvl/smartwatch/miband7.uvl";
-        String filePathString8 = "uvl/smartwatch/miband8.uvl";
+        String modelAString = "uvl/busybox/busybox_1.uvl";
+        String modelBString = "uvl/busybox/busybox_2.uvl";
+        String modelCString = "uvl/busybox/busybox_3.uvl";
+        String modelDString = "uvl/busybox/busybox_4.uvl";
+        String modelEString = "uvl/busybox/busybox_5.uvl";
 
-        RecreationModel recModel4 = UVLParser.parseUVLFile(filePathString, Region.A);
-        RecreationModel recModel5 = UVLParser.parseUVLFile(filePathString5, Region.B);
-        RecreationModel recModel6 = UVLParser.parseUVLFile(filePathString6, Region.C);
-        RecreationModel recModel7 = UVLParser.parseUVLFile(filePathString7, Region.D);
-        RecreationModel recModel8 = UVLParser.parseUVLFile(filePathString8, Region.E);
+        RecreationModel modelA = UVLParser.parseUVLFile(modelAString, Region.A);
+        RecreationModel modelB = UVLParser.parseUVLFile(modelBString, Region.B);
+        RecreationModel modelC = UVLParser.parseUVLFile(modelCString, Region.C);
+        RecreationModel modelD = UVLParser.parseUVLFile(modelDString, Region.D);
+        RecreationModel modelE = UVLParser.parseUVLFile(modelEString, Region.E);
 
-        recModel4.contextualizeAllConstraints();
-        recModel5.contextualizeAllConstraints();
-        recModel6.contextualizeAllConstraints();
-        recModel7.contextualizeAllConstraints();
-        recModel8.contextualizeAllConstraints();
+        modelA.contextualizeAllConstraints();
+        modelB.contextualizeAllConstraints();
+        modelC.contextualizeAllConstraints();
+        modelD.contextualizeAllConstraints();
+        modelE.contextualizeAllConstraints();
 
         Merger.resetMergeStatistics();
 
-        long solutions4 = Analyser.returnNumberOfSolutions(recModel4);
-        long solutions5 = Analyser.returnNumberOfSolutions(recModel5);
-        long solutions6 = Analyser.returnNumberOfSolutions(recModel6);
-        long solutions7 = Analyser.returnNumberOfSolutions(recModel7);
-        long solutions8 = Analyser.returnNumberOfSolutions(recModel8);
+        RecreationModel mergedModel = Merger.fullMerge(modelB, modelE);
 
-        long combinedSolutions = solutions6 + solutions7 + solutions8;
-
-        RecreationModel unionModel = Merger.unionMultiple(recModel6, recModel7, recModel8);
-
-        long unionSolutions = Analyser.returnNumberOfSolutions(unionModel);
-
-        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, true);
-        mergedModel = Merger.cleanup(mergedModel, true);
         logger.info(Merger.getMergeStatistics().toString());
         logger.info(Analyser.createSolveStatistics(mergedModel).toString());
-        Analyser.printAllSolutions(mergedModel);
+        
+        Validator.validateMerge(mergedModel, modelB, modelE);
     }
 }
