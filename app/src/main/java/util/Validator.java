@@ -1,5 +1,8 @@
 package util;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -7,6 +10,7 @@ import model.base.BaseModel;
 import model.base.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.OrNegationConstraint;
 import util.analyse.BaseModelAnalyser;
 
 public class Validator {
@@ -71,18 +75,12 @@ public class Validator {
             testModel.addConstraint(constraint.copy());
         }
 
-        // Add negation of all constraints from KB₁
-        for (AbstractConstraint constraint : kb1.getConstraints()) {
-            AbstractConstraint negatedConstraint = constraint.copy();
-            negatedConstraint.doNegate();
-            testModel.addConstraint(negatedConstraint);
+        if (!kb1.getConstraints().isEmpty()) {
+            testModel.addConstraint(new OrNegationConstraint(kb1.getConstraints()));
         }
 
-        // Add negation of all constraints from KB₂
-        for (AbstractConstraint constraint : kb2.getConstraints()) {
-            AbstractConstraint negatedConstraint = constraint.copy();
-            negatedConstraint.doNegate();
-            testModel.addConstraint(negatedConstraint);
+        if (!kb1.getConstraints().isEmpty()) {
+            testModel.addConstraint(new OrNegationConstraint(kb2.getConstraints()));
         }
 
         // Convert to Choco model and check satisfiability

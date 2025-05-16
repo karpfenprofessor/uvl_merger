@@ -78,12 +78,31 @@ public class ChocoTranslator {
             baseVar = createNotConstraintVar(nc, chocoModel);
         } else if (constraint instanceof FeatureReferenceConstraint frc) {
             baseVar = chocoModel.getFeature(frc.getFeature().getName());
+        } else if (constraint instanceof OrNegationConstraint onc) {
+            baseVar = createOrNegationConstraintVar(onc, chocoModel);
         } else {
             throw new UnsupportedOperationException(
                     "Unsupported constraint type: " + constraint.getClass().getSimpleName());
         }
 
         return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
+    }
+
+    private static BoolVar createOrNegationConstraintVar(OrNegationConstraint onc, BaseModel chocoModel) {
+        Model model = chocoModel.getModel();
+        BoolVar[] reifiedVars = new BoolVar[onc.getConstraints().size()];
+        
+        // Reify each constraint
+        for (int i = 0; i < onc.getConstraints().size(); i++) {
+            BoolVar reified = createConstraintVar(onc.getConstraints().get(i), chocoModel);
+            reifiedVars[i] = model.boolNotView(reified); // Negate each one
+        }
+        
+        // Create the OR clause
+        BoolVar result = model.boolVar();
+        model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(reifiedVars)));
+
+        return result;
     }
 
     private static BoolVar createGroupConstraintVar(final GroupConstraint gc, final BaseModel chocoModel) {

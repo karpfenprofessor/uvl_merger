@@ -39,7 +39,10 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelCdlAString = "uvl/cdl/vrc4373.uvl";
         String modelCdlBString = "uvl/cdl/vrc4375.uvl";
 
-        RecreationModel modelA = UVLParser.parseUVLFile(modelAString, Region.A);
+        String modelSmartwatchAString = "uvl/smartwatch/miband2.uvl";
+        String modelSmartwatchBString = "uvl/smartwatch/miband3.uvl";
+
+        /*RecreationModel modelA = UVLParser.parseUVLFile(modelAString, Region.A);
         RecreationModel modelB = UVLParser.parseUVLFile(modelBString, Region.B);
         RecreationModel modelC = UVLParser.parseUVLFile(modelCString, Region.C);
         RecreationModel modelD = UVLParser.parseUVLFile(modelDString, Region.D);
@@ -61,12 +64,15 @@ public class TestMergeTwoModelsWithoutValidation {
         RecreationModel modelAutomotiveD = UVLParser.parseUVLFile(modelAutomotiveDString, Region.D);
 
         RecreationModel modelCdlA = UVLParser.parseUVLFile(modelCdlAString, Region.A);
-        RecreationModel modelCdlB = UVLParser.parseUVLFile(modelCdlBString, Region.B);
+        RecreationModel modelCdlB = UVLParser.parseUVLFile(modelCdlBString, Region.B);*/
+
+        RecreationModel modelSmartwatchA = UVLParser.parseUVLFile(modelSmartwatchAString, Region.A);
+        RecreationModel modelSmartwatchB = UVLParser.parseUVLFile(modelSmartwatchBString, Region.B);
 
         Merger.resetMergeStatistics();
 
-        RecreationModel originalA = modelAutomotiveA;
-        RecreationModel originalB = modelAutomotiveB;
+        RecreationModel originalA = modelSmartwatchA;
+        RecreationModel originalB = modelSmartwatchB;
 
 
         RecreationModel mergedModel = Merger.fullMerge(originalA, originalB);
