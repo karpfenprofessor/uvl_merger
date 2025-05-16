@@ -149,15 +149,16 @@ public class MergerHelper {
                 if (feature != null) {
                     // Create implication: feature → region
                     FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint(feature);
-                    NotConstraint notAntecedent = new NotConstraint(antecedent);
+                    //NotConstraint notAntecedent = new NotConstraint(antecedent);
 
                     FeatureReferenceConstraint consequent = new FeatureReferenceConstraint(regionFeature);
-                    NotConstraint notConsequent = new NotConstraint(consequent);
+                    //NotConstraint notConsequent = new NotConstraint(consequent);
 
-                    BinaryConstraint implication = new BinaryConstraint(notConsequent,
-                            BinaryConstraint.LogicalOperator.IMPLIES, notAntecedent);
+                    BinaryConstraint implication = new BinaryConstraint(antecedent,
+                            BinaryConstraint.LogicalOperator.IMPLIES, consequent);
 
                     implication.setFeatureTreeConstraint(Boolean.TRUE);
+                    //implication.doContextualize(sourceModel.getRegion().ordinal());
                     unionModel.addConstraint(implication);
                     logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
                 }
@@ -271,41 +272,130 @@ public class MergerHelper {
 
     public static void splitFeaturesWithMultipleParents(final RecreationModel model) {
         logger.debug("[splitFeatures] checking feature tree for child group features with differentiating parents");
+        
+        // Map to store features that have multiple parents: [featureName -> [parentName -> GroupConstraint]]
+        Map<String, Map<String, GroupConstraint>> featuresWithMultipleParents = new HashMap<>();
+        
+        // First, identify features with multiple parents
         for (AbstractConstraint c1 : model.getConstraints()) {
             if (!(c1 instanceof GroupConstraint) || !c1.isContextualized()) {
                 continue;
             }
 
             GroupConstraint gc1 = (GroupConstraint) c1;
-            Set<String> children1 = gc1.getChildren().stream()
-                    .map(Feature::getName)
-                    .collect(Collectors.toSet());
-
-            for (AbstractConstraint c2 : model.getConstraints()) {
-                if (c1 == c2 || !(c2 instanceof GroupConstraint) || !c2.isContextualized()) {
+            
+            for (Feature child : gc1.getChildren()) {
+                String childName = child.getName();
+                
+                // Initialize the map entry if this is the first time we see this feature
+                if (!featuresWithMultipleParents.containsKey(childName)) {
+                    featuresWithMultipleParents.put(childName, new HashMap<>());
+                }
+                
+                // Add parent to the map
+                String parentName = gc1.getParent().getName();
+                featuresWithMultipleParents.get(childName).put(parentName, gc1);
+            }
+        }
+        
+        // Process features that have multiple parents
+        for (Map.Entry<String, Map<String, GroupConstraint>> entry : featuresWithMultipleParents.entrySet()) {
+            String featureName = entry.getKey();
+            Map<String, GroupConstraint> parentConstraints = entry.getValue();
+            
+            if (parentConstraints.size() > 1) {
+                logger.info("\t[splitFeatures] found feature {} with {} different parents", 
+                        featureName, parentConstraints.size());
+                
+                // Get the original feature
+                Feature originalFeature = model.getFeatures().get(featureName);
+                if (originalFeature == null) {
+                    logger.error("\t[splitFeatures] could not find feature {} in model", featureName);
                     continue;
                 }
-
-                GroupConstraint gc2 = (GroupConstraint) c2;
-                Set<String> children2 = gc2.getChildren().stream()
-                        .map(Feature::getName)
-                        .collect(Collectors.toSet());
-
-                // Find common children between the two group constraints
-                Set<String> commonChildren = new HashSet<>(children1);
-                commonChildren.retainAll(children2);
-
-                // Check if any common child has different parents
-                for (String childName : commonChildren) {
-                    if (!gc1.getParent().getName().equals(gc2.getParent().getName())) {
-                        logger.error("\t[splitFeatures] found feature {} with different parents: {} and {}",
-                                childName, gc1.getParent().getName(), gc2.getParent().getName());
-                        throw new RuntimeException("Feature " + childName + " has different parents: " +
-                                gc1.getParent().getName() + " and " + gc2.getParent().getName());
+                
+                // Create clones for each parent and track them
+                List<Feature> clones = new ArrayList<>();
+                
+                for (String parentName : parentConstraints.keySet()) {
+                    String cloneName = featureName + "_" + parentName;
+                    // Create a new feature instance instead of directly modifying the original
+                    Feature clone = new Feature(cloneName);
+                    // Copy any other properties from original feature to clone if needed
+                    
+                    // Add clone to model
+                    model.getFeatures().put(cloneName, clone);
+                    clones.add(clone);
+                    
+                    // Replace original feature with clone in the corresponding group constraint
+                    GroupConstraint gc = parentConstraints.get(parentName);
+                    
+                    // Create a new list for children to avoid modifying the original
+                    List<Feature> updatedChildren = new ArrayList<>();
+                    
+                    for (Feature child : gc.getChildren()) {
+                        if (child.getName().equals(featureName)) {
+                            updatedChildren.add(clone);
+                        } else {
+                            updatedChildren.add(child);
+                        }
+                    }
+                    
+                    // Create a new list to avoid modifying the original list
+                    // We make a deep copy of the constraint to avoid modifying the source models
+                    GroupConstraint newGc = (GroupConstraint) gc.copy();
+                    newGc.setChildren(new ArrayList<>(updatedChildren));
+                    
+                    // Remove the old constraint and add the new one
+                    model.getConstraints().remove(gc);
+                    model.addConstraint(newGc);
+                    
+                    logger.debug("\t[splitFeatures] replaced {} with {} in group constraint under parent {}", 
+                            featureName, cloneName, parentName);
+                    
+                    // Add region implication for the clone if this is a contextualized constraint
+                    if (gc.isContextualized()) {
+                        int contextValue = gc.getContextualizationValue();
+                        // Get region directly by ordinal value
+                        Region region = Region.values()[contextValue];
+                        Feature regionFeature = model.getFeatures().get(region.getRegionString());
+                        if (regionFeature != null) {
+                            // Call the existing method to add region implications, but use a new set to avoid reference issues
+                            Set<String> singleFeature = new HashSet<>();
+                            singleFeature.add(cloneName);
+                            addUniqueFeatureRegionImplications(null, model, regionFeature, new HashSet<>(singleFeature));
+                            logger.debug("\t[splitFeatures] added region implication constraint for {} → {}", 
+                                    cloneName, region.getRegionString());
+                        }
                     }
                 }
+                
+                // Add equivalence constraint: original ↔ (clone1 ∨ clone2 ∨ ...)
+                // First create the 'or' part of clones
+                FeatureReferenceConstraint firstCloneRef = new FeatureReferenceConstraint(clones.get(0));
+                Object orConstraint = firstCloneRef;
+                
+                if (clones.size() > 1) {
+                    for (int i = 1; i < clones.size(); i++) {
+                        FeatureReferenceConstraint nextCloneRef = new FeatureReferenceConstraint(clones.get(i));
+                        orConstraint = new BinaryConstraint(orConstraint, 
+                                BinaryConstraint.LogicalOperator.OR, nextCloneRef);
+                    }
+                }
+                
+                // Create equivalence: original ↔ (clone1 ∨ clone2 ∨ ...)
+                // Use a copy of the original feature to avoid modifying the original
+                Feature originalFeatureCopy = new Feature(originalFeature.getName());
+                FeatureReferenceConstraint originalRef = new FeatureReferenceConstraint(originalFeatureCopy);
+                BinaryConstraint equivalence = new BinaryConstraint(originalRef, 
+                        BinaryConstraint.LogicalOperator.IFF, orConstraint);
+                
+                // Add the constraint to the model
+                equivalence.setFeatureTreeConstraint(Boolean.TRUE);  // This is a cross-tree constraint
+                model.addConstraint(equivalence);
+                
+                logger.info("\t[splitFeatures] added equivalence constraint: {}", equivalence);
             }
-            logger.trace("\t[splitFeatures] ok");
         }
     }
 }
