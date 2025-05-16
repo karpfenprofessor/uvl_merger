@@ -318,7 +318,19 @@ public class MergerHelper {
                 List<Feature> clones = new ArrayList<>();
                 
                 for (String parentName : parentConstraints.keySet()) {
-                    String cloneName = featureName + "_" + parentName;
+                    GroupConstraint gc = parentConstraints.get(parentName);
+                    
+                    // Get the clone name based on region for contextualized constraints
+                    String cloneName;
+                    if (gc.isContextualized()) {
+                        int contextValue = gc.getContextualizationValue();
+                        Region region = Region.values()[contextValue];
+                        cloneName = featureName + "_" + region.getRegionString();
+                    } else {
+                        // Fallback to parent name if not contextualized
+                        cloneName = featureName + "_" + parentName;
+                    }
+                    
                     // Create a new feature instance instead of directly modifying the original
                     Feature clone = new Feature(cloneName);
                     // Copy any other properties from original feature to clone if needed
@@ -326,9 +338,6 @@ public class MergerHelper {
                     // Add clone to model
                     model.getFeatures().put(cloneName, clone);
                     clones.add(clone);
-                    
-                    // Replace original feature with clone in the corresponding group constraint
-                    GroupConstraint gc = parentConstraints.get(parentName);
                     
                     // Create a new list for children to avoid modifying the original
                     List<Feature> updatedChildren = new ArrayList<>();

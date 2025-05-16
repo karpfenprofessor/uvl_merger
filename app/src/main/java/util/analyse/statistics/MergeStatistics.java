@@ -17,7 +17,10 @@ public class MergeStatistics {
     private long startTimeCleanup;
     private long endTimeCleanup;
     private long inconsistencyCheckCounter = 0;
+    private long inconsistencyContextualizedCounter = 0;
+    private long inconsistencyNonContextualizedCounter = 0;
     private long cleanupCounter = 0;
+    private long cleanupRemovedCounter = 0;
     private float contextualizationShareBeforeMerge;
     private float contextualizationShareAfterMerge;
     private long numberOfCrossTreeConstraintsBeforeMerge;
@@ -76,7 +79,10 @@ public class MergeStatistics {
         sb.append("\t[statistics] Cleanup duration: ").append(getTotalDurationCleanup()).append(" ns\n");
         sb.append("\t[statistics] Full merge duration: ").append(getTotalDurationUnion() + getTotalDurationInconsistencyCheck() + getTotalDurationCleanup()).append(" ns\n");
         sb.append("\t[statistics] Number of inconsistency checks: ").append(inconsistencyCheckCounter).append("\n");
+        sb.append("\t[statistics] Number of inconsistency contextualized: ").append(inconsistencyContextualizedCounter).append("\n");
+        sb.append("\t[statistics] Number of inconsistency non contextualized: ").append(inconsistencyNonContextualizedCounter).append("\n");
         sb.append("\t[statistics] Number of cleanup checks: ").append(cleanupCounter).append("\n");
+        sb.append("\t[statistics] Number of cleanup removed: ").append(cleanupRemovedCounter).append("\n");
         sb.append("\t[statistics] Number of cross tree constraints before merge: ").append(numberOfCrossTreeConstraintsBeforeMerge).append("\n");
         sb.append("\t[statistics] Number of cross tree constraints after merge: ").append(numberOfCrossTreeConstraintsAfterMerge).append("\n");
         sb.append("\t[statistics] Contextualization share before merge: ").append(contextualizationShareBeforeMerge).append("\n");

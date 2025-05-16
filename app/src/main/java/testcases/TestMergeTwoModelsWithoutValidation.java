@@ -63,34 +63,10 @@ public class TestMergeTwoModelsWithoutValidation {
         RecreationModel modelCdlA = UVLParser.parseUVLFile(modelCdlAString, Region.A);
         RecreationModel modelCdlB = UVLParser.parseUVLFile(modelCdlBString, Region.B);
 
-        modelA.contextualizeAllConstraints();
-        modelB.contextualizeAllConstraints();
-        modelC.contextualizeAllConstraints();
-        modelD.contextualizeAllConstraints();
-        modelE.contextualizeAllConstraints();
-
-        modelFinanceA.contextualizeAllConstraints();
-        modelFinanceB.contextualizeAllConstraints();
-        modelFinanceC.contextualizeAllConstraints();
-        modelFinanceD.contextualizeAllConstraints();
-        modelFinanceE.contextualizeAllConstraints();
-        modelFinanceF.contextualizeAllConstraints();
-        modelFinanceG.contextualizeAllConstraints();
-        modelFinanceH.contextualizeAllConstraints();
-        modelFinanceI.contextualizeAllConstraints();
-
-        modelAutomotiveA.contextualizeAllConstraints();
-        modelAutomotiveB.contextualizeAllConstraints();
-        modelAutomotiveC.contextualizeAllConstraints();
-        modelAutomotiveD.contextualizeAllConstraints();
-
-        modelCdlA.contextualizeAllConstraints();
-        modelCdlB.contextualizeAllConstraints();
-
         Merger.resetMergeStatistics();
 
-        RecreationModel originalA = modelCdlA;
-        RecreationModel originalB = modelCdlB;
+        RecreationModel originalA = modelAutomotiveA;
+        RecreationModel originalB = modelAutomotiveB;
 
 
         RecreationModel mergedModel = Merger.fullMerge(originalA, originalB);

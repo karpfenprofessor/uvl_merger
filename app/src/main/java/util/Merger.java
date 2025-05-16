@@ -233,6 +233,8 @@ public class Merger extends MergerHelper {
 
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerInconsistencyCheck();
+            mergeStatistics.setInconsistencyContextualizedCounter(contextualizeCounter);
+            mergeStatistics.setInconsistencyNonContextualizedCounter(decontextualizeCounter);
         }
 
         if (validate && (solutions != Analyser.returnNumberOfSolutions(CKB))) {
@@ -297,6 +299,7 @@ public class Merger extends MergerHelper {
 
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerCleanup();
+            mergeStatistics.setCleanupRemovedCounter(deletionCounter);
             mergeStatistics.setNumberOfCrossTreeConstraintsAfterMerge(mergedModel.getConstraints().stream()
                     .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                     .count());

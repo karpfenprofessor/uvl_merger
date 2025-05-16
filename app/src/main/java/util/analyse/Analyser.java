@@ -69,7 +69,7 @@ public class Analyser {
     public static SolveStatistics createSolveStatistics(final RecreationModel model) {
         SolveStatistics solveStatistics = new SolveStatistics();
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             Collections.shuffle(model.getConstraints());
             BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
             BaseModelAnalyser.solveAndCreateStatistic(chocoTestModel, solveStatistics);
