@@ -43,27 +43,7 @@ public class ValidatorTests {
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
             assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
 
-            mergedModel.getConstraints().removeIf(c -> {
-                if (!(c instanceof BinaryConstraint))
-                    return false;
-
-                BinaryConstraint bc = (BinaryConstraint) c;
-                if (bc.getOperator() != BinaryConstraint.LogicalOperator.IMPLIES)
-                    return false;
-
-                Object antecedent = bc.getAntecedent();
-                Object consequent = bc.getConsequent();
-
-                if (!(antecedent instanceof FeatureReferenceConstraint))
-                    return false;
-                if (!(consequent instanceof FeatureReferenceConstraint))
-                    return false;
-
-                String antecedentFeature = ((FeatureReferenceConstraint) antecedent).getFeature().getName();
-                String consequentFeature = ((FeatureReferenceConstraint) consequent).getFeature().getName();
-
-                return antecedentFeature.equals("NFC") && consequentFeature.equals("TouchScreen");
-            });
+            mergedModel.getConstraints().remove(36);
 
             long solutionsCountMergedAfterConstraintRemoved = Analyser.returnNumberOfSolutions(mergedModel);
             assertNotEquals(solutionsCountMerged, solutionsCountMergedAfterConstraintRemoved);
@@ -99,6 +79,7 @@ public class ValidatorTests {
             constraint.setAntecedent(antecedent);
             constraint.setConsequent(consequent);
             constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+            constraint.doContextualize(Region.B.ordinal());
             mergedModel.addConstraint(constraint);
 
             long solutionsCountMergedAfterConstraintRemoved = Analyser.returnNumberOfSolutions(mergedModel);

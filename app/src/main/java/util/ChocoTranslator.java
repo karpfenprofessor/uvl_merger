@@ -100,16 +100,36 @@ public class ChocoTranslator {
         Model model = chocoModel.getModel();
         BoolVar[] reifiedVars = new BoolVar[onc.getConstraints().size()];
         
-        // Reify each constraint
+        // Handle each constraint with proper contextualization
         for (int i = 0; i < onc.getConstraints().size(); i++) {
-            BoolVar reified = createConstraintVar(onc.getConstraints().get(i), chocoModel, null);
-            reifiedVars[i] = model.boolNotView(reified); // Negate each one
+            AbstractConstraint c = onc.getConstraints().get(i);
+            
+            if (c.isContextualized()) {
+                // 1) Get the region variable
+                BoolVar regionVar = chocoModel.getFeature(
+                    Region.values()[c.getContextualizationValue()].getRegionString()
+                );
+                
+                // 2) Compute the BoolVar for "φ" (constraint body) with the correct regionVar
+                BoolVar φvar = createConstraintVar(c, chocoModel, regionVar);
+                
+                // 3) Build "negφ = ¬φvar" as a reified BoolVar
+                BoolVar negφ = model.boolVar("neg_" + φvar.getName());
+                model.arithm(φvar, "=", 0).reifyWith(negφ);
+                
+                // 4) Build "bad_i ≡ (regionVar ∧ negφ)"
+                BoolVar bad_i = model.and(regionVar, negφ).reify();
+                reifiedVars[i] = bad_i;
+            } else {
+                // If c is not contextualized, just negate it directly
+                BoolVar φvar = createConstraintVar(c, chocoModel, null);
+                reifiedVars[i] = model.boolNotView(φvar);
+            }
         }
         
-        // Create the OR clause
-        BoolVar result = model.boolVar();
+        // OR them all together
+        BoolVar result = model.boolVar("orchunk");
         model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(reifiedVars)));
-
         return result;
     }
 

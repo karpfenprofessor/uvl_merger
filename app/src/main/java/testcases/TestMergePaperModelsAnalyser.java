@@ -27,15 +27,15 @@ public class TestMergePaperModelsAnalyser {
             System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
             System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
 
-            AbstractConstraint constraint = mergedModel.getConstraints().remove(9);
-            System.out.println("removed constraint to trigger testcase 1: " + constraint);
+            //AbstractConstraint constraint = mergedModel.getConstraints().remove(9);
+            //System.out.println("removed constraint to trigger testcase 1: " + constraint);
 
             NotConstraint constraint2 = new NotConstraint();
             FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint();
             antecedent.setFeature(mergedModel.getFeatures().get("15k"));
             constraint2.setInner(antecedent);
-            mergedModel.addConstraint(constraint2);
-            System.out.println("added constraint to trigger testcase 2: " + constraint2);
+            //mergedModel.addConstraint(constraint2);
+            //System.out.println("added constraint to trigger testcase 2: " + constraint2);
             
             Validator.validateMerge(mergedModel, modelUs, modelGer);
 
