@@ -54,24 +54,32 @@ public class ChocoTranslator {
 
     private static void processConstraint(final AbstractConstraint constraint, final BaseModel chocoModel) {
         final Model model = chocoModel.getModel();
-        BoolVar constraintVar = createConstraintVar(constraint, chocoModel);
+        BoolVar regionVar = null;
+        
+        if (constraint.isContextualized()) {
+            regionVar = chocoModel
+                    .getFeature(Region.values()[constraint.getContextualizationValue()].getRegionString());
+        }
+        
+        BoolVar constraintVar = createConstraintVar(constraint, chocoModel, regionVar);
 
         if (constraint.isContextualized()) {
-            BoolVar regionVar = chocoModel
-                    .getFeature(Region.values()[constraint.getContextualizationValue()].getRegionString());
-
-            model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
+            // For group constraints, contextualization is handled internally
+            // For other constraints, apply top-level contextualization
+            if (!(constraint instanceof GroupConstraint)) {
+                model.ifThen(regionVar, model.arithm(constraintVar, "=", 1));
+            }
         } else {
             model.post(model.arithm(constraintVar, "=", 1));
         }
     }
 
-    private static BoolVar createConstraintVar(final AbstractConstraint constraint, final BaseModel chocoModel) {
+    private static BoolVar createConstraintVar(final AbstractConstraint constraint, final BaseModel chocoModel, final BoolVar regionVar) {
         final Model model = chocoModel.getModel();
         BoolVar baseVar;
 
         if (constraint instanceof GroupConstraint gc) {
-            baseVar = createGroupConstraintVar(gc, chocoModel);
+            baseVar = createGroupConstraintVar(gc, chocoModel, regionVar);
         } else if (constraint instanceof BinaryConstraint bc) {
             baseVar = createBinaryConstraintVar(bc, chocoModel);
         } else if (constraint instanceof NotConstraint nc) {
@@ -94,7 +102,7 @@ public class ChocoTranslator {
         
         // Reify each constraint
         for (int i = 0; i < onc.getConstraints().size(); i++) {
-            BoolVar reified = createConstraintVar(onc.getConstraints().get(i), chocoModel);
+            BoolVar reified = createConstraintVar(onc.getConstraints().get(i), chocoModel, null);
             reifiedVars[i] = model.boolNotView(reified); // Negate each one
         }
         
@@ -105,7 +113,7 @@ public class ChocoTranslator {
         return result;
     }
 
-    private static BoolVar createGroupConstraintVar(final GroupConstraint gc, final BaseModel chocoModel) {
+    private static BoolVar createGroupConstraintVar(final GroupConstraint gc, final BaseModel chocoModel, final BoolVar regionVar) {
         final Model model = chocoModel.getModel();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
 
@@ -113,7 +121,7 @@ public class ChocoTranslator {
                 .map(child -> chocoModel.getFeature(child.getName()))
                 .toArray(BoolVar[]::new);
 
-        // Create sum constraint for children selection
+        // Create sum constraint for children selection - this is always needed to define sumVar
         IntVar sumVar = model.intVar("sum_" + gc.getParent().getName(), 0, childVars.length);
         model.sum(childVars, "=", sumVar).post();
 
@@ -130,11 +138,28 @@ public class ChocoTranslator {
         // groupSat ⇔ (parent ∧ cardinalitySatisfied) ∨ (¬parent ∧ childrenAreZero)
         BoolVar parentAndCardinality = model.and(parentVar, cardinalitySatisfied).reify();
         BoolVar notParentAndZero = model.and(model.boolNotView(parentVar), childrenAreZero).reify();
-        model.addClauses(LogOp.ifOnlyIf(groupSat, LogOp.or(parentAndCardinality, notParentAndZero)));
-
-        // Also enforce that if any child is selected, parent must be true
-        for (BoolVar child : childVars) {
-            model.ifThen(child, model.arithm(parentVar, "=", 1));
+        
+        if (regionVar != null) {
+            // Contextualized: only enforce group logic when region is active
+            BoolVar groupLogic = model.boolVar("groupLogic_" + gc.getParent().getName());
+            model.addClauses(LogOp.ifOnlyIf(groupLogic, LogOp.or(parentAndCardinality, notParentAndZero)));
+            model.ifThen(regionVar, model.arithm(groupLogic, "=", 1));
+            
+            // Child->Parent implications only when region is active
+            for (BoolVar child : childVars) {
+                model.ifThen(model.and(regionVar, child).reify(), model.arithm(parentVar, "=", 1));
+            }
+            
+            // Group satisfaction: true when region is inactive, or when region is active and group logic holds
+            model.addClauses(LogOp.ifOnlyIf(groupSat, LogOp.or(model.boolNotView(regionVar), groupLogic)));
+        } else {
+            // Non-contextualized: standard group constraint behavior
+            model.addClauses(LogOp.ifOnlyIf(groupSat, LogOp.or(parentAndCardinality, notParentAndZero)));
+            
+            // Standard child->parent implications
+            for (BoolVar child : childVars) {
+                model.ifThen(child, model.arithm(parentVar, "=", 1));
+            }
         }
 
         return groupSat;

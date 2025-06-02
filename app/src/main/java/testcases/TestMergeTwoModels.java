@@ -27,11 +27,23 @@ public class TestMergeTwoModels {
     
         RecreationModel mergedModel = Merger.fullMerge(recModel, recModel2, Boolean.FALSE);
         long solutionsMerged = Analyser.returnNumberOfSolutions(mergedModel);
+        Validator.validateMerge(mergedModel, recModel, recModel2);
         System.out.println("removed constraint to trigger error: " + mergedModel.getConstraints().remove(36));
+        /*BinaryConstraint constraint = new BinaryConstraint();
+        FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint();
+        antecedent.setFeature(mergedModel.getFeatures().get("NFC"));
+
+        FeatureReferenceConstraint consequent = new FeatureReferenceConstraint();
+        consequent.setFeature(mergedModel.getFeatures().get("MovementFilter"));
+        constraint.setAntecedent(antecedent);
+        constraint.setConsequent(consequent);
+        constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+        constraint.doContextualize(Region.B.ordinal());
+        mergedModel.addConstraint(constraint);*/
+        
         long solutionsMerged2 = Analyser.returnNumberOfSolutions(mergedModel);
 
-        Analyser.printConstraints(recModel);
-        Analyser.printConstraints(recModel2);
+        //Analyser.printConstraints(recModel2);
 
         Validator.validateMerge(mergedModel, recModel, recModel2);
 
@@ -39,7 +51,7 @@ public class TestMergeTwoModels {
         System.out.println("Solutions 1: " + solutions1);
         System.out.println("Solutions 2: " + solutions2);
         System.out.println("Solutions Merged with constraint: " + solutionsMerged);
-        System.out.println("Solutions Merged with removed constraint: " + solutionsMerged2);
+        System.out.println("Solutions Merged with changed constraints: " + solutionsMerged2);
         
     }
 } 

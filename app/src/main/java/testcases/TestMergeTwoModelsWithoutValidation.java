@@ -69,10 +69,16 @@ public class TestMergeTwoModelsWithoutValidation {
         RecreationModel modelSmartwatchA = UVLParser.parseUVLFile(modelSmartwatchAString, Region.A);
         RecreationModel modelSmartwatchB = UVLParser.parseUVLFile(modelSmartwatchBString, Region.B);
 
+        RecreationModel modelA = UVLParser.parseUVLFile(modelAString, Region.A);
+        RecreationModel modelB = UVLParser.parseUVLFile(modelBString, Region.B);
+        RecreationModel modelC = UVLParser.parseUVLFile(modelCString, Region.C);
+        RecreationModel modelD = UVLParser.parseUVLFile(modelDString, Region.D);
+        RecreationModel modelE = UVLParser.parseUVLFile(modelEString, Region.E);
+
         Merger.resetMergeStatistics();
 
-        RecreationModel originalA = modelSmartwatchA;
-        RecreationModel originalB = modelSmartwatchB;
+        RecreationModel originalA = modelB;
+        RecreationModel originalB = modelD;
 
 
         RecreationModel mergedModel = Merger.fullMerge(originalA, originalB);

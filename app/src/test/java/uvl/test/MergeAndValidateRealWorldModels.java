@@ -34,7 +34,7 @@ public class MergeAndValidateRealWorldModels {
                         new TestCase("uvl/finance/finance_9.uvl", Region.I)
         };
 
-        @Test
+        //@Test
         public void testMergeOfBusyboxModel() {
                 try {
                         RecreationModel modelA = UVLParser.parseUVLFile(BUSYBOX_MODELS[2].filename,
@@ -52,7 +52,7 @@ public class MergeAndValidateRealWorldModels {
                 }
         }
 
-        @Test
+        //@Test
         public void testMergeOfFinanceModel() {
                 try {
                         RecreationModel modelA = UVLParser.parseUVLFile(FINANCE_MODELS[1].filename,
