@@ -42,7 +42,7 @@ public class TestMergeTwoModels {
         constraint.setConsequent(consequent);
         constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
         constraint.doContextualize(Region.B.ordinal());
-        mergedModel.addConstraint(constraint);
+        //mergedModel.addConstraint(constraint);
         
         long solutionsMerged2 = Analyser.returnNumberOfSolutions(mergedModel);
 

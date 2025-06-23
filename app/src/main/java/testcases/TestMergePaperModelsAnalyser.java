@@ -34,8 +34,8 @@ public class TestMergePaperModelsAnalyser {
             FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint();
             antecedent.setFeature(mergedModel.getFeatures().get("15k"));
             constraint2.setInner(antecedent);
-            //mergedModel.addConstraint(constraint2);
-            //System.out.println("added constraint to trigger testcase 2: " + constraint2);
+            mergedModel.addConstraint(constraint2);
+            System.out.println("added constraint to trigger testcase 2: " + constraint2);
             
             Validator.validateMerge(mergedModel, modelUs, modelGer);
 

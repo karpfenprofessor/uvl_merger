@@ -137,7 +137,7 @@ public class Merger extends MergerHelper {
             }
         }
 
-        //removeDuplicateContextualizedGroupConstraints(unionModel);
+        // removeDuplicateContextualizedGroupConstraints(unionModel);
         splitFeaturesWithMultipleParents(unionModel);
 
         if (mergeStatistics != null) {
@@ -317,7 +317,8 @@ public class Merger extends MergerHelper {
         }
 
         logger.info("[cleanup] removed {} constraints", deletionCounter);
-        logger.info("[cleanup] kept {} custom and feature tree constraints without checking", customAndFeatureTreeConstraintsCounter); 
+        logger.info("[cleanup] kept {} custom and feature tree constraints without checking",
+                customAndFeatureTreeConstraintsCounter);
         logger.info("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size());
@@ -367,7 +368,7 @@ public class Merger extends MergerHelper {
         if (models == null || models.length < 2 || models.length > 9) {
             throw new IllegalArgumentException("Number of models to union must be between 2 and 9");
         }
-        
+
         StringBuilder regionStrings = new StringBuilder();
         for (int i = 0; i < models.length; i++) {
             regionStrings.append(models[i].getRegion().getRegionString());
@@ -396,7 +397,8 @@ public class Merger extends MergerHelper {
 
         handleRootFeature(unionModel, models);
 
-        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationModelAnalyser.analyseSharedFeatures(models);
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationModelAnalyser
+                .analyseSharedFeatures(models);
         handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
 
         for (RecreationModel model : models) {

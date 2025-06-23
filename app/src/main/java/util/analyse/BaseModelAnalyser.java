@@ -21,16 +21,26 @@ public class BaseModelAnalyser {
     public static boolean isConsistent(final BaseModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
-        //model.getSolver().showStatistics();
+        model.getSolver().showStatistics();
+        model.getSolver().limitSolution(1);
+        
+        // Add timeout to prevent infinite hanging (30 seconds)
+        model.getSolver().limitTime(30000);
+        
         boolean solved = model.getSolver().solve();
 
-        if(false && !solved) {
+        if(true && !solved) {
             logger.trace("Solver failed to find a solution. Statistics:");
             logger.trace("Time: {} ms", model.getSolver().getTimeCount());
             logger.trace("Nodes: {}", model.getSolver().getNodeCount());
             logger.trace("Backtracks: {}", model.getSolver().getBackTrackCount());
             logger.trace("Fails: {}", model.getSolver().getFailCount());
             logger.trace("Restarts: {}", model.getSolver().getRestartCount());
+            
+            // Check if it timed out
+            if (model.getSolver().isStopCriterionMet()) {
+                logger.warn("Solver timed out after 30 seconds - model too complex");
+            }
         }
 
         return solved;
