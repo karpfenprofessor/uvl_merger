@@ -1,0 +1,140 @@
+We have a RecrationModel that holds a Collection of AbstractConstraint's that represent the feature models constraints 
+(feature tree group constraints, contextualization constraitns, cross tree constraints) and a collection of features.
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class AbstractConstraint {
+
+    private boolean isContextualized        = Boolean.FALSE;
+    private Integer contextualizationValue  = null;
+    private boolean isNegation              = Boolean.FALSE;
+    private boolean isCustomConstraint      = Boolean.FALSE;
+    private boolean isFeatureTreeConstraint = Boolean.FALSE;
+
+    //contextualize the constraint with a given value representing the region
+    public void doContextualize(Integer value) {
+        this.isContextualized = Boolean.TRUE;
+        this.contextualizationValue = value;
+    }
+
+    public void disableContextualize() {
+        this.isContextualized = Boolean.FALSE;
+        this.contextualizationValue = null;
+    }
+
+    public void doNegate() {
+        this.isNegation = Boolean.TRUE;
+    }
+
+    public void disableNegation() {
+        this.isNegation = Boolean.FALSE;
+    }
+
+    public boolean isSpecialConstraint() {
+        return isCustomConstraint || isFeatureTreeConstraint;
+    }
+
+    public abstract AbstractConstraint copy();
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class BinaryConstraint extends AbstractConstraint {
+
+    public enum LogicalOperator {
+        AND, OR, IMPLIES, IFF
+    }
+
+    private Object antecedent           = null;
+    private LogicalOperator operator    = null;
+    private Object consequent           = null;
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ComparisonConstraint extends AbstractConstraint {
+
+    public enum ComparisonOperator { EQ, NEQ, LT, GT, LTE, GTE }
+    
+    private AbstractConstraint leftOperand  = null;
+    private ComparisonOperator operator     = null;
+    private AbstractConstraint rightOperand = null;
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class FeatureReferenceConstraint extends AbstractConstraint 
+{
+        public Feature feature = null;
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class GroupConstraint extends AbstractConstraint {
+
+    private Feature parent          = null;
+    private List<Feature> children  = null;
+    private int lowerCardinality    = 0;
+    private int upperCardinality    = 0;
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class NotConstraint extends AbstractConstraint {
+
+    public AbstractConstraint inner     = null;
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class OrNegationConstraint extends AbstractConstraint {
+    private List<AbstractConstraint> constraints = null;
+}
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Feature {
+    private String name = null;
+}
+
+@Getter
+@Setter
+public class RecreationModel {
+    private Region region;
+    private Feature rootFeature;
+    private List<AbstractConstraint> constraints;
+    private Map<String, Feature> features = new HashMap<>();
+}
+
+@AllArgsConstructor
+public enum Region {
+    A(0),
+    B(1),
+    C(2),
+    D(3),
+    E(4),
+    F(5),
+    G(6),
+    H(7),
+    I(8),
+    UNION(9),
+    TESTING(10),
+    MERGED(11);
+}

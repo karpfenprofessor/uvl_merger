@@ -77,14 +77,14 @@ public class TestMergeTwoModelsWithoutValidation {
 
         Merger.resetMergeStatistics();
 
-        RecreationModel originalA = modelB;
-        RecreationModel originalB = modelD;
+        RecreationModel originalA = modelC;
+        RecreationModel originalB = modelE;
 
 
         RecreationModel mergedModel = Merger.fullMerge(originalA, originalB);
 
-        logger.info(Merger.getMergeStatistics().toString());
-        logger.info(Analyser.createSolveStatistics(mergedModel).toString());
+        //logger.info(Merger.getMergeStatistics().toString());
+        //logger.info(Analyser.createSolveStatistics(mergedModel).toString());
         
         Validator.validateMerge(mergedModel, originalA, originalB);
     }

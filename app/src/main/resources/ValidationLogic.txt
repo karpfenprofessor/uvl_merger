@@ -1,22 +1,3 @@
-package util;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import model.base.BaseModel;
-import model.base.Region;
-import model.recreate.RecreationModel;
-import model.recreate.constraints.AbstractConstraint;
-import model.recreate.constraints.FeatureReferenceConstraint;
-import model.recreate.constraints.NotConstraint;
-import model.recreate.constraints.OrNegationConstraint;
-import model.recreate.feature.Feature;
-import util.analyse.Analyser;
-import util.analyse.BaseModelAnalyser;
-
 public class Validator {
 
     private static final Logger logger = LogManager.getLogger(Validator.class);

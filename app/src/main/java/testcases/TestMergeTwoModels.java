@@ -31,7 +31,7 @@ public class TestMergeTwoModels {
         long solutionsMerged = Analyser.returnNumberOfSolutions(mergedModel);
         Analyser.printConstraints(mergedModel);
         Validator.validateMerge(mergedModel, recModel, recModel2);
-        //System.out.println("removed constraint to trigger error: " + mergedModel.getConstraints().remove(36));
+        System.out.println("removed constraint to trigger error: " + mergedModel.getConstraints().remove(36));
         BinaryConstraint constraint = new BinaryConstraint();
         FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint();
         antecedent.setFeature(mergedModel.getFeatures().get("NFC"));
@@ -42,7 +42,7 @@ public class TestMergeTwoModels {
         constraint.setConsequent(consequent);
         constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
         constraint.doContextualize(Region.B.ordinal());
-        //mergedModel.addConstraint(constraint);
+        mergedModel.addConstraint(constraint);
         
         long solutionsMerged2 = Analyser.returnNumberOfSolutions(mergedModel);
 
