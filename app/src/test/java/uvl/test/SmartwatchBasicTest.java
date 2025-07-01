@@ -155,7 +155,7 @@ public class SmartwatchBasicTest {
                                                         + testCaseB.filename);*/
                         RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
 
-                        assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
+                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
                 } catch (Exception e) {
                         throw new AssertionError("testMergeOfSmartwatchModels failed: " + e.getMessage(), e);
                 }
@@ -301,7 +301,7 @@ public class SmartwatchBasicTest {
                                                                 + MIBAND_BASE_MODELS[i].filename + " and "
                                                                 + MIBAND_BASE_MODELS[i + 1].filename);
 
-                                assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
+                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
                         }
 
                         for (int i = 0; i < MIBAND_REALIZED_MODELS.length - 1; i++) {
@@ -356,7 +356,7 @@ public class SmartwatchBasicTest {
                                                                 + MIBAND_REALIZED_MODELS[i].filename + " and "
                                                                 + MIBAND_REALIZED_MODELS[i + 1].filename);
 
-                                assertTrue(Validator.validateMerge(mergedModel, modelA, modelB));
+                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
                         }
                 } catch (Exception e) {
                         throw new AssertionError("testUnionOfSmartwatchModels failed: " + e.getMessage(), e);

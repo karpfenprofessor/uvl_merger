@@ -27,28 +27,29 @@ public class Validator {
      * @param mergedKB The merged knowledge base to validate
      * @param kb1      The first original knowledge base
      * @param kb2      The second original knowledge base
-     * @return true if the merge is correct (no extra or missing solutions), false
-     *         otherwise
+     * @return 0 if no error, 1 if testcase 1 failed, 2 if testcase 2A failed, 3 if testcase 2B failed
      */
-    public static boolean validateMerge(final RecreationModel mergedKB, final RecreationModel kb1,
+    public static int validateMerge(final RecreationModel mergedKB, final RecreationModel kb1,
             final RecreationModel kb2) {
         logger.info("[validateMerge] Starting validation of merged model");
 
         boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2);
-        boolean noMissingSolutions = validateNoMissingSolutions(mergedKB, kb1, kb2);
+        int missingSolutionsResult = validateNoMissingSolutions(mergedKB, kb1, kb2);
 
-        boolean isValid = noExtraSolutions && noMissingSolutions;
-
-        if (isValid) {
+        if (!noExtraSolutions) {
+            logger.warn("[validateMerge] Merge validation FAILED: Test Case 1 failed (extra solutions exist)");
+            return 1;
+        } else if (missingSolutionsResult == 1) {
+            logger.warn("[validateMerge] Merge validation FAILED: Test Case 2A failed (missing solutions exist)");
+            return 2;
+        } else if (missingSolutionsResult == 2) {
+            logger.warn("[validateMerge] Merge validation FAILED: Test Case 2B failed (missing solutions exist)");
+            return 3;
+        } else {
             logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({}) union Sol({})",
                     kb1.getRegionString(), kb2.getRegionString());
-        } else {
-            logger.warn("[validateMerge] Merge validation FAILED");
-            logger.warn("[validateMerge] - No extra solutions: {}", noExtraSolutions);
-            logger.warn("[validateMerge] - No missing solutions: {}", noMissingSolutions);
+            return 0;
         }
-
-        return isValid;
     }
 
     /**
@@ -114,10 +115,9 @@ public class Validator {
      * @param mergedKB The merged knowledge base
      * @param kb1      The first original knowledge base
      * @param kb2      The second original knowledge base
-     * @return true if no solutions are missing (both checks are UNSAT), false
-     *         otherwise
+     * @return 0 if no error, 1 if model A testcase failed, 2 if model B testcase failed
      */
-    public static boolean validateNoMissingSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
+    public static int validateNoMissingSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
             final RecreationModel kb2) {
         logger.info("[validateNoMissingSolutions] Test Case 2 - Checking for missing solutions");
 
@@ -127,8 +127,14 @@ public class Validator {
         // Check KB₂
         boolean kb2HasMissingSolutions = checkMissingSolutions(mergedKB, kb2, kb1);
 
-        // If both checks pass (no missing solutions in either KB), return true
-        return !kb1HasMissingSolutions && !kb2HasMissingSolutions;
+        // Return appropriate error code
+        if (kb1HasMissingSolutions) {
+            return 1; // Model A testcase failed
+        } else if (kb2HasMissingSolutions) {
+            return 2; // Model B testcase failed
+        } else {
+            return 0; // No error
+        }
     }
 
     /**

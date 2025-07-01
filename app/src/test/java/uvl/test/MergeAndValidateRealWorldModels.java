@@ -1,9 +1,6 @@
 package uvl.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import util.Merger;
 import util.UVLParser;
 import util.Validator;
@@ -44,7 +41,7 @@ public class MergeAndValidateRealWorldModels {
 
                         RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
 
-                        assertTrue(Validator.validateMerge(mergedModel, modelA, modelB),
+                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB),
                                         "Merge validation failed for " + BUSYBOX_MODELS[2].filename
                                                         + " and " + BUSYBOX_MODELS[4].filename);
                 } catch (Exception e) {
@@ -62,7 +59,7 @@ public class MergeAndValidateRealWorldModels {
 
                         RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
 
-                        assertTrue(Validator.validateMerge(mergedModel, modelA, modelB),
+                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB),
                                         "Merge validation failed for " + FINANCE_MODELS[1].filename
                                                         + " and " + FINANCE_MODELS[2].filename);
                 } catch (Exception e) {
