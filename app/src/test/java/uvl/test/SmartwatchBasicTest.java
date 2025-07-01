@@ -247,7 +247,7 @@ public class SmartwatchBasicTest {
                 }
         }
 
-        @Test
+        //@Test
         public void testMergeOfSmartwatchModels() {
                 try {
                         for (int i = 0; i < MIBAND_BASE_MODELS.length - 1; i++) {

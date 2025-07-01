@@ -39,8 +39,8 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelCdlAString = "uvl/cdl/vrc4373.uvl";
         String modelCdlBString = "uvl/cdl/vrc4375.uvl";
 
-        String modelSmartwatchAString = "uvl/smartwatch/miband2.uvl";
-        String modelSmartwatchBString = "uvl/smartwatch/miband3.uvl";
+        String modelSmartwatchAString = "uvl/smartwatch/miband7_realized.uvl";
+        String modelSmartwatchBString = "uvl/smartwatch/miband8_realized.uvl";
 
         /*RecreationModel modelA = UVLParser.parseUVLFile(modelAString, Region.A);
         RecreationModel modelB = UVLParser.parseUVLFile(modelBString, Region.B);

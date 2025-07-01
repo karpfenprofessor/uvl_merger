@@ -1,10 +1,10 @@
 package util;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Set;
+import java.util.HashSet;
 
 import model.base.BaseModel;
 import model.base.Region;
@@ -14,7 +14,6 @@ import model.recreate.constraints.FeatureReferenceConstraint;
 import model.recreate.constraints.NotConstraint;
 import model.recreate.constraints.OrNegationConstraint;
 import model.recreate.feature.Feature;
-import util.analyse.Analyser;
 import util.analyse.BaseModelAnalyser;
 
 public class Validator {
@@ -167,6 +166,31 @@ public class Validator {
         // Add all constraints from the original KB
         for (AbstractConstraint constraint : originalKB.getConstraints()) {
             testModel.addConstraint(constraint.copy());
+        }
+
+        // Force unique features from the other model to be false
+        // This ensures that when testing one model, features unique to the other model are disabled
+        Set<String> originalKBFeatures = originalKB.getFeatures().keySet();
+        Set<String> originalKBNotTestingFeatures = originalKBNotTesting.getFeatures().keySet();
+        
+        // Find features that are unique to the other model (not in the original KB)
+        Set<String> uniqueToOtherKB = new HashSet<>(originalKBNotTestingFeatures);
+        uniqueToOtherKB.removeAll(originalKBFeatures);
+        
+        // Exclude the region-specific feature from the other model as it's handled separately in the validation logic
+        uniqueToOtherKB.remove(originalKBNotTesting.getRegion().getRegionString());
+        
+        // Create constraints to force unique features from the other model to be false
+        for (String uniqueFeatureName : uniqueToOtherKB) {
+            Feature uniqueFeature = testModel.getFeatures().get(uniqueFeatureName);
+            if (uniqueFeature != null) {
+                NotConstraint forceFalseConstraint = new NotConstraint();
+                FeatureReferenceConstraint featureRef = new FeatureReferenceConstraint(uniqueFeature);
+                forceFalseConstraint.setInner(featureRef);
+                testModel.addConstraint(forceFalseConstraint);
+                logger.debug("\t[checkMissingSolutions] forcing unique feature {} from {} to false", 
+                        uniqueFeatureName, originalKBNotTesting.getRegion().getRegionString());
+            }
         }
 
         // For Test Case 2: we need "at least one relevant constraint from merged KB must be violated"
