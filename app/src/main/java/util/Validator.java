@@ -27,7 +27,8 @@ public class Validator {
      * @param mergedKB The merged knowledge base to validate
      * @param kb1      The first original knowledge base
      * @param kb2      The second original knowledge base
-     * @return 0 if no error, 1 if testcase 1 failed, 2 if testcase 2A failed, 3 if testcase 2B failed
+     * @return 0 if no error, 1 if testcase 1 failed, 2 if testcase 2A failed, 3 if
+     *         testcase 2B failed
      */
     public static int validateMerge(final RecreationModel mergedKB, final RecreationModel kb1,
             final RecreationModel kb2) {
@@ -115,7 +116,8 @@ public class Validator {
      * @param mergedKB The merged knowledge base
      * @param kb1      The first original knowledge base
      * @param kb2      The second original knowledge base
-     * @return 0 if no error, 1 if model A testcase failed, 2 if model B testcase failed
+     * @return 0 if no error, 1 if model A testcase failed, 2 if model B testcase
+     *         failed
      */
     public static int validateNoMissingSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
             final RecreationModel kb2) {
@@ -146,7 +148,8 @@ public class Validator {
      * @param kbName     The name of the knowledge base (for logging)
      * @return true if there are missing solutions, false otherwise
      */
-    private static boolean checkMissingSolutions(RecreationModel mergedKB, RecreationModel originalKB, RecreationModel originalKBNotTesting) {
+    private static boolean checkMissingSolutions(RecreationModel mergedKB, RecreationModel originalKB,
+            RecreationModel originalKBNotTesting) {
         logger.info("\t[checkMissingSolutions] Checking for missing solutions in {}", originalKB.getRegionString());
 
         // Create a test model with the region set to TESTING
@@ -174,39 +177,38 @@ public class Validator {
             testModel.addConstraint(constraint.copy());
         }
 
-        // Force unique features from the other model to be false
-        // This ensures that when testing one model, features unique to the other model are disabled
-        Set<String> originalKBFeatures = originalKB.getFeatures().keySet();
-        Set<String> originalKBNotTestingFeatures = originalKBNotTesting.getFeatures().keySet();
-        
-        // Find features that are unique to the other model (not in the original KB)
-        Set<String> uniqueToOtherKB = new HashSet<>(originalKBNotTestingFeatures);
-        uniqueToOtherKB.removeAll(originalKBFeatures);
-        
-        // Exclude the region-specific feature from the other model as it's handled separately in the validation logic
-        uniqueToOtherKB.remove(originalKBNotTesting.getRegion().getRegionString());
-        
+        // 1) Build the full “forbidden” set: every feature that exists in KBMerge
+        // but NOT in the region-specific KB we are currently testing.
+        // ---------------------------------------------------------------------
+        Set<String> forbidden = new HashSet<>(mergedKB.getFeatures().keySet()); // all merged vars
+        forbidden.removeAll(originalKB.getFeatures().keySet()); // keep only unknowns
+        forbidden.remove(originalKB.getRegion().getRegionString()); // never forbid A or B
+
+        // (optional but harmless) also remove the *other* region flag
+        forbidden.remove(originalKBNotTesting.getRegion().getRegionString());
+
         // Create constraints to force unique features from the other model to be false
-        for (String uniqueFeatureName : uniqueToOtherKB) {
+        for (String uniqueFeatureName : forbidden) {
             Feature uniqueFeature = testModel.getFeatures().get(uniqueFeatureName);
             if (uniqueFeature != null) {
                 NotConstraint forceFalseConstraint = new NotConstraint();
                 FeatureReferenceConstraint featureRef = new FeatureReferenceConstraint(uniqueFeature);
                 forceFalseConstraint.setInner(featureRef);
                 testModel.addConstraint(forceFalseConstraint);
-                logger.debug("\t[checkMissingSolutions] forcing unique feature {} from {} to false", 
+                logger.trace("\t[checkMissingSolutions] forcing unique feature {} from {} to false",
                         uniqueFeatureName, originalKBNotTesting.getRegion().getRegionString());
             }
         }
 
-        // For Test Case 2: we need "at least one relevant constraint from merged KB must be violated"
+        // For Test Case 2: we need "at least one relevant constraint from merged KB
+        // must be violated"
         // This requires OR logic, so we use OrNegationConstraint
         testModel.addConstraint(new OrNegationConstraint(mergedKB.getConstraints()));
-        
+
         // Convert to Choco model and check satisfiability
         BaseModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
         boolean isSatisfiable = BaseModelAnalyser.isConsistent(chocoModel);
-        
+
         if (isSatisfiable) {
             logger.warn(
                     "\t[checkMissingSolutions] Test Case 2 for {} FAILED: KBMerge excludes valid configurations (merge too strict)",
