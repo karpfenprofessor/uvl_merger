@@ -210,7 +210,7 @@ public class Merger extends MergerHelper {
             testingModel.addConstraints(unionModel.getConstraints());
             testingModel.addConstraints(CKB.getConstraints());
 
-            logger.debug("\t[inconsistencyCheck] check constraint: {}", checkConstraint.toString());
+            logger.trace("\t[inconsistencyCheck] check constraint: {}", checkConstraint.toString());
 
             if (isInconsistentWithNegatedContextualizedConstraint(checkConstraint, testingModel)) {
                 // decontextualize constraint and add to merged model (line 8 in pseudocode)

@@ -24,9 +24,9 @@ public class Validator {
      * Validates that a merged knowledge base correctly represents the union of two
      * knowledge bases.
      * 
-     * @param mergedKB The merged knowledge base to validate
-     * @param kb1      The first original knowledge base
-     * @param kb2      The second original knowledge base
+     * @param mergedKB the merged knowledge base to validate
+     * @param kb1      the first original knowledge base
+     * @param kb2      the second original knowledge base
      * @return 0 if no error, 1 if testcase 1 failed, 2 if testcase 2A failed, 3 if
      *         testcase 2B failed
      */
@@ -58,9 +58,9 @@ public class Validator {
      * Checks if KBMerge has solutions outside KB₁∪KB₂.
      * Formula: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
      * 
-     * @param mergedKB The merged knowledge base
-     * @param kb1      The first original knowledge base
-     * @param kb2      The second original knowledge base
+     * @param mergedKB the merged knowledge base
+     * @param kb1      the first original knowledge base
+     * @param kb2      the second original knowledge base
      * @return true if no extra solutions exist (UNSAT), false if extra solutions
      *         exist (SAT)
      */
@@ -113,9 +113,9 @@ public class Validator {
      * 1. ¬KBMerge ∧ KB₁
      * 2. ¬KBMerge ∧ KB₂
      * 
-     * @param mergedKB The merged knowledge base
-     * @param kb1      The first original knowledge base
-     * @param kb2      The second original knowledge base
+     * @param mergedKB the merged knowledge base
+     * @param kb1      the first original knowledge base
+     * @param kb2      the second original knowledge base
      * @return 0 if no error, 1 if model A testcase failed, 2 if model B testcase
      *         failed
      */
@@ -143,9 +143,10 @@ public class Validator {
      * Helper method for Test Case 2 to check if KBMerge excludes valid
      * configurations from a specific KB.
      * 
-     * @param mergedKB   The merged knowledge base
-     * @param originalKB The original knowledge base to check against
-     * @param kbName     The name of the knowledge base (for logging)
+     * @param mergedKB             the merged knowledge base
+     * @param originalKB           the original knowledge base to check against
+     * @param originalKBNotTesting the other original knowledge base (for region
+     *                             exclusion)
      * @return true if there are missing solutions, false otherwise
      */
     private static boolean checkMissingSolutions(RecreationModel mergedKB, RecreationModel originalKB,
@@ -159,7 +160,7 @@ public class Validator {
         testModel.getFeatures().putAll(mergedKB.getFeatures());
         testModel.setRootFeature(mergedKB.getRootFeature());
 
-        // FORCE the region to be true - this is crucial!
+        // FORCE the region to be true
         String regionName = originalKB.getRegion().getRegionString();
         FeatureReferenceConstraint fRef = new FeatureReferenceConstraint();
         fRef.setFeature(testModel.getFeatures().get(regionName));
@@ -177,14 +178,11 @@ public class Validator {
             testModel.addConstraint(constraint.copy());
         }
 
-        // 1) Build the full “forbidden” set: every feature that exists in KBMerge
+        // every feature that exists in KBMerge
         // but NOT in the region-specific KB we are currently testing.
-        // ---------------------------------------------------------------------
         Set<String> forbidden = new HashSet<>(mergedKB.getFeatures().keySet()); // all merged vars
         forbidden.removeAll(originalKB.getFeatures().keySet()); // keep only unknowns
         forbidden.remove(originalKB.getRegion().getRegionString()); // never forbid A or B
-
-        // (optional but harmless) also remove the *other* region flag
         forbidden.remove(originalKBNotTesting.getRegion().getRegionString());
 
         // Create constraints to force unique features from the other model to be false

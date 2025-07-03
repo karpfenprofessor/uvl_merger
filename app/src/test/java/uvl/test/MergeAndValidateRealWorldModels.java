@@ -1,6 +1,7 @@
 package uvl.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import util.Merger;
 import util.UVLParser;
 import util.Validator;
