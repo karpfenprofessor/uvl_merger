@@ -15,6 +15,11 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
 
+/*
+ * Analysis utility for RecreationModel instances.
+ * This class provides direct analysis capabilities for RecreationModel instances, which are
+ * the working representations of feature models in our merging process. 
+ */
 public class RecreationModelAnalyser {
     private static final Logger logger = LogManager.getLogger(RecreationModelAnalyser.class);
 

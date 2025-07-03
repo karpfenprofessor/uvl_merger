@@ -5,6 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/*
+ * Represents a logical NOT operation on a constraint.
+ * This class wraps another AbstractConstraint and represents its logical negation (¬φ).
+ * The inner constraint can be any type of AbstractConstraint (Binary, Group, Feature Reference, etc.).
+ * 
+ * Primary use cases:
+ * - UVL parsing: Translating "!" operators in constraint syntax
+ * - Validation logic: Creating region exclusions and forcing features to false
+ * - General constraint negation: Basic logical inversion of any constraint
+ */
 @Getter
 @Setter
 @NoArgsConstructor

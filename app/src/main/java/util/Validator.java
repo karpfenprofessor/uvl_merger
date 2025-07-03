@@ -16,6 +16,42 @@ import model.recreate.constraints.OrNegationConstraint;
 import model.recreate.feature.Feature;
 import util.analyse.BaseModelAnalyser;
 
+/*
+ * Feature-model merge validation utility.
+ *
+ * Purpose
+ * -------
+ * Verifies that a merged knowledge base KBMerge represents exactly the
+ * union of the two original bases KB₁ and KB₂.
+ *
+ * Validation logic
+ * ----------------
+ * Test 1 – Extra solutions?
+ *     Formula:   KBMerge ∧ ¬KB₁ ∧ ¬KB₂
+ *     Meaning :  Is there a configuration allowed by KBMerge
+ *                that neither original model permits?
+ *     SAT   ⇒   merge is too loose (adds invalid configs)
+ *     UNSAT ⇒   no extra configs – OK
+ *
+ * Test 2 – Missing solutions?
+ *     Formula:   ¬KBMerge ∧ (KB₁ ∨ KB₂)
+ *     Implemented as two SAT calls, one per region:
+ *         (¬KBMerge ∧ KB₁)   and   (¬KBMerge ∧ KB₂)
+ *     Meaning :  Does KBMerge forbid a configuration that an
+ *                original model accepts?
+ *     SAT   ⇒   merge is too strict (drops valid configs)
+ *     UNSAT ⇒   all originals are preserved – OK
+ *
+ * Practical notes
+ * ---------------
+ * • ¬KBMerge, ¬KB₁ and ¬KB₂ is encoded with a single OrNegationConstraint
+ * • During Test 2 we fix every feature that the region-specific KB
+ *   does not know to ‘false’
+ *
+ * Usage
+ * -----
+ * Call after each merge; both tests must be UNSAT for a correct union.
+ */
 public class Validator {
 
     private static final Logger logger = LogManager.getLogger(Validator.class);

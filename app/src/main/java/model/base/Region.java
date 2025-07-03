@@ -2,6 +2,9 @@ package model.base;
 
 import lombok.AllArgsConstructor;
 
+/*
+ * This enum is used to represent the possible regions of a Feature Model (in the Form of a RecreationModel or BaseModel).
+ */
 @AllArgsConstructor
 public enum Region {
     A(0),

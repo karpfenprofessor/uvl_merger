@@ -10,6 +10,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.recreate.feature.Feature;
 
+/*
+ * Represents a group constraint in a Feature Model.
+ * Group constraints define relationships between a parent feature and its children features,
+ * specifying cardinality restrictions on how many child features can be selected.
+ * The cardinality is defined by lower and upper bounds [n,m] indicating the minimum
+ * and maximum number of child features that must/can be selected when the parent is selected.
+ * 
+ * Common group types:
+ * - OR groups [1,n]: at least one child must be selected
+ * - XOR groups [1,1]: exactly one child must be selected  
+ * - Optional groups [0,n]: any number of children can be selected
+ * - Mandatory groups [n,n]: all n children must be selected
+ * 
+ * Primary use cases:
+ * - UVL parsing: Translating group syntax (or, alternative, optional, mandatory, cardinality)
+ * - Feature tree structure: Defining parent-child relationships with cardinality constraints
+ * - Merge operations: Creating region structures and handling root features during model merging
+ * - Custom constraints: Special merge-related constraints (region handling, root features)
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -6,6 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import model.recreate.feature.Feature;
 
+/*
+ * Represents a binary logical constraint between two operands.
+ * The constraint consists of an antecedent and consequent connected by a logical operator.
+ * Both antecedent and consequent can be either Feature objects or AbstractConstraints.
+ * 
+ * Supported logical operators:
+ * - AND (∧): Both operands must be true
+ * - OR (∨): At least one operand must be true  
+ * - IMPLIES (→): If antecedent is true, consequent must be true
+ * - IFF (↔): Both operands must have the same truth value
+ * 
+ * Primary use cases:
+ * - UVL parsing: Translating logical operators (&&, ||, =>, <=>) from UVL syntax
+ * - Cross-tree constraints: Expressing relationships between features
+ * - Merge operations: Creating implications for region-specific features
+ * - Complex constraint building: Combining multiple constraints with logical operators
+ */
 @Getter
 @Setter
 @NoArgsConstructor

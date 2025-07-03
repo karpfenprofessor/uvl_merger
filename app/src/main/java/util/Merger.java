@@ -17,6 +17,26 @@ import util.analyse.BaseModelAnalyser;
 import util.analyse.RecreationModelAnalyser;
 import util.analyse.statistics.MergeStatistics;
 
+/*
+ * Main feature model merging engine.
+ * 
+ * The merging algorithm consists of three main phases:
+ * 
+ * 1. Union Phase:
+ *    - Combines features and constraints from all input models
+ *    - Creates unified region structures and root feature hierarchies
+ *    - Handles feature splitting for features with multiple parents
+ *    - Preserves contextualization information
+ * 
+ * 2. Inconsistency Check Phase:
+ *    - Analyzes each contextualized constraint for consistency
+ *    - Decontextualizes constraints that would create inconsistencies
+ * 
+ * 3. Cleanup Phase:
+ *    - Removes redundant constraints that don't affect the solution space
+ *    - Uses constraint negation to identify removable constraints
+ *    - Ensures the final model is minimal while preserving semantics
+ */
 public class Merger extends MergerHelper {
     private static final Logger logger = LogManager.getLogger(Merger.class);
     private static MergeStatistics mergeStatistics;

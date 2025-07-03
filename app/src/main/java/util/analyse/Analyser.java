@@ -11,6 +11,21 @@ import util.Merger;
 import util.analyse.statistics.MergeStatistics;
 import util.analyse.statistics.SolveStatistics;
 
+/*
+ * Central analysis utility class for feature model operations.
+ * This class provides a unified interface for analyzing feature models, including
+ * solution counting, consistency checking, feature/constraint printing, and
+ * statistical analysis. It serves as a facade that delegates to specialized
+ * analyser classes while providing convenient overloaded methods for different
+ * model types.
+ * 
+ * Model type support:
+ * - RecreationModel: High-level feature model representation
+ * - BaseModel: Low-level Choco constraint model representation
+ * 
+ * Note: Methods automatically convert RecreationModel to BaseModel when needed
+ * using ChocoTranslator for seamless analysis across different model representations.
+ */
 public class Analyser {
 
     public static long returnNumberOfSolutions(final RecreationModel model) {

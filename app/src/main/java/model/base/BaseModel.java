@@ -13,6 +13,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
+/*
+ * This class is used to represent a Java Choco Model with its BoolVar Features and the AbstractConstraints it got created from.
+ * The Choco Model is used to check a Feature Model for SAT or UNSAT.
+ */
 @Getter
 @Setter
 public class BaseModel {

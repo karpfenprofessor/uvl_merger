@@ -17,9 +17,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
- * Our working model for the merge algorithm.
+ * Represents a feature model for a specific region in the merging process.
+ * This class serves as the core data structure that holds all components of a feature model
+ * including features, constraints, and the hierarchical structure. It provides functionality
+ * for contextualizing constraints.
+ * 
+ * Key components:
+ * - region: The specific region (A, B,..) this model represents
+ * - rootFeature: The root feature of the feature tree hierarchy
+ * - constraints: List of all constraints (cross-tree and feature tree) in the model
+ * - features: Map of all features in the model, indexed by feature name
+ * 
+ * 
+ * Usage: This class is used throughout the merging process to represent individual
+ * feature models before and after merging.
  */
-
 @Getter
 @Setter
 public class RecreationModel {

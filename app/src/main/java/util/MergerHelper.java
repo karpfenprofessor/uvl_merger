@@ -18,8 +18,31 @@ import model.recreate.constraints.BinaryConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
 import model.recreate.feature.Feature;
 import model.recreate.constraints.GroupConstraint;
-import model.recreate.constraints.NotConstraint;
 
+/*
+ * Helper utility for feature model merging operations.
+ * This class provides specialized methods to handle the complex aspects of merging
+ * feature models, including region management, root feature unification, and
+ * constraint deduplication. It ensures that merged models maintain structural
+ * integrity and proper feature relationships.
+ * 
+ * Key functionality:
+ * - Region feature management: Creates unified region structures and handles
+ *   region-specific feature implications
+ * - Root feature unification: Merges root features from different models,
+ *   creating new super-roots when necessary
+ * - Constraint deduplication: Removes duplicate contextualized group constraints
+ *   to prevent redundancy
+ * - Feature splitting: Handles features with multiple parents by creating
+ *   region-specific clones and equivalence constraints
+ * 
+ * Region management:
+ * - Creates unified "Region" feature hierarchies for merged models
+ * - Adds region implications for unique features (feature → region)
+ * - Handles both binary and multi-model merging scenarios
+ * 
+ * Usage: This class is used by the main Merger class to handle structural aspects of feature model merging.
+ */
 public class MergerHelper {
     private static final Logger logger = LogManager.getLogger(MergerHelper.class);
 

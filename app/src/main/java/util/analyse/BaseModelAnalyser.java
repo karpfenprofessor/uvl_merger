@@ -15,6 +15,12 @@ import org.chocosolver.solver.variables.BoolVar;
 
 import java.util.Arrays;
 
+/*
+ * Analysis utility for Choco-based feature models.
+ * This class provides direct analysis capabilities for BaseModel instances, which are
+ * the Choco constraint solver representations of feature models. 
+ */
+
 public class BaseModelAnalyser {
     private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
 
