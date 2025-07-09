@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.Set;
 import java.util.HashSet;
 
-import model.base.BaseModel;
-import model.base.Region;
+import model.choco.ChocoModel;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
@@ -125,7 +125,7 @@ public class Validator {
         }
 
         // Convert to Choco model and check satisfiability
-        BaseModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
         boolean isSatisfiable = BaseModelAnalyser.isConsistent(chocoModel);
 
         if (isSatisfiable) {
@@ -240,7 +240,7 @@ public class Validator {
         testModel.addConstraint(new OrNegationConstraint(mergedKB.getConstraints()));
 
         // Convert to Choco model and check satisfiability
-        BaseModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
         boolean isSatisfiable = BaseModelAnalyser.isConsistent(chocoModel);
 
         if (isSatisfiable) {

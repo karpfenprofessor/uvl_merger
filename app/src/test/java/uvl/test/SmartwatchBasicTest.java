@@ -7,7 +7,7 @@ import util.Merger;
 import util.UVLParser;
 import util.Validator;
 import util.analyse.Analyser;
-import model.base.Region;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 
 public class SmartwatchBasicTest {

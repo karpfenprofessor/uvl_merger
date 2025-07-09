@@ -7,18 +7,19 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.nary.cnf.LogOp;
 import org.chocosolver.solver.variables.BoolVar;
 import org.chocosolver.solver.variables.IntVar;
+
+import model.choco.ChocoModel;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.*;
 import model.recreate.feature.Feature;
-import model.base.BaseModel;
-import model.base.Region;
 
 public class ChocoTranslator {
     private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 
-    public static BaseModel convertToChocoModel(final RecreationModel recModel) {
+    public static ChocoModel convertToChocoModel(final RecreationModel recModel) {
         logger.trace("[convertToChocoModel] converting model {} to choco", recModel.getRegionString());
-        final BaseModel chocoModel = new BaseModel(recModel.getRegion());
+        final ChocoModel chocoModel = new ChocoModel(recModel.getRegion());
 
         if (recModel.getFeatures().isEmpty() || recModel.getConstraints().isEmpty()) {
             logger.warn("[convertToChocoModel] model has no features or constraints, returning empty model");
@@ -44,7 +45,7 @@ public class ChocoTranslator {
         return chocoModel;
     }
 
-    private static void createFeatures(final RecreationModel recModel, final BaseModel chocoModel) {
+    private static void createFeatures(final RecreationModel recModel, final ChocoModel chocoModel) {
         for (Feature feature : recModel.getFeatures().values()) {
             chocoModel.addFeature(feature.getName());
         }
@@ -52,7 +53,7 @@ public class ChocoTranslator {
         logger.trace("\t[createFeatures] created {} features for choco model {}", recModel.getFeatures().size(), recModel.getRegionString());
     }
 
-    private static void processConstraint(final AbstractConstraint constraint, final BaseModel chocoModel) {
+    private static void processConstraint(final AbstractConstraint constraint, final ChocoModel chocoModel) {
         final Model model = chocoModel.getModel();
         BoolVar regionVar = null;
         
@@ -74,7 +75,7 @@ public class ChocoTranslator {
         }
     }
 
-    private static BoolVar createConstraintVar(final AbstractConstraint constraint, final BaseModel chocoModel, final BoolVar regionVar) {
+    private static BoolVar createConstraintVar(final AbstractConstraint constraint, final ChocoModel chocoModel, final BoolVar regionVar) {
         final Model model = chocoModel.getModel();
         BoolVar baseVar;
 
@@ -96,7 +97,7 @@ public class ChocoTranslator {
         return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
     }
 
-    private static BoolVar createOrNegationConstraintVar(OrNegationConstraint onc, BaseModel chocoModel) {
+    private static BoolVar createOrNegationConstraintVar(OrNegationConstraint onc, ChocoModel chocoModel) {
         Model model = chocoModel.getModel();
         BoolVar[] reifiedVars = new BoolVar[onc.getConstraints().size()];
         
@@ -133,7 +134,7 @@ public class ChocoTranslator {
         return result;
     }
 
-    private static BoolVar createGroupConstraintVar(final GroupConstraint gc, final BaseModel chocoModel, final BoolVar regionVar) {
+    private static BoolVar createGroupConstraintVar(final GroupConstraint gc, final ChocoModel chocoModel, final BoolVar regionVar) {
         final Model model = chocoModel.getModel();
         BoolVar parentVar = chocoModel.getFeature(gc.getParent().getName());
 
@@ -185,7 +186,7 @@ public class ChocoTranslator {
         return groupSat;
     }
 
-    private static BoolVar createBinaryConstraintVar(final BinaryConstraint bc, final BaseModel chocoModel) {
+    private static BoolVar createBinaryConstraintVar(final BinaryConstraint bc, final ChocoModel chocoModel) {
         final Model model = chocoModel.getModel();
         BoolVar antecedent = getConstraintVar((AbstractConstraint) bc.getAntecedent(), chocoModel);
         BoolVar consequent = getConstraintVar((AbstractConstraint) bc.getConsequent(), chocoModel);
@@ -209,7 +210,7 @@ public class ChocoTranslator {
         return result;
     }
 
-    private static BoolVar createNotConstraintVar(final NotConstraint nc, final BaseModel chocoModel) {
+    private static BoolVar createNotConstraintVar(final NotConstraint nc, final ChocoModel chocoModel) {
         final Model model = chocoModel.getModel();
         BoolVar inner = getConstraintVar(nc.getInner(), chocoModel);
 
@@ -220,7 +221,7 @@ public class ChocoTranslator {
         return notVar;
     }
 
-    private static BoolVar getConstraintVar(final AbstractConstraint constraint, final BaseModel chocoModel) {
+    private static BoolVar getConstraintVar(final AbstractConstraint constraint, final ChocoModel chocoModel) {
         if (constraint instanceof FeatureReferenceConstraint frc) {
             return chocoModel.getFeature(frc.getFeature().getName());
         } else if (constraint instanceof NotConstraint nc) {

@@ -23,7 +23,7 @@ import uvl.UVLJavaParser.MandatoryGroupContext;
 import uvl.UVLJavaParser.OptionalGroupContext;
 import uvl.UVLJavaParser.OrGroupContext;
 import uvl.UVLJavaParser.ReferenceContext;
-import model.base.Region;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.BinaryConstraint;

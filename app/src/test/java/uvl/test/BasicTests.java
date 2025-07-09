@@ -1,15 +1,13 @@
 package uvl.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import util.Merger;
 import util.UVLParser;
 import util.Validator;
 import util.analyse.Analyser;
-import model.base.Region;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 
 public class BasicTests {

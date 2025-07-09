@@ -7,8 +7,8 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import model.base.BaseModel;
-import model.base.Region;
+import model.choco.ChocoModel;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.feature.Feature;
@@ -56,10 +56,10 @@ public class Merger extends MergerHelper {
 
         mergeStatistics = new MergeStatistics(); // Create new statistics object for this merge
 
-        BaseModel chocoTestModelABeforeDecontextualization = null;
-        BaseModel chocoTestModelBBeforeDecontextualization = null;
-        BaseModel chocoTestModelAAfterContextualization = null;
-        BaseModel chocoTestModelBAfterContextualization = null;
+        ChocoModel chocoTestModelABeforeDecontextualization = null;
+        ChocoModel chocoTestModelBBeforeDecontextualization = null;
+        ChocoModel chocoTestModelAAfterContextualization = null;
+        ChocoModel chocoTestModelBAfterContextualization = null;
         long solutionsModelABeforeContextualization = 0;
         long solutionsModelBBeforeContextualization = 0;
         long solutionsModelAAfterContextualization = 0;
@@ -101,7 +101,7 @@ public class Merger extends MergerHelper {
         RecreationModel unionModel = union(modelToMergeA, modelToMergeB, validate);
 
         if (validate) {
-            BaseModel chocoTestModelUnion = ChocoTranslator.convertToChocoModel(unionModel);
+            ChocoModel chocoTestModelUnion = ChocoTranslator.convertToChocoModel(unionModel);
             long solutionsUnionModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelUnion);
             if (solutionsUnionModel != (solutionsModelABeforeContextualization
                     + solutionsModelBBeforeContextualization)) {

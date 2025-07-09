@@ -11,7 +11,7 @@ import java.util.HashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import model.base.Region;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.BinaryConstraint;
@@ -21,7 +21,7 @@ import model.recreate.constraints.GroupConstraint;
 
 /*
  * Helper utility for feature model merging operations.
- * This class provides specialized methods to handle the complex aspects of merging
+ * This class provides methods to handle the aspects of merging
  * feature models, including region management, root feature unification, and
  * constraint deduplication. It ensures that merged models maintain structural
  * integrity and proper feature relationships.
@@ -35,13 +35,6 @@ import model.recreate.constraints.GroupConstraint;
  *   to prevent redundancy
  * - Feature splitting: Handles features with multiple parents by creating
  *   region-specific clones and equivalence constraints
- * 
- * Region management:
- * - Creates unified "Region" feature hierarchies for merged models
- * - Adds region implications for unique features (feature → region)
- * - Handles both binary and multi-model merging scenarios
- * 
- * Usage: This class is used by the main Merger class to handle structural aspects of feature model merging.
  */
 public class MergerHelper {
     private static final Logger logger = LogManager.getLogger(MergerHelper.class);

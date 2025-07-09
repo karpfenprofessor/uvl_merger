@@ -1,11 +1,14 @@
-package model.base;
+package model.choco;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /*
- * This enum is used to represent the possible regions of a Feature Model (in the Form of a RecreationModel or BaseModel).
+ * This enum is used to represent the possible regions of a Feature Model
+ * (in the Form of a {@link RecreationModel} or {@link ChocoModel}).
  */
 @AllArgsConstructor
+@Getter
 public enum Region {
     A(0),
     B(1),
@@ -22,10 +25,9 @@ public enum Region {
 
     private final int value;
 
-    public int getValue() {
-        return value;
-    }
-
+    /*
+     * Returns the string representation of the region.
+     */
     public String getRegionString() {
         switch (getValue()) {
             case 0:
@@ -36,7 +38,7 @@ public enum Region {
                 return "C";
             case 3:
                 return "D";
-            case 4: 
+            case 4:
                 return "E";
             case 5:
                 return "F";

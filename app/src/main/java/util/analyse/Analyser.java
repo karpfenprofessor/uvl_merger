@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import model.base.BaseModel;
+import model.choco.ChocoModel;
 import model.recreate.RecreationModel;
 import util.ChocoTranslator;
 import util.Merger;
@@ -12,7 +12,7 @@ import util.analyse.statistics.MergeStatistics;
 import util.analyse.statistics.SolveStatistics;
 
 /*
- * Central analysis utility class for feature model operations.
+ * Utility class for feature model operations.
  * This class provides a unified interface for analyzing feature models, including
  * solution counting, consistency checking, feature/constraint printing, and
  * statistical analysis. It serves as a facade that delegates to specialized
@@ -20,20 +20,20 @@ import util.analyse.statistics.SolveStatistics;
  * model types.
  * 
  * Model type support:
- * - RecreationModel: High-level feature model representation
- * - BaseModel: Low-level Choco constraint model representation
+ * - {@link RecreationModel}: My own Feature model representation
+ * - {@link ChocoModel}: JavaChoco model representation
  * 
  * Note: Methods automatically convert RecreationModel to BaseModel when needed
- * using ChocoTranslator for seamless analysis across different model representations.
+ * using {@link ChocoTranslator}.
  */
 public class Analyser {
 
     public static long returnNumberOfSolutions(final RecreationModel model) {
-        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+        ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
         return returnNumberOfSolutions(chocoTestModel);
     }
 
-    public static long returnNumberOfSolutions(final BaseModel model) {
+    public static long returnNumberOfSolutions(final ChocoModel model) {
         return BaseModelAnalyser.solveAndReturnNumberOfSolutions(model);
     }
 
@@ -41,7 +41,7 @@ public class Analyser {
         RecreationModelAnalyser.printFeatures(model);
     }
 
-    public static void printFeatures(final BaseModel model) {
+    public static void printFeatures(final ChocoModel model) {
         BaseModelAnalyser.printFeatures(model);
     }
 
@@ -49,35 +49,35 @@ public class Analyser {
         RecreationModelAnalyser.printConstraints(model);
     }
 
-    public static void printConstraints(final BaseModel model) {
+    public static void printConstraints(final ChocoModel model) {
         BaseModelAnalyser.printConstraints(model);
     }
 
-    public static void printAllSolutions(final BaseModel model) {
+    public static void printAllSolutions(final ChocoModel model) {
         BaseModelAnalyser.printAllSolutions(model);
     }
 
     public static void printAllSolutions(final RecreationModel model) {
-        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+        ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
         BaseModelAnalyser.printAllSolutions(chocoTestModel);
     }
 
-    public static int printIntersectionSolutions(final BaseModel model1, final BaseModel model2) {
+    public static int printIntersectionSolutions(final ChocoModel model1, final ChocoModel model2) {
         return BaseModelAnalyser.findIntersectionSolutions(model1, model2);
     }
 
     public static int printIntersectionSolutions(final RecreationModel model1, final RecreationModel model2) {
-        BaseModel chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
-        BaseModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
+        ChocoModel chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
+        ChocoModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
         return BaseModelAnalyser.findIntersectionSolutions(chocoTestModel1, chocoTestModel2);
     }
 
-    public static boolean isConsistent(final BaseModel model) {
+    public static boolean isConsistent(final ChocoModel model) {
         return BaseModelAnalyser.isConsistent(model);
     }
 
     public static boolean isConsistent(final RecreationModel model) {
-        BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+        ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
         return isConsistent(chocoTestModel);
     }
 
@@ -86,7 +86,7 @@ public class Analyser {
 
         for(int i = 0; i < 10; i++) {
             Collections.shuffle(model.getConstraints());
-            BaseModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
+            ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
             BaseModelAnalyser.solveAndCreateStatistic(chocoTestModel, solveStatistics);
         }
 

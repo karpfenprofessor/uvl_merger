@@ -2,12 +2,15 @@ package util.analyse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import model.base.BaseModel;
+
 import util.analyse.statistics.SolveStatistics;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.variables.Variable;
+
+import model.choco.ChocoModel;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
@@ -24,7 +27,7 @@ import java.util.Arrays;
 public class BaseModelAnalyser {
     private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
 
-    public static boolean isConsistent(final BaseModel baseModel) {
+    public static boolean isConsistent(final ChocoModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
         //model.getSolver().showStatistics();
@@ -52,7 +55,7 @@ public class BaseModelAnalyser {
         return solved;
     }
 
-    public static long solveAndReturnNumberOfSolutions(final BaseModel baseModel) {
+    public static long solveAndReturnNumberOfSolutions(final ChocoModel baseModel) {
         Model model = baseModel.getModel();
         model.getSolver().reset();
 
@@ -65,7 +68,7 @@ public class BaseModelAnalyser {
         return solutions;
     }
 
-    public static void solveAndCreateStatistic(final BaseModel baseModel, final SolveStatistics solveStatistics) {
+    public static void solveAndCreateStatistic(final ChocoModel baseModel, final SolveStatistics solveStatistics) {
         final Model model = baseModel.getModel();
         model.getSolver().reset();
         long startTime = System.nanoTime();
@@ -75,7 +78,7 @@ public class BaseModelAnalyser {
         }
     }
 
-    public static void printConstraints(final BaseModel baseModel) {
+    public static void printConstraints(final ChocoModel baseModel) {
         Model model = baseModel.getModel();
         logger.info("----------------------------------------");
         logger.info("Printing all constraints in Choco model + " + baseModel.getRegionString() + ":");
@@ -118,7 +121,7 @@ public class BaseModelAnalyser {
         logger.info("----------------------------------------");
     }
 
-    public static void printFeatures(final BaseModel baseModel) {
+    public static void printFeatures(final ChocoModel baseModel) {
         Model model = baseModel.getModel();
         logger.info("Printing all features in Choco model " + baseModel.getRegionString() + ":");
         Variable[] variables = model.getVars();
@@ -128,7 +131,7 @@ public class BaseModelAnalyser {
         logger.info("Total features in model " + baseModel.getRegionString() + ": {}", variables.length);
     }
 
-    public static int findIntersectionSolutions(final BaseModel model1, final BaseModel model2) {
+    public static int findIntersectionSolutions(final ChocoModel model1, final ChocoModel model2) {
         // Get variables from both models
         Map<String, BoolVar> vars1 = model1.getFeatures();
         Map<String, BoolVar> vars2 = model2.getFeatures();
@@ -173,7 +176,7 @@ public class BaseModelAnalyser {
         return solutionsModel1.size();
     }
 
-    public static void printAllSolutions(final BaseModel baseModel) {
+    public static void printAllSolutions(final ChocoModel baseModel) {
         final Model model = baseModel.getModel();
         model.getSolver().reset();
 

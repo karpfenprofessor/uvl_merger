@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import util.Merger;
 import util.UVLParser;
 import util.Validator;
-import model.base.Region;
+import model.choco.Region;
 import model.recreate.RecreationModel;
 
 public class TestMergeTwoModelsWithoutValidation {

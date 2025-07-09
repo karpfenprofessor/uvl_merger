@@ -1,15 +1,12 @@
 package uvl.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import model.base.Region;
+import model.choco.Region;
 import model.recreate.RecreationModel;
-import model.recreate.constraints.BinaryConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
 import util.Merger;
 import util.UVLParser;
