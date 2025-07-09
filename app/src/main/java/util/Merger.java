@@ -16,6 +16,7 @@ import util.analyse.Analyser;
 import util.analyse.BaseModelAnalyser;
 import util.analyse.RecreationModelAnalyser;
 import util.analyse.statistics.MergeStatistics;
+import util.helper.MergerHelper;
 
 /*
  * Main feature model merging engine.

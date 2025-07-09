@@ -8,7 +8,7 @@ import util.Validator;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class MergeAndValidateRealWorldModels {
+public class MergeAndValidateRealWorldModelsTest {
         private record TestCase(String filename, Region region) {
         }
 
