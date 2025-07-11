@@ -180,7 +180,7 @@ public class BasicTests {
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
             assertEquals(TEST_CASES_PAPER[1].expectedSolutions, solutionsGer);
 
-            assertEquals(Analyser.printIntersectionSolutions(modelUs, modelGer), 126);
+            assertEquals(Analyser.findIntersectionSolutions(modelUs, modelGer), 126);
 
             modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();

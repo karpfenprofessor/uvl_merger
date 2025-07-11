@@ -14,7 +14,7 @@ import model.recreate.constraints.FeatureReferenceConstraint;
 import model.recreate.constraints.NotConstraint;
 import model.recreate.constraints.OrNegationConstraint;
 import model.recreate.feature.Feature;
-import util.analyse.BaseModelAnalyser;
+import util.analyse.Analyser;
 
 /*
  * Feature-model merge validation utility.
@@ -126,7 +126,7 @@ public class Validator {
 
         // Convert to Choco model and check satisfiability
         ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
-        boolean isSatisfiable = BaseModelAnalyser.isConsistent(chocoModel);
+        boolean isSatisfiable = Analyser.isConsistent(chocoModel);
 
         if (isSatisfiable) {
             logger.warn(
@@ -241,7 +241,7 @@ public class Validator {
 
         // Convert to Choco model and check satisfiability
         ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
-        boolean isSatisfiable = BaseModelAnalyser.isConsistent(chocoModel);
+        boolean isSatisfiable = Analyser.isConsistent(chocoModel);
 
         if (isSatisfiable) {
             logger.warn(

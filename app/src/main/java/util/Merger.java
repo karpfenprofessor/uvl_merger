@@ -13,8 +13,8 @@ import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.feature.Feature;
 import util.analyse.Analyser;
-import util.analyse.BaseModelAnalyser;
-import util.analyse.RecreationModelAnalyser;
+import util.analyse.ChocoAnalyser;
+import util.analyse.RecrationAnalyser;
 import util.analyse.statistics.MergeStatistics;
 import util.helper.MergerHelper;
 
@@ -72,10 +72,10 @@ public class Merger extends MergerHelper {
             chocoTestModelBBeforeDecontextualization = ChocoTranslator.convertToChocoModel(modelToMergeB);
 
             // Get solutions before contextualization
-            solutionsModelABeforeContextualization = BaseModelAnalyser
-                    .solveAndReturnNumberOfSolutions(chocoTestModelABeforeDecontextualization);
-            solutionsModelBBeforeContextualization = BaseModelAnalyser
-                    .solveAndReturnNumberOfSolutions(chocoTestModelBBeforeDecontextualization);
+            solutionsModelABeforeContextualization = ChocoAnalyser
+                    .returnNumberOfSolutions(chocoTestModelABeforeDecontextualization);
+            solutionsModelBBeforeContextualization = ChocoAnalyser
+                    .returnNumberOfSolutions(chocoTestModelBBeforeDecontextualization);
         }
 
         // Contextualize both region models
@@ -86,10 +86,10 @@ public class Merger extends MergerHelper {
             // Get solutions after contextualization
             chocoTestModelAAfterContextualization = ChocoTranslator.convertToChocoModel(modelToMergeA);
             chocoTestModelBAfterContextualization = ChocoTranslator.convertToChocoModel(modelToMergeB);
-            solutionsModelAAfterContextualization = BaseModelAnalyser
-                    .solveAndReturnNumberOfSolutions(chocoTestModelAAfterContextualization);
-            solutionsModelBAfterContextualization = BaseModelAnalyser
-                    .solveAndReturnNumberOfSolutions(chocoTestModelBAfterContextualization);
+            solutionsModelAAfterContextualization = ChocoAnalyser
+                    .returnNumberOfSolutions(chocoTestModelAAfterContextualization);
+            solutionsModelBAfterContextualization = ChocoAnalyser
+                    .returnNumberOfSolutions(chocoTestModelBAfterContextualization);
         }
 
         // validate solution spaces after contextualization
@@ -103,7 +103,7 @@ public class Merger extends MergerHelper {
 
         if (validate) {
             ChocoModel chocoTestModelUnion = ChocoTranslator.convertToChocoModel(unionModel);
-            long solutionsUnionModel = BaseModelAnalyser.solveAndReturnNumberOfSolutions(chocoTestModelUnion);
+            long solutionsUnionModel = ChocoAnalyser.returnNumberOfSolutions(chocoTestModelUnion);
             if (solutionsUnionModel != (solutionsModelABeforeContextualization
                     + solutionsModelBBeforeContextualization)) {
                 throw new RuntimeException(
@@ -128,7 +128,7 @@ public class Merger extends MergerHelper {
         }
 
         final RecreationModel unionModel = new RecreationModel(Region.UNION);
-        RecreationModelAnalyser.analyseSharedFeatures(modelA, modelB);
+        RecrationAnalyser.analyseSharedFeatures(modelA, modelB);
 
         // Add features from both models to union model's feature map
         for (Feature feature : modelA.getFeatures().values()) {
@@ -164,7 +164,7 @@ public class Merger extends MergerHelper {
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerUnion();
             mergeStatistics.setContextualizationShareBeforeMerge(
-                    RecreationModelAnalyser.returnContextualizationShare(unionModel));
+                    RecrationAnalyser.returnContextualizationShare(unionModel));
             mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
                     .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                     .count());
@@ -325,7 +325,7 @@ public class Merger extends MergerHelper {
                     .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                     .count());
             mergeStatistics.setContextualizationShareAfterMerge(
-                    RecreationModelAnalyser.returnContextualizationShare(mergedModel));
+                    RecrationAnalyser.returnContextualizationShare(mergedModel));
         }
 
         if (validate && (solutions != Analyser.returnNumberOfSolutions(mergedModel))) {
@@ -418,7 +418,7 @@ public class Merger extends MergerHelper {
 
         handleRootFeature(unionModel, models);
 
-        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationModelAnalyser
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser
                 .analyseSharedFeatures(models);
         handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
 
@@ -436,7 +436,7 @@ public class Merger extends MergerHelper {
         if (mergeStatistics != null) {
             mergeStatistics.stopTimerUnion();
             mergeStatistics.setContextualizationShareBeforeMerge(
-                    RecreationModelAnalyser.returnContextualizationShare(unionModel));
+                    RecrationAnalyser.returnContextualizationShare(unionModel));
             mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
                     .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                     .count());

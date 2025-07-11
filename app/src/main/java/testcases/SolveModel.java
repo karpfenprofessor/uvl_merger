@@ -1,8 +1,7 @@
 package testcases;
 
 import util.UVLParser;
-import util.analyse.Analyser;
-import util.analyse.RecreationModelAnalyser;
+import util.analyse.RecrationAnalyser;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
@@ -12,7 +11,7 @@ public class SolveModel {
         String filePathString = "uvl/cdl/vrc4373.uvl";	 
         RecreationModel recModel = UVLParser.parseUVLFile(filePathString, Region.A);
 
-        RecreationModelAnalyser.printConstraintDistribution(recModel);
+        RecrationAnalyser.printConstraintDistribution(recModel);
     }
     
 }

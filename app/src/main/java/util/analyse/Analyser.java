@@ -28,71 +28,17 @@ import util.analyse.statistics.SolveStatistics;
  */
 public class Analyser {
 
-    public static long returnNumberOfSolutions(final RecreationModel model) {
-        ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
-        return returnNumberOfSolutions(chocoTestModel);
-    }
-
-    public static long returnNumberOfSolutions(final ChocoModel model) {
-        return BaseModelAnalyser.solveAndReturnNumberOfSolutions(model);
-    }
-
-    public static void printFeatures(final RecreationModel model) {
-        RecreationModelAnalyser.printFeatures(model);
-    }
-
-    public static void printFeatures(final ChocoModel model) {
-        BaseModelAnalyser.printFeatures(model);
-    }
-
-    public static void printConstraints(final RecreationModel model) {
-        RecreationModelAnalyser.printConstraints(model);
-    }
-
-    public static void printConstraints(final ChocoModel model) {
-        BaseModelAnalyser.printConstraints(model);
-    }
-
-    public static void printAllSolutions(final ChocoModel model) {
-        BaseModelAnalyser.printAllSolutions(model);
-    }
-
-    public static void printAllSolutions(final RecreationModel model) {
-        ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
-        BaseModelAnalyser.printAllSolutions(chocoTestModel);
-    }
-
-    public static int printIntersectionSolutions(final ChocoModel model1, final ChocoModel model2) {
-        return BaseModelAnalyser.findIntersectionSolutions(model1, model2);
-    }
-
-    public static int printIntersectionSolutions(final RecreationModel model1, final RecreationModel model2) {
-        ChocoModel chocoTestModel1 = ChocoTranslator.convertToChocoModel(model1);
-        ChocoModel chocoTestModel2 = ChocoTranslator.convertToChocoModel(model2);
-        return BaseModelAnalyser.findIntersectionSolutions(chocoTestModel1, chocoTestModel2);
-    }
-
-    public static boolean isConsistent(final ChocoModel model) {
-        return BaseModelAnalyser.isConsistent(model);
-    }
-
-    public static boolean isConsistent(final RecreationModel model) {
-        ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
-        return isConsistent(chocoTestModel);
-    }
-
     public static SolveStatistics createSolveStatistics(final RecreationModel model) {
         SolveStatistics solveStatistics = new SolveStatistics();
 
         for(int i = 0; i < 10; i++) {
             Collections.shuffle(model.getConstraints());
-            ChocoModel chocoTestModel = ChocoTranslator.convertToChocoModel(model);
-            BaseModelAnalyser.solveAndCreateStatistic(chocoTestModel, solveStatistics);
+            ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(model);
+            ChocoAnalyser.solveAndCreateStatistic(chocoModel, solveStatistics);
         }
 
         return solveStatistics;
     }
-
     public static List<MergeStatistics> createMergeStatistics(final RecreationModel modelA, final RecreationModel modelB) {
         List<MergeStatistics> mergeStatisticsList = new ArrayList<>();
 
@@ -106,5 +52,52 @@ public class Analyser {
         }
 
         return mergeStatisticsList;
+    }
+
+    public static long returnNumberOfSolutions(final RecreationModel model) {
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(model);
+        return returnNumberOfSolutions(chocoModel);
+    }
+    public static long returnNumberOfSolutions(final ChocoModel chocoModel) {
+        return ChocoAnalyser.returnNumberOfSolutions(chocoModel);
+    }
+
+    public static void printFeatures(final RecreationModel model) {
+        RecrationAnalyser.printFeatures(model);
+    }
+    public static void printFeatures(final ChocoModel chocoModel) {
+        ChocoAnalyser.printFeatures(chocoModel);
+    }
+
+    public static void printConstraints(final RecreationModel model) {
+        RecrationAnalyser.printConstraints(model);
+    }
+    public static void printConstraints(final ChocoModel chocoModel) {
+        ChocoAnalyser.printConstraints(chocoModel);
+    }
+
+    public static void printAllSolutions(final RecreationModel model) {
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(model);
+        printAllSolutions(chocoModel);
+    }
+    public static void printAllSolutions(final ChocoModel chocoModel) {
+        ChocoAnalyser.printAllSolutions(chocoModel);
+    }
+
+    public static int findIntersectionSolutions(final RecreationModel modelA, final RecreationModel modelB) {
+        ChocoModel chocoModelA = ChocoTranslator.convertToChocoModel(modelA);
+        ChocoModel chocoModelB = ChocoTranslator.convertToChocoModel(modelB);
+        return findIntersectionSolutions(chocoModelA, chocoModelB);
+    }
+    public static int findIntersectionSolutions(final ChocoModel chocoModelA, final ChocoModel chocoModelB) {
+        return ChocoAnalyser.findIntersectionSolutions(chocoModelA, chocoModelB);
+    }
+
+    public static boolean isConsistent(final RecreationModel model) {
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(model);
+        return isConsistent(chocoModel);
+    }
+    public static boolean isConsistent(final ChocoModel chocoModel) {
+        return ChocoAnalyser.isConsistent(chocoModel, false);
     }
 }

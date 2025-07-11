@@ -20,7 +20,7 @@ public class TestMergePaperModels {
             System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
             System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
 
-            int intersectionSolutions = Analyser.printIntersectionSolutions(modelUs, modelGer);
+            int intersectionSolutions = Analyser.findIntersectionSolutions(modelUs, modelGer);
             System.out.println("intersection solutions: " + intersectionSolutions);
 
             modelUs.contextualizeAllConstraints();

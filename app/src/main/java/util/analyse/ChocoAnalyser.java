@@ -23,49 +23,29 @@ import java.util.Arrays;
  * This class provides direct analysis capabilities for BaseModel instances, which are
  * the Choco constraint solver representations of feature models. 
  */
+public class ChocoAnalyser {
+    private static final Logger logger = LogManager.getLogger(ChocoAnalyser.class);
 
-public class BaseModelAnalyser {
-    private static final Logger logger = LogManager.getLogger(BaseModelAnalyser.class);
-
-    public static boolean isConsistent(final ChocoModel baseModel) {
-        Model model = baseModel.getModel();
+    public static boolean isConsistent(final ChocoModel chocoModel, boolean timeout) {
+        Model model = chocoModel.getModel();
         model.getSolver().reset();
-        //model.getSolver().showStatistics();
         model.getSolver().limitSolution(1);
         
         // Add timeout to prevent infinite hanging (30 seconds)
-        model.getSolver().limitTime(30000);
+        if(timeout) {
+            model.getSolver().showStatistics();
+            model.getSolver().limitTime(30000);
+        }
         
         boolean solved = model.getSolver().solve();
 
-        /*if(true && !solved) {
-            logger.trace("Solver failed to find a solution. Statistics:");
-            logger.trace("Time: {} ms", model.getSolver().getTimeCount());
-            logger.trace("Nodes: {}", model.getSolver().getNodeCount());
-            logger.trace("Backtracks: {}", model.getSolver().getBackTrackCount());
-            logger.trace("Fails: {}", model.getSolver().getFailCount());
-            logger.trace("Restarts: {}", model.getSolver().getRestartCount());
-            
-            // Check if it timed out
+        if(timeout && !solved) {
             if (model.getSolver().isStopCriterionMet()) {
                 logger.warn("Solver timed out after 30 seconds - model too complex");
             }
-        }*/
-
-        return solved;
-    }
-
-    public static long solveAndReturnNumberOfSolutions(final ChocoModel baseModel) {
-        Model model = baseModel.getModel();
-        model.getSolver().reset();
-
-        long solutions = 0;
-        while (model.getSolver().solve()) {
-            solutions++;
-            if(solutions % 1000 == 0) logger.info("Solution found: " + solutions);
         }
 
-        return solutions;
+        return solved;
     }
 
     public static void solveAndCreateStatistic(final ChocoModel baseModel, final SolveStatistics solveStatistics) {
@@ -76,6 +56,18 @@ public class BaseModelAnalyser {
             long endTime = System.nanoTime();
             solveStatistics.addSolveTime(startTime, endTime);
         }
+    }
+
+    public static long returnNumberOfSolutions(final ChocoModel baseModel) {
+        Model model = baseModel.getModel();
+        model.getSolver().reset();
+
+        long solutions = 0;
+        while (model.getSolver().solve()) {
+            solutions++;
+        }
+
+        return solutions;
     }
 
     public static void printConstraints(final ChocoModel baseModel) {
