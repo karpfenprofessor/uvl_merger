@@ -1,4 +1,4 @@
-package uvl.test;
+package uvl.testcases;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
