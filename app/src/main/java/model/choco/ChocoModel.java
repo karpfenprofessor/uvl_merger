@@ -14,8 +14,9 @@ import java.util.Set;
 import java.util.HashSet;
 
 /*
- * This class is used to represent a Java Choco Model with its BoolVar Features and the {@link AbstractConstraint}s it got created from.
+ * Holds a Java Choco Model that represents a Feature Model, the boolVar Features it is constructed from and the {@link AbstractConstraint}s it got created from.
  * The Choco Model is used to check a Feature Model for SAT or UNSAT using the Choco Solver.
+ * https://choco-solver.org/docs/
  */
 @Getter
 @Setter

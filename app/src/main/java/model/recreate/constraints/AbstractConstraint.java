@@ -13,14 +13,15 @@ import lombok.Setter;
  * Key properties:
  * - Contextualization: Constraints can be region-specific (e.g., only apply to Region A or B)
  * - Negation: Constraints can be logically negated (¬φ)
- * - Classification: Constraints are marked as custom or feature tree constraints
+ * - Classification: Constraints are marked as custom or feature tree constraints 
+ *                   if they are introduced during the merge process and dont originate from one of the original models.
  * 
  * Concrete subclasses:
- * - BinaryConstraint: Logical operations (AND, OR, IMPLIES, IFF) between constraints
+ * - BinaryConstraint: Logical operations (AND, OR, IMPLIES, IFF)
  * - GroupConstraint: Parent-child relationships with cardinality constraints
- * - NotConstraint: Logical negation of a constraint
- * - FeatureReferenceConstraint: Reference to a specific feature
- * - ComparisonConstraint: Comparison operations between constraints
+ * - NotConstraint: Logical negation of a constraint (¬φ)
+ * - FeatureReferenceConstraint: Reference to a specific feature to make a feature usable in other Constraint types
+ * - ComparisonConstraint: Comparison operations between constraints (e.g. ≥, ≤, =, ≠)
  */
 @Getter
 @Setter

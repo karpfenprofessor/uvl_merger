@@ -5,6 +5,10 @@ import org.apache.logging.log4j.Logger;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.BinaryConstraint;
+import model.recreate.constraints.ComparisonConstraint;
+import model.recreate.constraints.GroupConstraint;
+import model.recreate.constraints.NotConstraint;
+import model.recreate.constraints.OrNegationConstraint;
 import model.recreate.feature.Feature;
 
 import java.util.HashSet;
@@ -143,5 +147,37 @@ public class RecreationModelAnalyser {
             logger.info("  [{}]: {}", i++, feature.toString());
         }
         logger.info("Total features in model {}: {}", recModel.getRegion().getRegionString(), recModel.getFeatures().size());
+    }
+
+    public static void printConstraintDistribution(RecreationModel recModel) {
+        logger.info("Analyzing constraint types in Recreation model: {}", 
+                recModel.getRegion().getRegionString());
+
+        int binaryCount = 0;
+        int comparisonCount = 0; 
+        int groupCount = 0;
+        int notCount = 0;
+        int orNegationCount = 0;
+
+        for (AbstractConstraint constraint : recModel.getConstraints()) {
+            if (constraint instanceof BinaryConstraint) {
+                binaryCount++;
+            } else if (constraint instanceof ComparisonConstraint) {
+                comparisonCount++;
+            } else if (constraint instanceof GroupConstraint) {
+                groupCount++;
+            } else if (constraint instanceof NotConstraint) {
+                notCount++;
+            } else if (constraint instanceof OrNegationConstraint) {
+                orNegationCount++;
+            }
+        }
+
+        logger.info("\tBinary Constraints: {}", binaryCount);
+        logger.info("\tComparison Constraints: {}", comparisonCount);
+        logger.info("\tGroup Constraints: {}", groupCount);
+        logger.info("\tNot Constraints: {}", notCount);
+        logger.info("\tOr Negation Constraints: {}", orNegationCount);
+        logger.info("");
     }
 }

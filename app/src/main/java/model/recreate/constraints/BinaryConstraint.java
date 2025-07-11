@@ -15,7 +15,7 @@ import model.recreate.feature.Feature;
  * - AND (∧): Both operands must be true
  * - OR (∨): At least one operand must be true  
  * - IMPLIES (→): If antecedent is true, consequent must be true
- * - IFF (↔): Both operands must have the same truth value
+ * - IFF (↔): Both operands must have the same value
  * 
  * Primary use cases:
  * - UVL parsing: Translating logical operators (&&, ||, =>, <=>) from UVL syntax
