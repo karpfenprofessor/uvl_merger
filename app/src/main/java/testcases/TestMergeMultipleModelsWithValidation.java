@@ -32,8 +32,6 @@ public class TestMergeMultipleModelsWithValidation {
         recModel7.contextualizeAllConstraints();
         recModel8.contextualizeAllConstraints();
 
-        Merger.resetMergeStatistics();
-
         long solutions4 = Analyser.returnNumberOfSolutions(recModel4);
         long solutions5 = Analyser.returnNumberOfSolutions(recModel5);
         long solutions6 = Analyser.returnNumberOfSolutions(recModel6);
@@ -46,10 +44,8 @@ public class TestMergeMultipleModelsWithValidation {
 
         long unionSolutions = Analyser.returnNumberOfSolutions(unionModel);
 
-        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, true);
-        mergedModel = Merger.cleanup(mergedModel, true);
-        logger.info(Merger.getMergeStatistics().toString());
-        logger.info(Analyser.createSolveStatistics(mergedModel).toString());
+        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
+        mergedModel = Merger.cleanup(mergedModel);
         Analyser.printAllSolutions(mergedModel);
     }
 }
