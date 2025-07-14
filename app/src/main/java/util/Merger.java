@@ -55,6 +55,8 @@ public class Merger extends MergerHelper {
 
         cleanup(mergedModel, mergeStatistics);
 
+        mergeStatistics.setValidate(Validator.validateMerge(mergedModel, modelToMergeA, modelToMergeB));
+
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return new MergeResult(mergedModel, mergeStatistics);
     }

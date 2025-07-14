@@ -42,6 +42,8 @@ public class MergeStatistics {
     private long numberOfCustomConstraintsAfterMerge;
     private long numberOfCrossTreeConstraintsAfterMerge;
 
+    private Integer validate;
+
     public void startTimerUnion() {
         startTimeUnion = System.nanoTime();
     }
@@ -166,6 +168,9 @@ public class MergeStatistics {
                 .append(numberOfCrossTreeConstraintsAfterMerge).append("\n");
         sb.append("\t[statistics] Contextualisation share after merge: ")
                 .append(contextualizationShareAfterMerge).append("\n");
+
+        sb.append("\t[statistics] Validation: ")
+                .append(validate).append("\n");
 
         return sb.toString();
     }
