@@ -40,7 +40,7 @@ public class MergeAndValidateRealWorldModelsTest {
                         RecreationModel modelB = UVLParser.parseUVLFile(BUSYBOX_MODELS[4].filename,
                                         BUSYBOX_MODELS[4].region);
 
-                        RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
+                        RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
 
                         assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB),
                                         "Merge validation failed for " + BUSYBOX_MODELS[2].filename
@@ -58,7 +58,7 @@ public class MergeAndValidateRealWorldModelsTest {
                         RecreationModel modelB = UVLParser.parseUVLFile(FINANCE_MODELS[2].filename,
                                         FINANCE_MODELS[2].region);
 
-                        RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
+                        RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
 
                         assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB),
                                         "Merge validation failed for " + FINANCE_MODELS[1].filename

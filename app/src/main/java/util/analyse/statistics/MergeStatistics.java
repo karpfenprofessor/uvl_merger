@@ -1,35 +1,51 @@
 package util.analyse.statistics;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class MergeStatistics {
+    private final Logger logger = LogManager.getLogger(MergeStatistics.class);
+
     private long startTimeUnion;
     private long endTimeUnion;
+
     private long startTimeInconsistencyCheck;
-    private long endTimeInconsistencyCheck;
-    private long startTimeCleanup;
-    private long endTimeCleanup;
     private long inconsistencyCheckCounter = 0;
     private long inconsistencyContextualizedCounter = 0;
     private long inconsistencyNonContextualizedCounter = 0;
+    private long inconsistencyNotCheckedCounter = 0;
+    private long endTimeInconsistencyCheck;
+
+    private long startTimeCleanup;
     private long cleanupCounter = 0;
+    private long cleanupKeptAsIsCounter = 0;
     private long cleanupRemovedCounter = 0;
+    private long cleanupNotCheckedCounter = 0;
+    private long endTimeCleanup;
+
     private float contextualizationShareBeforeMerge;
-    private float contextualizationShareAfterMerge;
+    private long numberOfConstraintsBeforeMerge;
+    private long numberOfFeatureTreeConstraintsBeforeMerge;
+    private long numberOfCustomConstraintsBeforeMerge;
     private long numberOfCrossTreeConstraintsBeforeMerge;
+
+    private float contextualizationShareAfterMerge;
+    private long numberOfConstraintsAfterMerge;
+    private long numberOfFeatureTreeConstraintsAfterMerge;
+    private long numberOfCustomConstraintsAfterMerge;
     private long numberOfCrossTreeConstraintsAfterMerge;
-    
+
     public void startTimerUnion() {
         startTimeUnion = System.nanoTime();
     }
-    
+
     public void stopTimerUnion() {
         endTimeUnion = System.nanoTime();
     }
@@ -49,44 +65,112 @@ public class MergeStatistics {
     public void stopTimerCleanup() {
         endTimeCleanup = System.nanoTime();
     }
-    
-    public long getTotalDurationUnion() {
+
+    public long getDurationUnion() {
         return endTimeUnion - startTimeUnion;
     }
 
-    public long getTotalDurationInconsistencyCheck() {
+    public long getDurationInconsistencyCheck() {
         return endTimeInconsistencyCheck - startTimeInconsistencyCheck;
     }
 
-    public long getTotalDurationCleanup() {
+    public long getDurationCleanup() {
         return endTimeCleanup - startTimeCleanup;
+    }
+
+    public long getTotalDuration() {
+        return getDurationUnion() + getDurationInconsistencyCheck() + getDurationCleanup();
     }
 
     public void incrementInconsistencyCheckCounter() {
         inconsistencyCheckCounter++;
     }
 
+    public void incrementInconsistencyContextualizedCounter() {
+        inconsistencyContextualizedCounter++;
+    }
+
+    public void incrementInconsistencyNonContextualizedCounter() {
+        inconsistencyNonContextualizedCounter++;
+    }
+
+    public void incrementInconsistencyNotCheckedCounter() {
+        inconsistencyNotCheckedCounter++;
+    }
+
     public void incrementCleanupCounter() {
         cleanupCounter++;
+    }
+
+    public void incrementCleanupKeptAsIsCounter() {
+        cleanupKeptAsIsCounter++;
+    }
+
+    public void incrementCleanupRemovedCounter() {
+        cleanupRemovedCounter++;
+    }
+
+    public void incrementCleanupNotCheckedCounter() {
+        cleanupNotCheckedCounter++;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[statistics] Merge operation statistics:\n");
-        sb.append("\t[statistics] Union operation duration: ").append(getTotalDurationUnion()).append(" ns\n");
-        sb.append("\t[statistics] Inconsistency check duration: ").append(getTotalDurationInconsistencyCheck()).append(" ns\n");
-        sb.append("\t[statistics] Cleanup duration: ").append(getTotalDurationCleanup()).append(" ns\n");
-        sb.append("\t[statistics] Full merge duration: ").append(getTotalDurationUnion() + getTotalDurationInconsistencyCheck() + getTotalDurationCleanup()).append(" ns\n");
-        sb.append("\t[statistics] Number of inconsistency checks: ").append(inconsistencyCheckCounter).append("\n");
-        sb.append("\t[statistics] Number of inconsistency contextualized: ").append(inconsistencyContextualizedCounter).append("\n");
-        sb.append("\t[statistics] Number of inconsistency non contextualized: ").append(inconsistencyNonContextualizedCounter).append("\n");
-        sb.append("\t[statistics] Number of cleanup checks: ").append(cleanupCounter).append("\n");
-        sb.append("\t[statistics] Number of cleanup removed: ").append(cleanupRemovedCounter).append("\n");
-        sb.append("\t[statistics] Number of cross tree constraints before merge: ").append(numberOfCrossTreeConstraintsBeforeMerge).append("\n");
-        sb.append("\t[statistics] Number of cross tree constraints after merge: ").append(numberOfCrossTreeConstraintsAfterMerge).append("\n");
-        sb.append("\t[statistics] Contextualization share before merge: ").append(contextualizationShareBeforeMerge).append("\n");
-        sb.append("\t[statistics] Contextualization share after merge: ").append(contextualizationShareAfterMerge).append("\n");
+
+        // ─ Timing ───────────────────────────────────────────────────────────────
+        sb.append("\t[statistics] Union operation duration: ")
+                .append(getDurationUnion()).append(" ns\n");
+        sb.append("\t[statistics] Inconsistency check duration: ")
+                .append(getDurationInconsistencyCheck()).append(" ns\n");
+        sb.append("\t[statistics] Cleanup duration: ")
+                .append(getDurationCleanup()).append(" ns\n");
+        sb.append("\t[statistics] Full merge duration: ")
+                .append(getTotalDuration()).append(" ns\n");
+
+        // ─ Counters ─────────────────────────────────────────────────────────────
+        sb.append("\t[statistics] Number of inconsistency checks: ")
+                .append(inconsistencyCheckCounter).append("\n");
+        sb.append("\t[statistics]   ↳ contextualised: ")
+                .append(inconsistencyContextualizedCounter).append("\n");
+        sb.append("\t[statistics]   ↳ non-contextualised: ")
+                .append(inconsistencyNonContextualizedCounter).append("\n");
+        sb.append("\t[statistics]   ↳ not checked: ")
+                .append(inconsistencyNotCheckedCounter).append("\n");
+        sb.append("\t[statistics] Number of cleanup checks: ")
+                .append(cleanupCounter).append("\n");
+        sb.append("\t[statistics]   ↳ kept as is: ")
+                .append(cleanupKeptAsIsCounter).append("\n");
+        sb.append("\t[statistics]   ↳ removed as redundant: ")
+                .append(cleanupRemovedCounter).append("\n");
+        sb.append("\t[statistics]   ↳ not checked: ")
+                .append(cleanupNotCheckedCounter).append("\n");
+
+        // ─ Size before merge ────────────────────────────────────────────────────
+        sb.append("\t[statistics] Feature-tree constraints before merge: ")
+                .append(numberOfFeatureTreeConstraintsBeforeMerge).append("\n");
+        sb.append("\t[statistics] Custom constraints before merge: ")
+                .append(numberOfCustomConstraintsBeforeMerge).append("\n");
+        sb.append("\t[statistics] Cross-tree constraints before merge: ")
+                .append(numberOfCrossTreeConstraintsBeforeMerge).append("\n");
+        sb.append("\t[statistics] Contextualisation share before merge: ")
+                .append(contextualizationShareBeforeMerge).append("\n");
+
+        // ─ Size after merge ─────────────────────────────────────────────────────
+        sb.append("\t[statistics] Feature-tree constraints after merge: ")
+                .append(numberOfFeatureTreeConstraintsAfterMerge).append("\n");
+        sb.append("\t[statistics] Custom constraints after merge: ")
+                .append(numberOfCustomConstraintsAfterMerge).append("\n");
+        sb.append("\t[statistics] Cross-tree constraints after merge: ")
+                .append(numberOfCrossTreeConstraintsAfterMerge).append("\n");
+        sb.append("\t[statistics] Contextualisation share after merge: ")
+                .append(contextualizationShareAfterMerge).append("\n");
+
         return sb.toString();
+    }
+
+    public void printStatistics() {
+        logger.info(toString());
     }
 }

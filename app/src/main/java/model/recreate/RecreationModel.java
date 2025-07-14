@@ -6,8 +6,6 @@ import model.choco.Region;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.GroupConstraint;
 import model.recreate.feature.Feature;
-import util.analyse.Analyser;
-
 import java.util.List;
 import java.util.Map;
 
@@ -50,17 +48,8 @@ public class RecreationModel {
      * Contextualizes all constraints in the model.
      */
     public void contextualizeAllConstraints() {
-        contextualizeAllConstraints(Boolean.FALSE);
-    }
-
-    public void contextualizeAllConstraints(final boolean validate) {
         logger.info("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
                 + " with region value " + region.ordinal());
-
-        long solutions = 0;
-        if(validate) {
-            solutions = Analyser.returnNumberOfSolutions(this);
-        }
 
         // contextualize each constraint with the respective region value
         for (AbstractConstraint constraint : constraints) {
@@ -98,10 +87,6 @@ public class RecreationModel {
         addConstraint(regionGc);
         logger.debug("\t[contextualize] constrain region root and contextualization feature with " + regionGc.toString());
 
-        // validate solution spaces after contextualization
-        if (validate && solutions != Analyser.returnNumberOfSolutions(this)) {
-            throw new RuntimeException("Solution space of model should not change after contextualization");
-        }
         logger.info("[contextualize] finished region " + getRegionString());
         logger.info("");
     }

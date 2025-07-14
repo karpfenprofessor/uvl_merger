@@ -27,7 +27,7 @@ public class TestMergeTwoModels {
         long solutions1 = Analyser.returnNumberOfSolutions(recModel);
         long solutions2 = Analyser.returnNumberOfSolutions(recModel2);
     
-        RecreationModel mergedModel = Merger.fullMerge(recModel, recModel2);
+        RecreationModel mergedModel = Merger.fullMerge(recModel, recModel2).mergedModel();
         long solutionsMerged = Analyser.returnNumberOfSolutions(mergedModel);
         Analyser.printConstraints(mergedModel);
         Validator.validateMerge(mergedModel, recModel, recModel2);

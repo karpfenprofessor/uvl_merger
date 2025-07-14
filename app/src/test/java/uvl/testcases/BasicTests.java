@@ -7,6 +7,7 @@ import util.Merger;
 import util.UVLParser;
 import util.Validator;
 import util.analyse.Analyser;
+import util.analyse.statistics.MergeStatistics;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
@@ -161,7 +162,7 @@ public class BasicTests {
             assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
             assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = Merger.union(modelUs, modelGer);
+            RecreationModel unionModel = Merger.union(modelUs, modelGer, new MergeStatistics());
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
         } catch (Exception e) {
@@ -188,15 +189,15 @@ public class BasicTests {
             assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
             assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = Merger.union(modelUs, modelGer);
+            RecreationModel unionModel = Merger.union(modelUs, modelGer, new MergeStatistics());
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
 
-            RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
+            RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 
-            mergedModel = Merger.cleanup(mergedModel);
+            mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 
