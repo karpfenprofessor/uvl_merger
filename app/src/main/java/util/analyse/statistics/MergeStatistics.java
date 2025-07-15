@@ -43,7 +43,7 @@ public class MergeStatistics {
     private long numberOfCrossTreeConstraintsAfterMerge;
 
     private Integer validate;
-    
+
     private java.util.List<String> mergedModelPaths = new java.util.ArrayList<>();
 
     public void startTimerUnion() {
@@ -127,6 +127,7 @@ public class MergeStatistics {
         StringBuilder sb = new StringBuilder();
         sb.append("[statistics] Merge operation statistics:\n");
 
+        // ─ Merged model paths ────────────────────────────────────────────────────
         if (!mergedModelPaths.isEmpty()) {
             sb.append("\t[statistics] Merged model paths:\n");
             for (String path : mergedModelPaths) {
@@ -135,14 +136,14 @@ public class MergeStatistics {
         }
 
         // ─ Timing ───────────────────────────────────────────────────────────────
-        sb.append("\t[statistics] Union operation duration: ")
-                .append(getDurationUnion()).append(" ns\n");
+        sb.append("\t[statistics] Union operation duration:     ")
+                .append(String.format("%12d ns (%.2f ms)", getDurationUnion(), getDurationUnion() / 1_000_000.0)).append("\n");
         sb.append("\t[statistics] Inconsistency check duration: ")
-                .append(getDurationInconsistencyCheck()).append(" ns\n");
-        sb.append("\t[statistics] Cleanup duration: ")
-                .append(getDurationCleanup()).append(" ns\n");
-        sb.append("\t[statistics] Full merge duration: ")
-                .append(getTotalDuration()).append(" ns\n");
+                .append(String.format("%12d ns (%.2f ms)", getDurationInconsistencyCheck(), getDurationInconsistencyCheck() / 1_000_000.0)).append("\n");
+        sb.append("\t[statistics] Cleanup duration:             ")
+                .append(String.format("%12d ns (%.2f ms)", getDurationCleanup(), getDurationCleanup() / 1_000_000.0)).append("\n");
+        sb.append("\t[statistics] Full merge duration:          ")
+                .append(String.format("%12d ns (%.2f ms)", getTotalDuration(), getTotalDuration() / 1_000_000.0)).append("\n");
 
         // ─ Counters ─────────────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of inconsistency checks: ")
@@ -162,27 +163,26 @@ public class MergeStatistics {
         sb.append("\t[statistics]   -> not checked: ")
                 .append(cleanupNotCheckedCounter).append("\n");
 
-        // ─ Size before merge ────────────────────────────────────────────────────
+        // ─ Size before and after merge ────────────────────────────────────────────────────
         sb.append("\t[statistics] Feature-tree constraints before merge: ")
                 .append(numberOfFeatureTreeConstraintsBeforeMerge).append("\n");
-        sb.append("\t[statistics] Custom constraints before merge: ")
-                .append(numberOfCustomConstraintsBeforeMerge).append("\n");
-        sb.append("\t[statistics] Cross-tree constraints before merge: ")
-                .append(numberOfCrossTreeConstraintsBeforeMerge).append("\n");
-        sb.append("\t[statistics] Contextualisation share before merge: ")
-                .append(contextualizationShareBeforeMerge).append("\n");
-
-        // ─ Size after merge ─────────────────────────────────────────────────────
         sb.append("\t[statistics] Feature-tree constraints after merge: ")
                 .append(numberOfFeatureTreeConstraintsAfterMerge).append("\n");
+        sb.append("\t[statistics] Custom constraints before merge: ")
+                .append(numberOfCustomConstraintsBeforeMerge).append("\n");
         sb.append("\t[statistics] Custom constraints after merge: ")
                 .append(numberOfCustomConstraintsAfterMerge).append("\n");
+        sb.append("\t[statistics] Cross-tree constraints before merge: ")
+                .append(numberOfCrossTreeConstraintsBeforeMerge).append("\n");
         sb.append("\t[statistics] Cross-tree constraints after merge: ")
                 .append(numberOfCrossTreeConstraintsAfterMerge).append("\n");
+        sb.append("\t[statistics] Contextualisation share before merge: ")
+                .append(contextualizationShareBeforeMerge).append("\n");
         sb.append("\t[statistics] Contextualisation share after merge: ")
                 .append(contextualizationShareAfterMerge).append("\n");
 
-        sb.append("\t[statistics] Validation: ")
+        // ─ Validation result ────────────────────────────────────────────────────
+        sb.append("\t[statistics] Validation result: ")
                 .append(decodeValidationResult(validate))
                 .append("\n");
 
