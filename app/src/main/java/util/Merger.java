@@ -1,6 +1,8 @@
 package util;
 
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,6 +60,9 @@ public class Merger extends MergerHelper {
         cleanup(mergedModel, mergeStatistics);
 
         mergeStatistics.setValidate(Validator.validateMerge(mergedModel, modelToMergeA, modelToMergeB));
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser.analyseSharedFeatures(modelToMergeA, modelToMergeB);
+        mergeStatistics.setNumberOfUniqueFeaturesModelA(uniqueFeaturesPerModel.get(modelToMergeA) != null ? uniqueFeaturesPerModel.get(modelToMergeA).size() : 0);
+        mergeStatistics.setNumberOfUniqueFeaturesModelB(uniqueFeaturesPerModel.get(modelToMergeB) != null ? uniqueFeaturesPerModel.get(modelToMergeB).size() : 0);
 
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return new MergeResult(mergedModel, mergeStatistics);
@@ -255,7 +260,8 @@ public class Merger extends MergerHelper {
                 .count());
         mergeStatistics
                 .setContextualizationShareAfterMerge(RecrationAnalyser.returnContextualizationShare(mergedModel));
-
+                mergeStatistics.setNumberOfFeatures(mergedModel.getFeatures().size());
+        
         logger.info("[cleanup] removed {} constraints", mergeStatistics.getCleanupRemovedCounter());
         logger.info("[cleanup] kept {} custom and feature tree constraints without checking",
                 mergeStatistics.getCleanupNotCheckedCounter());

@@ -18,8 +18,8 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelSmartwatchAString = "uvl/smartwatch/miband1s.uvl";
         String modelSmartwatchBString = "uvl/smartwatch/miband2.uvl";
 
-        String modelBusyboxAString = "uvl/busybox/busybox_3.uvl";
-        String modelBusyboxBString = "uvl/busybox/busybox_5.uvl";
+        String modelBusyboxAString = "uvl/busybox/busybox_2.uvl";
+        String modelBusyboxBString = "uvl/busybox/busybox_4.uvl";
 
         String modelFinanceAString = "uvl/finance/finance_2.uvl";
         String modelFinanceBString = "uvl/finance/finance_3.uvl";
@@ -27,8 +27,8 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelPaperAString = "uvl/paper_test_models/us.uvl";
         String modelPaperBString = "uvl/paper_test_models/ger.uvl";
 
-        RecreationModel originalA = UVLParser.parseUVLFile(modelPaperAString, Region.A);
-        RecreationModel originalB = UVLParser.parseUVLFile(modelPaperBString, Region.B);
+        RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceAString, Region.A);
+        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceBString, Region.B);
 
         MergeResult mergeResult = Merger.fullMerge(originalA, originalB);
 

@@ -30,6 +30,10 @@ public class MergeStatistics {
     private long cleanupNotCheckedCounter = 0;
     private long endTimeCleanup;
 
+    private long numberOfFeatures;
+    private long numberOfUniqueFeaturesModelA;
+    private long numberOfUniqueFeaturesModelB;
+
     private float contextualizationShareBeforeMerge;
     private long numberOfConstraintsBeforeMerge;
     private long numberOfFeatureTreeConstraintsBeforeMerge;
@@ -144,6 +148,17 @@ public class MergeStatistics {
                 .append(String.format("%12d ns (%.2f ms)", getDurationCleanup(), getDurationCleanup() / 1_000_000.0)).append("\n");
         sb.append("\t[statistics] Full merge duration:          ")
                 .append(String.format("%12d ns (%.2f ms)", getTotalDuration(), getTotalDuration() / 1_000_000.0)).append("\n");
+
+        // ─ Number of features ────────────────────────────────────────────────────
+        sb.append("\t[statistics] Number of features in merged model: ").append(numberOfFeatures).append("\n");
+        sb.append("\t[statistics]  -> unique features model A: ").append(numberOfUniqueFeaturesModelA).append("\n");
+        sb.append("\t[statistics]  -> unique features model B: ").append(numberOfUniqueFeaturesModelB).append("\n");
+
+        // ─ Number of constraints ────────────────────────────────────────────────────
+        sb.append("\t[statistics] Number of constraints before merge: ")
+                .append(numberOfConstraintsBeforeMerge).append("\n");
+        sb.append("\t[statistics] Number of constraints after merge: ")
+                .append(numberOfConstraintsAfterMerge).append("\n");
 
         // ─ Counters ─────────────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of inconsistency checks: ")
