@@ -38,10 +38,19 @@ public class RecreationModel {
     private List<AbstractConstraint> constraints;
     private Map<String, Feature> features;
 
+    private String filePath;
+
     public RecreationModel(final Region region) {
         this.constraints = new ArrayList<>();
         this.features = new HashMap<>();
         this.region = region;
+    }
+
+    public RecreationModel(final Region region, final String filePath) {
+        this.constraints = new ArrayList<>();
+        this.features = new HashMap<>();
+        this.region = region;
+        this.filePath = filePath;
     }
 
     /*

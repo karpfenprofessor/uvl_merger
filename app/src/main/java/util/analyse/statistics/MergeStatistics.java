@@ -43,6 +43,8 @@ public class MergeStatistics {
     private long numberOfCrossTreeConstraintsAfterMerge;
 
     private Integer validate;
+    
+    private java.util.List<String> mergedModelPaths = new java.util.ArrayList<>();
 
     public void startTimerUnion() {
         startTimeUnion = System.nanoTime();
@@ -116,10 +118,21 @@ public class MergeStatistics {
         cleanupNotCheckedCounter++;
     }
 
+    public void addMergedModelPath(String filePath) {
+        mergedModelPaths.add(filePath);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[statistics] Merge operation statistics:\n");
+
+        if (!mergedModelPaths.isEmpty()) {
+            sb.append("\t[statistics] Merged model paths:\n");
+            for (String path : mergedModelPaths) {
+                sb.append("\t[statistics]   -> ").append(path).append("\n");
+            }
+        }
 
         // ─ Timing ───────────────────────────────────────────────────────────────
         sb.append("\t[statistics] Union operation duration: ")
@@ -134,19 +147,19 @@ public class MergeStatistics {
         // ─ Counters ─────────────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of inconsistency checks: ")
                 .append(inconsistencyCheckCounter).append("\n");
-        sb.append("\t[statistics]   ↳ contextualised: ")
+        sb.append("\t[statistics]   -> contextualised: ")
                 .append(inconsistencyContextualizedCounter).append("\n");
-        sb.append("\t[statistics]   ↳ non-contextualised: ")
+        sb.append("\t[statistics]   -> non-contextualised: ")
                 .append(inconsistencyNonContextualizedCounter).append("\n");
-        sb.append("\t[statistics]   ↳ not checked: ")
+        sb.append("\t[statistics]   -> not checked: ")
                 .append(inconsistencyNotCheckedCounter).append("\n");
         sb.append("\t[statistics] Number of cleanup checks: ")
                 .append(cleanupCounter).append("\n");
-        sb.append("\t[statistics]   ↳ kept as is: ")
+        sb.append("\t[statistics]   -> kept as is: ")
                 .append(cleanupKeptAsIsCounter).append("\n");
-        sb.append("\t[statistics]   ↳ removed as redundant: ")
+        sb.append("\t[statistics]   -> removed as redundant: ")
                 .append(cleanupRemovedCounter).append("\n");
-        sb.append("\t[statistics]   ↳ not checked: ")
+        sb.append("\t[statistics]   -> not checked: ")
                 .append(cleanupNotCheckedCounter).append("\n");
 
         // ─ Size before merge ────────────────────────────────────────────────────
@@ -170,12 +183,38 @@ public class MergeStatistics {
                 .append(contextualizationShareAfterMerge).append("\n");
 
         sb.append("\t[statistics] Validation: ")
-                .append(validate).append("\n");
+                .append(decodeValidationResult(validate))
+                .append("\n");
 
         return sb.toString();
     }
 
     public void printStatistics() {
         logger.info(toString());
+    }
+
+    /**
+     * Decodes the validation result from Validator.validateMerge()
+     * 
+     * @param validate the validation result code
+     * @return a human-readable description of the validation result
+     */
+    private String decodeValidationResult(Integer validate) {
+        if (validate == null) {
+            return "not performed";
+        }
+
+        switch (validate) {
+            case 0:
+                return "PASSED";
+            case 1:
+                return "FAILED - Test Case 1";
+            case 2:
+                return "FAILED - Test Case 2A";
+            case 3:
+                return "FAILED - Test Case 2B";
+        }
+
+        return "UNKNOWN validation code: " + validate;
     }
 }

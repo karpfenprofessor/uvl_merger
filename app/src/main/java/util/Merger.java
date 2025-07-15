@@ -44,6 +44,8 @@ public class Merger extends MergerHelper {
                 modelToMergeA.getRegion(), modelToMergeB.getRegion());
 
         MergeStatistics mergeStatistics = new MergeStatistics();
+        mergeStatistics.addMergedModelPath(modelToMergeA.getFilePath());
+        mergeStatistics.addMergedModelPath(modelToMergeB.getFilePath());
 
         // Contextualize both original region models
         modelToMergeA.contextualizeAllConstraints();
