@@ -27,8 +27,8 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelPaperAString = "uvl/paper_test_models/us.uvl";
         String modelPaperBString = "uvl/paper_test_models/ger.uvl";
 
-        RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceAString, Region.A);
-        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceBString, Region.B);
+        RecreationModel originalA = UVLParser.parseUVLFile(modelBusyboxAString, Region.A);
+        RecreationModel originalB = UVLParser.parseUVLFile(modelBusyboxBString, Region.B);
 
         MergeResult mergeResult = Merger.fullMerge(originalA, originalB);
 

@@ -69,4 +69,8 @@ public class Analyser {
     public static boolean isConsistent(final ChocoModel chocoModel) {
         return ChocoAnalyser.isConsistent(chocoModel, false);
     }
+    
+    public static boolean isConsistent(final ChocoModel chocoModel, boolean timeout) {
+        return ChocoAnalyser.isConsistent(chocoModel, timeout);
+    }
 }

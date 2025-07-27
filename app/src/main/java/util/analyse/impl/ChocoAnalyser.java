@@ -7,6 +7,7 @@ import util.analyse.statistics.SolveStatistics;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
+// import org.chocosolver.solver.search.loop.monitors.IMonitorDownBranch;
 import org.chocosolver.solver.variables.Variable;
 
 import model.choco.ChocoModel;
@@ -30,15 +31,43 @@ public class ChocoAnalyser {
         Model model = chocoModel.getModel();
         model.getSolver().reset();
         model.getSolver().limitSolution(1);
+        model.getSolver().showShortStatistics();
+        
+        // Create a monitoring thread that reports progress every 2 seconds
+        Thread monitorThread = new Thread(() -> {
+            try {
+                while (!Thread.currentThread().isInterrupted()) {
+                    Thread.sleep(2000); // Check every 2 seconds
+                    logger.info("[monitor] Progress: nodes={}, fails={}", 
+                        model.getSolver().getMeasures().getNodeCount(),
+                        model.getSolver().getMeasures().getFailCount());
+                }
+            } catch (InterruptedException e) {
+                // Thread interrupted, stop monitoring
+            }
+        });
+        monitorThread.setDaemon(true);
+        monitorThread.start();
         
         // Add timeout to prevent infinite hanging (30 seconds)
         if(timeout) {
-            model.getSolver().showStatistics();
             model.getSolver().limitTime(30000);
         }
         
+        long startTime = System.currentTimeMillis();
         boolean solved = model.getSolver().solve();
-
+        long endTime = System.currentTimeMillis();
+        
+        // Stop the monitoring thread
+        monitorThread.interrupt();
+        
+        // Log final statistics
+        /*logger.info("[consistency] Final result: {} in {} ms (nodes={}, fails={})", 
+            solved ? "consistent" : "inconsistent",
+            endTime - startTime,
+            model.getSolver().getMeasures().getNodeCount(),
+            model.getSolver().getMeasures().getFailCount());*/
+        
         if(timeout && !solved) {
             if (model.getSolver().isStopCriterionMet()) {
                 logger.warn("Solver timed out after 30 seconds - model too complex");
