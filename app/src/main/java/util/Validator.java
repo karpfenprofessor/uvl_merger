@@ -16,6 +16,7 @@ import model.recreate.constraints.OrNegationConstraint;
 import model.recreate.feature.Feature;
 import util.analyse.Analyser;
 
+
 /*
  * Feature-model merge validation utility.
  *
@@ -104,31 +105,10 @@ public class Validator {
             final RecreationModel kb2) {
         logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
 
-        // Create a test model with the region set to TESTING
-        RecreationModel testModel = new RecreationModel(Region.TESTING);
+        // Check for simultaneous violations: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
+        boolean hasExtraSolutions = checkSimultaneousViolations(mergedKB, kb1, kb2);
 
-        // Add all features from the merged model
-        testModel.getFeatures().putAll(mergedKB.getFeatures());
-        testModel.setRootFeature(mergedKB.getRootFeature());
-
-        // Add all constraints from the merged model
-        for (AbstractConstraint constraint : mergedKB.getConstraints()) {
-            testModel.addConstraint(constraint.copy());
-        }
-
-        if (!kb1.getConstraints().isEmpty()) {
-            testModel.addConstraint(new OrNegationConstraint(kb1.getConstraints()));
-        }
-
-        if (!kb2.getConstraints().isEmpty()) {
-            testModel.addConstraint(new OrNegationConstraint(kb2.getConstraints()));
-        }
-
-        // Convert to Choco model and check satisfiability
-        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
-        boolean isSatisfiable = Analyser.isConsistent(chocoModel);
-
-        if (isSatisfiable) {
+        if (hasExtraSolutions) {
             logger.warn(
                     "\t[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} union {} (merge too loose)",
                     kb1.getRegionString(), kb2.getRegionString());
@@ -254,5 +234,73 @@ public class Validator {
                     originalKB.getRegionString());
             return false;
         }
+    }
+
+    /**
+     * Returns true ⇔ there exists a configuration that
+     *   – satisfies KBMerge
+     *   – violates ≥1 constraint from KB₁
+     *   – violates ≥1 constraint from KB₂
+     * 
+     * This implements the correct logic for Test Case 1: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
+     * 
+     * @param kbMerge the merged knowledge base
+     * @param kb1 the first original knowledge base
+     * @param kb2 the second original knowledge base
+     * @return true if there are configurations violating both KBs simultaneously
+     */
+    private static boolean checkSimultaneousViolations(RecreationModel kbMerge,
+                                                       RecreationModel kb1,
+                                                       RecreationModel kb2) {
+
+        // Create a new test model for this constraint pair
+        RecreationModel testModel = new RecreationModel(Region.TESTING);
+        testModel.getFeatures().putAll(kbMerge.getFeatures());
+        testModel.setRootFeature(kbMerge.getRootFeature());
+        
+        // Add all merged constraints
+        for (AbstractConstraint mergedConstraint : kbMerge.getConstraints()) {
+            testModel.addConstraint(mergedConstraint.copy());
+        }
+
+        // LOOP over every pair (c1 ∈ KB1, c2 ∈ KB2)
+        Integer cntKb1 = 1;
+        Integer cntKb2 = 1;
+        for (AbstractConstraint c1 : kb1.getConstraints()) {
+            for (AbstractConstraint c2 : kb2.getConstraints()) {
+                logger.debug("\t[checkSimultaneousViolations] checking pair: {}/{} and {}/{}", cntKb1, kb1.getConstraints().size(), cntKb2, kb2.getConstraints().size());
+                
+                // Add the two negated constraints
+                NotConstraint notConstraint1 = new NotConstraint();
+                AbstractConstraint negatedC1 = c1.copy();
+                notConstraint1.setInner(negatedC1);
+                testModel.addConstraint(notConstraint1);
+                
+                NotConstraint notConstraint2 = new NotConstraint();
+                AbstractConstraint negatedC2 = c2.copy();
+                notConstraint2.setInner(negatedC2);
+                testModel.addConstraint(notConstraint2);
+                
+                // Convert to Choco model and check satisfiability
+                ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
+                boolean isSatisfiable = Analyser.isConsistent(chocoModel, false);
+
+                testModel.getConstraints().remove(notConstraint1);
+                testModel.getConstraints().remove(notConstraint2);
+
+                if (isSatisfiable) {             // SAT ⇒ extra solution
+                    logger.info("[checkSimultaneousViolations] Found configuration violating both KBs:");
+                    logger.info("  - KB1 constraint: {}", c1);
+                    logger.info("  - KB2 constraint: {}", c2);
+                    return true;
+                }
+                cntKb2++;
+            }
+            cntKb1++;
+            cntKb2 = 1;
+        }
+        
+        logger.info("[checkSimultaneousViolations] No configurations found that violate both KBs simultaneously");
+        return false;                        // UNSAT for every pair
     }
 }

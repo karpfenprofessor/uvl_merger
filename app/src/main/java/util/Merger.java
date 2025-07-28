@@ -184,14 +184,14 @@ public class Merger extends MergerHelper {
                 CKB.addConstraint(originalConstraint);
 
                 mergeStatistics.incrementInconsistencyNonContextualizedCounter();
-                logger.debug("\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
+                logger.debug("\n\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
                         originalConstraint.toString());
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
                 CKB.addConstraint(originalConstraint);
 
                 mergeStatistics.incrementInconsistencyContextualizedCounter();
-                logger.debug("\t[inconsistencyCheck] consistent, add contextualized constraint {}",
+                logger.debug("\n\t[inconsistencyCheck] consistent, add contextualized constraint {}",
                         originalConstraint.toString());
             }
 
@@ -237,14 +237,14 @@ public class Merger extends MergerHelper {
                 iterator.remove();
                 constraint.disableNegation();
                 mergeStatistics.incrementCleanupRemovedCounter();
+                System.out.print(" - ");
                 logger.trace("\t[cleanup] inconsistent, remove constraint {}", constraint.toString());
             } else {
                 constraint.disableNegation();
                 mergeStatistics.incrementCleanupKeptAsIsCounter();
+                System.out.print(" + ");
                 logger.trace("\t[cleanup] consistent, keep unnegated constraint {}", constraint.toString());
             }
-
-            System.out.print(".");
         }
 
         System.out.print("\n");

@@ -31,7 +31,7 @@ public class ChocoAnalyser {
         Model model = chocoModel.getModel();
         model.getSolver().reset();
         model.getSolver().limitSolution(1);
-        model.getSolver().showShortStatistics();
+        //model.getSolver().showShortStatistics();
         
         // Create a monitoring thread that reports progress every 2 seconds
         Thread monitorThread = new Thread(() -> {
