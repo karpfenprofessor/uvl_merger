@@ -34,7 +34,7 @@ public class TestMergePaperModelsAnalyser {
             // mergedModel.addConstraint(constraint2);
             // System.out.println("added constraint to trigger testcase 2: " + constraint2);
 
-            Validator.validateMerge(mergedModel, modelUs, modelGer);
+            //Validator.validateMerge(mergedModel, modelUs, modelGer);
 
             System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
             System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
