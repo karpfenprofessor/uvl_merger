@@ -3,18 +3,15 @@ package util;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import model.choco.ChocoModel;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.feature.Feature;
 import util.analyse.Analyser;
-import util.analyse.ChocoAnalyser;
-import util.analyse.RecrationAnalyser;
+import util.analyse.impl.RecrationAnalyser;
 import util.analyse.statistics.MergeStatistics;
 import util.helper.MergerHelper;
 
@@ -40,95 +37,46 @@ import util.helper.MergerHelper;
  */
 public class Merger extends MergerHelper {
     private static final Logger logger = LogManager.getLogger(Merger.class);
-    private static MergeStatistics mergeStatistics;
 
-    public static MergeStatistics getMergeStatistics() {
-        return mergeStatistics;
+    public record MergeResult(RecreationModel mergedModel, MergeStatistics mergedStatistics) {
     }
 
-    public static void resetMergeStatistics() {
-        mergeStatistics = new MergeStatistics();
-    }
+    public static MergeResult fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB) {
+        logger.info("[merge] starting full merge process between models from regions {} and {}",
+                modelToMergeA.getRegion(), modelToMergeB.getRegion());
 
-    public static RecreationModel fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB,
-            final boolean validate) {
-        logger.info("[merge] starting full merge process between models from regions {} and {} with validation {}",
-                modelToMergeA.getRegion(), modelToMergeB.getRegion(), validate);
+        MergeStatistics mergeStatistics = new MergeStatistics();
+        mergeStatistics.addMergedModelPath(modelToMergeA.getFilePath());
+        mergeStatistics.addMergedModelPath(modelToMergeB.getFilePath());
 
-        mergeStatistics = new MergeStatistics(); // Create new statistics object for this merge
-
-        ChocoModel chocoTestModelABeforeDecontextualization = null;
-        ChocoModel chocoTestModelBBeforeDecontextualization = null;
-        ChocoModel chocoTestModelAAfterContextualization = null;
-        ChocoModel chocoTestModelBAfterContextualization = null;
-        long solutionsModelABeforeContextualization = 0;
-        long solutionsModelBBeforeContextualization = 0;
-        long solutionsModelAAfterContextualization = 0;
-        long solutionsModelBAfterContextualization = 0;
-
-        if (validate) {
-            // Models for validation of contextualization and union
-            chocoTestModelABeforeDecontextualization = ChocoTranslator.convertToChocoModel(modelToMergeA);
-            chocoTestModelBBeforeDecontextualization = ChocoTranslator.convertToChocoModel(modelToMergeB);
-
-            // Get solutions before contextualization
-            solutionsModelABeforeContextualization = ChocoAnalyser
-                    .returnNumberOfSolutions(chocoTestModelABeforeDecontextualization);
-            solutionsModelBBeforeContextualization = ChocoAnalyser
-                    .returnNumberOfSolutions(chocoTestModelBBeforeDecontextualization);
-        }
-
-        // Contextualize both region models
+        // Contextualize both original region models
         modelToMergeA.contextualizeAllConstraints();
         modelToMergeB.contextualizeAllConstraints();
 
-        if (validate) {
-            // Get solutions after contextualization
-            chocoTestModelAAfterContextualization = ChocoTranslator.convertToChocoModel(modelToMergeA);
-            chocoTestModelBAfterContextualization = ChocoTranslator.convertToChocoModel(modelToMergeB);
-            solutionsModelAAfterContextualization = ChocoAnalyser
-                    .returnNumberOfSolutions(chocoTestModelAAfterContextualization);
-            solutionsModelBAfterContextualization = ChocoAnalyser
-                    .returnNumberOfSolutions(chocoTestModelBAfterContextualization);
-        }
+        RecreationModel unionModel = union(modelToMergeA, modelToMergeB, mergeStatistics);
 
-        // validate solution spaces after contextualization
-        if (validate && (solutionsModelABeforeContextualization != solutionsModelAAfterContextualization)) {
-            throw new RuntimeException("Solution space of model A should not change after contextualization");
-        } else if (validate && (solutionsModelBBeforeContextualization != solutionsModelBAfterContextualization)) {
-            throw new RuntimeException("Solution space of model B should not change after contextualization");
-        }
+        RecreationModel mergedModel = inconsistencyCheck(unionModel, mergeStatistics);
 
-        RecreationModel unionModel = union(modelToMergeA, modelToMergeB, validate);
+        cleanup(mergedModel, mergeStatistics);
 
-        if (validate) {
-            ChocoModel chocoTestModelUnion = ChocoTranslator.convertToChocoModel(unionModel);
-            long solutionsUnionModel = ChocoAnalyser.returnNumberOfSolutions(chocoTestModelUnion);
-            if (solutionsUnionModel != (solutionsModelABeforeContextualization
-                    + solutionsModelBBeforeContextualization)) {
-                throw new RuntimeException(
-                        "Solution space of union model should be the sum of the solution spaces of the two models before contextualization");
-            }
-        }
-
-        RecreationModel mergedModel = inconsistencyCheck(unionModel, validate);
-
-        cleanup(mergedModel, validate);
+        mergeStatistics.setValidate(Validator.validateMerge(mergedModel, modelToMergeA, modelToMergeB));
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser.analyseSharedFeatures(modelToMergeA, modelToMergeB);
+        mergeStatistics.setNumberOfUniqueFeaturesModelA(uniqueFeaturesPerModel.get(modelToMergeA) != null ? uniqueFeaturesPerModel.get(modelToMergeA).size() : 0);
+        mergeStatistics.setNumberOfUniqueFeaturesModelB(uniqueFeaturesPerModel.get(modelToMergeB) != null ? uniqueFeaturesPerModel.get(modelToMergeB).size() : 0);
 
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
-        return mergedModel;
+        return new MergeResult(mergedModel, mergeStatistics);
     }
 
     public static RecreationModel union(final RecreationModel modelA, final RecreationModel modelB,
-            final boolean validate) {
+            final MergeStatistics mergeStatistics) {
         logger.info("[union] with models from regions {} and {}", modelA.getRegion().getRegionString(),
                 modelB.getRegion().getRegionString());
-        if (mergeStatistics != null) {
-            mergeStatistics.startTimerUnion();
-        }
 
         final RecreationModel unionModel = new RecreationModel(Region.UNION);
         RecrationAnalyser.analyseSharedFeatures(modelA, modelB);
+
+        mergeStatistics.startTimerUnion();
 
         // Add features from both models to union model's feature map
         for (Feature feature : modelA.getFeatures().values()) {
@@ -158,17 +106,19 @@ public class Merger extends MergerHelper {
             }
         }
 
-        // removeDuplicateContextualizedGroupConstraints(unionModel);
         splitFeaturesWithMultipleParents(unionModel);
 
-        if (mergeStatistics != null) {
-            mergeStatistics.stopTimerUnion();
-            mergeStatistics.setContextualizationShareBeforeMerge(
-                    RecrationAnalyser.returnContextualizationShare(unionModel));
-            mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
-                    .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
-                    .count());
-        }
+        mergeStatistics.stopTimerUnion();
+        mergeStatistics.setNumberOfConstraintsBeforeMerge(unionModel.getConstraints().size());
+        mergeStatistics.setNumberOfFeatureTreeConstraintsBeforeMerge(
+                unionModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count());
+        mergeStatistics.setNumberOfCustomConstraintsBeforeMerge(
+                unionModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count());
+        mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
+                .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+                .count());
+        mergeStatistics
+                .setContextualizationShareBeforeMerge(RecrationAnalyser.returnContextualizationShare(unionModel));
 
         logger.info(
                 "[union] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints",
@@ -184,40 +134,35 @@ public class Merger extends MergerHelper {
         return unionModel;
     }
 
-    public static RecreationModel inconsistencyCheck(final RecreationModel unionModel, final boolean validate) {
+    public static RecreationModel inconsistencyCheck(final RecreationModel unionModel,
+            final MergeStatistics mergeStatistics) {
         logger.info(
                 "[inconsistencyCheck] start looping {} constraints in union model (excluding feature tree and custom constraints)",
                 unionModel.getConstraints().stream()
                         .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint()).count());
 
-        long solutions = 0;
-
-        if (validate) {
-            solutions = Analyser.returnNumberOfSolutions(unionModel);
-        }
-
-        long decontextualizeCounter = 0;
-        long contextualizeCounter = 0;
         final RecreationModel CKB = new RecreationModel(Region.MERGED);
+        RecreationModel testingModel = null;
+
+        mergeStatistics.startTimerInconsistencyCheck();
 
         // Copy all features and root feature from union model to merged model
         CKB.getFeatures().putAll(unionModel.getFeatures());
         CKB.setRootFeature(unionModel.getRootFeature());
 
-        RecreationModel testingModel = null;
-        if (mergeStatistics != null) {
-            mergeStatistics.startTimerInconsistencyCheck();
-        }
-
         // loop over every contextualized constraint (line 6 in pseudocode)
         Iterator<AbstractConstraint> iterator = unionModel.getConstraints().iterator();
         while (iterator.hasNext()) {
+            mergeStatistics.incrementInconsistencyCheckCounter();
+
             AbstractConstraint constraint = iterator.next();
             AbstractConstraint checkConstraint = constraint.copy();
             AbstractConstraint originalConstraint = constraint.copy();
             if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
                 CKB.addConstraint(originalConstraint);
                 iterator.remove();
+
+                mergeStatistics.incrementInconsistencyNotCheckedCounter();
                 logger.debug("\t[inconsistencyCheck] skip and add constraint {}",
                         originalConstraint.toString());
                 continue;
@@ -237,14 +182,16 @@ public class Merger extends MergerHelper {
                 // decontextualize constraint and add to merged model (line 8 in pseudocode)
                 originalConstraint.disableContextualize();
                 CKB.addConstraint(originalConstraint);
-                decontextualizeCounter++;
-                logger.debug("\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
+
+                mergeStatistics.incrementInconsistencyNonContextualizedCounter();
+                logger.debug("\n\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
                         originalConstraint.toString());
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
                 CKB.addConstraint(originalConstraint);
-                contextualizeCounter++;
-                logger.debug("\t[inconsistencyCheck] consistent, add contextualized constraint {}",
+
+                mergeStatistics.incrementInconsistencyContextualizedCounter();
+                logger.debug("\n\t[inconsistencyCheck] consistent, add contextualized constraint {}",
                         originalConstraint.toString());
             }
 
@@ -252,21 +199,13 @@ public class Merger extends MergerHelper {
             iterator.remove();
         }
 
-        if (mergeStatistics != null) {
-            mergeStatistics.stopTimerInconsistencyCheck();
-            mergeStatistics.setInconsistencyContextualizedCounter(contextualizeCounter);
-            mergeStatistics.setInconsistencyNonContextualizedCounter(decontextualizeCounter);
-        }
-
-        if (validate && (solutions != Analyser.returnNumberOfSolutions(CKB))) {
-            throw new RuntimeException(
-                    "Solution space of merged model after inconsistency check should be the same as the solution space of the union model");
-        }
+        mergeStatistics.stopTimerInconsistencyCheck();
 
         logger.info(
                 "[inconsistencyCheck] added {} decontextualized, {} contextualized and {} not checked constraints to merged model",
-                decontextualizeCounter, contextualizeCounter,
-                CKB.getConstraints().size() - decontextualizeCounter - contextualizeCounter);
+                mergeStatistics.getInconsistencyNonContextualizedCounter(),
+                mergeStatistics.getInconsistencyContextualizedCounter(),
+                mergeStatistics.getInconsistencyNotCheckedCounter());
         logger.info("[inconsistencyCheck] finished with {} features and {} constraints",
                 CKB.getFeatures().size(), CKB.getConstraints().size());
         logger.info("");
@@ -274,30 +213,21 @@ public class Merger extends MergerHelper {
         return CKB;
     }
 
-    public static RecreationModel cleanup(final RecreationModel mergedModel, final boolean validate) {
+    public static RecreationModel cleanup(final RecreationModel mergedModel, final MergeStatistics mergeStatistics) {
         logger.info(
                 "[cleanup] start looping {} constraints in merged model (excluding feature tree and custom constraints)",
                 mergedModel.getConstraints().stream()
                         .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint()).count());
 
-        long solutions = 0;
-        long deletionCounter = 0;
-        long customAndFeatureTreeConstraintsCounter = 0;
-
-        if (validate) {
-            solutions = Analyser.returnNumberOfSolutions(mergedModel);
-        }
-
-        if (mergeStatistics != null) {
-            mergeStatistics.startTimerCleanup();
-        }
+        mergeStatistics.startTimerCleanup();
 
         Iterator<AbstractConstraint> iterator = mergedModel.getConstraints().iterator();
         while (iterator.hasNext()) {
+            mergeStatistics.incrementCleanupCounter();
             AbstractConstraint constraint = iterator.next();
 
             if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
-                customAndFeatureTreeConstraintsCounter++;
+                mergeStatistics.incrementCleanupNotCheckedCounter();
                 continue;
             }
 
@@ -306,40 +236,35 @@ public class Merger extends MergerHelper {
             if (isInconsistent(mergedModel)) {
                 iterator.remove();
                 constraint.disableNegation();
-                deletionCounter++;
+                mergeStatistics.incrementCleanupRemovedCounter();
+                System.out.print(" - ");
                 logger.trace("\t[cleanup] inconsistent, remove constraint {}", constraint.toString());
             } else {
                 constraint.disableNegation();
+                mergeStatistics.incrementCleanupKeptAsIsCounter();
+                System.out.print(" + ");
                 logger.trace("\t[cleanup] consistent, keep unnegated constraint {}", constraint.toString());
             }
-
-            System.out.print(".");
         }
 
         System.out.print("\n");
 
-        if (mergeStatistics != null) {
-            mergeStatistics.stopTimerCleanup();
-            mergeStatistics.setCleanupRemovedCounter(deletionCounter);
-            mergeStatistics.setNumberOfCrossTreeConstraintsAfterMerge(mergedModel.getConstraints().stream()
-                    .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
-                    .count());
-            mergeStatistics.setContextualizationShareAfterMerge(
-                    RecrationAnalyser.returnContextualizationShare(mergedModel));
-        }
-
-        if (validate && (solutions != Analyser.returnNumberOfSolutions(mergedModel))) {
-            throw new RuntimeException(
-                    "Solution space of merged model after cleanup (" +
-                            Analyser.returnNumberOfSolutions(mergedModel)
-                            +
-                            ") should be the same as the solution space of the merged model before cleanup ("
-                            + solutions + ")");
-        }
-
-        logger.info("[cleanup] removed {} constraints", deletionCounter);
+        mergeStatistics.stopTimerCleanup();
+        mergeStatistics.setNumberOfConstraintsAfterMerge(mergedModel.getConstraints().size());
+        mergeStatistics.setNumberOfFeatureTreeConstraintsAfterMerge(
+                mergedModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count());
+        mergeStatistics.setNumberOfCustomConstraintsAfterMerge(
+                mergedModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count());
+        mergeStatistics.setNumberOfCrossTreeConstraintsAfterMerge(mergedModel.getConstraints().stream()
+                .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+                .count());
+        mergeStatistics
+                .setContextualizationShareAfterMerge(RecrationAnalyser.returnContextualizationShare(mergedModel));
+                mergeStatistics.setNumberOfFeatures(mergedModel.getFeatures().size());
+        
+        logger.info("[cleanup] removed {} constraints", mergeStatistics.getCleanupRemovedCounter());
         logger.info("[cleanup] kept {} custom and feature tree constraints without checking",
-                customAndFeatureTreeConstraintsCounter);
+                mergeStatistics.getCleanupNotCheckedCounter());
         logger.info("[cleanup] finished with {} features and {} constraints",
                 mergedModel.getFeatures().size(),
                 mergedModel.getConstraints().size());
@@ -355,104 +280,78 @@ public class Merger extends MergerHelper {
         constraintToNegate.doNegate();
         testingModel.addConstraint(constraintToNegate);
 
-        if (mergeStatistics != null) {
-            mergeStatistics.incrementInconsistencyCheckCounter();
-        }
-
         return !Analyser.isConsistent(testingModel);
     }
 
     private static boolean isInconsistent(final RecreationModel testingModel) {
-        if (mergeStatistics != null) {
-            mergeStatistics.incrementCleanupCounter();
-        }
         return !Analyser.isConsistent(testingModel);
     }
 
-    public static RecreationModel cleanup(final RecreationModel mergedModel) {
-        return cleanup(mergedModel, Boolean.FALSE);
-    }
-
-    public static RecreationModel inconsistencyCheck(final RecreationModel unionModel) {
-        return inconsistencyCheck(unionModel, Boolean.FALSE);
-    }
-
-    public static RecreationModel union(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB) {
-        return union(modelToMergeA, modelToMergeB, Boolean.FALSE);
-    }
-
-    public static RecreationModel fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB) {
-        return fullMerge(modelToMergeA, modelToMergeB, Boolean.FALSE);
-    }
-
-    public static RecreationModel unionMultiple(final RecreationModel... models) {
-        if (models == null || models.length < 2 || models.length > 9) {
-            throw new IllegalArgumentException("Number of models to union must be between 2 and 9");
-        }
-
-        StringBuilder regionStrings = new StringBuilder();
-        for (int i = 0; i < models.length; i++) {
-            regionStrings.append(models[i].getRegion().getRegionString());
-            if (i < models.length - 1) {
-                regionStrings.append(", ");
-            }
-        }
-        logger.info("[unionMultiple] with models from regions {}", regionStrings);
-
-        if (mergeStatistics != null) {
-            mergeStatistics.startTimerUnion();
-        }
-
-        final RecreationModel unionModel = new RecreationModel(Region.UNION);
-
-        // Add features from both models to union model's feature map
-        for (RecreationModel model : models) {
-            for (Feature feature : model.getFeatures().values()) {
-                if (!unionModel.getFeatures().containsKey(feature.getName())) {
-                    unionModel.getFeatures().put(feature.getName(), feature); // Use original feature
-                }
-            }
-        }
-
-        logger.debug("\t[unionMultiple] added {} unique features to union model", unionModel.getFeatures().size());
-
-        handleRootFeature(unionModel, models);
-
-        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser
-                .analyseSharedFeatures(models);
-        handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
-
-        for (RecreationModel model : models) {
-            for (AbstractConstraint constraint : model.getConstraints()) {
-                if (!constraint.isCustomConstraint()) {
-                    unionModel.addConstraint(constraint);
-                }
-            }
-        }
-
-        removeDuplicateContextualizedGroupConstraints(unionModel);
-        splitFeaturesWithMultipleParents(unionModel);
-
-        if (mergeStatistics != null) {
-            mergeStatistics.stopTimerUnion();
-            mergeStatistics.setContextualizationShareBeforeMerge(
-                    RecrationAnalyser.returnContextualizationShare(unionModel));
-            mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
-                    .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
-                    .count());
-        }
-
-        logger.info(
-                "[unionMultiple] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints",
-                unionModel.getFeatures().size(),
-                unionModel.getConstraints().size(),
-                unionModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count(),
-                unionModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count(),
-                unionModel.getConstraints().stream()
-                        .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
-                        .count());
-        logger.info("");
-
-        return unionModel;
-    }
+    /*
+     * public static RecreationModel unionMultiple(final RecreationModel... models)
+     * {
+     * if (models == null || models.length < 2 || models.length > 9) {
+     * throw new
+     * IllegalArgumentException("Number of models to union must be between 2 and 9"
+     * );
+     * }
+     * 
+     * StringBuilder regionStrings = new StringBuilder();
+     * for (int i = 0; i < models.length; i++) {
+     * regionStrings.append(models[i].getRegion().getRegionString());
+     * if (i < models.length - 1) {
+     * regionStrings.append(", ");
+     * }
+     * }
+     * logger.info("[unionMultiple] with models from regions {}", regionStrings);
+     * 
+     * final RecreationModel unionModel = new RecreationModel(Region.UNION);
+     * 
+     * // Add features from both models to union model's feature map
+     * for (RecreationModel model : models) {
+     * for (Feature feature : model.getFeatures().values()) {
+     * if (!unionModel.getFeatures().containsKey(feature.getName())) {
+     * unionModel.getFeatures().put(feature.getName(), feature); // Use original
+     * feature
+     * }
+     * }
+     * }
+     * 
+     * logger.debug("\t[unionMultiple] added {} unique features to union model",
+     * unionModel.getFeatures().size());
+     * 
+     * handleRootFeature(unionModel, models);
+     * 
+     * Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser
+     * .analyseSharedFeatures(models);
+     * handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
+     * 
+     * for (RecreationModel model : models) {
+     * for (AbstractConstraint constraint : model.getConstraints()) {
+     * if (!constraint.isCustomConstraint()) {
+     * unionModel.addConstraint(constraint);
+     * }
+     * }
+     * }
+     * 
+     * removeDuplicateContextualizedGroupConstraints(unionModel);
+     * splitFeaturesWithMultipleParents(unionModel);
+     * 
+     * logger.info(
+     * "[unionMultiple] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints"
+     * ,
+     * unionModel.getFeatures().size(),
+     * unionModel.getConstraints().size(),
+     * unionModel.getConstraints().stream().filter(c ->
+     * c.isFeatureTreeConstraint()).count(),
+     * unionModel.getConstraints().stream().filter(c ->
+     * c.isCustomConstraint()).count(),
+     * unionModel.getConstraints().stream()
+     * .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+     * .count());
+     * logger.info("");
+     * 
+     * return unionModel;
+     * }
+     */
 }

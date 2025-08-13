@@ -1,7 +1,7 @@
 package testcases;
 
 import util.UVLParser;
-import util.analyse.RecrationAnalyser;
+import util.analyse.impl.RecrationAnalyser;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 

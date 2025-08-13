@@ -228,6 +228,8 @@ public class ChocoTranslator {
             return createNotConstraintVar(nc, chocoModel);
         } else if (constraint instanceof BinaryConstraint bc) {
             return createBinaryConstraintVar(bc, chocoModel);
+        } else if (constraint instanceof GroupConstraint gc) {
+            return createGroupConstraintVar(gc, chocoModel, null);
         }
 
         throw new UnsupportedOperationException(

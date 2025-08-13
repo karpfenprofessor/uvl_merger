@@ -34,7 +34,7 @@ public class ValidatorTests {
             long solutionsCountA = Analyser.returnNumberOfSolutions(modelA);
             long solutionsCountB = Analyser.returnNumberOfSolutions(modelB);
 
-            RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
+            RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
             long solutionsCountMerged = Analyser.returnNumberOfSolutions(mergedModel);
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
@@ -61,7 +61,7 @@ public class ValidatorTests {
             long solutionsCountA = Analyser.returnNumberOfSolutions(modelA);
             long solutionsCountB = Analyser.returnNumberOfSolutions(modelB);
 
-            RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
+            RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
             long solutionsCountMerged = Analyser.returnNumberOfSolutions(mergedModel);
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
@@ -91,7 +91,7 @@ public class ValidatorTests {
             long solutionsCountA = Analyser.returnNumberOfSolutions(modelA);
             long solutionsCountB = Analyser.returnNumberOfSolutions(modelB);
 
-            RecreationModel mergedModel = Merger.fullMerge(modelA, modelB);
+            RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
             long solutionsCountMerged = Analyser.returnNumberOfSolutions(mergedModel);
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);

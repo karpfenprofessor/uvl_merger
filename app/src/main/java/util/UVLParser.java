@@ -56,7 +56,7 @@ public class UVLParser {
         UVLJavaParser parser = new UVLJavaParser(tokenStream);
         UVLJavaParser.FeatureModelContext featureContext = parser.featureModel();
 
-        RecreationModel model = new RecreationModel(region);
+        RecreationModel model = new RecreationModel(region, filePathString);
         parseFeatures(featureContext, model);
         parseConstraints(featureContext.constraints(), model);
         logger.info("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString() 

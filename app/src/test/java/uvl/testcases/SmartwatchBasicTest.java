@@ -7,6 +7,7 @@ import util.Merger;
 import util.UVLParser;
 import util.Validator;
 import util.analyse.Analyser;
+import util.analyse.statistics.MergeStatistics;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
@@ -134,20 +135,20 @@ public class SmartwatchBasicTest {
                         long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions;
 
                         // Union the models
-                        RecreationModel unionModel = Merger.union(modelA, modelB);
+                        RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
 
                         // Verify the solution count after union
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(unionModel),
                                         "Solution count mismatch after union of " + testCaseA.filename + " and "
                                                         + testCaseB.filename);
 
-                        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
+                        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                         "Solution count mismatch after inconsistencyCheck of " + testCaseA.filename
                                                         + " and "
                                                         + testCaseB.filename);
 
-                        mergedModel = Merger.cleanup(mergedModel);
+                        mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                         "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                                                         + testCaseB.filename);
@@ -190,7 +191,7 @@ public class SmartwatchBasicTest {
                                                 MIBAND_BASE_MODELS[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB);
+                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -230,7 +231,7 @@ public class SmartwatchBasicTest {
                                                 MIBAND_REALIZED_MODELS[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB);
+                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -276,7 +277,7 @@ public class SmartwatchBasicTest {
                                                 MIBAND_BASE_MODELS[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB);
+                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -285,14 +286,14 @@ public class SmartwatchBasicTest {
                                                                 + MIBAND_BASE_MODELS[i].filename + " and "
                                                                 + MIBAND_BASE_MODELS[i + 1].filename);
 
-                                RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
+                                RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after inconsistencyCheck of "
                                                                 + MIBAND_BASE_MODELS[i].filename
                                                                 + " and "
                                                                 + MIBAND_BASE_MODELS[i + 1].filename);
 
-                                mergedModel = Merger.cleanup(mergedModel);
+                                mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after cleanup of "
                                                                 + MIBAND_BASE_MODELS[i].filename + " and "
@@ -331,7 +332,7 @@ public class SmartwatchBasicTest {
                                                 MIBAND_REALIZED_MODELS[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB);
+                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -340,14 +341,14 @@ public class SmartwatchBasicTest {
                                                                 + MIBAND_REALIZED_MODELS[i].filename + " and "
                                                                 + MIBAND_REALIZED_MODELS[i + 1].filename);
 
-                                RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
+                                RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after inconsistencyCheck of "
                                                                 + MIBAND_REALIZED_MODELS[i].filename
                                                                 + " and "
                                                                 + MIBAND_REALIZED_MODELS[i + 1].filename);
 
-                                mergedModel = Merger.cleanup(mergedModel);
+                                mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after cleanup of "
                                                                 + MIBAND_REALIZED_MODELS[i].filename + " and "
@@ -357,140 +358,6 @@ public class SmartwatchBasicTest {
                         }
                 } catch (Exception e) {
                         throw new AssertionError("testUnionOfSmartwatchModels failed: " + e.getMessage(), e);
-                }
-        }
-
-        // @Test
-        public void testMergeOfMultipleSmartwatchModels() {
-                try {
-                        RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[4].filename, Region.A);
-                        RecreationModel modelB = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[5].filename, Region.B);
-                        RecreationModel modelC = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[6].filename, Region.C);
-                        RecreationModel modelD = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[7].filename, Region.D);
-                        RecreationModel modelE = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[8].filename, Region.E);
-
-                        assertEquals(MIBAND_BASE_MODELS[4].expectedSolutions, Analyser.returnNumberOfSolutions(modelA),
-                                        "Solution count mismatch for " + MIBAND_BASE_MODELS[4].filename);
-                        assertEquals(MIBAND_BASE_MODELS[5].expectedSolutions, Analyser.returnNumberOfSolutions(modelB),
-                                        "Solution count mismatch for " + MIBAND_BASE_MODELS[5].filename);
-                        assertEquals(MIBAND_BASE_MODELS[6].expectedSolutions, Analyser.returnNumberOfSolutions(modelC),
-                                        "Solution count mismatch for " + MIBAND_BASE_MODELS[6].filename);
-                        assertEquals(MIBAND_BASE_MODELS[7].expectedSolutions, Analyser.returnNumberOfSolutions(modelD),
-                                        "Solution count mismatch for " + MIBAND_BASE_MODELS[7].filename);
-                        assertEquals(MIBAND_BASE_MODELS[8].expectedSolutions, Analyser.returnNumberOfSolutions(modelE),
-                                        "Solution count mismatch for " + MIBAND_BASE_MODELS[8].filename);
-
-                        modelA.contextualizeAllConstraints();
-                        modelB.contextualizeAllConstraints();
-                        modelC.contextualizeAllConstraints();
-                        modelD.contextualizeAllConstraints();
-                        modelE.contextualizeAllConstraints();
-
-                        assertEquals(MIBAND_BASE_MODELS[4].expectedSolutions, Analyser.returnNumberOfSolutions(modelA),
-                                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[4].filename);
-                        assertEquals(MIBAND_BASE_MODELS[5].expectedSolutions, Analyser.returnNumberOfSolutions(modelB),
-                                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[5].filename);
-                        assertEquals(MIBAND_BASE_MODELS[6].expectedSolutions, Analyser.returnNumberOfSolutions(modelC),
-                                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[6].filename);
-                        assertEquals(MIBAND_BASE_MODELS[7].expectedSolutions, Analyser.returnNumberOfSolutions(modelD),
-                                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[7].filename);
-                        assertEquals(MIBAND_BASE_MODELS[8].expectedSolutions, Analyser.returnNumberOfSolutions(modelE),
-                                        "Solution count mismatch for contextualized " + MIBAND_BASE_MODELS[8].filename);
-
-                        long expectedSolutions = MIBAND_BASE_MODELS[4].expectedSolutions +
-                                        MIBAND_BASE_MODELS[5].expectedSolutions +
-                                        MIBAND_BASE_MODELS[6].expectedSolutions +
-                                        MIBAND_BASE_MODELS[7].expectedSolutions +
-                                        MIBAND_BASE_MODELS[8].expectedSolutions;
-
-                        // Union the models
-                        RecreationModel unionModel = Merger.unionMultiple(modelA, modelB, modelC, modelD, modelE);
-
-                        // Verify the solution count after union
-                        long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
-                        assertEquals(expectedSolutions, actualSolutions,
-                                        "Solution count mismatch after unionMultiple of Smartwatch Models 4, 5, 6, 7, 8");
-
-                        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel);
-                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
-                                        "Solution count mismatch after inconsistencyCheck of Smartwatch Models 4, 5, 6, 7, 8");
-
-                        mergedModel = Merger.cleanup(mergedModel);
-                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
-                                        "Solution count mismatch after cleanup of Smartwatch Models 4, 5, 6, 7, 8");
-
-                        modelA = UVLParser.parseUVLFile(MIBAND_REALIZED_MODELS[4].filename, Region.A);
-                        modelB = UVLParser.parseUVLFile(MIBAND_REALIZED_MODELS[5].filename, Region.B);
-                        modelC = UVLParser.parseUVLFile(MIBAND_REALIZED_MODELS[6].filename, Region.C);
-                        modelD = UVLParser.parseUVLFile(MIBAND_REALIZED_MODELS[7].filename, Region.D);
-                        modelE = UVLParser.parseUVLFile(MIBAND_REALIZED_MODELS[8].filename, Region.E);
-
-                        assertEquals(MIBAND_REALIZED_MODELS[4].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelA),
-                                        "Solution count mismatch for " + MIBAND_REALIZED_MODELS[4].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[5].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelB),
-                                        "Solution count mismatch for " + MIBAND_REALIZED_MODELS[5].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[6].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelC),
-                                        "Solution count mismatch for " + MIBAND_REALIZED_MODELS[6].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[7].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelD),
-                                        "Solution count mismatch for " + MIBAND_REALIZED_MODELS[7].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[8].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelE),
-                                        "Solution count mismatch for " + MIBAND_REALIZED_MODELS[8].filename);
-
-                        modelA.contextualizeAllConstraints();
-                        modelB.contextualizeAllConstraints();
-                        modelC.contextualizeAllConstraints();
-                        modelD.contextualizeAllConstraints();
-                        modelE.contextualizeAllConstraints();
-
-                        assertEquals(MIBAND_REALIZED_MODELS[4].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelA),
-                                        "Solution count mismatch for contextualized "
-                                                        + MIBAND_REALIZED_MODELS[4].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[5].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelB),
-                                        "Solution count mismatch for contextualized "
-                                                        + MIBAND_REALIZED_MODELS[5].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[6].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelC),
-                                        "Solution count mismatch for contextualized "
-                                                        + MIBAND_REALIZED_MODELS[6].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[7].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelD),
-                                        "Solution count mismatch for contextualized "
-                                                        + MIBAND_REALIZED_MODELS[7].filename);
-                        assertEquals(MIBAND_REALIZED_MODELS[8].expectedSolutions,
-                                        Analyser.returnNumberOfSolutions(modelE),
-                                        "Solution count mismatch for contextualized "
-                                                        + MIBAND_REALIZED_MODELS[8].filename);
-
-                        expectedSolutions = MIBAND_REALIZED_MODELS[4].expectedSolutions +
-                                        MIBAND_REALIZED_MODELS[5].expectedSolutions +
-                                        MIBAND_REALIZED_MODELS[6].expectedSolutions +
-                                        MIBAND_REALIZED_MODELS[7].expectedSolutions +
-                                        MIBAND_REALIZED_MODELS[8].expectedSolutions;
-
-                        // Union the models
-                        unionModel = Merger.unionMultiple(modelA, modelB, modelC, modelD, modelE);
-
-                        // Verify the solution count after union
-                        actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
-                        assertEquals(expectedSolutions, actualSolutions,
-                                        "Solution count mismatch after unionMultiple of Smartwatch Realized Models 4, 5, 6, 7, 8");
-
-                        mergedModel = Merger.inconsistencyCheck(unionModel);
-                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
-                                        "Solution count mismatch after inconsistencyCheck of Smartwatch Realized Models 4, 5, 6, 7, 8");
-
-                        mergedModel = Merger.cleanup(mergedModel);
-                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
-                                        "Solution count mismatch after cleanup of Smartwatch Realized Models 4, 5, 6, 7, 8");
-                } catch (Exception e) {
-                        throw new AssertionError("testMergeOfMultipleSmartwatchModels failed: " + e.getMessage(), e);
                 }
         }
 }

@@ -1,4 +1,4 @@
-package util.analyse;
+package util.analyse.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
