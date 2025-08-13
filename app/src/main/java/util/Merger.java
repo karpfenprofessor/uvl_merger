@@ -11,7 +11,7 @@ import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.feature.Feature;
 import util.analyse.Analyser;
-import util.analyse.impl.RecrationAnalyser;
+import util.analyse.impl.RecreationAnalyser;
 import util.analyse.statistics.MergeStatistics;
 import util.helper.MergerHelper;
 
@@ -60,7 +60,7 @@ public class Merger extends MergerHelper {
         cleanup(mergedModel, mergeStatistics);
 
         mergeStatistics.setValidate(Validator.validateMerge(mergedModel, modelToMergeA, modelToMergeB));
-        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser.analyseSharedFeatures(modelToMergeA, modelToMergeB);
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser.analyseSharedFeatures(modelToMergeA, modelToMergeB);
         mergeStatistics.setNumberOfUniqueFeaturesModelA(uniqueFeaturesPerModel.get(modelToMergeA) != null ? uniqueFeaturesPerModel.get(modelToMergeA).size() : 0);
         mergeStatistics.setNumberOfUniqueFeaturesModelB(uniqueFeaturesPerModel.get(modelToMergeB) != null ? uniqueFeaturesPerModel.get(modelToMergeB).size() : 0);
 
@@ -74,7 +74,7 @@ public class Merger extends MergerHelper {
                 modelB.getRegion().getRegionString());
 
         final RecreationModel unionModel = new RecreationModel(Region.UNION);
-        RecrationAnalyser.analyseSharedFeatures(modelA, modelB);
+        RecreationAnalyser.analyseSharedFeatures(modelA, modelB);
 
         mergeStatistics.startTimerUnion();
 
@@ -118,7 +118,7 @@ public class Merger extends MergerHelper {
                 .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
                 .count());
         mergeStatistics
-                .setContextualizationShareBeforeMerge(RecrationAnalyser.returnContextualizationShare(unionModel));
+                .setContextualizationShareBeforeMerge(RecreationAnalyser.returnContextualizationShare(unionModel));
 
         logger.info(
                 "[union] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints",
@@ -259,7 +259,7 @@ public class Merger extends MergerHelper {
                 .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
                 .count());
         mergeStatistics
-                .setContextualizationShareAfterMerge(RecrationAnalyser.returnContextualizationShare(mergedModel));
+                .setContextualizationShareAfterMerge(RecreationAnalyser.returnContextualizationShare(mergedModel));
                 mergeStatistics.setNumberOfFeatures(mergedModel.getFeatures().size());
         
         logger.info("[cleanup] removed {} constraints", mergeStatistics.getCleanupRemovedCounter());
@@ -322,7 +322,7 @@ public class Merger extends MergerHelper {
      * 
      * handleRootFeature(unionModel, models);
      * 
-     * Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecrationAnalyser
+     * Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
      * .analyseSharedFeatures(models);
      * handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
      * 

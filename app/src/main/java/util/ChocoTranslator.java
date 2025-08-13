@@ -99,38 +99,41 @@ public class ChocoTranslator {
 
     private static BoolVar createOrNegationConstraintVar(OrNegationConstraint onc, ChocoModel chocoModel) {
         Model model = chocoModel.getModel();
+
+        // Construct reified violation indicators: bad_i ≡ (¬c_i) or (region_i ∧ ¬c_i) if contextualized
         BoolVar[] reifiedVars = new BoolVar[onc.getConstraints().size()];
-        
-        // Handle each constraint with proper contextualization
+
         for (int i = 0; i < onc.getConstraints().size(); i++) {
             AbstractConstraint c = onc.getConstraints().get(i);
-            
+
             if (c.isContextualized()) {
-                // 1) Get the region variable
+                // Region-gated violation: active only if region is true
                 BoolVar regionVar = chocoModel.getFeature(
-                    Region.values()[c.getContextualizationValue()].getRegionString()
-                );
-                
-                // 2) Compute the BoolVar for "φ" (constraint body) with the correct regionVar
-                BoolVar φvar = createConstraintVar(c, chocoModel, regionVar);
-                
-                // 3) Build "negφ = ¬φvar" as a reified BoolVar
-                BoolVar negφ = model.boolVar("neg_" + φvar.getName());
-                model.arithm(φvar, "=", 0).reifyWith(negφ);
-                
-                // 4) Build "bad_i ≡ (regionVar ∧ negφ)"
-                BoolVar bad_i = model.and(regionVar, negφ).reify();
-                reifiedVars[i] = bad_i;
+                    Region.values()[c.getContextualizationValue()].getRegionString());
+
+                BoolVar phi = createConstraintVar(c, chocoModel, regionVar);
+
+                BoolVar notPhi = model.boolVar("neg_" + phi.getName());
+                model.arithm(phi, "=", 0).reifyWith(notPhi);
+
+                // bad_i ≡ regionVar ∧ ¬phi
+                reifiedVars[i] = model.and(regionVar, notPhi).reify();
             } else {
-                // If c is not contextualized, just negate it directly
-                BoolVar φvar = createConstraintVar(c, chocoModel, null);
-                reifiedVars[i] = model.boolNotView(φvar);
+                // Non-contextualized: violation is simply ¬phi
+                BoolVar phi = createConstraintVar(c, chocoModel, null);
+                BoolVar notPhi = model.boolVar("neg_" + phi.getName());
+                model.arithm(phi, "=", 0).reifyWith(notPhi);
+                reifiedVars[i] = notPhi;
             }
         }
-        
-        // OR them all together
-        BoolVar result = model.boolVar("orchunk");
-        model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(reifiedVars)));
+
+        // Equivalent encoding for big OR: sum(bad_i) >= 1
+        if (reifiedVars.length == 0) {
+            return model.boolVar(false);
+        }
+
+        BoolVar result = model.boolVar("notKBMerge");
+        model.sum(reifiedVars, ">=", 1).reifyWith(result);
         return result;
     }
 

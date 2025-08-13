@@ -29,7 +29,7 @@ The goal is to **merge two or more feature models** from the same domain, each t
 - **ANTLR + UVL Parser** – for parsing `.uvl` files and generating the feature tree
 - **Java 17** – for implementation
 - **Gradle** – for project setup and dependency management
-- **SLF4J / Logback** – for logging
+- **Log4J2** – for logging
 
 ---
 

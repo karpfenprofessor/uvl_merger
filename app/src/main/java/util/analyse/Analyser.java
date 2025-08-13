@@ -4,7 +4,7 @@ import model.choco.ChocoModel;
 import model.recreate.RecreationModel;
 import util.ChocoTranslator;
 import util.analyse.impl.ChocoAnalyser;
-import util.analyse.impl.RecrationAnalyser;
+import util.analyse.impl.RecreationAnalyser;
 
 /*
  * Utility class for feature model operations.
@@ -32,14 +32,14 @@ public class Analyser {
     }
 
     public static void printFeatures(final RecreationModel model) {
-        RecrationAnalyser.printFeatures(model);
+        RecreationAnalyser.printFeatures(model);
     }
     public static void printFeatures(final ChocoModel chocoModel) {
         ChocoAnalyser.printFeatures(chocoModel);
     }
 
     public static void printConstraints(final RecreationModel model) {
-        RecrationAnalyser.printConstraints(model);
+        RecreationAnalyser.printConstraints(model);
     }
     public static void printConstraints(final ChocoModel chocoModel) {
         ChocoAnalyser.printConstraints(chocoModel);

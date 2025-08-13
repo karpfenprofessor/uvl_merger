@@ -24,8 +24,8 @@ import java.util.HashMap;
  * This class provides direct analysis capabilities for RecreationModel instances, which are
  * the working representations of feature models in our merging process. 
  */
-public class RecrationAnalyser {
-    private static final Logger logger = LogManager.getLogger(RecrationAnalyser.class);
+public class RecreationAnalyser {
+    private static final Logger logger = LogManager.getLogger(RecreationAnalyser.class);
 
     public static float returnContextualizationShare(final RecreationModel model) {
         long contextualizedSize = model.getConstraints().stream()
