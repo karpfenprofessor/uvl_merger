@@ -12,14 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
-
 import model.choco.ChocoModel;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
-import model.recreate.constraints.GroupConstraint;
 import model.recreate.constraints.NotConstraint;
 import model.recreate.constraints.OrNegationConstraint;
 import model.recreate.feature.Feature;
@@ -64,18 +61,6 @@ import util.analyse.Analyser;
 public class Validator {
 
     private static final Logger logger = LogManager.getLogger(Validator.class);
-
-    /** deep-copy while preserving only contextualization & feature-tree flags */
-    private static AbstractConstraint cloneWithFlags(AbstractConstraint c) {
-        AbstractConstraint cp = c.copy();
-        // copy only the guard/contextualization bits
-        cp.setContextualized(c.isContextualized());
-        cp.setContextualizationValue(c.getContextualizationValue());
-        // copy other metadata—but do NOT copy isNegation!
-        cp.setCustomConstraint(c.isCustomConstraint());
-        cp.setFeatureTreeConstraint(c.isFeatureTreeConstraint());
-        return cp;
-    }
 
     /**
      * Validates that a merged knowledge base correctly represents the union of two
@@ -186,86 +171,7 @@ public class Validator {
         }
     }
 
-    /**
-     * Helper method for Test Case 2 to check if KBMerge excludes valid
-     * configurations from a specific KB.
-     * 
-     * @param mergedKB             the merged knowledge base
-     * @param originalKB           the original knowledge base to check against
-     * @param originalKBNotTesting the other original knowledge base (for region
-     *                             exclusion)
-     * @return true if there are missing solutions, false otherwise
-     */
-    private static boolean checkMissingSolutions(RecreationModel mergedKB, RecreationModel originalKB,
-            RecreationModel originalKBNotTesting) {
-        logger.info("\t[checkMissingSolutions] Checking for missing solutions in {}", originalKB.getRegionString());
-
-        // Create a test model with the region set to TESTING
-        RecreationModel testModel = new RecreationModel(Region.TESTING);
-
-        // Add all features from the original model
-        testModel.getFeatures().putAll(mergedKB.getFeatures());
-        testModel.setRootFeature(mergedKB.getRootFeature());
-
-        // FORCE the region to be true
-        String regionName = originalKB.getRegion().getRegionString();
-        FeatureReferenceConstraint fRef = new FeatureReferenceConstraint();
-        fRef.setFeature(testModel.getFeatures().get(regionName));
-        testModel.addConstraint(fRef);
-
-        regionName = originalKBNotTesting.getRegion().getRegionString();
-        NotConstraint notConstraint = new NotConstraint();
-        fRef = new FeatureReferenceConstraint();
-        fRef.setFeature(testModel.getFeatures().get(regionName));
-        notConstraint.setInner(fRef);
-        testModel.addConstraint(notConstraint);
-
-        // Add all constraints from the original KB
-        for (AbstractConstraint constraint : originalKB.getConstraints()) {
-            testModel.addConstraint(constraint.copy());
-        }
-
-        // every feature that exists in KBMerge
-        // but NOT in the region-specific KB we are currently testing.
-        Set<String> forbidden = new HashSet<>(mergedKB.getFeatures().keySet()); // all merged vars
-        forbidden.removeAll(originalKB.getFeatures().keySet()); // keep only unknowns
-        forbidden.remove(originalKB.getRegion().getRegionString()); // never forbid A or B
-        forbidden.remove(originalKBNotTesting.getRegion().getRegionString());
-
-        // Create constraints to force unique features from the other model to be false
-        for (String uniqueFeatureName : forbidden) {
-            Feature uniqueFeature = testModel.getFeatures().get(uniqueFeatureName);
-            if (uniqueFeature != null) {
-                NotConstraint forceFalseConstraint = new NotConstraint();
-                FeatureReferenceConstraint featureRef = new FeatureReferenceConstraint(uniqueFeature);
-                forceFalseConstraint.setInner(featureRef);
-                testModel.addConstraint(forceFalseConstraint);
-                logger.trace("\t[checkMissingSolutions] forcing unique feature {} from {} to false",
-                        uniqueFeatureName, originalKBNotTesting.getRegion().getRegionString());
-            }
-        }
-
-        // For Test Case 2: we need "at least one relevant constraint from merged KB
-        // must be violated"
-        // This requires OR logic, so we use OrNegationConstraint
-        testModel.addConstraint(new OrNegationConstraint(mergedKB.getConstraints()));
-
-        // Convert to Choco model and check satisfiability
-        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
-        boolean isSatisfiable = Analyser.isConsistent(chocoModel);
-
-        if (isSatisfiable) {
-            logger.warn(
-                    "\t[checkMissingSolutions] Test Case 2 for {} FAILED: KBMerge excludes valid configurations (merge too strict)",
-                    originalKB.getRegionString());
-            return true;
-        } else {
-            logger.info(
-                    "\t[checkMissingSolutions] Test Case 2 for {} PASSED: KBMerge includes all valid configurations",
-                    originalKB.getRegionString());
-            return false;
-        }
-    }
+    
 
     /**
      * Helper method for Test Case 1.
@@ -454,5 +360,86 @@ public class Validator {
         }
 
         return witness.get();
+    }
+
+    /**
+     * Helper method for Test Case 2 to check if KBMerge excludes valid
+     * configurations from a specific KB.
+     * 
+     * @param mergedKB             the merged knowledge base
+     * @param originalKB           the original knowledge base to check against
+     * @param originalKBNotTesting the other original knowledge base (for region
+     *                             exclusion)
+     * @return true if there are missing solutions, false otherwise
+     */
+    private static boolean checkMissingSolutions(RecreationModel mergedKB, RecreationModel originalKB,
+            RecreationModel originalKBNotTesting) {
+        logger.info("\t[checkMissingSolutions] Checking for missing solutions in {}", originalKB.getRegionString());
+
+        // Create a test model with the region set to TESTING
+        RecreationModel testModel = new RecreationModel(Region.TESTING);
+
+        // Add all features from the original model
+        testModel.getFeatures().putAll(mergedKB.getFeatures());
+        testModel.setRootFeature(mergedKB.getRootFeature());
+
+        // FORCE the region to be true
+        String regionName = originalKB.getRegion().getRegionString();
+        FeatureReferenceConstraint fRef = new FeatureReferenceConstraint();
+        fRef.setFeature(testModel.getFeatures().get(regionName));
+        testModel.addConstraint(fRef);
+
+        regionName = originalKBNotTesting.getRegion().getRegionString();
+        NotConstraint notConstraint = new NotConstraint();
+        fRef = new FeatureReferenceConstraint();
+        fRef.setFeature(testModel.getFeatures().get(regionName));
+        notConstraint.setInner(fRef);
+        testModel.addConstraint(notConstraint);
+
+        // Add all constraints from the original KB
+        for (AbstractConstraint constraint : originalKB.getConstraints()) {
+            testModel.addConstraint(constraint.copy());
+        }
+
+        // every feature that exists in KBMerge
+        // but NOT in the region-specific KB we are currently testing.
+        Set<String> forbidden = new HashSet<>(mergedKB.getFeatures().keySet()); // all merged vars
+        forbidden.removeAll(originalKB.getFeatures().keySet()); // keep only unknowns
+        forbidden.remove(originalKB.getRegion().getRegionString()); // never forbid A or B
+        forbidden.remove(originalKBNotTesting.getRegion().getRegionString());
+
+        // Create constraints to force unique features from the other model to be false
+        for (String uniqueFeatureName : forbidden) {
+            Feature uniqueFeature = testModel.getFeatures().get(uniqueFeatureName);
+            if (uniqueFeature != null) {
+                NotConstraint forceFalseConstraint = new NotConstraint();
+                FeatureReferenceConstraint featureRef = new FeatureReferenceConstraint(uniqueFeature);
+                forceFalseConstraint.setInner(featureRef);
+                testModel.addConstraint(forceFalseConstraint);
+                logger.trace("\t[checkMissingSolutions] forcing unique feature {} from {} to false",
+                        uniqueFeatureName, originalKBNotTesting.getRegion().getRegionString());
+            }
+        }
+
+        // For Test Case 2: we need "at least one relevant constraint from merged KB
+        // must be violated"
+        // This requires OR logic, so we use OrNegationConstraint
+        testModel.addConstraint(new OrNegationConstraint(mergedKB.getConstraints()));
+
+        // Convert to Choco model and check satisfiability
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
+        boolean isSatisfiable = Analyser.isConsistent(chocoModel);
+
+        if (isSatisfiable) {
+            logger.warn(
+                    "\t[checkMissingSolutions] Test Case 2 for {} FAILED: KBMerge excludes valid configurations (merge too strict)",
+                    originalKB.getRegionString());
+            return true;
+        } else {
+            logger.info(
+                    "\t[checkMissingSolutions] Test Case 2 for {} PASSED: KBMerge includes all valid configurations",
+                    originalKB.getRegionString());
+            return false;
+        }
     }
 }

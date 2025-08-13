@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import util.Merger;
 import util.UVLParser;
-import util.Validator;
 import util.analyse.Analyser;
 import model.choco.Region;
 import model.recreate.RecreationModel;

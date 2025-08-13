@@ -54,9 +54,9 @@ public class ChocoAnalyser {
             model.getSolver().limitTime(30000);
         }
         
-        long startTime = System.currentTimeMillis();
+        //long startTime = System.currentTimeMillis();
         boolean solved = model.getSolver().solve();
-        long endTime = System.currentTimeMillis();
+        //long endTime = System.currentTimeMillis();
         
         // Stop the monitoring thread
         monitorThread.interrupt();
