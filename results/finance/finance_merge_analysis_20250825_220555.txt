@@ -1,0 +1,1847 @@
+FINANCE MODEL MERGE ANALYSIS RESULTS
+===================================
+Generated: 2025-08-25 22:05:55
+Total merge operations: 36
+
+MERGE OPERATION 1/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_3.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 712
+Shared features: 704
+Features exclusive to Model A: 0
+Features exclusive to Model B: 8
+Total unique features: 712
+Share ratio: 98,88%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics] Union operation duration:          7085700 ns (7,09 ms)
+	[statistics] Inconsistency check duration: 166336913000 ns (166336,91 ms)
+	[statistics] Cleanup duration:             126083891700 ns (126083,89 ms)
+	[statistics] Full merge duration:          292427890400 ns (292427,89 ms)
+	[statistics] Number of features in merged model: 715
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 9
+	[statistics] Number of constraints before merge: 2604
+	[statistics] Number of constraints after merge: 1442
+	[statistics] Number of inconsistency checks: 2604
+	[statistics]   -> contextualised: 15
+	[statistics]   -> non-contextualised: 2263
+	[statistics]   -> not checked: 326
+	[statistics] Number of cleanup checks: 2604
+	[statistics]   -> kept as is: 1116
+	[statistics]   -> removed as redundant: 1162
+	[statistics]   -> not checked: 326
+	[statistics] Feature-tree constraints before merge: 324
+	[statistics] Feature-tree constraints after merge: 324
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2278
+	[statistics] Cross-tree constraints after merge: 1116
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.01344086
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 2/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 711
+Shared features: 699
+Features exclusive to Model A: 5
+Features exclusive to Model B: 12
+Total unique features: 716
+Share ratio: 97,63%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics] Union operation duration:         10249400 ns (10,25 ms)
+	[statistics] Inconsistency check duration: 158091532700 ns (158091,53 ms)
+	[statistics] Cleanup duration:             133357281500 ns (133357,28 ms)
+	[statistics] Full merge duration:          291459063600 ns (291459,06 ms)
+	[statistics] Number of features in merged model: 727
+	[statistics]  -> unique features model A: 6
+	[statistics]  -> unique features model B: 13
+	[statistics] Number of constraints before merge: 2633
+	[statistics] Number of constraints after merge: 1511
+	[statistics] Number of inconsistency checks: 2633
+	[statistics]   -> contextualised: 22
+	[statistics]   -> non-contextualised: 2262
+	[statistics]   -> not checked: 349
+	[statistics] Number of cleanup checks: 2633
+	[statistics]   -> kept as is: 1162
+	[statistics]   -> removed as redundant: 1122
+	[statistics]   -> not checked: 349
+	[statistics] Feature-tree constraints before merge: 347
+	[statistics] Feature-tree constraints after merge: 347
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2284
+	[statistics] Cross-tree constraints after merge: 1162
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.018932875
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 3/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 716
+Shared features: 693
+Features exclusive to Model A: 11
+Features exclusive to Model B: 23
+Total unique features: 727
+Share ratio: 95,32%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics] Union operation duration:         14163900 ns (14,16 ms)
+	[statistics] Inconsistency check duration: 163685451300 ns (163685,45 ms)
+	[statistics] Cleanup duration:             150504228000 ns (150504,23 ms)
+	[statistics] Full merge duration:          314203843200 ns (314203,84 ms)
+	[statistics] Number of features in merged model: 750
+	[statistics]  -> unique features model A: 12
+	[statistics]  -> unique features model B: 24
+	[statistics] Number of constraints before merge: 2681
+	[statistics] Number of constraints after merge: 1566
+	[statistics] Number of inconsistency checks: 2681
+	[statistics]   -> contextualised: 34
+	[statistics]   -> non-contextualised: 2250
+	[statistics]   -> not checked: 397
+	[statistics] Number of cleanup checks: 2681
+	[statistics]   -> kept as is: 1169
+	[statistics]   -> removed as redundant: 1115
+	[statistics]   -> not checked: 397
+	[statistics] Feature-tree constraints before merge: 395
+	[statistics] Feature-tree constraints after merge: 395
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2284
+	[statistics] Cross-tree constraints after merge: 1169
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.029084688
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 4/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 712
+Shared features: 516
+Features exclusive to Model A: 188
+Features exclusive to Model B: 196
+Total unique features: 900
+Share ratio: 57,33%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics] Union operation duration:         57217300 ns (57,22 ms)
+	[statistics] Inconsistency check duration: 165545871000 ns (165545,87 ms)
+	[statistics] Cleanup duration:             163552985700 ns (163552,99 ms)
+	[statistics] Full merge duration:          329156074000 ns (329156,07 ms)
+	[statistics] Number of features in merged model: 941
+	[statistics]  -> unique features model A: 189
+	[statistics]  -> unique features model B: 197
+	[statistics] Number of constraints before merge: 2948
+	[statistics] Number of constraints after merge: 2333
+	[statistics] Number of inconsistency checks: 2948
+	[statistics]   -> contextualised: 209
+	[statistics]   -> non-contextualised: 1955
+	[statistics]   -> not checked: 784
+	[statistics] Number of cleanup checks: 2948
+	[statistics]   -> kept as is: 1549
+	[statistics]   -> removed as redundant: 615
+	[statistics]   -> not checked: 784
+	[statistics] Feature-tree constraints before merge: 782
+	[statistics] Feature-tree constraints after merge: 782
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2164
+	[statistics] Cross-tree constraints after merge: 1549
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.13492575
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 5/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 759
+Shared features: 508
+Features exclusive to Model A: 196
+Features exclusive to Model B: 251
+Total unique features: 955
+Share ratio: 53,19%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics] Union operation duration:         64091100 ns (64,09 ms)
+	[statistics] Inconsistency check duration: 172402481900 ns (172402,48 ms)
+	[statistics] Cleanup duration:             167144882000 ns (167144,88 ms)
+	[statistics] Full merge duration:          339611455000 ns (339611,46 ms)
+	[statistics] Number of features in merged model: 994
+	[statistics]  -> unique features model A: 197
+	[statistics]  -> unique features model B: 252
+	[statistics] Number of constraints before merge: 3031
+	[statistics] Number of constraints after merge: 2439
+	[statistics] Number of inconsistency checks: 3031
+	[statistics]   -> contextualised: 244
+	[statistics]   -> non-contextualised: 1926
+	[statistics]   -> not checked: 861
+	[statistics] Number of cleanup checks: 3031
+	[statistics]   -> kept as is: 1578
+	[statistics]   -> removed as redundant: 592
+	[statistics]   -> not checked: 861
+	[statistics] Feature-tree constraints before merge: 859
+	[statistics] Feature-tree constraints after merge: 859
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2170
+	[statistics] Cross-tree constraints after merge: 1578
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.15462612
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 6/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 771
+Shared features: 501
+Features exclusive to Model A: 203
+Features exclusive to Model B: 270
+Total unique features: 974
+Share ratio: 51,44%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics] Union operation duration:         68292100 ns (68,29 ms)
+	[statistics] Inconsistency check duration: 208286388000 ns (208286,39 ms)
+	[statistics] Cleanup duration:             205531770300 ns (205531,77 ms)
+	[statistics] Full merge duration:          413886450400 ns (413886,45 ms)
+	[statistics] Number of features in merged model: 1037
+	[statistics]  -> unique features model A: 204
+	[statistics]  -> unique features model B: 271
+	[statistics] Number of constraints before merge: 3166
+	[statistics] Number of constraints after merge: 2681
+	[statistics] Number of inconsistency checks: 3166
+	[statistics]   -> contextualised: 391
+	[statistics]   -> non-contextualised: 1825
+	[statistics]   -> not checked: 950
+	[statistics] Number of cleanup checks: 3166
+	[statistics]   -> kept as is: 1731
+	[statistics]   -> removed as redundant: 485
+	[statistics]   -> not checked: 950
+	[statistics] Feature-tree constraints before merge: 948
+	[statistics] Feature-tree constraints after merge: 948
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2216
+	[statistics] Cross-tree constraints after merge: 1731
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.225881
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 7/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 774
+Shared features: 494
+Features exclusive to Model A: 210
+Features exclusive to Model B: 280
+Total unique features: 984
+Share ratio: 50,20%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         77032800 ns (77,03 ms)
+	[statistics] Inconsistency check duration: 212847012300 ns (212847,01 ms)
+	[statistics] Cleanup duration:             222726138000 ns (222726,14 ms)
+	[statistics] Full merge duration:          435650183100 ns (435650,18 ms)
+	[statistics] Number of features in merged model: 1065
+	[statistics]  -> unique features model A: 211
+	[statistics]  -> unique features model B: 281
+	[statistics] Number of constraints before merge: 3223
+	[statistics] Number of constraints after merge: 2744
+	[statistics] Number of inconsistency checks: 3223
+	[statistics]   -> contextualised: 388
+	[statistics]   -> non-contextualised: 1827
+	[statistics]   -> not checked: 1008
+	[statistics] Number of cleanup checks: 3223
+	[statistics]   -> kept as is: 1736
+	[statistics]   -> removed as redundant: 479
+	[statistics]   -> not checked: 1008
+	[statistics] Feature-tree constraints before merge: 1006
+	[statistics] Feature-tree constraints after merge: 1006
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2215
+	[statistics] Cross-tree constraints after merge: 1736
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.22350231
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 8/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_2.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 704
+Model B features: 771
+Shared features: 494
+Features exclusive to Model A: 210
+Features exclusive to Model B: 277
+Total unique features: 981
+Share ratio: 50,36%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_2.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:         77835800 ns (77,84 ms)
+	[statistics] Inconsistency check duration: 213064099900 ns (213064,10 ms)
+	[statistics] Cleanup duration:             236114713900 ns (236114,71 ms)
+	[statistics] Full merge duration:          449256649600 ns (449256,65 ms)
+	[statistics] Number of features in merged model: 1062
+	[statistics]  -> unique features model A: 211
+	[statistics]  -> unique features model B: 278
+	[statistics] Number of constraints before merge: 3222
+	[statistics] Number of constraints after merge: 2748
+	[statistics] Number of inconsistency checks: 3222
+	[statistics]   -> contextualised: 396
+	[statistics]   -> non-contextualised: 1820
+	[statistics]   -> not checked: 1006
+	[statistics] Number of cleanup checks: 3222
+	[statistics]   -> kept as is: 1742
+	[statistics]   -> removed as redundant: 474
+	[statistics]   -> not checked: 1006
+	[statistics] Feature-tree constraints before merge: 1004
+	[statistics] Feature-tree constraints after merge: 1004
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2216
+	[statistics] Cross-tree constraints after merge: 1742
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.22732492
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 9/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 711
+Shared features: 707
+Features exclusive to Model A: 5
+Features exclusive to Model B: 4
+Total unique features: 716
+Share ratio: 98,74%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics] Union operation duration:          4312200 ns (4,31 ms)
+	[statistics] Inconsistency check duration: 161936241500 ns (161936,24 ms)
+	[statistics] Cleanup duration:             137665989000 ns (137665,99 ms)
+	[statistics] Full merge duration:          299606542700 ns (299606,54 ms)
+	[statistics] Number of features in merged model: 727
+	[statistics]  -> unique features model A: 6
+	[statistics]  -> unique features model B: 5
+	[statistics] Number of constraints before merge: 2633
+	[statistics] Number of constraints after merge: 1503
+	[statistics] Number of inconsistency checks: 2633
+	[statistics]   -> contextualised: 9
+	[statistics]   -> non-contextualised: 2281
+	[statistics]   -> not checked: 343
+	[statistics] Number of cleanup checks: 2633
+	[statistics]   -> kept as is: 1160
+	[statistics]   -> removed as redundant: 1130
+	[statistics]   -> not checked: 343
+	[statistics] Feature-tree constraints before merge: 341
+	[statistics] Feature-tree constraints after merge: 341
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2290
+	[statistics] Cross-tree constraints after merge: 1160
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0077586207
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 10/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 716
+Shared features: 701
+Features exclusive to Model A: 11
+Features exclusive to Model B: 15
+Total unique features: 727
+Share ratio: 96,42%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics] Union operation duration:         10680800 ns (10,68 ms)
+	[statistics] Inconsistency check duration: 169886696200 ns (169886,70 ms)
+	[statistics] Cleanup duration:             142654729200 ns (142654,73 ms)
+	[statistics] Full merge duration:          312552106200 ns (312552,11 ms)
+	[statistics] Number of features in merged model: 750
+	[statistics]  -> unique features model A: 12
+	[statistics]  -> unique features model B: 16
+	[statistics] Number of constraints before merge: 2681
+	[statistics] Number of constraints after merge: 1558
+	[statistics] Number of inconsistency checks: 2681
+	[statistics]   -> contextualised: 21
+	[statistics]   -> non-contextualised: 2269
+	[statistics]   -> not checked: 391
+	[statistics] Number of cleanup checks: 2681
+	[statistics]   -> kept as is: 1167
+	[statistics]   -> removed as redundant: 1123
+	[statistics]   -> not checked: 391
+	[statistics] Feature-tree constraints before merge: 389
+	[statistics] Feature-tree constraints after merge: 389
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2290
+	[statistics] Cross-tree constraints after merge: 1167
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.017994858
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 11/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 712
+Shared features: 524
+Features exclusive to Model A: 188
+Features exclusive to Model B: 188
+Total unique features: 900
+Share ratio: 58,22%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics] Union operation duration:         52486501 ns (52,49 ms)
+	[statistics] Inconsistency check duration: 173625108500 ns (173625,11 ms)
+	[statistics] Cleanup duration:             164307455100 ns (164307,46 ms)
+	[statistics] Full merge duration:          337985050101 ns (337985,05 ms)
+	[statistics] Number of features in merged model: 941
+	[statistics]  -> unique features model A: 189
+	[statistics]  -> unique features model B: 189
+	[statistics] Number of constraints before merge: 2948
+	[statistics] Number of constraints after merge: 2324
+	[statistics] Number of inconsistency checks: 2948
+	[statistics]   -> contextualised: 195
+	[statistics]   -> non-contextualised: 1975
+	[statistics]   -> not checked: 778
+	[statistics] Number of cleanup checks: 2948
+	[statistics]   -> kept as is: 1546
+	[statistics]   -> removed as redundant: 624
+	[statistics]   -> not checked: 778
+	[statistics] Feature-tree constraints before merge: 776
+	[statistics] Feature-tree constraints after merge: 776
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2170
+	[statistics] Cross-tree constraints after merge: 1546
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.12613195
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 12/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 759
+Shared features: 516
+Features exclusive to Model A: 196
+Features exclusive to Model B: 243
+Total unique features: 955
+Share ratio: 54,03%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics] Union operation duration:         75832100 ns (75,83 ms)
+	[statistics] Inconsistency check duration: 328069898800 ns (328069,90 ms)
+	[statistics] Cleanup duration:             235156552199 ns (235156,55 ms)
+	[statistics] Full merge duration:          563302283099 ns (563302,28 ms)
+	[statistics] Number of features in merged model: 994
+	[statistics]  -> unique features model A: 197
+	[statistics]  -> unique features model B: 244
+	[statistics] Number of constraints before merge: 3031
+	[statistics] Number of constraints after merge: 2430
+	[statistics] Number of inconsistency checks: 3031
+	[statistics]   -> contextualised: 230
+	[statistics]   -> non-contextualised: 1946
+	[statistics]   -> not checked: 855
+	[statistics] Number of cleanup checks: 3031
+	[statistics]   -> kept as is: 1575
+	[statistics]   -> removed as redundant: 601
+	[statistics]   -> not checked: 855
+	[statistics] Feature-tree constraints before merge: 853
+	[statistics] Feature-tree constraints after merge: 853
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2176
+	[statistics] Cross-tree constraints after merge: 1575
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.14603175
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 13/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 771
+Shared features: 509
+Features exclusive to Model A: 203
+Features exclusive to Model B: 262
+Total unique features: 974
+Share ratio: 52,26%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics] Union operation duration:         67491300 ns (67,49 ms)
+	[statistics] Inconsistency check duration: 219350877000 ns (219350,88 ms)
+	[statistics] Cleanup duration:             236698846200 ns (236698,85 ms)
+	[statistics] Full merge duration:          456117214500 ns (456117,21 ms)
+	[statistics] Number of features in merged model: 1039
+	[statistics]  -> unique features model A: 204
+	[statistics]  -> unique features model B: 263
+	[statistics] Number of constraints before merge: 3170
+	[statistics] Number of constraints after merge: 2677
+	[statistics] Number of inconsistency checks: 3170
+	[statistics]   -> contextualised: 380
+	[statistics]   -> non-contextualised: 1842
+	[statistics]   -> not checked: 948
+	[statistics] Number of cleanup checks: 3170
+	[statistics]   -> kept as is: 1729
+	[statistics]   -> removed as redundant: 493
+	[statistics]   -> not checked: 948
+	[statistics] Feature-tree constraints before merge: 946
+	[statistics] Feature-tree constraints after merge: 946
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2222
+	[statistics] Cross-tree constraints after merge: 1729
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.21978022
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 14/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 774
+Shared features: 500
+Features exclusive to Model A: 212
+Features exclusive to Model B: 274
+Total unique features: 986
+Share ratio: 50,71%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         77978000 ns (77,98 ms)
+	[statistics] Inconsistency check duration: 231887619700 ns (231887,62 ms)
+	[statistics] Cleanup duration:             243957091600 ns (243957,09 ms)
+	[statistics] Full merge duration:          475922689300 ns (475922,69 ms)
+	[statistics] Number of features in merged model: 1079
+	[statistics]  -> unique features model A: 213
+	[statistics]  -> unique features model B: 275
+	[statistics] Number of constraints before merge: 3254
+	[statistics] Number of constraints after merge: 2769
+	[statistics] Number of inconsistency checks: 3254
+	[statistics]   -> contextualised: 383
+	[statistics]   -> non-contextualised: 1838
+	[statistics]   -> not checked: 1033
+	[statistics] Number of cleanup checks: 3254
+	[statistics]   -> kept as is: 1736
+	[statistics]   -> removed as redundant: 485
+	[statistics]   -> not checked: 1033
+	[statistics] Feature-tree constraints before merge: 1031
+	[statistics] Feature-tree constraints after merge: 1031
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2221
+	[statistics] Cross-tree constraints after merge: 1736
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.22062212
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 15/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_3.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 771
+Shared features: 500
+Features exclusive to Model A: 212
+Features exclusive to Model B: 271
+Total unique features: 983
+Share ratio: 50,86%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_3.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:         78251700 ns (78,25 ms)
+	[statistics] Inconsistency check duration: 241406075500 ns (241406,08 ms)
+	[statistics] Cleanup duration:             233937727300 ns (233937,73 ms)
+	[statistics] Full merge duration:          475422054500 ns (475422,05 ms)
+	[statistics] Number of features in merged model: 1076
+	[statistics]  -> unique features model A: 213
+	[statistics]  -> unique features model B: 272
+	[statistics] Number of constraints before merge: 3253
+	[statistics] Number of constraints after merge: 2773
+	[statistics] Number of inconsistency checks: 3253
+	[statistics]   -> contextualised: 391
+	[statistics]   -> non-contextualised: 1831
+	[statistics]   -> not checked: 1031
+	[statistics] Number of cleanup checks: 3253
+	[statistics]   -> kept as is: 1742
+	[statistics]   -> removed as redundant: 480
+	[statistics]   -> not checked: 1031
+	[statistics] Feature-tree constraints before merge: 1029
+	[statistics] Feature-tree constraints after merge: 1029
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2222
+	[statistics] Cross-tree constraints after merge: 1742
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.22445466
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 16/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_4.uvl
+Model B: uvl/finance/finance_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 711
+Model B features: 716
+Shared features: 705
+Features exclusive to Model A: 6
+Features exclusive to Model B: 11
+Total unique features: 722
+Share ratio: 97,65%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics] Union operation duration:          8819000 ns (8,82 ms)
+	[statistics] Inconsistency check duration: 173733276800 ns (173733,28 ms)
+	[statistics] Cleanup duration:             142116859800 ns (142116,86 ms)
+	[statistics] Full merge duration:          315858955600 ns (315858,96 ms)
+	[statistics] Number of features in merged model: 737
+	[statistics]  -> unique features model A: 7
+	[statistics]  -> unique features model B: 12
+	[statistics] Number of constraints before merge: 2664
+	[statistics] Number of constraints after merge: 1494
+	[statistics] Number of inconsistency checks: 2664
+	[statistics]   -> contextualised: 12
+	[statistics]   -> non-contextualised: 2284
+	[statistics]   -> not checked: 368
+	[statistics] Number of cleanup checks: 2664
+	[statistics]   -> kept as is: 1126
+	[statistics]   -> removed as redundant: 1170
+	[statistics]   -> not checked: 368
+	[statistics] Feature-tree constraints before merge: 366
+	[statistics] Feature-tree constraints after merge: 366
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2296
+	[statistics] Cross-tree constraints after merge: 1126
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.010657194
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 17/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_4.uvl
+Model B: uvl/finance/finance_6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 711
+Model B features: 712
+Shared features: 525
+Features exclusive to Model A: 186
+Features exclusive to Model B: 187
+Total unique features: 898
+Share ratio: 58,46%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics] Union operation duration:         57750900 ns (57,75 ms)
+	[statistics] Inconsistency check duration: 180750425200 ns (180750,43 ms)
+	[statistics] Cleanup duration:             183367184800 ns (183367,18 ms)
+	[statistics] Full merge duration:          364175360900 ns (364175,36 ms)
+	[statistics] Number of features in merged model: 937
+	[statistics]  -> unique features model A: 187
+	[statistics]  -> unique features model B: 188
+	[statistics] Number of constraints before merge: 2948
+	[statistics] Number of constraints after merge: 2325
+	[statistics] Number of inconsistency checks: 2948
+	[statistics]   -> contextualised: 193
+	[statistics]   -> non-contextualised: 1983
+	[statistics]   -> not checked: 772
+	[statistics] Number of cleanup checks: 2948
+	[statistics]   -> kept as is: 1553
+	[statistics]   -> removed as redundant: 623
+	[statistics]   -> not checked: 772
+	[statistics] Feature-tree constraints before merge: 770
+	[statistics] Feature-tree constraints after merge: 770
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2176
+	[statistics] Cross-tree constraints after merge: 1553
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.124275595
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 18/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_4.uvl
+Model B: uvl/finance/finance_7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 711
+Model B features: 759
+Shared features: 517
+Features exclusive to Model A: 194
+Features exclusive to Model B: 242
+Total unique features: 953
+Share ratio: 54,25%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics] Union operation duration:         55839400 ns (55,84 ms)
+	[statistics] Inconsistency check duration: 189786580400 ns (189786,58 ms)
+	[statistics] Cleanup duration:             189594497600 ns (189594,50 ms)
+	[statistics] Full merge duration:          379436917400 ns (379436,92 ms)
+	[statistics] Number of features in merged model: 990
+	[statistics]  -> unique features model A: 195
+	[statistics]  -> unique features model B: 243
+	[statistics] Number of constraints before merge: 3031
+	[statistics] Number of constraints after merge: 2431
+	[statistics] Number of inconsistency checks: 3031
+	[statistics]   -> contextualised: 228
+	[statistics]   -> non-contextualised: 1954
+	[statistics]   -> not checked: 849
+	[statistics] Number of cleanup checks: 3031
+	[statistics]   -> kept as is: 1582
+	[statistics]   -> removed as redundant: 600
+	[statistics]   -> not checked: 849
+	[statistics] Feature-tree constraints before merge: 847
+	[statistics] Feature-tree constraints after merge: 847
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2182
+	[statistics] Cross-tree constraints after merge: 1582
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.14412136
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 19/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_4.uvl
+Model B: uvl/finance/finance_8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 711
+Model B features: 771
+Shared features: 510
+Features exclusive to Model A: 201
+Features exclusive to Model B: 261
+Total unique features: 972
+Share ratio: 52,47%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics] Union operation duration:         70518800 ns (70,52 ms)
+	[statistics] Inconsistency check duration: 212036732300 ns (212036,73 ms)
+	[statistics] Cleanup duration:             218716673100 ns (218716,67 ms)
+	[statistics] Full merge duration:          430823924200 ns (430823,92 ms)
+	[statistics] Number of features in merged model: 1035
+	[statistics]  -> unique features model A: 202
+	[statistics]  -> unique features model B: 262
+	[statistics] Number of constraints before merge: 3170
+	[statistics] Number of constraints after merge: 2678
+	[statistics] Number of inconsistency checks: 3170
+	[statistics]   -> contextualised: 378
+	[statistics]   -> non-contextualised: 1850
+	[statistics]   -> not checked: 942
+	[statistics] Number of cleanup checks: 3170
+	[statistics]   -> kept as is: 1736
+	[statistics]   -> removed as redundant: 492
+	[statistics]   -> not checked: 942
+	[statistics] Feature-tree constraints before merge: 940
+	[statistics] Feature-tree constraints after merge: 940
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2228
+	[statistics] Cross-tree constraints after merge: 1736
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.21774194
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 20/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_4.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 711
+Model B features: 774
+Shared features: 501
+Features exclusive to Model A: 210
+Features exclusive to Model B: 273
+Total unique features: 984
+Share ratio: 50,91%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         84946600 ns (84,95 ms)
+	[statistics] Inconsistency check duration: 220715588600 ns (220715,59 ms)
+	[statistics] Cleanup duration:             227980494400 ns (227980,49 ms)
+	[statistics] Full merge duration:          448781029600 ns (448781,03 ms)
+	[statistics] Number of features in merged model: 1075
+	[statistics]  -> unique features model A: 211
+	[statistics]  -> unique features model B: 274
+	[statistics] Number of constraints before merge: 3254
+	[statistics] Number of constraints after merge: 2770
+	[statistics] Number of inconsistency checks: 3254
+	[statistics]   -> contextualised: 381
+	[statistics]   -> non-contextualised: 1846
+	[statistics]   -> not checked: 1027
+	[statistics] Number of cleanup checks: 3254
+	[statistics]   -> kept as is: 1743
+	[statistics]   -> removed as redundant: 484
+	[statistics]   -> not checked: 1027
+	[statistics] Feature-tree constraints before merge: 1025
+	[statistics] Feature-tree constraints after merge: 1025
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2227
+	[statistics] Cross-tree constraints after merge: 1743
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.21858864
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 21/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_4.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 711
+Model B features: 771
+Shared features: 501
+Features exclusive to Model A: 210
+Features exclusive to Model B: 270
+Total unique features: 981
+Share ratio: 51,07%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_4.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:         84498200 ns (84,50 ms)
+	[statistics] Inconsistency check duration: 226762630900 ns (226762,63 ms)
+	[statistics] Cleanup duration:             218449278600 ns (218449,28 ms)
+	[statistics] Full merge duration:          445296407700 ns (445296,41 ms)
+	[statistics] Number of features in merged model: 1072
+	[statistics]  -> unique features model A: 211
+	[statistics]  -> unique features model B: 271
+	[statistics] Number of constraints before merge: 3253
+	[statistics] Number of constraints after merge: 2774
+	[statistics] Number of inconsistency checks: 3253
+	[statistics]   -> contextualised: 389
+	[statistics]   -> non-contextualised: 1839
+	[statistics]   -> not checked: 1025
+	[statistics] Number of cleanup checks: 3253
+	[statistics]   -> kept as is: 1749
+	[statistics]   -> removed as redundant: 479
+	[statistics]   -> not checked: 1025
+	[statistics] Feature-tree constraints before merge: 1023
+	[statistics] Feature-tree constraints after merge: 1023
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2228
+	[statistics] Cross-tree constraints after merge: 1749
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.22241281
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 22/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_5.uvl
+Model B: uvl/finance/finance_6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 716
+Model B features: 712
+Shared features: 528
+Features exclusive to Model A: 188
+Features exclusive to Model B: 184
+Total unique features: 900
+Share ratio: 58,67%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics] Union operation duration:         51929400 ns (51,93 ms)
+	[statistics] Inconsistency check duration: 193965101200 ns (193965,10 ms)
+	[statistics] Cleanup duration:             153209381500 ns (153209,38 ms)
+	[statistics] Full merge duration:          347226412100 ns (347226,41 ms)
+	[statistics] Number of features in merged model: 927
+	[statistics]  -> unique features model A: 189
+	[statistics]  -> unique features model B: 185
+	[statistics] Number of constraints before merge: 2926
+	[statistics] Number of constraints after merge: 2301
+	[statistics] Number of inconsistency checks: 2926
+	[statistics]   -> contextualised: 193
+	[statistics]   -> non-contextualised: 1983
+	[statistics]   -> not checked: 750
+	[statistics] Number of cleanup checks: 2926
+	[statistics]   -> kept as is: 1551
+	[statistics]   -> removed as redundant: 625
+	[statistics]   -> not checked: 750
+	[statistics] Feature-tree constraints before merge: 748
+	[statistics] Feature-tree constraints after merge: 748
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2176
+	[statistics] Cross-tree constraints after merge: 1551
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.12443585
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 23/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_5.uvl
+Model B: uvl/finance/finance_7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 716
+Model B features: 759
+Shared features: 520
+Features exclusive to Model A: 196
+Features exclusive to Model B: 239
+Total unique features: 955
+Share ratio: 54,45%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics] Union operation duration:         54763800 ns (54,76 ms)
+	[statistics] Inconsistency check duration: 175501261700 ns (175501,26 ms)
+	[statistics] Cleanup duration:             178393194700 ns (178393,19 ms)
+	[statistics] Full merge duration:          353949220200 ns (353949,22 ms)
+	[statistics] Number of features in merged model: 980
+	[statistics]  -> unique features model A: 197
+	[statistics]  -> unique features model B: 240
+	[statistics] Number of constraints before merge: 3009
+	[statistics] Number of constraints after merge: 2408
+	[statistics] Number of inconsistency checks: 3009
+	[statistics]   -> contextualised: 228
+	[statistics]   -> non-contextualised: 1954
+	[statistics]   -> not checked: 827
+	[statistics] Number of cleanup checks: 3009
+	[statistics]   -> kept as is: 1581
+	[statistics]   -> removed as redundant: 601
+	[statistics]   -> not checked: 827
+	[statistics] Feature-tree constraints before merge: 825
+	[statistics] Feature-tree constraints after merge: 825
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2182
+	[statistics] Cross-tree constraints after merge: 1581
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.14421253
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 24/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_5.uvl
+Model B: uvl/finance/finance_8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 716
+Model B features: 771
+Shared features: 513
+Features exclusive to Model A: 203
+Features exclusive to Model B: 258
+Total unique features: 974
+Share ratio: 52,67%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics] Union operation duration:         66812100 ns (66,81 ms)
+	[statistics] Inconsistency check duration: 220791255500 ns (220791,26 ms)
+	[statistics] Cleanup duration:             210295964400 ns (210295,96 ms)
+	[statistics] Full merge duration:          431154032000 ns (431154,03 ms)
+	[statistics] Number of features in merged model: 1025
+	[statistics]  -> unique features model A: 204
+	[statistics]  -> unique features model B: 259
+	[statistics] Number of constraints before merge: 3148
+	[statistics] Number of constraints after merge: 2655
+	[statistics] Number of inconsistency checks: 3148
+	[statistics]   -> contextualised: 378
+	[statistics]   -> non-contextualised: 1850
+	[statistics]   -> not checked: 920
+	[statistics] Number of cleanup checks: 3148
+	[statistics]   -> kept as is: 1735
+	[statistics]   -> removed as redundant: 493
+	[statistics]   -> not checked: 920
+	[statistics] Feature-tree constraints before merge: 918
+	[statistics] Feature-tree constraints after merge: 918
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2228
+	[statistics] Cross-tree constraints after merge: 1735
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.21786743
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 25/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_5.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 716
+Model B features: 774
+Shared features: 504
+Features exclusive to Model A: 212
+Features exclusive to Model B: 270
+Total unique features: 986
+Share ratio: 51,12%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         84744500 ns (84,74 ms)
+	[statistics] Inconsistency check duration: 222347732800 ns (222347,73 ms)
+	[statistics] Cleanup duration:             215290451400 ns (215290,45 ms)
+	[statistics] Full merge duration:          437722928700 ns (437722,93 ms)
+	[statistics] Number of features in merged model: 1065
+	[statistics]  -> unique features model A: 213
+	[statistics]  -> unique features model B: 271
+	[statistics] Number of constraints before merge: 3232
+	[statistics] Number of constraints after merge: 2747
+	[statistics] Number of inconsistency checks: 3232
+	[statistics]   -> contextualised: 381
+	[statistics]   -> non-contextualised: 1846
+	[statistics]   -> not checked: 1005
+	[statistics] Number of cleanup checks: 3232
+	[statistics]   -> kept as is: 1742
+	[statistics]   -> removed as redundant: 485
+	[statistics]   -> not checked: 1005
+	[statistics] Feature-tree constraints before merge: 1003
+	[statistics] Feature-tree constraints after merge: 1003
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2227
+	[statistics] Cross-tree constraints after merge: 1742
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.21871412
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 26/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_5.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 716
+Model B features: 771
+Shared features: 504
+Features exclusive to Model A: 212
+Features exclusive to Model B: 267
+Total unique features: 983
+Share ratio: 51,27%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_5.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:        116883500 ns (116,88 ms)
+	[statistics] Inconsistency check duration: 216691451900 ns (216691,45 ms)
+	[statistics] Cleanup duration:             220144469800 ns (220144,47 ms)
+	[statistics] Full merge duration:          436952805200 ns (436952,81 ms)
+	[statistics] Number of features in merged model: 1062
+	[statistics]  -> unique features model A: 213
+	[statistics]  -> unique features model B: 268
+	[statistics] Number of constraints before merge: 3231
+	[statistics] Number of constraints after merge: 2751
+	[statistics] Number of inconsistency checks: 3231
+	[statistics]   -> contextualised: 389
+	[statistics]   -> non-contextualised: 1839
+	[statistics]   -> not checked: 1003
+	[statistics] Number of cleanup checks: 3231
+	[statistics]   -> kept as is: 1748
+	[statistics]   -> removed as redundant: 480
+	[statistics]   -> not checked: 1003
+	[statistics] Feature-tree constraints before merge: 1001
+	[statistics] Feature-tree constraints after merge: 1001
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2228
+	[statistics] Cross-tree constraints after merge: 1748
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.22254005
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 27/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_6.uvl
+Model B: uvl/finance/finance_7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 759
+Shared features: 701
+Features exclusive to Model A: 11
+Features exclusive to Model B: 58
+Total unique features: 770
+Share ratio: 91,04%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics] Union operation duration:         20384000 ns (20,38 ms)
+	[statistics] Inconsistency check duration: 161943098600 ns (161943,10 ms)
+	[statistics] Cleanup duration:             151691430500 ns (151691,43 ms)
+	[statistics] Full merge duration:          313654913100 ns (313654,91 ms)
+	[statistics] Number of features in merged model: 801
+	[statistics]  -> unique features model A: 12
+	[statistics]  -> unique features model B: 59
+	[statistics] Number of constraints before merge: 2547
+	[statistics] Number of constraints after merge: 1597
+	[statistics] Number of inconsistency checks: 2547
+	[statistics]   -> contextualised: 45
+	[statistics]   -> non-contextualised: 2017
+	[statistics]   -> not checked: 485
+	[statistics] Number of cleanup checks: 2547
+	[statistics]   -> kept as is: 1112
+	[statistics]   -> removed as redundant: 950
+	[statistics]   -> not checked: 485
+	[statistics] Feature-tree constraints before merge: 483
+	[statistics] Feature-tree constraints after merge: 483
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2062
+	[statistics] Cross-tree constraints after merge: 1112
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.040467627
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 28/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_6.uvl
+Model B: uvl/finance/finance_8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 771
+Shared features: 694
+Features exclusive to Model A: 18
+Features exclusive to Model B: 77
+Total unique features: 789
+Share ratio: 87,96%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics] Union operation duration:         31929200 ns (31,93 ms)
+	[statistics] Inconsistency check duration: 204991904700 ns (204991,90 ms)
+	[statistics] Cleanup duration:             192564416900 ns (192564,42 ms)
+	[statistics] Full merge duration:          397588250800 ns (397588,25 ms)
+	[statistics] Number of features in merged model: 850
+	[statistics]  -> unique features model A: 19
+	[statistics]  -> unique features model B: 78
+	[statistics] Number of constraints before merge: 2692
+	[statistics] Number of constraints after merge: 1931
+	[statistics] Number of inconsistency checks: 2692
+	[statistics]   -> contextualised: 354
+	[statistics]   -> non-contextualised: 1754
+	[statistics]   -> not checked: 584
+	[statistics] Number of cleanup checks: 2692
+	[statistics]   -> kept as is: 1347
+	[statistics]   -> removed as redundant: 761
+	[statistics]   -> not checked: 584
+	[statistics] Feature-tree constraints before merge: 582
+	[statistics] Feature-tree constraints after merge: 582
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2108
+	[statistics] Cross-tree constraints after merge: 1347
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.26280624
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 29/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_6.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 774
+Shared features: 685
+Features exclusive to Model A: 27
+Features exclusive to Model B: 89
+Total unique features: 801
+Share ratio: 85,52%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         42332500 ns (42,33 ms)
+	[statistics] Inconsistency check duration: 228834317300 ns (228834,32 ms)
+	[statistics] Cleanup duration:             207432468500 ns (207432,47 ms)
+	[statistics] Full merge duration:          436309118300 ns (436309,12 ms)
+	[statistics] Number of features in merged model: 890
+	[statistics]  -> unique features model A: 28
+	[statistics]  -> unique features model B: 90
+	[statistics] Number of constraints before merge: 2777
+	[statistics] Number of constraints after merge: 2030
+	[statistics] Number of inconsistency checks: 2777
+	[statistics]   -> contextualised: 359
+	[statistics]   -> non-contextualised: 1748
+	[statistics]   -> not checked: 670
+	[statistics] Number of cleanup checks: 2777
+	[statistics]   -> kept as is: 1360
+	[statistics]   -> removed as redundant: 747
+	[statistics]   -> not checked: 670
+	[statistics] Feature-tree constraints before merge: 668
+	[statistics] Feature-tree constraints after merge: 668
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2107
+	[statistics] Cross-tree constraints after merge: 1360
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.26397058
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 30/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_6.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 712
+Model B features: 771
+Shared features: 685
+Features exclusive to Model A: 27
+Features exclusive to Model B: 86
+Total unique features: 798
+Share ratio: 85,84%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_6.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:         42756400 ns (42,76 ms)
+	[statistics] Inconsistency check duration: 326408920500 ns (326408,92 ms)
+	[statistics] Cleanup duration:             215464396300 ns (215464,40 ms)
+	[statistics] Full merge duration:          541916073200 ns (541916,07 ms)
+	[statistics] Number of features in merged model: 887
+	[statistics]  -> unique features model A: 28
+	[statistics]  -> unique features model B: 87
+	[statistics] Number of constraints before merge: 2776
+	[statistics] Number of constraints after merge: 2034
+	[statistics] Number of inconsistency checks: 2776
+	[statistics]   -> contextualised: 367
+	[statistics]   -> non-contextualised: 1741
+	[statistics]   -> not checked: 668
+	[statistics] Number of cleanup checks: 2776
+	[statistics]   -> kept as is: 1366
+	[statistics]   -> removed as redundant: 742
+	[statistics]   -> not checked: 668
+	[statistics] Feature-tree constraints before merge: 666
+	[statistics] Feature-tree constraints after merge: 666
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2108
+	[statistics] Cross-tree constraints after merge: 1366
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.26866764
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 31/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_7.uvl
+Model B: uvl/finance/finance_8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 759
+Model B features: 771
+Shared features: 720
+Features exclusive to Model A: 39
+Features exclusive to Model B: 51
+Total unique features: 810
+Share ratio: 88,89%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics] Union operation duration:         24408800 ns (24,41 ms)
+	[statistics] Inconsistency check duration: 197310731500 ns (197310,73 ms)
+	[statistics] Cleanup duration:             184153593400 ns (184153,59 ms)
+	[statistics] Full merge duration:          381488733700 ns (381488,73 ms)
+	[statistics] Number of features in merged model: 853
+	[statistics]  -> unique features model A: 40
+	[statistics]  -> unique features model B: 52
+	[statistics] Number of constraints before merge: 2667
+	[statistics] Number of constraints after merge: 1813
+	[statistics] Number of inconsistency checks: 2667
+	[statistics]   -> contextualised: 352
+	[statistics]   -> non-contextualised: 1762
+	[statistics]   -> not checked: 553
+	[statistics] Number of cleanup checks: 2667
+	[statistics]   -> kept as is: 1260
+	[statistics]   -> removed as redundant: 854
+	[statistics]   -> not checked: 553
+	[statistics] Feature-tree constraints before merge: 551
+	[statistics] Feature-tree constraints after merge: 551
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2114
+	[statistics] Cross-tree constraints after merge: 1260
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.2793651
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 32/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_7.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 759
+Model B features: 774
+Shared features: 707
+Features exclusive to Model A: 52
+Features exclusive to Model B: 67
+Total unique features: 826
+Share ratio: 85,59%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         36420900 ns (36,42 ms)
+	[statistics] Inconsistency check duration: 408961871700 ns (408961,87 ms)
+	[statistics] Cleanup duration:             212043569500 ns (212043,57 ms)
+	[statistics] Full merge duration:          621041862100 ns (621041,86 ms)
+	[statistics] Number of features in merged model: 901
+	[statistics]  -> unique features model A: 53
+	[statistics]  -> unique features model B: 68
+	[statistics] Number of constraints before merge: 2767
+	[statistics] Number of constraints after merge: 1927
+	[statistics] Number of inconsistency checks: 2767
+	[statistics]   -> contextualised: 358
+	[statistics]   -> non-contextualised: 1755
+	[statistics]   -> not checked: 654
+	[statistics] Number of cleanup checks: 2767
+	[statistics]   -> kept as is: 1273
+	[statistics]   -> removed as redundant: 840
+	[statistics]   -> not checked: 654
+	[statistics] Feature-tree constraints before merge: 652
+	[statistics] Feature-tree constraints after merge: 652
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2113
+	[statistics] Cross-tree constraints after merge: 1273
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.28122544
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 33/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_7.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 759
+Model B features: 771
+Shared features: 706
+Features exclusive to Model A: 53
+Features exclusive to Model B: 65
+Total unique features: 824
+Share ratio: 85,68%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_7.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:         47758200 ns (47,76 ms)
+	[statistics] Inconsistency check duration: 218549428400 ns (218549,43 ms)
+	[statistics] Cleanup duration:             214276836100 ns (214276,84 ms)
+	[statistics] Full merge duration:          432874022700 ns (432874,02 ms)
+	[statistics] Number of features in merged model: 895
+	[statistics]  -> unique features model A: 54
+	[statistics]  -> unique features model B: 66
+	[statistics] Number of constraints before merge: 2760
+	[statistics] Number of constraints after merge: 1925
+	[statistics] Number of inconsistency checks: 2760
+	[statistics]   -> contextualised: 365
+	[statistics]   -> non-contextualised: 1749
+	[statistics]   -> not checked: 646
+	[statistics] Number of cleanup checks: 2760
+	[statistics]   -> kept as is: 1279
+	[statistics]   -> removed as redundant: 835
+	[statistics]   -> not checked: 646
+	[statistics] Feature-tree constraints before merge: 644
+	[statistics] Feature-tree constraints after merge: 644
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2114
+	[statistics] Cross-tree constraints after merge: 1279
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.2853792
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 34/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_8.uvl
+Model B: uvl/finance/finance_9.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 771
+Model B features: 774
+Shared features: 758
+Features exclusive to Model A: 13
+Features exclusive to Model B: 16
+Total unique features: 787
+Share ratio: 96,32%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics] Union operation duration:         15902000 ns (15,90 ms)
+	[statistics] Inconsistency check duration: 188654800000 ns (188654,80 ms)
+	[statistics] Cleanup duration:             173705394100 ns (173705,39 ms)
+	[statistics] Full merge duration:          362376096100 ns (362376,10 ms)
+	[statistics] Number of features in merged model: 826
+	[statistics]  -> unique features model A: 14
+	[statistics]  -> unique features model B: 17
+	[statistics] Number of constraints before merge: 2649
+	[statistics] Number of constraints after merge: 1550
+	[statistics] Number of inconsistency checks: 2649
+	[statistics]   -> contextualised: 9
+	[statistics]   -> non-contextualised: 2150
+	[statistics]   -> not checked: 490
+	[statistics] Number of cleanup checks: 2649
+	[statistics]   -> kept as is: 1060
+	[statistics]   -> removed as redundant: 1099
+	[statistics]   -> not checked: 490
+	[statistics] Feature-tree constraints before merge: 488
+	[statistics] Feature-tree constraints after merge: 488
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2159
+	[statistics] Cross-tree constraints after merge: 1060
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.008490566
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 35/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_8.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 771
+Model B features: 771
+Shared features: 750
+Features exclusive to Model A: 21
+Features exclusive to Model B: 21
+Total unique features: 792
+Share ratio: 94,70%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_8.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:         18111400 ns (18,11 ms)
+	[statistics] Inconsistency check duration: 192310516500 ns (192310,52 ms)
+	[statistics] Cleanup duration:             174677522000 ns (174677,52 ms)
+	[statistics] Full merge duration:          367006149900 ns (367006,15 ms)
+	[statistics] Number of features in merged model: 825
+	[statistics]  -> unique features model A: 22
+	[statistics]  -> unique features model B: 22
+	[statistics] Number of constraints before merge: 2651
+	[statistics] Number of constraints after merge: 1568
+	[statistics] Number of inconsistency checks: 2651
+	[statistics]   -> contextualised: 28
+	[statistics]   -> non-contextualised: 2132
+	[statistics]   -> not checked: 491
+	[statistics] Number of cleanup checks: 2651
+	[statistics]   -> kept as is: 1077
+	[statistics]   -> removed as redundant: 1083
+	[statistics]   -> not checked: 491
+	[statistics] Feature-tree constraints before merge: 489
+	[statistics] Feature-tree constraints after merge: 489
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2160
+	[statistics] Cross-tree constraints after merge: 1077
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.025998143
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 36/36
+──────────────────────────────────────────────────
+Model A: uvl/finance/finance_9.uvl
+Model B: uvl/finance/finance_10.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 774
+Model B features: 771
+Shared features: 760
+Features exclusive to Model A: 14
+Features exclusive to Model B: 11
+Total unique features: 785
+Share ratio: 96,82%
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/finance/finance_9.uvl
+	[statistics]   -> uvl/finance/finance_10.uvl
+	[statistics] Union operation duration:          4564100 ns (4,56 ms)
+	[statistics] Inconsistency check duration: 183573625600 ns (183573,63 ms)
+	[statistics] Cleanup duration:             156336027200 ns (156336,03 ms)
+	[statistics] Full merge duration:          339914216900 ns (339914,22 ms)
+	[statistics] Number of features in merged model: 792
+	[statistics]  -> unique features model A: 15
+	[statistics]  -> unique features model B: 12
+	[statistics] Number of constraints before merge: 2571
+	[statistics] Number of constraints after merge: 1484
+	[statistics] Number of inconsistency checks: 2571
+	[statistics]   -> contextualised: 23
+	[statistics]   -> non-contextualised: 2136
+	[statistics]   -> not checked: 412
+	[statistics] Number of cleanup checks: 2571
+	[statistics]   -> kept as is: 1072
+	[statistics]   -> removed as redundant: 1087
+	[statistics]   -> not checked: 412
+	[statistics] Feature-tree constraints before merge: 410
+	[statistics] Feature-tree constraints after merge: 410
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 2159
+	[statistics] Cross-tree constraints after merge: 1072
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.021455225
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+SUMMARY
+=======
+Total operations: 36
+Successful merges: 36
+Failed merges: 0
+Success rate: 100,00%

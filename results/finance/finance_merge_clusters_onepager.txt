@@ -1,0 +1,31 @@
+Finance Model Merge - One Pager Summary
+
+-------------------------------------------------
+Clusters (Merge Outcomes)
+-------------------------------------------------
+Cluster 1 – High overlap, low contextualization (near-duplicates, found in both subgroups)
+- Very high share ratio (>90%), aligned constraints.
+- Strong reduction (>40%), minimal contextualization.
+- Appears in both subgroups as near-duplicates.
+
+Cluster 2 – High overlap, high contextualization (only in Subgroup 2, due to diverging cross-tree logic)
+- High share ratio (85–90%), but diverging constraints.
+- Moderate reduction (25–30%), many contextualized rules.
+- Only occurs in Subgroup 2 (6–10).
+
+Cluster 3 – Low overlap, low contextualization (only cross-group, reflects two distinct product families)
+- Low share ratio (50–60%), many unique features.
+- Weak reduction (15–20%), contextualization ~12–22%.
+- Only occurs across Subgroup 1 ↔ Subgroup 2.
+
+-------------------------------------------------
+Subgroups (Model Families)
+-------------------------------------------------
+Subgroup 1 (Models 2–5)
+- Internal merges → Cluster 1 (near-duplicates).
+
+Subgroup 2 (Models 6–10)
+- Internal merges → Cluster 1 or Cluster 2 (depends on constraints).
+
+Cross-group (2–5 vs 6–10)
+- Always → Cluster 3 (low overlap, low contextualization).

@@ -1,0 +1,65 @@
+Finance Model Merge Analysis - Clusters and Subgroups
+
+-------------------------------------------------
+Three Clusters of Merge Outcomes
+-------------------------------------------------
+
+Cluster 1 – High overlap, low contextualization
+-------------------------------------------------
+Characteristics: Very high feature share ratio (>90%), cross-tree constraints mostly aligned.
+Merge result: Most constraints are redundant and get cleaned up → strong reduction (>40%), only few remain contextualized.
+Interpretation: Near-duplicate models with only minor adaptations. Appears in BOTH subgroups.
+
+Cluster 2 – High overlap, high contextualization
+-------------------------------------------------
+Characteristics: High feature share ratio (85–90%), but cross-tree constraints differ strongly.
+Merge result: Redundancy reduction is moderate (25–30%), many conflicting constraints must remain contextualized.
+Interpretation: Structurally very similar, but semantically different across regions. This pattern only occurs in Subgroup 2 (6–10).
+
+Cluster 3 – Low overlap, low contextualization
+-------------------------------------------------
+Characteristics: Low feature share ratio (50–60%), many unique features per model.
+Merge result: Reduction is weak (15–20%), but contextualization stays relatively low (~12–22%).
+Interpretation: Models are very different, but since they share so little, there are few conflicts to contextualized. Most constraints remain local (guarded by region-specific features). This cluster occurs only across subgroups.
+
+-------------------------------------------------
+Cluster Definitions (Model Pairs)
+-------------------------------------------------
+
+Cluster 1 (High overlap, low contextualization):
+2–3, 2–4, 2–5, 3–4, 3–5, 4–5, 6–7, 8–9, 8–10, 9–10
+
+Cluster 2 (High overlap, high contextualization):
+6–8, 6–9, 6–10, 7–8, 7–9, 7–10
+
+Cluster 3 (Low overlap, low contextualization):
+2–6, 2–7, 2–8, 2–9, 2–10,
+3–6, 3–7, 3–8, 3–9, 3–10,
+4–6, 4–7, 4–8, 4–9, 4–10,
+5–6, 5–7, 5–8, 5–9, 5–10
+
+-------------------------------------------------
+Two Subgroups Driving the Patterns
+-------------------------------------------------
+
+The clusters are not random: they are explained by the presence of two subgroups of models.
+
+Subgroup 1 (Models 2–5)
+- Internal merges almost always land in Cluster 1 (high overlap, low contextualization).
+- Example: 2–3, 3–4, 4–5 all behave as near-duplicates.
+
+Subgroup 2 (Models 6–10)
+- Internal merges land either in Cluster 1 (low contextualization) or Cluster 2 (high contextualization).
+- Example: 6–8 or 7–10
+
+Cross-group (Merges between Subgroup 1 and Subgroup 2)
+- All pairs fall into Cluster 3 (low overlap, low contextualization).
+- Example: 2–6, 3–9, 4–10.
+
+-------------------------------------------------
+Overall Insight
+-------------------------------------------------
+- Cluster 1 occurs in both subgroups, but for different reasons: near-duplicates in Subgroup 1 and near-duplicates in Subgroup 2
+- Cluster 2 is unique to Subgroup 2, caused by diverging cross-tree logic despite high overlap.
+- Cluster 3 only appears across subgroups, reflecting two different product families with little overlap but also little conflict.
+
