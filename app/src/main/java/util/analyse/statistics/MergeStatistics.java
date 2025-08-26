@@ -33,6 +33,7 @@ public class MergeStatistics {
     private long numberOfFeatures;
     private long numberOfUniqueFeaturesModelA;
     private long numberOfUniqueFeaturesModelB;
+    private boolean isConsistentAfterMerge;
 
     private float contextualizationShareBeforeMerge;
     private long numberOfConstraintsBeforeMerge;
@@ -199,6 +200,9 @@ public class MergeStatistics {
         // ─ Validation result ────────────────────────────────────────────────────
         sb.append("\t[statistics] Validation result: ")
                 .append(decodeValidationResult(validate))
+                .append("\n");
+        sb.append("\t[statistics] Consistent after merge: ")
+                .append(isConsistentAfterMerge)
                 .append("\n");
 
         return sb.toString();

@@ -36,11 +36,14 @@ public class ChocoAnalyser {
         // Create a monitoring thread that reports progress every 2 seconds
         Thread monitorThread = new Thread(() -> {
             try {
+                int idx = 0;
                 while (!Thread.currentThread().isInterrupted()) {
                     Thread.sleep(2000); // Check every 2 seconds
-                    logger.info("[monitor] Progress: nodes={}, fails={}", 
+                    logger.info("[monitor] {} Progress: nodes={}, fails={}", 
+                        idx,
                         model.getSolver().getMeasures().getNodeCount(),
                         model.getSolver().getMeasures().getFailCount());
+                    idx++;
                 }
             } catch (InterruptedException e) {
                 // Thread interrupted, stop monitoring
