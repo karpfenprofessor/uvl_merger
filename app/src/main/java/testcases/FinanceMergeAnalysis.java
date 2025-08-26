@@ -262,20 +262,6 @@ public class FinanceMergeAnalysis {
         sb.append("Total unique features: ").append(totalUniqueFeatures).append("\n");
         sb.append("Share ratio: ").append(String.format("%.2f%%", shareRatio)).append("\n");
         
-        if (!exclusiveToModelA.isEmpty()) {
-            sb.append("\nFeatures exclusive to Model A (").append(modelA.getRegion().getRegionString()).append("):\n");
-            for (String feature : exclusiveToModelA.stream().sorted().collect(Collectors.toList())) {
-                sb.append("  - ").append(feature).append("\n");
-            }
-        }
-        
-        if (!exclusiveToModelB.isEmpty()) {
-            sb.append("\nFeatures exclusive to Model B (").append(modelB.getRegion().getRegionString()).append("):\n");
-            for (String feature : exclusiveToModelB.stream().sorted().collect(Collectors.toList())) {
-                sb.append("  - ").append(feature).append("\n");
-            }
-        }
-        
         return sb.toString();
     }
     
