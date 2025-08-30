@@ -112,18 +112,21 @@ public class Validator {
         logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
 
         // Check for simultaneous violations: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
-        boolean hasExtraSolutions;
+        /*boolean hasExtraSolutions;
         try {
             if (kb1.getConstraints().size() > 50 && kb2.getConstraints().size() > 50) {
                 hasExtraSolutions = checkSimultaneousViolationsThreads(mergedKB, kb1, kb2);
             } else {
                 hasExtraSolutions = checkSimultaneousViolations(mergedKB, kb1, kb2);
             }
+
         } catch (InterruptedException e) {
             logger.error("[validateNoExtraSolutions] Thread execution was interrupted", e);
             Thread.currentThread().interrupt(); // Restore interrupt status
             return false; // Assume no extra solutions on interruption
-        }
+        }*/
+
+        boolean hasExtraSolutions = checkSimultaneousViolationsOrNegation(mergedKB, kb1, kb2);
 
         if (hasExtraSolutions) {
             logger.warn(
@@ -169,6 +172,60 @@ public class Validator {
             return 2; // Model B testcase failed
         } else {
             return 0; // No error
+        }
+    }
+
+    /**
+     * Alternative implementation of Test Case 1 using OrNegationConstraint.
+     * This is the original abbreviated approach that avoids nested loops.
+     * 
+     * Formula: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
+     * Where ¬KB₁ means "at least one constraint from KB₁ is violated"
+     * and ¬KB₂ means "at least one constraint from KB₂ is violated"
+     * 
+     * @param mergedKB the merged knowledge base
+     * @param kb1      the first original knowledge base  
+     * @param kb2      the second original knowledge base
+     * @return true if extra solutions exist (SAT), false if no extra solutions (UNSAT)
+     */
+    private static boolean checkSimultaneousViolationsOrNegation(RecreationModel mergedKB, 
+            RecreationModel kb1, RecreationModel kb2) {
+        logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
+
+        // Create a test model with the region set to TESTING
+        RecreationModel testModel = new RecreationModel(Region.TESTING);
+
+        // Add all features from the merged model
+        testModel.getFeatures().putAll(mergedKB.getFeatures());
+        testModel.setRootFeature(mergedKB.getRootFeature());
+
+        // Add all constraints from the merged model
+        for (AbstractConstraint constraint : mergedKB.getConstraints()) {
+            testModel.addConstraint(constraint.copy());
+        }
+
+        if (!kb1.getConstraints().isEmpty()) {
+            testModel.addConstraint(new OrNegationConstraint(kb1.getConstraints()));
+        }
+
+        if (!kb2.getConstraints().isEmpty()) {
+            testModel.addConstraint(new OrNegationConstraint(kb2.getConstraints()));
+        }
+
+        // Convert to Choco model and check satisfiability
+        ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(testModel);
+        boolean isSatisfiable = Analyser.isConsistent(chocoModel);
+
+        if (isSatisfiable) {
+            logger.warn(
+                    "\t[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} union {} (merge too loose)",
+                    kb1.getRegionString(), kb2.getRegionString());
+            return true;
+        } else {
+            logger.info(
+                    "\t[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside {} union {}",
+                    kb1.getRegionString(), kb2.getRegionString());
+            return false;
         }
     }
 
