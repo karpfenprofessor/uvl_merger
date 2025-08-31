@@ -30,7 +30,7 @@ public class TestMergeTwoModels {
         RecreationModel mergedModel = Merger.fullMerge(recModel, recModel2).mergedModel();
         long solutionsMerged = Analyser.returnNumberOfSolutions(mergedModel);
         Analyser.printConstraints(mergedModel);
-        Validator.validateMerge(mergedModel, recModel, recModel2);
+        Validator.validateMerge(mergedModel, recModel, recModel2, true);
         System.out.println("removed constraint to trigger error: " + mergedModel.getConstraints().remove(36));
         BinaryConstraint constraint = new BinaryConstraint();
         FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint();
@@ -48,7 +48,7 @@ public class TestMergeTwoModels {
 
         //Analyser.printConstraints(recModel2);
 
-        Validator.validateMerge(mergedModel, recModel, recModel2);
+        Validator.validateMerge(mergedModel, recModel, recModel2, true);
 
         
         System.out.println("Solutions 1: " + solutions1);

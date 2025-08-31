@@ -42,7 +42,7 @@ public class MergeAndValidateRealWorldModelsTest {
 
                         RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
 
-                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB),
+                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true),
                                         "Merge validation failed for " + BUSYBOX_MODELS[2].filename
                                                         + " and " + BUSYBOX_MODELS[4].filename);
                 } catch (Exception e) {
@@ -60,7 +60,7 @@ public class MergeAndValidateRealWorldModelsTest {
 
                         RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();
 
-                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB),
+                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true),
                                         "Merge validation failed for " + FINANCE_MODELS[1].filename
                                                         + " and " + FINANCE_MODELS[2].filename);
                 } catch (Exception e) {

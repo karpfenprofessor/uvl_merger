@@ -38,13 +38,15 @@ public class ValidatorTests {
             long solutionsCountMerged = Analyser.returnNumberOfSolutions(mergedModel);
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
-            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
-
+            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false));
+            
             mergedModel.getConstraints().remove(36);
 
             long solutionsCountMergedAfterConstraintRemoved = Analyser.returnNumberOfSolutions(mergedModel);
             assertNotEquals(solutionsCountMerged, solutionsCountMergedAfterConstraintRemoved);
-            assertEquals(1, Validator.validateMerge(mergedModel, modelA, modelB));
+            assertEquals(1, Validator.validateMerge(mergedModel, modelA, modelB, true));
+            assertEquals(1, Validator.validateMerge(mergedModel, modelA, modelB, false));
         } catch (Exception e) {
             throw new AssertionError("testCase1ExpectedToFail failed: " + e.getMessage(), e);
         }
@@ -65,7 +67,8 @@ public class ValidatorTests {
             long solutionsCountMerged = Analyser.returnNumberOfSolutions(mergedModel);
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
-            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false));
 
             FeatureReferenceConstraint constraint = new FeatureReferenceConstraint();
             constraint.setFeature(mergedModel.getFeatures().get("MovementFilter"));
@@ -74,7 +77,8 @@ public class ValidatorTests {
 
             long solutionsCountMergedAfterConstraintRemoved = Analyser.returnNumberOfSolutions(mergedModel);
             assertNotEquals(solutionsCountMerged, solutionsCountMergedAfterConstraintRemoved);
-            assertEquals(2, Validator.validateMerge(mergedModel, modelA, modelB));
+            assertEquals(2, Validator.validateMerge(mergedModel, modelA, modelB, true));
+            assertEquals(2, Validator.validateMerge(mergedModel, modelA, modelB, false));
         } catch (Exception e) {
             throw new AssertionError("testCase2ExpectedToFail failed: " + e.getMessage(), e);
         }
@@ -95,7 +99,8 @@ public class ValidatorTests {
             long solutionsCountMerged = Analyser.returnNumberOfSolutions(mergedModel);
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
-            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false));
 
             FeatureReferenceConstraint constraint = new FeatureReferenceConstraint();
             constraint.setFeature(mergedModel.getFeatures().get("TouchScreen"));
@@ -104,7 +109,8 @@ public class ValidatorTests {
 
             long solutionsCountMergedAfterConstraintRemoved = Analyser.returnNumberOfSolutions(mergedModel);
             assertNotEquals(solutionsCountMerged, solutionsCountMergedAfterConstraintRemoved);
-            assertEquals(3, Validator.validateMerge(mergedModel, modelA, modelB));
+            assertEquals(3, Validator.validateMerge(mergedModel, modelA, modelB, true));
+            assertEquals(3, Validator.validateMerge(mergedModel, modelA, modelB, false));
         } catch (Exception e) {
             throw new AssertionError("testCase2ExpectedToFail failed: " + e.getMessage(), e);
         }

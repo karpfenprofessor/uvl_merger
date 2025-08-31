@@ -2,8 +2,16 @@ plugins {
     id 'application'
     id 'java'
     id 'io.freefair.lombok' version '8.14'
+    id "org.sonarqube" version "6.3.1.5724"
 }
 
+sonar {
+  properties {
+    property "sonar.projectKey", "karpfenprofessor_uvl_merger"
+    property "sonar.organization", "karpfenprofessor"
+    property "sonar.token", "f2469fb76d2c8b4002290a92a23295cf318f26e3"
+  }
+}
 repositories {
     mavenCentral()
 }

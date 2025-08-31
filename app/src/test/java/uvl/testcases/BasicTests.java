@@ -201,7 +201,9 @@ public class BasicTests {
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 
-            assertEquals(0, Validator.validateMerge(mergedModel, modelUs, modelGer));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelUs, modelGer, true));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelUs, modelGer, false));
+
         } catch (Exception e) {
             throw new AssertionError("testMergeOfPaperCarModels failed, error: " + e.getMessage());
         }

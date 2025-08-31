@@ -62,6 +62,6 @@ public class TestMergeTwoModelsWithoutValidation {
         System.out.println("mergedModel: " + Analyser.isConsistent(mergeResult.mergedModel()));
 
         mergeResult.mergedStatistics().printStatistics();
-        Validator.validateMerge(mergeResult.mergedModel(), originalA, originalB);
+        Validator.validateMerge(mergeResult.mergedModel(), originalA, originalB, true);
     }
 }
