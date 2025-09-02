@@ -1,0 +1,1883 @@
+SMARTWATCH MODEL MERGE ANALYSIS RESULTS
+======================================
+Generated: 2025-09-02 20:40:04
+Total merge operations: 36
+
+MERGE OPERATION 1/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband1s.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 13
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 1
+Total unique features: 13
+Share ratio: 92,31%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics] Union operation duration:          3101900 ns (3,10 ms)
+	[statistics] Inconsistency check duration:      3470100 ns (3,47 ms)
+	[statistics] Cleanup duration:                   162400 ns (0,16 ms)
+	[statistics] Full merge duration:               6734400 ns (6,73 ms)
+	[statistics] Number of features in merged model: 16
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 2
+	[statistics] Number of constraints before merge: 14
+	[statistics] Number of constraints after merge: 14
+	[statistics] Number of inconsistency checks: 14
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 0
+	[statistics]   -> not checked: 14
+	[statistics] Number of cleanup checks: 14
+	[statistics]   -> kept as is: 0
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 14
+	[statistics] Feature-tree constraints before merge: 12
+	[statistics] Feature-tree constraints after merge: 12
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 0
+	[statistics] Cross-tree constraints after merge: 0
+	[statistics] Contextualisation share before merge: 0.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 2/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband2.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 21
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 9
+Total unique features: 21
+Share ratio: 57,14%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics] Union operation duration:          6587000 ns (6,59 ms)
+	[statistics] Inconsistency check duration:     43384700 ns (43,38 ms)
+	[statistics] Cleanup duration:                 25624000 ns (25,62 ms)
+	[statistics] Full merge duration:              75595700 ns (75,60 ms)
+	[statistics] Number of features in merged model: 26
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 10
+	[statistics] Number of constraints before merge: 35
+	[statistics] Number of constraints after merge: 35
+	[statistics] Number of inconsistency checks: 35
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 4
+	[statistics]   -> not checked: 31
+	[statistics] Number of cleanup checks: 35
+	[statistics]   -> kept as is: 4
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 31
+	[statistics] Feature-tree constraints before merge: 29
+	[statistics] Feature-tree constraints after merge: 29
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 4
+	[statistics] Cross-tree constraints after merge: 4
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 3/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband3.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 24
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 12
+Total unique features: 24
+Share ratio: 50,00%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics] Union operation duration:          4965000 ns (4,97 ms)
+	[statistics] Inconsistency check duration:     58834600 ns (58,83 ms)
+	[statistics] Cleanup duration:                 45550600 ns (45,55 ms)
+	[statistics] Full merge duration:             109350200 ns (109,35 ms)
+	[statistics] Number of features in merged model: 29
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 13
+	[statistics] Number of constraints before merge: 45
+	[statistics] Number of constraints after merge: 45
+	[statistics] Number of inconsistency checks: 45
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 8
+	[statistics]   -> not checked: 37
+	[statistics] Number of cleanup checks: 45
+	[statistics]   -> kept as is: 8
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 37
+	[statistics] Feature-tree constraints before merge: 35
+	[statistics] Feature-tree constraints after merge: 35
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 8
+	[statistics] Cross-tree constraints after merge: 8
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 4/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 31
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 19
+Total unique features: 31
+Share ratio: 38,71%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics] Union operation duration:          6513600 ns (6,51 ms)
+	[statistics] Inconsistency check duration:    126566600 ns (126,57 ms)
+	[statistics] Cleanup duration:                144899200 ns (144,90 ms)
+	[statistics] Full merge duration:             277979400 ns (277,98 ms)
+	[statistics] Number of features in merged model: 36
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 20
+	[statistics] Number of constraints before merge: 63
+	[statistics] Number of constraints after merge: 63
+	[statistics] Number of inconsistency checks: 63
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 16
+	[statistics]   -> not checked: 47
+	[statistics] Number of cleanup checks: 63
+	[statistics]   -> kept as is: 16
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 47
+	[statistics] Feature-tree constraints before merge: 45
+	[statistics] Feature-tree constraints after merge: 45
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 16
+	[statistics] Cross-tree constraints after merge: 16
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 5/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 34
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 22
+Total unique features: 34
+Share ratio: 35,29%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics] Union operation duration:          8280800 ns (8,28 ms)
+	[statistics] Inconsistency check duration:    130085800 ns (130,09 ms)
+	[statistics] Cleanup duration:                108861800 ns (108,86 ms)
+	[statistics] Full merge duration:             247228400 ns (247,23 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 23
+	[statistics] Number of constraints before merge: 72
+	[statistics] Number of constraints after merge: 71
+	[statistics] Number of inconsistency checks: 72
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 20
+	[statistics]   -> not checked: 52
+	[statistics] Number of cleanup checks: 72
+	[statistics]   -> kept as is: 19
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 52
+	[statistics] Feature-tree constraints before merge: 50
+	[statistics] Feature-tree constraints after merge: 50
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 20
+	[statistics] Cross-tree constraints after merge: 19
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 6/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 35
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 23
+Total unique features: 35
+Share ratio: 34,29%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics] Union operation duration:          5652400 ns (5,65 ms)
+	[statistics] Inconsistency check duration:     94081000 ns (94,08 ms)
+	[statistics] Cleanup duration:                 67435400 ns (67,44 ms)
+	[statistics] Full merge duration:             167168800 ns (167,17 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 24
+	[statistics] Number of constraints before merge: 74
+	[statistics] Number of constraints after merge: 73
+	[statistics] Number of inconsistency checks: 74
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 21
+	[statistics]   -> not checked: 53
+	[statistics] Number of cleanup checks: 74
+	[statistics]   -> kept as is: 20
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 53
+	[statistics] Feature-tree constraints before merge: 51
+	[statistics] Feature-tree constraints after merge: 51
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 21
+	[statistics] Cross-tree constraints after merge: 20
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 7/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 36
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 24
+Total unique features: 36
+Share ratio: 33,33%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:          6187800 ns (6,19 ms)
+	[statistics] Inconsistency check duration:     88805600 ns (88,81 ms)
+	[statistics] Cleanup duration:                 75247500 ns (75,25 ms)
+	[statistics] Full merge duration:             170240900 ns (170,24 ms)
+	[statistics] Number of features in merged model: 41
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 25
+	[statistics] Number of constraints before merge: 76
+	[statistics] Number of constraints after merge: 75
+	[statistics] Number of inconsistency checks: 76
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 22
+	[statistics]   -> not checked: 54
+	[statistics] Number of cleanup checks: 76
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 54
+	[statistics] Feature-tree constraints before merge: 52
+	[statistics] Feature-tree constraints after merge: 52
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 22
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 8/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 12
+Model B features: 37
+Shared features: 12
+Features exclusive to Model A: 0
+Features exclusive to Model B: 25
+Total unique features: 37
+Share ratio: 32,43%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:          5839300 ns (5,84 ms)
+	[statistics] Inconsistency check duration:     81315200 ns (81,32 ms)
+	[statistics] Cleanup duration:                 95499800 ns (95,50 ms)
+	[statistics] Full merge duration:             182654300 ns (182,65 ms)
+	[statistics] Number of features in merged model: 42
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 26
+	[statistics] Number of constraints before merge: 77
+	[statistics] Number of constraints after merge: 76
+	[statistics] Number of inconsistency checks: 77
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 22
+	[statistics]   -> not checked: 55
+	[statistics] Number of cleanup checks: 77
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 55
+	[statistics] Feature-tree constraints before merge: 53
+	[statistics] Feature-tree constraints after merge: 53
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 22
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 9/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband2.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 21
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 8
+Total unique features: 21
+Share ratio: 61,90%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics] Union operation duration:          3619200 ns (3,62 ms)
+	[statistics] Inconsistency check duration:     12720600 ns (12,72 ms)
+	[statistics] Cleanup duration:                  9824100 ns (9,82 ms)
+	[statistics] Full merge duration:              26163900 ns (26,16 ms)
+	[statistics] Number of features in merged model: 26
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 9
+	[statistics] Number of constraints before merge: 35
+	[statistics] Number of constraints after merge: 35
+	[statistics] Number of inconsistency checks: 35
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 4
+	[statistics]   -> not checked: 31
+	[statistics] Number of cleanup checks: 35
+	[statistics]   -> kept as is: 4
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 31
+	[statistics] Feature-tree constraints before merge: 29
+	[statistics] Feature-tree constraints after merge: 29
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 4
+	[statistics] Cross-tree constraints after merge: 4
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 10/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband3.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 24
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 11
+Total unique features: 24
+Share ratio: 54,17%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics] Union operation duration:          3551600 ns (3,55 ms)
+	[statistics] Inconsistency check duration:     22751600 ns (22,75 ms)
+	[statistics] Cleanup duration:                 15882700 ns (15,88 ms)
+	[statistics] Full merge duration:              42185900 ns (42,19 ms)
+	[statistics] Number of features in merged model: 29
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 12
+	[statistics] Number of constraints before merge: 45
+	[statistics] Number of constraints after merge: 45
+	[statistics] Number of inconsistency checks: 45
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 8
+	[statistics]   -> not checked: 37
+	[statistics] Number of cleanup checks: 45
+	[statistics]   -> kept as is: 8
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 37
+	[statistics] Feature-tree constraints before merge: 35
+	[statistics] Feature-tree constraints after merge: 35
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 8
+	[statistics] Cross-tree constraints after merge: 8
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 11/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 31
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 18
+Total unique features: 31
+Share ratio: 41,94%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics] Union operation duration:          4270000 ns (4,27 ms)
+	[statistics] Inconsistency check duration:     46190000 ns (46,19 ms)
+	[statistics] Cleanup duration:                 42369800 ns (42,37 ms)
+	[statistics] Full merge duration:              92829800 ns (92,83 ms)
+	[statistics] Number of features in merged model: 36
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 19
+	[statistics] Number of constraints before merge: 63
+	[statistics] Number of constraints after merge: 63
+	[statistics] Number of inconsistency checks: 63
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 16
+	[statistics]   -> not checked: 47
+	[statistics] Number of cleanup checks: 63
+	[statistics]   -> kept as is: 16
+	[statistics]   -> removed as redundant: 0
+	[statistics]   -> not checked: 47
+	[statistics] Feature-tree constraints before merge: 45
+	[statistics] Feature-tree constraints after merge: 45
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 16
+	[statistics] Cross-tree constraints after merge: 16
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 12/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 34
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 21
+Total unique features: 34
+Share ratio: 38,24%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics] Union operation duration:          6028900 ns (6,03 ms)
+	[statistics] Inconsistency check duration:     55180400 ns (55,18 ms)
+	[statistics] Cleanup duration:                 47486900 ns (47,49 ms)
+	[statistics] Full merge duration:             108696200 ns (108,70 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 22
+	[statistics] Number of constraints before merge: 72
+	[statistics] Number of constraints after merge: 71
+	[statistics] Number of inconsistency checks: 72
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 20
+	[statistics]   -> not checked: 52
+	[statistics] Number of cleanup checks: 72
+	[statistics]   -> kept as is: 19
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 52
+	[statistics] Feature-tree constraints before merge: 50
+	[statistics] Feature-tree constraints after merge: 50
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 20
+	[statistics] Cross-tree constraints after merge: 19
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 13/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 35
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 22
+Total unique features: 35
+Share ratio: 37,14%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics] Union operation duration:          3474300 ns (3,47 ms)
+	[statistics] Inconsistency check duration:     53070800 ns (53,07 ms)
+	[statistics] Cleanup duration:                 45396200 ns (45,40 ms)
+	[statistics] Full merge duration:             101941300 ns (101,94 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 23
+	[statistics] Number of constraints before merge: 74
+	[statistics] Number of constraints after merge: 73
+	[statistics] Number of inconsistency checks: 74
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 21
+	[statistics]   -> not checked: 53
+	[statistics] Number of cleanup checks: 74
+	[statistics]   -> kept as is: 20
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 53
+	[statistics] Feature-tree constraints before merge: 51
+	[statistics] Feature-tree constraints after merge: 51
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 21
+	[statistics] Cross-tree constraints after merge: 20
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 14/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 36
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 23
+Total unique features: 36
+Share ratio: 36,11%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:          5531100 ns (5,53 ms)
+	[statistics] Inconsistency check duration:     56138100 ns (56,14 ms)
+	[statistics] Cleanup duration:                 48941300 ns (48,94 ms)
+	[statistics] Full merge duration:             110610500 ns (110,61 ms)
+	[statistics] Number of features in merged model: 41
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 24
+	[statistics] Number of constraints before merge: 76
+	[statistics] Number of constraints after merge: 75
+	[statistics] Number of inconsistency checks: 76
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 22
+	[statistics]   -> not checked: 54
+	[statistics] Number of cleanup checks: 76
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 54
+	[statistics] Feature-tree constraints before merge: 52
+	[statistics] Feature-tree constraints after merge: 52
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 22
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 15/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband1s.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 13
+Model B features: 37
+Shared features: 13
+Features exclusive to Model A: 0
+Features exclusive to Model B: 24
+Total unique features: 37
+Share ratio: 35,14%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband1s.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:          4367200 ns (4,37 ms)
+	[statistics] Inconsistency check duration:     60600800 ns (60,60 ms)
+	[statistics] Cleanup duration:                 57635000 ns (57,64 ms)
+	[statistics] Full merge duration:             122603000 ns (122,60 ms)
+	[statistics] Number of features in merged model: 42
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 25
+	[statistics] Number of constraints before merge: 77
+	[statistics] Number of constraints after merge: 76
+	[statistics] Number of inconsistency checks: 77
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 22
+	[statistics]   -> not checked: 55
+	[statistics] Number of cleanup checks: 77
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 1
+	[statistics]   -> not checked: 55
+	[statistics] Feature-tree constraints before merge: 53
+	[statistics] Feature-tree constraints after merge: 53
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 22
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 16/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband2.uvl
+Model B: uvl/smartwatch/miband3.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 21
+Model B features: 24
+Shared features: 21
+Features exclusive to Model A: 0
+Features exclusive to Model B: 3
+Total unique features: 24
+Share ratio: 87,50%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics] Union operation duration:           774800 ns (0,77 ms)
+	[statistics] Inconsistency check duration:     28888200 ns (28,89 ms)
+	[statistics] Cleanup duration:                 22340900 ns (22,34 ms)
+	[statistics] Full merge duration:              52003900 ns (52,00 ms)
+	[statistics] Number of features in merged model: 27
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 4
+	[statistics] Number of constraints before merge: 44
+	[statistics] Number of constraints after merge: 40
+	[statistics] Number of inconsistency checks: 44
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 12
+	[statistics]   -> not checked: 32
+	[statistics] Number of cleanup checks: 44
+	[statistics]   -> kept as is: 8
+	[statistics]   -> removed as redundant: 4
+	[statistics]   -> not checked: 32
+	[statistics] Feature-tree constraints before merge: 30
+	[statistics] Feature-tree constraints after merge: 30
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 12
+	[statistics] Cross-tree constraints after merge: 8
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 17/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband2.uvl
+Model B: uvl/smartwatch/miband4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 21
+Model B features: 31
+Shared features: 21
+Features exclusive to Model A: 0
+Features exclusive to Model B: 10
+Total unique features: 31
+Share ratio: 67,74%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics] Union operation duration:          2254400 ns (2,25 ms)
+	[statistics] Inconsistency check duration:     48026600 ns (48,03 ms)
+	[statistics] Cleanup duration:                 45406500 ns (45,41 ms)
+	[statistics] Full merge duration:              95687500 ns (95,69 ms)
+	[statistics] Number of features in merged model: 36
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 11
+	[statistics] Number of constraints before merge: 65
+	[statistics] Number of constraints after merge: 61
+	[statistics] Number of inconsistency checks: 65
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 20
+	[statistics]   -> not checked: 45
+	[statistics] Number of cleanup checks: 65
+	[statistics]   -> kept as is: 16
+	[statistics]   -> removed as redundant: 4
+	[statistics]   -> not checked: 45
+	[statistics] Feature-tree constraints before merge: 43
+	[statistics] Feature-tree constraints after merge: 43
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 20
+	[statistics] Cross-tree constraints after merge: 16
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 18/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband2.uvl
+Model B: uvl/smartwatch/miband5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 21
+Model B features: 34
+Shared features: 21
+Features exclusive to Model A: 0
+Features exclusive to Model B: 13
+Total unique features: 34
+Share ratio: 61,76%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics] Union operation duration:          2497800 ns (2,50 ms)
+	[statistics] Inconsistency check duration:     62691200 ns (62,69 ms)
+	[statistics] Cleanup duration:                 55551000 ns (55,55 ms)
+	[statistics] Full merge duration:             120740000 ns (120,74 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 14
+	[statistics] Number of constraints before merge: 74
+	[statistics] Number of constraints after merge: 69
+	[statistics] Number of inconsistency checks: 74
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 24
+	[statistics]   -> not checked: 50
+	[statistics] Number of cleanup checks: 74
+	[statistics]   -> kept as is: 19
+	[statistics]   -> removed as redundant: 5
+	[statistics]   -> not checked: 50
+	[statistics] Feature-tree constraints before merge: 48
+	[statistics] Feature-tree constraints after merge: 48
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 24
+	[statistics] Cross-tree constraints after merge: 19
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 19/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband2.uvl
+Model B: uvl/smartwatch/miband6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 21
+Model B features: 35
+Shared features: 21
+Features exclusive to Model A: 0
+Features exclusive to Model B: 14
+Total unique features: 35
+Share ratio: 60,00%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics] Union operation duration:          2180800 ns (2,18 ms)
+	[statistics] Inconsistency check duration:     67006800 ns (67,01 ms)
+	[statistics] Cleanup duration:                 64690900 ns (64,69 ms)
+	[statistics] Full merge duration:             133878500 ns (133,88 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 15
+	[statistics] Number of constraints before merge: 76
+	[statistics] Number of constraints after merge: 71
+	[statistics] Number of inconsistency checks: 76
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 25
+	[statistics]   -> not checked: 51
+	[statistics] Number of cleanup checks: 76
+	[statistics]   -> kept as is: 20
+	[statistics]   -> removed as redundant: 5
+	[statistics]   -> not checked: 51
+	[statistics] Feature-tree constraints before merge: 49
+	[statistics] Feature-tree constraints after merge: 49
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 25
+	[statistics] Cross-tree constraints after merge: 20
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 20/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband2.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 21
+Model B features: 36
+Shared features: 21
+Features exclusive to Model A: 0
+Features exclusive to Model B: 15
+Total unique features: 36
+Share ratio: 58,33%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:          2572600 ns (2,57 ms)
+	[statistics] Inconsistency check duration:     71449900 ns (71,45 ms)
+	[statistics] Cleanup duration:                 67234700 ns (67,23 ms)
+	[statistics] Full merge duration:             141257200 ns (141,26 ms)
+	[statistics] Number of features in merged model: 41
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 16
+	[statistics] Number of constraints before merge: 78
+	[statistics] Number of constraints after merge: 73
+	[statistics] Number of inconsistency checks: 78
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 26
+	[statistics]   -> not checked: 52
+	[statistics] Number of cleanup checks: 78
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 5
+	[statistics]   -> not checked: 52
+	[statistics] Feature-tree constraints before merge: 50
+	[statistics] Feature-tree constraints after merge: 50
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 26
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 21/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband2.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 21
+Model B features: 37
+Shared features: 21
+Features exclusive to Model A: 0
+Features exclusive to Model B: 16
+Total unique features: 37
+Share ratio: 56,76%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband2.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:          2497700 ns (2,50 ms)
+	[statistics] Inconsistency check duration:     73294700 ns (73,29 ms)
+	[statistics] Cleanup duration:                 67640400 ns (67,64 ms)
+	[statistics] Full merge duration:             143432800 ns (143,43 ms)
+	[statistics] Number of features in merged model: 42
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 17
+	[statistics] Number of constraints before merge: 79
+	[statistics] Number of constraints after merge: 74
+	[statistics] Number of inconsistency checks: 79
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 26
+	[statistics]   -> not checked: 53
+	[statistics] Number of cleanup checks: 79
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 5
+	[statistics]   -> not checked: 53
+	[statistics] Feature-tree constraints before merge: 51
+	[statistics] Feature-tree constraints after merge: 51
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 26
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 22/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband3.uvl
+Model B: uvl/smartwatch/miband4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 24
+Model B features: 31
+Shared features: 24
+Features exclusive to Model A: 0
+Features exclusive to Model B: 7
+Total unique features: 31
+Share ratio: 77,42%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics] Union operation duration:          1681400 ns (1,68 ms)
+	[statistics] Inconsistency check duration:     70127000 ns (70,13 ms)
+	[statistics] Cleanup duration:                 64980600 ns (64,98 ms)
+	[statistics] Full merge duration:             136789000 ns (136,79 ms)
+	[statistics] Number of features in merged model: 36
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 8
+	[statistics] Number of constraints before merge: 69
+	[statistics] Number of constraints after merge: 62
+	[statistics] Number of inconsistency checks: 69
+	[statistics]   -> contextualised: 1
+	[statistics]   -> non-contextualised: 23
+	[statistics]   -> not checked: 45
+	[statistics] Number of cleanup checks: 69
+	[statistics]   -> kept as is: 17
+	[statistics]   -> removed as redundant: 7
+	[statistics]   -> not checked: 45
+	[statistics] Feature-tree constraints before merge: 43
+	[statistics] Feature-tree constraints after merge: 43
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 24
+	[statistics] Cross-tree constraints after merge: 17
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.05882353
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 23/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband3.uvl
+Model B: uvl/smartwatch/miband5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 24
+Model B features: 34
+Shared features: 24
+Features exclusive to Model A: 0
+Features exclusive to Model B: 10
+Total unique features: 34
+Share ratio: 70,59%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics] Union operation duration:          2132600 ns (2,13 ms)
+	[statistics] Inconsistency check duration:     80878900 ns (80,88 ms)
+	[statistics] Cleanup duration:                 79007300 ns (79,01 ms)
+	[statistics] Full merge duration:             162018800 ns (162,02 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 11
+	[statistics] Number of constraints before merge: 78
+	[statistics] Number of constraints after merge: 70
+	[statistics] Number of inconsistency checks: 78
+	[statistics]   -> contextualised: 1
+	[statistics]   -> non-contextualised: 27
+	[statistics]   -> not checked: 50
+	[statistics] Number of cleanup checks: 78
+	[statistics]   -> kept as is: 20
+	[statistics]   -> removed as redundant: 8
+	[statistics]   -> not checked: 50
+	[statistics] Feature-tree constraints before merge: 48
+	[statistics] Feature-tree constraints after merge: 48
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 28
+	[statistics] Cross-tree constraints after merge: 20
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.05
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 24/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband3.uvl
+Model B: uvl/smartwatch/miband6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 24
+Model B features: 35
+Shared features: 24
+Features exclusive to Model A: 0
+Features exclusive to Model B: 11
+Total unique features: 35
+Share ratio: 68,57%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics] Union operation duration:          2148200 ns (2,15 ms)
+	[statistics] Inconsistency check duration:     90615100 ns (90,62 ms)
+	[statistics] Cleanup duration:                 78748900 ns (78,75 ms)
+	[statistics] Full merge duration:             171512200 ns (171,51 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 12
+	[statistics] Number of constraints before merge: 80
+	[statistics] Number of constraints after merge: 72
+	[statistics] Number of inconsistency checks: 80
+	[statistics]   -> contextualised: 1
+	[statistics]   -> non-contextualised: 28
+	[statistics]   -> not checked: 51
+	[statistics] Number of cleanup checks: 80
+	[statistics]   -> kept as is: 21
+	[statistics]   -> removed as redundant: 8
+	[statistics]   -> not checked: 51
+	[statistics] Feature-tree constraints before merge: 49
+	[statistics] Feature-tree constraints after merge: 49
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 29
+	[statistics] Cross-tree constraints after merge: 21
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.04761905
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 25/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband3.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 24
+Model B features: 36
+Shared features: 24
+Features exclusive to Model A: 0
+Features exclusive to Model B: 12
+Total unique features: 36
+Share ratio: 66,67%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:          2775400 ns (2,78 ms)
+	[statistics] Inconsistency check duration:     94027600 ns (94,03 ms)
+	[statistics] Cleanup duration:                 96196600 ns (96,20 ms)
+	[statistics] Full merge duration:             192999600 ns (193,00 ms)
+	[statistics] Number of features in merged model: 41
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 13
+	[statistics] Number of constraints before merge: 82
+	[statistics] Number of constraints after merge: 74
+	[statistics] Number of inconsistency checks: 82
+	[statistics]   -> contextualised: 1
+	[statistics]   -> non-contextualised: 29
+	[statistics]   -> not checked: 52
+	[statistics] Number of cleanup checks: 82
+	[statistics]   -> kept as is: 22
+	[statistics]   -> removed as redundant: 8
+	[statistics]   -> not checked: 52
+	[statistics] Feature-tree constraints before merge: 50
+	[statistics] Feature-tree constraints after merge: 50
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 30
+	[statistics] Cross-tree constraints after merge: 22
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.045454547
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 26/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband3.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 24
+Model B features: 37
+Shared features: 24
+Features exclusive to Model A: 0
+Features exclusive to Model B: 13
+Total unique features: 37
+Share ratio: 64,86%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband3.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:          2249200 ns (2,25 ms)
+	[statistics] Inconsistency check duration:     92188500 ns (92,19 ms)
+	[statistics] Cleanup duration:                 81536700 ns (81,54 ms)
+	[statistics] Full merge duration:             175974400 ns (175,97 ms)
+	[statistics] Number of features in merged model: 42
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 14
+	[statistics] Number of constraints before merge: 83
+	[statistics] Number of constraints after merge: 75
+	[statistics] Number of inconsistency checks: 83
+	[statistics]   -> contextualised: 1
+	[statistics]   -> non-contextualised: 29
+	[statistics]   -> not checked: 53
+	[statistics] Number of cleanup checks: 83
+	[statistics]   -> kept as is: 22
+	[statistics]   -> removed as redundant: 8
+	[statistics]   -> not checked: 53
+	[statistics] Feature-tree constraints before merge: 51
+	[statistics] Feature-tree constraints after merge: 51
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 30
+	[statistics] Cross-tree constraints after merge: 22
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.045454547
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 27/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband4.uvl
+Model B: uvl/smartwatch/miband5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 31
+Model B features: 34
+Shared features: 31
+Features exclusive to Model A: 0
+Features exclusive to Model B: 3
+Total unique features: 34
+Share ratio: 91,18%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics] Union operation duration:           883000 ns (0,88 ms)
+	[statistics] Inconsistency check duration:    104342200 ns (104,34 ms)
+	[statistics] Cleanup duration:                100305600 ns (100,31 ms)
+	[statistics] Full merge duration:             205530800 ns (205,53 ms)
+	[statistics] Number of features in merged model: 37
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 4
+	[statistics] Number of constraints before merge: 79
+	[statistics] Number of constraints after merge: 62
+	[statistics] Number of inconsistency checks: 79
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 36
+	[statistics]   -> not checked: 43
+	[statistics] Number of cleanup checks: 79
+	[statistics]   -> kept as is: 19
+	[statistics]   -> removed as redundant: 17
+	[statistics]   -> not checked: 43
+	[statistics] Feature-tree constraints before merge: 41
+	[statistics] Feature-tree constraints after merge: 41
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 36
+	[statistics] Cross-tree constraints after merge: 19
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 28/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband4.uvl
+Model B: uvl/smartwatch/miband6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 31
+Model B features: 35
+Shared features: 31
+Features exclusive to Model A: 0
+Features exclusive to Model B: 4
+Total unique features: 35
+Share ratio: 88,57%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics] Union operation duration:          1020600 ns (1,02 ms)
+	[statistics] Inconsistency check duration:    102138500 ns (102,14 ms)
+	[statistics] Cleanup duration:                142636100 ns (142,64 ms)
+	[statistics] Full merge duration:             245795200 ns (245,80 ms)
+	[statistics] Number of features in merged model: 38
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 5
+	[statistics] Number of constraints before merge: 81
+	[statistics] Number of constraints after merge: 64
+	[statistics] Number of inconsistency checks: 81
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 37
+	[statistics]   -> not checked: 44
+	[statistics] Number of cleanup checks: 81
+	[statistics]   -> kept as is: 20
+	[statistics]   -> removed as redundant: 17
+	[statistics]   -> not checked: 44
+	[statistics] Feature-tree constraints before merge: 42
+	[statistics] Feature-tree constraints after merge: 42
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 37
+	[statistics] Cross-tree constraints after merge: 20
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 29/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband4.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 31
+Model B features: 36
+Shared features: 31
+Features exclusive to Model A: 0
+Features exclusive to Model B: 5
+Total unique features: 36
+Share ratio: 86,11%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:           836900 ns (0,84 ms)
+	[statistics] Inconsistency check duration:    109456600 ns (109,46 ms)
+	[statistics] Cleanup duration:                 99870100 ns (99,87 ms)
+	[statistics] Full merge duration:             210163600 ns (210,16 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 6
+	[statistics] Number of constraints before merge: 83
+	[statistics] Number of constraints after merge: 69
+	[statistics] Number of inconsistency checks: 83
+	[statistics]   -> contextualised: 3
+	[statistics]   -> non-contextualised: 35
+	[statistics]   -> not checked: 45
+	[statistics] Number of cleanup checks: 83
+	[statistics]   -> kept as is: 24
+	[statistics]   -> removed as redundant: 14
+	[statistics]   -> not checked: 45
+	[statistics] Feature-tree constraints before merge: 43
+	[statistics] Feature-tree constraints after merge: 43
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 38
+	[statistics] Cross-tree constraints after merge: 24
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.125
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 30/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband4.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 31
+Model B features: 37
+Shared features: 31
+Features exclusive to Model A: 0
+Features exclusive to Model B: 6
+Total unique features: 37
+Share ratio: 83,78%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband4.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:           743700 ns (0,74 ms)
+	[statistics] Inconsistency check duration:    106132000 ns (106,13 ms)
+	[statistics] Cleanup duration:                107374900 ns (107,37 ms)
+	[statistics] Full merge duration:             214250600 ns (214,25 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 7
+	[statistics] Number of constraints before merge: 84
+	[statistics] Number of constraints after merge: 70
+	[statistics] Number of inconsistency checks: 84
+	[statistics]   -> contextualised: 3
+	[statistics]   -> non-contextualised: 35
+	[statistics]   -> not checked: 46
+	[statistics] Number of cleanup checks: 84
+	[statistics]   -> kept as is: 24
+	[statistics]   -> removed as redundant: 14
+	[statistics]   -> not checked: 46
+	[statistics] Feature-tree constraints before merge: 44
+	[statistics] Feature-tree constraints after merge: 44
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 38
+	[statistics] Cross-tree constraints after merge: 24
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.125
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 31/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband5.uvl
+Model B: uvl/smartwatch/miband6.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 34
+Model B features: 35
+Shared features: 34
+Features exclusive to Model A: 0
+Features exclusive to Model B: 1
+Total unique features: 35
+Share ratio: 97,14%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics] Union operation duration:           564200 ns (0,56 ms)
+	[statistics] Inconsistency check duration:    126261100 ns (126,26 ms)
+	[statistics] Cleanup duration:                115072800 ns (115,07 ms)
+	[statistics] Full merge duration:             241898100 ns (241,90 ms)
+	[statistics] Number of features in merged model: 38
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 2
+	[statistics] Number of constraints before merge: 84
+	[statistics] Number of constraints after merge: 63
+	[statistics] Number of inconsistency checks: 84
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 41
+	[statistics]   -> not checked: 43
+	[statistics] Number of cleanup checks: 84
+	[statistics]   -> kept as is: 20
+	[statistics]   -> removed as redundant: 21
+	[statistics]   -> not checked: 43
+	[statistics] Feature-tree constraints before merge: 41
+	[statistics] Feature-tree constraints after merge: 41
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 41
+	[statistics] Cross-tree constraints after merge: 20
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 32/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband5.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 34
+Model B features: 36
+Shared features: 34
+Features exclusive to Model A: 0
+Features exclusive to Model B: 2
+Total unique features: 36
+Share ratio: 94,44%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:           673400 ns (0,67 ms)
+	[statistics] Inconsistency check duration:    131752100 ns (131,75 ms)
+	[statistics] Cleanup duration:                133666700 ns (133,67 ms)
+	[statistics] Full merge duration:             266092200 ns (266,09 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 3
+	[statistics] Number of constraints before merge: 86
+	[statistics] Number of constraints after merge: 69
+	[statistics] Number of inconsistency checks: 86
+	[statistics]   -> contextualised: 4
+	[statistics]   -> non-contextualised: 38
+	[statistics]   -> not checked: 44
+	[statistics] Number of cleanup checks: 86
+	[statistics]   -> kept as is: 25
+	[statistics]   -> removed as redundant: 17
+	[statistics]   -> not checked: 44
+	[statistics] Feature-tree constraints before merge: 42
+	[statistics] Feature-tree constraints after merge: 42
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 42
+	[statistics] Cross-tree constraints after merge: 25
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.16
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 33/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband5.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 34
+Model B features: 37
+Shared features: 34
+Features exclusive to Model A: 0
+Features exclusive to Model B: 3
+Total unique features: 37
+Share ratio: 91,89%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband5.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:           716500 ns (0,72 ms)
+	[statistics] Inconsistency check duration:    127442100 ns (127,44 ms)
+	[statistics] Cleanup duration:                126121800 ns (126,12 ms)
+	[statistics] Full merge duration:             254280400 ns (254,28 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 4
+	[statistics] Number of constraints before merge: 87
+	[statistics] Number of constraints after merge: 70
+	[statistics] Number of inconsistency checks: 87
+	[statistics]   -> contextualised: 4
+	[statistics]   -> non-contextualised: 38
+	[statistics]   -> not checked: 45
+	[statistics] Number of cleanup checks: 87
+	[statistics]   -> kept as is: 25
+	[statistics]   -> removed as redundant: 17
+	[statistics]   -> not checked: 45
+	[statistics] Feature-tree constraints before merge: 43
+	[statistics] Feature-tree constraints after merge: 43
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 42
+	[statistics] Cross-tree constraints after merge: 25
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.16
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 34/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband6.uvl
+Model B: uvl/smartwatch/miband7.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 35
+Model B features: 36
+Shared features: 35
+Features exclusive to Model A: 0
+Features exclusive to Model B: 1
+Total unique features: 36
+Share ratio: 97,22%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics] Union operation duration:           573700 ns (0,57 ms)
+	[statistics] Inconsistency check duration:    132779100 ns (132,78 ms)
+	[statistics] Cleanup duration:                119430600 ns (119,43 ms)
+	[statistics] Full merge duration:             252783400 ns (252,78 ms)
+	[statistics] Number of features in merged model: 39
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 2
+	[statistics] Number of constraints before merge: 86
+	[statistics] Number of constraints after merge: 68
+	[statistics] Number of inconsistency checks: 86
+	[statistics]   -> contextualised: 4
+	[statistics]   -> non-contextualised: 39
+	[statistics]   -> not checked: 43
+	[statistics] Number of cleanup checks: 86
+	[statistics]   -> kept as is: 25
+	[statistics]   -> removed as redundant: 18
+	[statistics]   -> not checked: 43
+	[statistics] Feature-tree constraints before merge: 41
+	[statistics] Feature-tree constraints after merge: 41
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 43
+	[statistics] Cross-tree constraints after merge: 25
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.16
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 35/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband6.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 35
+Model B features: 37
+Shared features: 35
+Features exclusive to Model A: 0
+Features exclusive to Model B: 2
+Total unique features: 37
+Share ratio: 94,59%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband6.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:           604100 ns (0,60 ms)
+	[statistics] Inconsistency check duration:    129527400 ns (129,53 ms)
+	[statistics] Cleanup duration:                126707800 ns (126,71 ms)
+	[statistics] Full merge duration:             256839300 ns (256,84 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 3
+	[statistics] Number of constraints before merge: 87
+	[statistics] Number of constraints after merge: 69
+	[statistics] Number of inconsistency checks: 87
+	[statistics]   -> contextualised: 4
+	[statistics]   -> non-contextualised: 39
+	[statistics]   -> not checked: 44
+	[statistics] Number of cleanup checks: 87
+	[statistics]   -> kept as is: 25
+	[statistics]   -> removed as redundant: 18
+	[statistics]   -> not checked: 44
+	[statistics] Feature-tree constraints before merge: 42
+	[statistics] Feature-tree constraints after merge: 42
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 43
+	[statistics] Cross-tree constraints after merge: 25
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.16
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 36/36
+──────────────────────────────────────────────────
+Model A: uvl/smartwatch/miband7.uvl
+Model B: uvl/smartwatch/miband8.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 36
+Model B features: 37
+Shared features: 36
+Features exclusive to Model A: 0
+Features exclusive to Model B: 1
+Total unique features: 37
+Share ratio: 97,30%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/smartwatch/miband7.uvl
+	[statistics]   -> uvl/smartwatch/miband8.uvl
+	[statistics] Union operation duration:           564800 ns (0,56 ms)
+	[statistics] Inconsistency check duration:    144971900 ns (144,97 ms)
+	[statistics] Cleanup duration:                141227700 ns (141,23 ms)
+	[statistics] Full merge duration:             286764400 ns (286,76 ms)
+	[statistics] Number of features in merged model: 40
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 2
+	[statistics] Number of constraints before merge: 87
+	[statistics] Number of constraints after merge: 68
+	[statistics] Number of inconsistency checks: 87
+	[statistics]   -> contextualised: 4
+	[statistics]   -> non-contextualised: 40
+	[statistics]   -> not checked: 43
+	[statistics] Number of cleanup checks: 87
+	[statistics]   -> kept as is: 25
+	[statistics]   -> removed as redundant: 19
+	[statistics]   -> not checked: 43
+	[statistics] Feature-tree constraints before merge: 41
+	[statistics] Feature-tree constraints after merge: 41
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 44
+	[statistics] Cross-tree constraints after merge: 25
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.16
+	[statistics] Validation result: PASSED
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+SUMMARY
+=======
+Total operations: 36
+Successful merges: 36
+Failed merges: 0
+Success rate: 100,00%

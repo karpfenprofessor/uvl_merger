@@ -48,8 +48,8 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelAutomotiveCString = "uvl/automotive/automotive02_03.uvl";
         String modelAutomotiveDString = "uvl/automotive/automotive02_04.uvl";
 
-        RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceGString, Region.A);
-        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceHString, Region.B);
+        RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceDString, Region.A);
+        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceFString, Region.B);
 
         RecreationAnalyser.analyseSharedFeatures(originalA, originalB);
 
