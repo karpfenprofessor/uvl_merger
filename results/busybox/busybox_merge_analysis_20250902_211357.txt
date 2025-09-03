@@ -1,0 +1,531 @@
+BUSYBOX MODEL MERGE ANALYSIS RESULTS
+===================================
+Generated: 2025-09-02 21:13:58
+Total merge operations: 10
+
+MERGE OPERATION 1/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_1.uvl
+Model B: uvl/busybox/busybox_2.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 608
+Model B features: 619
+Shared features: 604
+Features exclusive to Model A: 4
+Features exclusive to Model B: 15
+Total unique features: 623
+Share ratio: 96,95%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_1.uvl
+	[statistics]   -> uvl/busybox/busybox_2.uvl
+	[statistics] Union operation duration:         18046800 ns (18,05 ms)
+	[statistics] Inconsistency check duration:  81624392100 ns (81624,39 ms)
+	[statistics] Cleanup duration:              39791185000 ns (39791,19 ms)
+	[statistics] Full merge duration:          121433623900 ns (121433,62 ms)
+	[statistics] Number of features in merged model: 626
+	[statistics]  -> unique features model A: 5
+	[statistics]  -> unique features model B: 16
+	[statistics] Number of constraints before merge: 1369
+	[statistics] Number of constraints after merge: 644
+	[statistics] Number of inconsistency checks: 1369
+	[statistics]   -> contextualised: 3
+	[statistics]   -> non-contextualised: 1343
+	[statistics]   -> not checked: 23
+	[statistics] Number of cleanup checks: 1369
+	[statistics]   -> kept as is: 621
+	[statistics]   -> removed as redundant: 725
+	[statistics]   -> not checked: 23
+	[statistics] Feature-tree constraints before merge: 21
+	[statistics] Feature-tree constraints after merge: 21
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1346
+	[statistics] Cross-tree constraints after merge: 621
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.004830918
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 2/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_1.uvl
+Model B: uvl/busybox/busybox_3.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 608
+Model B features: 622
+Shared features: 604
+Features exclusive to Model A: 4
+Features exclusive to Model B: 18
+Total unique features: 626
+Share ratio: 96,49%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_1.uvl
+	[statistics]   -> uvl/busybox/busybox_3.uvl
+	[statistics] Union operation duration:          5876400 ns (5,88 ms)
+	[statistics] Inconsistency check duration:  37496020200 ns (37496,02 ms)
+	[statistics] Cleanup duration:              37645068300 ns (37645,07 ms)
+	[statistics] Full merge duration:           75146964900 ns (75146,96 ms)
+	[statistics] Number of features in merged model: 629
+	[statistics]  -> unique features model A: 5
+	[statistics]  -> unique features model B: 19
+	[statistics] Number of constraints before merge: 1374
+	[statistics] Number of constraints after merge: 650
+	[statistics] Number of inconsistency checks: 1374
+	[statistics]   -> contextualised: 3
+	[statistics]   -> non-contextualised: 1345
+	[statistics]   -> not checked: 26
+	[statistics] Number of cleanup checks: 1374
+	[statistics]   -> kept as is: 624
+	[statistics]   -> removed as redundant: 724
+	[statistics]   -> not checked: 26
+	[statistics] Feature-tree constraints before merge: 24
+	[statistics] Feature-tree constraints after merge: 24
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1348
+	[statistics] Cross-tree constraints after merge: 624
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0048076925
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 3/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_1.uvl
+Model B: uvl/busybox/busybox_4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 608
+Model B features: 628
+Shared features: 603
+Features exclusive to Model A: 5
+Features exclusive to Model B: 25
+Total unique features: 633
+Share ratio: 95,26%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_1.uvl
+	[statistics]   -> uvl/busybox/busybox_4.uvl
+	[statistics] Union operation duration:          4258600 ns (4,26 ms)
+	[statistics] Inconsistency check duration:  36814487200 ns (36814,49 ms)
+	[statistics] Cleanup duration:              37119015200 ns (37119,02 ms)
+	[statistics] Full merge duration:           73937761000 ns (73937,76 ms)
+	[statistics] Number of features in merged model: 636
+	[statistics]  -> unique features model A: 6
+	[statistics]  -> unique features model B: 26
+	[statistics] Number of constraints before merge: 1392
+	[statistics] Number of constraints after merge: 671
+	[statistics] Number of inconsistency checks: 1392
+	[statistics]   -> contextualised: 9
+	[statistics]   -> non-contextualised: 1349
+	[statistics]   -> not checked: 34
+	[statistics] Number of cleanup checks: 1392
+	[statistics]   -> kept as is: 637
+	[statistics]   -> removed as redundant: 721
+	[statistics]   -> not checked: 34
+	[statistics] Feature-tree constraints before merge: 32
+	[statistics] Feature-tree constraints after merge: 32
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1358
+	[statistics] Cross-tree constraints after merge: 637
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.014128729
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 4/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_1.uvl
+Model B: uvl/busybox/busybox_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 608
+Model B features: 631
+Shared features: 603
+Features exclusive to Model A: 5
+Features exclusive to Model B: 28
+Total unique features: 636
+Share ratio: 94,81%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_1.uvl
+	[statistics]   -> uvl/busybox/busybox_5.uvl
+	[statistics] Union operation duration:          4634100 ns (4,63 ms)
+	[statistics] Inconsistency check duration:  38599259600 ns (38599,26 ms)
+	[statistics] Cleanup duration:              37908485900 ns (37908,49 ms)
+	[statistics] Full merge duration:           76512379600 ns (76512,38 ms)
+	[statistics] Number of features in merged model: 639
+	[statistics]  -> unique features model A: 6
+	[statistics]  -> unique features model B: 29
+	[statistics] Number of constraints before merge: 1385
+	[statistics] Number of constraints after merge: 676
+	[statistics] Number of inconsistency checks: 1385
+	[statistics]   -> contextualised: 11
+	[statistics]   -> non-contextualised: 1337
+	[statistics]   -> not checked: 37
+	[statistics] Number of cleanup checks: 1385
+	[statistics]   -> kept as is: 639
+	[statistics]   -> removed as redundant: 709
+	[statistics]   -> not checked: 37
+	[statistics] Feature-tree constraints before merge: 35
+	[statistics] Feature-tree constraints after merge: 35
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1348
+	[statistics] Cross-tree constraints after merge: 639
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.017214397
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 5/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_2.uvl
+Model B: uvl/busybox/busybox_3.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 619
+Model B features: 622
+Shared features: 619
+Features exclusive to Model A: 0
+Features exclusive to Model B: 3
+Total unique features: 622
+Share ratio: 99,52%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_2.uvl
+	[statistics]   -> uvl/busybox/busybox_3.uvl
+	[statistics] Union operation duration:         16283400 ns (16,28 ms)
+	[statistics] Inconsistency check duration: 106430515000 ns (106430,52 ms)
+	[statistics] Cleanup duration:             112394326000 ns (112394,33 ms)
+	[statistics] Full merge duration:          218841124400 ns (218841,12 ms)
+	[statistics] Number of features in merged model: 625
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 4
+	[statistics] Number of constraints before merge: 1367
+	[statistics] Number of constraints after merge: 626
+	[statistics] Number of inconsistency checks: 1367
+	[statistics]   -> contextualised: 0
+	[statistics]   -> non-contextualised: 1360
+	[statistics]   -> not checked: 7
+	[statistics] Number of cleanup checks: 1367
+	[statistics]   -> kept as is: 619
+	[statistics]   -> removed as redundant: 741
+	[statistics]   -> not checked: 7
+	[statistics] Feature-tree constraints before merge: 5
+	[statistics] Feature-tree constraints after merge: 5
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1360
+	[statistics] Cross-tree constraints after merge: 619
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 6/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_2.uvl
+Model B: uvl/busybox/busybox_4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 619
+Model B features: 628
+Shared features: 618
+Features exclusive to Model A: 1
+Features exclusive to Model B: 10
+Total unique features: 629
+Share ratio: 98,25%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_2.uvl
+	[statistics]   -> uvl/busybox/busybox_4.uvl
+	[statistics] Union operation duration:         25518900 ns (25,52 ms)
+	[statistics] Inconsistency check duration: 104987122900 ns (104987,12 ms)
+	[statistics] Cleanup duration:             120451486400 ns (120451,49 ms)
+	[statistics] Full merge duration:          225464128200 ns (225464,13 ms)
+	[statistics] Number of features in merged model: 632
+	[statistics]  -> unique features model A: 2
+	[statistics]  -> unique features model B: 11
+	[statistics] Number of constraints before merge: 1385
+	[statistics] Number of constraints after merge: 653
+	[statistics] Number of inconsistency checks: 1385
+	[statistics]   -> contextualised: 16
+	[statistics]   -> non-contextualised: 1354
+	[statistics]   -> not checked: 15
+	[statistics] Number of cleanup checks: 1385
+	[statistics]   -> kept as is: 638
+	[statistics]   -> removed as redundant: 732
+	[statistics]   -> not checked: 15
+	[statistics] Feature-tree constraints before merge: 13
+	[statistics] Feature-tree constraints after merge: 13
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1370
+	[statistics] Cross-tree constraints after merge: 638
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.02507837
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 7/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_2.uvl
+Model B: uvl/busybox/busybox_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 619
+Model B features: 631
+Shared features: 618
+Features exclusive to Model A: 1
+Features exclusive to Model B: 13
+Total unique features: 632
+Share ratio: 97,78%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_2.uvl
+	[statistics]   -> uvl/busybox/busybox_5.uvl
+	[statistics] Union operation duration:         19778599 ns (19,78 ms)
+	[statistics] Inconsistency check duration: 108980112100 ns (108980,11 ms)
+	[statistics] Cleanup duration:             124591063800 ns (124591,06 ms)
+	[statistics] Full merge duration:          233590954499 ns (233590,95 ms)
+	[statistics] Number of features in merged model: 635
+	[statistics]  -> unique features model A: 2
+	[statistics]  -> unique features model B: 14
+	[statistics] Number of constraints before merge: 1378
+	[statistics] Number of constraints after merge: 658
+	[statistics] Number of inconsistency checks: 1378
+	[statistics]   -> contextualised: 18
+	[statistics]   -> non-contextualised: 1342
+	[statistics]   -> not checked: 18
+	[statistics] Number of cleanup checks: 1378
+	[statistics]   -> kept as is: 640
+	[statistics]   -> removed as redundant: 720
+	[statistics]   -> not checked: 18
+	[statistics] Feature-tree constraints before merge: 16
+	[statistics] Feature-tree constraints after merge: 16
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1360
+	[statistics] Cross-tree constraints after merge: 640
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.028125
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 8/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_3.uvl
+Model B: uvl/busybox/busybox_4.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 622
+Model B features: 628
+Shared features: 621
+Features exclusive to Model A: 1
+Features exclusive to Model B: 7
+Total unique features: 629
+Share ratio: 98,73%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_3.uvl
+	[statistics]   -> uvl/busybox/busybox_4.uvl
+	[statistics] Union operation duration:         14280800 ns (14,28 ms)
+	[statistics] Inconsistency check duration: 105372204900 ns (105372,20 ms)
+	[statistics] Cleanup duration:             114127472500 ns (114127,47 ms)
+	[statistics] Full merge duration:          219513958200 ns (219513,96 ms)
+	[statistics] Number of features in merged model: 632
+	[statistics]  -> unique features model A: 2
+	[statistics]  -> unique features model B: 8
+	[statistics] Number of constraints before merge: 1384
+	[statistics] Number of constraints after merge: 650
+	[statistics] Number of inconsistency checks: 1384
+	[statistics]   -> contextualised: 16
+	[statistics]   -> non-contextualised: 1356
+	[statistics]   -> not checked: 12
+	[statistics] Number of cleanup checks: 1384
+	[statistics]   -> kept as is: 638
+	[statistics]   -> removed as redundant: 734
+	[statistics]   -> not checked: 12
+	[statistics] Feature-tree constraints before merge: 10
+	[statistics] Feature-tree constraints after merge: 10
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1372
+	[statistics] Cross-tree constraints after merge: 638
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.02507837
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 9/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_3.uvl
+Model B: uvl/busybox/busybox_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 622
+Model B features: 631
+Shared features: 621
+Features exclusive to Model A: 1
+Features exclusive to Model B: 10
+Total unique features: 632
+Share ratio: 98,26%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_3.uvl
+	[statistics]   -> uvl/busybox/busybox_5.uvl
+	[statistics] Union operation duration:         37432200 ns (37,43 ms)
+	[statistics] Inconsistency check duration: 104232279000 ns (104232,28 ms)
+	[statistics] Cleanup duration:             113648429200 ns (113648,43 ms)
+	[statistics] Full merge duration:          217918140400 ns (217918,14 ms)
+	[statistics] Number of features in merged model: 635
+	[statistics]  -> unique features model A: 2
+	[statistics]  -> unique features model B: 11
+	[statistics] Number of constraints before merge: 1377
+	[statistics] Number of constraints after merge: 655
+	[statistics] Number of inconsistency checks: 1377
+	[statistics]   -> contextualised: 18
+	[statistics]   -> non-contextualised: 1344
+	[statistics]   -> not checked: 15
+	[statistics] Number of cleanup checks: 1377
+	[statistics]   -> kept as is: 640
+	[statistics]   -> removed as redundant: 722
+	[statistics]   -> not checked: 15
+	[statistics] Feature-tree constraints before merge: 13
+	[statistics] Feature-tree constraints after merge: 13
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1362
+	[statistics] Cross-tree constraints after merge: 640
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.028125
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+MERGE OPERATION 10/10
+──────────────────────────────────────────────────
+Model A: uvl/busybox/busybox_4.uvl
+Model B: uvl/busybox/busybox_5.uvl
+STATUS: SUCCESS
+
+SHARED FEATURES ANALYSIS
+────────────────────────────────────────
+Model A features: 628
+Model B features: 631
+Shared features: 628
+Features exclusive to Model A: 0
+Features exclusive to Model B: 3
+Total unique features: 631
+Share ratio: 99,52%
+
+
+[statistics] Merge operation statistics:
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/busybox/busybox_4.uvl
+	[statistics]   -> uvl/busybox/busybox_5.uvl
+	[statistics] Union operation duration:         13702000 ns (13,70 ms)
+	[statistics] Inconsistency check duration: 101230952200 ns (101230,95 ms)
+	[statistics] Cleanup duration:             113012061400 ns (113012,06 ms)
+	[statistics] Full merge duration:          214256715600 ns (214256,72 ms)
+	[statistics] Number of features in merged model: 634
+	[statistics]  -> unique features model A: 1
+	[statistics]  -> unique features model B: 4
+	[statistics] Number of constraints before merge: 1379
+	[statistics] Number of constraints after merge: 635
+	[statistics] Number of inconsistency checks: 1379
+	[statistics]   -> contextualised: 2
+	[statistics]   -> non-contextualised: 1370
+	[statistics]   -> not checked: 7
+	[statistics] Number of cleanup checks: 1379
+	[statistics]   -> kept as is: 628
+	[statistics]   -> removed as redundant: 744
+	[statistics]   -> not checked: 7
+	[statistics] Feature-tree constraints before merge: 5
+	[statistics] Feature-tree constraints after merge: 5
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 1372
+	[statistics] Cross-tree constraints after merge: 628
+	[statistics] Contextualisation share before merge: 1.0
+	[statistics] Contextualisation share after merge: 0.0031847134
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+
+
+================================================================================
+
+SUMMARY
+=======
+Total operations: 10
+Successful merges: 10
+Failed merges: 0
+Success rate: 100,00%
