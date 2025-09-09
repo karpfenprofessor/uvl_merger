@@ -127,13 +127,19 @@ public class ChocoTranslator {
             }
         }
 
-        // Equivalent encoding for big OR: sum(bad_i) >= 1
+        
         if (reifiedVars.length == 0) {
             return model.boolVar(false);
         }
 
         BoolVar result = model.boolVar("notKBMerge");
-        model.sum(reifiedVars, ">=", 1).reifyWith(result);
+        
+        // Optimization: Use LogOp.or instead of expensive sum constraint
+        // Use direct clause generation instead of sum constraint for much better performance
+        // This avoids the expensive arithmetic constraint propagation
+        model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(reifiedVars)));
+        //model.sum(reifiedVars, ">=", 1).reifyWith(result);
+        
         return result;
     }
 
