@@ -113,17 +113,22 @@ public class ChocoTranslator {
 
                 BoolVar phi = createConstraintVar(c, chocoModel, regionVar);
 
-                BoolVar notPhi = model.boolVar("neg_" + phi.getName());
-                model.arithm(phi, "=", 0).reifyWith(notPhi);
+                // Optimization: Use lightweight view instead of heavy reification
+                BoolVar notPhi = phi.not();
 
-                // bad_i ≡ regionVar ∧ ¬phi
-                reifiedVars[i] = model.and(regionVar, notPhi).reify();
+                // Optimization: Use SAT-friendly Tseitin encoding instead of and().reify()
+                // Encode b ≡ (region ∧ ¬φ) using 3 SAT clauses for better learning
+                BoolVar b = model.boolVar("ctx_" + i);
+                model.addClauses(LogOp.or(b.not(), regionVar));        // b ⇒ region
+                model.addClauses(LogOp.or(b.not(), notPhi));           // b ⇒ ¬φ  
+                model.addClauses(LogOp.or(regionVar.not(), phi, b));    // (region ∧ ¬φ) ⇒ b
+                reifiedVars[i] = b;
             } else {
                 // Non-contextualized: violation is simply ¬phi
                 BoolVar phi = createConstraintVar(c, chocoModel, null);
-                BoolVar notPhi = model.boolVar("neg_" + phi.getName());
-                model.arithm(phi, "=", 0).reifyWith(notPhi);
-                reifiedVars[i] = notPhi;
+                
+                // Optimization: Use lightweight view instead of heavy reification
+                reifiedVars[i] = phi.not();
             }
         }
 
