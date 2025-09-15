@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import model.recreate.RecreationModel;
 import util.helper.ValidatorHelper;
-
 /*
  * Feature Model Merge Validation Utility
  *
@@ -69,8 +68,7 @@ public class Validator extends ValidatorHelper {
             final RecreationModel kb2, final boolean useOrNegationConstraint) {
         logger.info("[validateMerge] Starting validation of merged model");
 
-        boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2, useOrNegationConstraint);
-        //boolean noExtraSolutions = true;
+        boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2);
         int missingSolutionsResult = validateNoMissingSolutions(mergedKB, kb1, kb2);
 
         if (!noExtraSolutions) {
@@ -105,29 +103,12 @@ public class Validator extends ValidatorHelper {
      *         false if validation fails (extra solutions exist)
      */
     public static boolean validateNoExtraSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
-            final RecreationModel kb2, final boolean useOrNegationConstraint) {
+            final RecreationModel kb2) {
         logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
 
         // Test formula: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
         // True if extra solutions exist (validation fails)
-        boolean hasExtraSolutions;
-
-        if (useOrNegationConstraint) {
-            hasExtraSolutions = checkSimultaneousViolationsOrNegation(mergedKB, kb1, kb2);
-        } else {
-            try {
-                if (kb1.getConstraints().size() > 50 && kb2.getConstraints().size() > 50) {
-                    hasExtraSolutions = checkSimultaneousViolationsThreads(mergedKB, kb1, kb2);
-                } else {
-                    hasExtraSolutions = checkSimultaneousViolations(mergedKB, kb1, kb2);
-                }
-
-            } catch (InterruptedException e) {
-                logger.error("[validateNoExtraSolutions] Thread execution was interrupted", e);
-                Thread.currentThread().interrupt(); // Restore interrupt status
-                return false; // Assume no extra solutions on interruption
-            }
-        }
+        boolean hasExtraSolutions = checkSimultaneousViolationsOrNegation(mergedKB, kb1, kb2);
 
         if (hasExtraSolutions) {
             logger.warn(
