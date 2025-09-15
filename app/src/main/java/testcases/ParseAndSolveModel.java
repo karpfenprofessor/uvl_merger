@@ -5,7 +5,7 @@ import util.analyse.impl.RecreationAnalyser;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class SolveModel {
+public class ParseAndSolveModel {
 
     public static void main(String[] args) throws Exception {
         String filePathString = "uvl/cdl/vrc4373.uvl";	 
@@ -13,5 +13,4 @@ public class SolveModel {
 
         RecreationAnalyser.printConstraintDistribution(recModel);
     }
-    
 }

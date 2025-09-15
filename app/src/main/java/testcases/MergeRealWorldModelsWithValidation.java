@@ -1,8 +1,5 @@
 package testcases;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import util.Merger;
 import util.Merger.MergeResult;
 import util.analyse.Analyser;
@@ -12,9 +9,7 @@ import util.Validator;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class TestMergeTwoModelsWithoutValidation {
-
-    protected final static Logger logger = LogManager.getLogger(TestMergeTwoModelsWithoutValidation.class);
+public class MergeRealWorldModelsWithValidation {
 
     public static void main(String[] args) throws Exception {
         String modelSmartwatchAString = "uvl/smartwatch/miband7.uvl";
@@ -37,19 +32,8 @@ public class TestMergeTwoModelsWithoutValidation {
         String modelFinanceIString = "uvl/finance/finance_9.uvl";
         String modelFinanceJString = "uvl/finance/finance_10.uvl";
 
-        String modelPaperAString = "uvl/paper_test_models/us.uvl";
-        String modelPaperBString = "uvl/paper_test_models/ger.uvl";
-
-        String modelCdlAString = "uvl/cdl/vrc4373.uvl";
-        String modelCdlBString = "uvl/cdl/vrc4375.uvl";
-
-        String modelAutomotiveAString = "uvl/automotive/automotive02_01.uvl";
-        String modelAutomotiveBString = "uvl/automotive/automotive02_02.uvl";
-        String modelAutomotiveCString = "uvl/automotive/automotive02_03.uvl";
-        String modelAutomotiveDString = "uvl/automotive/automotive02_04.uvl";
-
-        RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceDString, Region.A);
-        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceFString, Region.B);
+        RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceBString, Region.A);
+        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceIString, Region.B);
 
         RecreationAnalyser.analyseSharedFeatures(originalA, originalB);
 

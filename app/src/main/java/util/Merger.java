@@ -59,7 +59,6 @@ public class Merger extends MergerHelper {
 
         cleanup(mergedModel, mergeStatistics);
 
-        //mergeStatistics.setValidate(Validator.validateMerge(mergedModel, modelToMergeA, modelToMergeB));
         Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
                 .analyseSharedFeatures(modelToMergeA, modelToMergeB);
         mergeStatistics.setNumberOfUniqueFeaturesModelA(

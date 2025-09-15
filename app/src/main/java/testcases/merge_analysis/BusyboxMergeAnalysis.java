@@ -1,4 +1,4 @@
-package testcases;
+package testcases.merge_analysis;
 
 import util.UVLParser;
 import util.Merger;
@@ -18,39 +18,38 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Analysis class for merging all smartwatch models with each other and collecting statistics.
- * This class performs a comprehensive analysis by merging every smartwatch model with every other
- * smartwatch model and writes detailed merge statistics to a results file.
+ * Analysis class for merging all busybox models with each other and collecting statistics.
+ * This class performs a comprehensive analysis by merging every busybox model with every other
+ * busybox model and writes detailed merge statistics to a results file.
  */
-public class SmartwatchMergeAnalysis {
-    private static final Logger logger = LogManager.getLogger(SmartwatchMergeAnalysis.class);
+public class BusyboxMergeAnalysis {
+    private static final Logger logger = LogManager.getLogger(BusyboxMergeAnalysis.class);
     
-    private static final String SMARTWATCH_MODELS_PATH = "uvl/smartwatch/";
-    private static final String RESULTS_DIRECTORY = "results/smartwatch/";
-    private static final String RESULTS_FILE_PREFIX = "smartwatch_merge_analysis_";
-    private static final String SEPARATOR_LINE = "[SmartwatchMergeAnalysis] ═══════════════════════════════════════";
+    private static final String BUSYBOX_MODELS_PATH = "uvl/busybox/";
+    private static final String RESULTS_DIRECTORY = "results/busybox/";
+    private static final String RESULTS_FILE_PREFIX = "busybox_merge_analysis_";
+    private static final String SEPARATOR_LINE = "[BusyboxMergeAnalysis] ═══════════════════════════════════════";
     
     public static void main(String[] args) throws Exception {
-        logger.info("[SmartwatchMergeAnalysis] Starting comprehensive smartwatch model merge analysis");
+        logger.info("[BusyboxMergeAnalysis] Starting comprehensive busybox model merge analysis");
         
         // Create results directory if it doesn't exist
         createResultsDirectory();
         
-        // Get all smartwatch model files
-        List<String> smartwatchModelPaths = getSmartwatchModelPaths();
-        logger.info("[SmartwatchMergeAnalysis] Found {} smartwatch models to analyze", smartwatchModelPaths.size());
+        // Get all busybox model files
+        List<String> busyboxModelPaths = getBusyboxModelPaths();
+        logger.info("[BusyboxMergeAnalysis] Found {} busybox models to analyze", busyboxModelPaths.size());
         
         // Generate timestamp for results file
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         String resultsFilePath = RESULTS_DIRECTORY + RESULTS_FILE_PREFIX + timestamp + ".txt";
         
         // Perform all pairwise merges and write results incrementally
-        List<MergeAnalysisResult> allResults = performAllPairwiseMergesWithIncrementalWriting(smartwatchModelPaths, resultsFilePath);
+        List<MergeAnalysisResult> allResults = performAllPairwiseMergesWithIncrementalWriting(busyboxModelPaths, resultsFilePath);
         
         // Write final summary
         writeFinalSummary(allResults, resultsFilePath);
@@ -58,7 +57,7 @@ public class SmartwatchMergeAnalysis {
         // Print summary
         printSummary(allResults, resultsFilePath);
         
-        logger.info("[SmartwatchMergeAnalysis] Analysis completed successfully");
+        logger.info("[BusyboxMergeAnalysis] Analysis completed successfully");
     }
     
     /**
@@ -69,24 +68,22 @@ public class SmartwatchMergeAnalysis {
         if (!resultsDir.exists()) {
             boolean created = resultsDir.mkdirs();
             if (created) {
-                logger.info("[SmartwatchMergeAnalysis] Created results directory: {}", RESULTS_DIRECTORY);
+                logger.info("[BusyboxMergeAnalysis] Created results directory: {}", RESULTS_DIRECTORY);
             } else {
-                logger.warn("[SmartwatchMergeAnalysis] Failed to create results directory: {}", RESULTS_DIRECTORY);
+                logger.warn("[BusyboxMergeAnalysis] Failed to create results directory: {}", RESULTS_DIRECTORY);
             }
         }
     }
     
     /**
-     * Gets all smartwatch model file paths (base variants only, excluding _realized.uvl files)
+     * Gets all busybox model file paths
      */
-    private static List<String> getSmartwatchModelPaths() {
+    private static List<String> getBusyboxModelPaths() {
         List<String> modelPaths = new ArrayList<>();
         
-        // Add all smartwatch base models (miband1 through miband8, excluding realized versions)
-        String[] modelNames = {"miband1", "miband1s", "miband2", "miband3", "miband4", "miband5", "miband6", "miband7", "miband8"};
-        
-        for (String modelName : modelNames) {
-            String modelPath = SMARTWATCH_MODELS_PATH + modelName + ".uvl";
+        // Add all busybox models (busybox_1.uvl through busybox_5.uvl)
+        for (int i = 1; i <= 5; i++) {
+            String modelPath = BUSYBOX_MODELS_PATH + "busybox_" + i + ".uvl";
             modelPaths.add(modelPath);
         }
         
@@ -94,20 +91,20 @@ public class SmartwatchMergeAnalysis {
     }
     
     /**
-     * Performs all pairwise merges between smartwatch models and writes results incrementally
+     * Performs all pairwise merges between busybox models and writes results incrementally
      */
     private static List<MergeAnalysisResult> performAllPairwiseMergesWithIncrementalWriting(List<String> modelPaths, String resultsFilePath) {
         List<MergeAnalysisResult> results = new ArrayList<>();
         int totalMerges = modelPaths.size() * (modelPaths.size() - 1) / 2;
         int currentMerge = 0;
         
-        logger.info("[SmartwatchMergeAnalysis] Starting {} pairwise merges", totalMerges);
+        logger.info("[BusyboxMergeAnalysis] Starting {} pairwise merges", totalMerges);
         
         // Write file header
         try {
             writeFileHeader(resultsFilePath, totalMerges);
         } catch (IOException e) {
-            logger.error("[SmartwatchMergeAnalysis] Failed to write file header: {}", e.getMessage(), e);
+            logger.error("[BusyboxMergeAnalysis] Failed to write file header: {}", e.getMessage(), e);
             return results;
         }
         
@@ -117,7 +114,7 @@ public class SmartwatchMergeAnalysis {
                 String modelPathA = modelPaths.get(i);
                 String modelPathB = modelPaths.get(j);
                 
-                logger.info("[SmartwatchMergeAnalysis] Merge {}/{}: {} + {}", 
+                logger.info("[BusyboxMergeAnalysis] Merge {}/{}: {} + {}", 
                     currentMerge, totalMerges, modelPathA, modelPathB);
                 
                 try {
@@ -141,15 +138,15 @@ public class SmartwatchMergeAnalysis {
                     try {
                         writeMergeResult(resultsFilePath, analysisResult, currentMerge, totalMerges);
                     } catch (IOException e) {
-                        logger.error("[SmartwatchMergeAnalysis] Failed to write merge result {}/{}: {}", 
+                        logger.error("[BusyboxMergeAnalysis] Failed to write merge result {}/{}: {}", 
                             currentMerge, totalMerges, e.getMessage(), e);
                     }
                     
-                    logger.info("[SmartwatchMergeAnalysis] Merge {}/{} completed successfully", 
+                    logger.info("[BusyboxMergeAnalysis] Merge {}/{} completed successfully", 
                         currentMerge, totalMerges);
                     
                 } catch (Exception e) {
-                    logger.error("[SmartwatchMergeAnalysis] Merge {}/{} failed: {}", 
+                    logger.error("[BusyboxMergeAnalysis] Merge {}/{} failed: {}", 
                         currentMerge, totalMerges, e.getMessage(), e);
                     
                     // Store error result
@@ -162,7 +159,7 @@ public class SmartwatchMergeAnalysis {
                     try {
                         writeMergeResult(resultsFilePath, errorResult, currentMerge, totalMerges);
                     } catch (IOException e2) {
-                        logger.error("[SmartwatchMergeAnalysis] Failed to write error result {}/{}: {}", 
+                        logger.error("[BusyboxMergeAnalysis] Failed to write error result {}/{}: {}", 
                             currentMerge, totalMerges, e2.getMessage(), e2);
                     }
                 }
@@ -176,16 +173,16 @@ public class SmartwatchMergeAnalysis {
      * Writes the file header
      */
     private static void writeFileHeader(String filePath, int totalMerges) throws IOException {
-        logger.info("[SmartwatchMergeAnalysis] Initializing results file: {}", filePath);
+        logger.info("[BusyboxMergeAnalysis] Initializing results file: {}", filePath);
         
         try (FileWriter writer = new FileWriter(filePath)) {
-            writer.write("SMARTWATCH MODEL MERGE ANALYSIS RESULTS\n");
-            writer.write("======================================\n");
+            writer.write("BUSYBOX MODEL MERGE ANALYSIS RESULTS\n");
+            writer.write("===================================\n");
             writer.write("Generated: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "\n");
             writer.write("Total merge operations: " + totalMerges + "\n\n");
         }
         
-        logger.info("[SmartwatchMergeAnalysis] File header written successfully");
+        logger.info("[BusyboxMergeAnalysis] File header written successfully");
     }
     
     /**
@@ -215,7 +212,7 @@ public class SmartwatchMergeAnalysis {
      * Writes the final summary to the file
      */
     private static void writeFinalSummary(List<MergeAnalysisResult> results, String filePath) throws IOException {
-        logger.info("[SmartwatchMergeAnalysis] Writing final summary to file");
+        logger.info("[BusyboxMergeAnalysis] Writing final summary to file");
         
         int successfulMerges = (int) results.stream().mapToLong(r -> r.errorMessage() == null ? 1 : 0).sum();
         int failedMerges = results.size() - successfulMerges;
@@ -229,7 +226,7 @@ public class SmartwatchMergeAnalysis {
             writer.write("Success rate: " + String.format("%.2f%%", (double) successfulMerges / results.size() * 100) + "\n");
         }
         
-        logger.info("[SmartwatchMergeAnalysis] Final summary written successfully");
+        logger.info("[BusyboxMergeAnalysis] Final summary written successfully");
     }
     
     /**
@@ -277,14 +274,14 @@ public class SmartwatchMergeAnalysis {
         int failedMerges = results.size() - successfulMerges;
         
         logger.info(SEPARATOR_LINE);
-        logger.info("[SmartwatchMergeAnalysis] ANALYSIS SUMMARY");
+        logger.info("[BusyboxMergeAnalysis] ANALYSIS SUMMARY");
         logger.info(SEPARATOR_LINE);
-        logger.info("[SmartwatchMergeAnalysis] Total merge operations: {}", results.size());
-        logger.info("[SmartwatchMergeAnalysis] Successful merges: {}", successfulMerges);
-        logger.info("[SmartwatchMergeAnalysis] Failed merges: {}", failedMerges);
+        logger.info("[BusyboxMergeAnalysis] Total merge operations: {}", results.size());
+        logger.info("[BusyboxMergeAnalysis] Successful merges: {}", successfulMerges);
+        logger.info("[BusyboxMergeAnalysis] Failed merges: {}", failedMerges);
         double successRate = !results.isEmpty() ? (double) successfulMerges / results.size() * 100 : 0.0;
-        logger.info("[SmartwatchMergeAnalysis] Success rate: {}%", String.format("%.2f", successRate));
-        logger.info("[SmartwatchMergeAnalysis] Results file: {}", resultsFilePath);
+        logger.info("[BusyboxMergeAnalysis] Success rate: {}%", String.format("%.2f", successRate));
+        logger.info("[BusyboxMergeAnalysis] Results file: {}", resultsFilePath);
         logger.info(SEPARATOR_LINE);
     }
     

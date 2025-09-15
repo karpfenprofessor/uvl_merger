@@ -70,6 +70,7 @@ public class Validator extends ValidatorHelper {
         logger.info("[validateMerge] Starting validation of merged model");
 
         boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2, useOrNegationConstraint);
+        //boolean noExtraSolutions = true;
         int missingSolutionsResult = validateNoMissingSolutions(mergedKB, kb1, kb2);
 
         if (!noExtraSolutions) {

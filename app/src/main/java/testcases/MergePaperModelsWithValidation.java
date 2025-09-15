@@ -5,12 +5,12 @@ import org.apache.logging.log4j.Logger;
 
 import util.Merger;
 import util.UVLParser;
+import util.Validator;
 import util.analyse.Analyser;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class TestMergePaperModelsAnalyser {
-    protected final static Logger logger = LogManager.getLogger(TestMergePaperModelsAnalyser.class);
+public class MergePaperModelsWithValidation {
 
     public static void main(String[] args) {
         try {
@@ -18,10 +18,6 @@ public class TestMergePaperModelsAnalyser {
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
 
             RecreationModel mergedModel = Merger.fullMerge(modelUs, modelGer).mergedModel();
-
-            System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
-            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
 
             //AbstractConstraint constraint = mergedModel.getConstraints().remove(9);
             //System.out.println("removed constraint to trigger testcase 1: " + constraint);
@@ -33,11 +29,7 @@ public class TestMergePaperModelsAnalyser {
             // mergedModel.addConstraint(constraint2);
             // System.out.println("added constraint to trigger testcase 2: " + constraint2);
 
-            //Validator.validateMerge(mergedModel, modelUs, modelGer);
-
-            System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
-            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
+            Validator.validateMerge(mergedModel, modelUs, modelGer, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

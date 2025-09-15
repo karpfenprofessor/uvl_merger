@@ -10,8 +10,8 @@ import util.analyse.statistics.MergeStatistics;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class TestMergePaperModels {
-    protected final static Logger logger = LogManager.getLogger(TestMergePaperModels.class);
+public class MergePaperModelsSingleStep {
+    protected final static Logger logger = LogManager.getLogger(MergePaperModelsSingleStep.class);
 
     public static void main(String[] args) {
         try {
