@@ -1,40 +1,38 @@
-Finance Model Merge Analysis - Clusters and Subgroups
+Finance Model Merge Analysis
 
-Cluster 1 – High Feature overlap, low contextualization (bottom right)
+Cluster 1: high Feature overlap, low contextualization (plot bottom right)
 -------------------------------------------------
-Characteristics:    Very high feature share ratio (>90%), cross-tree constraints mostly aligned.
-Merge result:       Most constraints are redundant and get cleaned up → strong reduction, only few remain contextualized.
-Interpretation:     Near-duplicate models with only minor regional adaptations.
+Very high feature share ratio (>90%), cross-tree constraints mostly aligned.
+Most constraints are redundant and get cleaned up → strong reduction, only few remain contextualized.
+Near-duplicate models with only minor regional adaptations.
 
-Cluster 2 – High Feature overlap, high contextualization (top right)
+Cluster 2: high Feature overlap, high contextualization (plot top right)
 -------------------------------------------------
-Characteristics:    High feature share ratio (85–90%), cross-tree constraints differ strongly.
-Merge result:       Redundancy reduction is moderate (25–30%), many conflicting constraints must remain contextualized.
-Interpretation:     Structurally very similar, but semantically different across regions.
+High feature share ratio (85–90%), cross-tree constraints differ strongly.
+Redundancy reduction is not as strong as in cluster 1, many conflicting constraints must remain contextualized.
+Structurally very similar, but semantically different across regions.
 
-Cluster 3 – Low Feature overlap, low contextualization (left)
+Cluster 3: low Feature overlap, low contextualization (left)
 -------------------------------------------------
-Characteristics:    Low feature share ratio (50–60%), many unique features per model.
-Merge result:       Reduction is weak (15–20%), but contextualization stays relatively low (~12–22%).
-Interpretation:     Models are very different, but since they share so little, there are few conflicts to contextualize. Most constraints remain local (guarded by region-specific features).
+Low feature share ratio (50–60%), many unique features per model, cross-tree constraints differ strongly.
+Reduction is weak, but contextualization stays relatively low.
+Models are very different, but since they share so little, there are few conflicts to contextualize. Most constraints remain local (guarded by region-specific features).
 
 
-Cluster 1 (High overlap, low contextualization):
+Cluster 1 (high overlap, low contextualization):
 2–3, 2–4, 2–5, 3–4, 3–5, 4–5, 6–7, 8–9, 8–10, 9–10
 
-Cluster 2 (High overlap, high contextualization):
+Cluster 2 (high overlap, high contextualization):
 6–8, 6–9, 6–10, 7–8, 7–9, 7–10
 
-Cluster 3 (Low overlap, low contextualization):
+Cluster 3 (low overlap, low contextualization):
 2–6, 2–7, 2–8, 2–9, 2–10,
 3–6, 3–7, 3–8, 3–9, 3–10,
 4–6, 4–7, 4–8, 4–9, 4–10,
 5–6, 5–7, 5–8, 5–9, 5–10
 
 -------------------------------------------------
-Two Subgroups Driving the Patterns
--------------------------------------------------
-The clusters are not random: they are explained by the presence of two subgroups of models.
+The clusters are not random, they are explained by the presence of two subgroups of models.
 
 Subgroup 1 (Models 2–5)
 - Internal merges always land in Cluster 1 (high overlap, low contextualization).
@@ -44,11 +42,4 @@ Subgroup 2 (Models 6–10)
 
 Cross-group (Merges between Subgroup 1 and Subgroup 2)
 - All pairs fall into Cluster 3 (low overlap, low contextualization).
-
--------------------------------------------------
-Overall Insight
--------------------------------------------------
-- Cluster 1 occurs in both subgroups, but for different reasons: near-duplicates in Subgroup 1 and near-duplicates in Subgroup 2.
-- Cluster 2 is unique to Subgroup 2, caused by diverging cross-tree logic despite high overlap.
-- Cluster 3 only appears across subgroups, reflecting two different product families with little overlap but also little conflict.
 
