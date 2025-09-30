@@ -3,12 +3,12 @@ package testcases;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import util.UVLParser;
-import util.Merger;
 import util.Validator;
+import util.Merger;
 import util.analyse.Analyser;
+import util.analyse.statistics.MergeStatistics;
 
 public class MergeMultiplePaperModels {
-
 
     public static void main(String[] args) {
         try {
@@ -17,49 +17,29 @@ public class MergeMultiplePaperModels {
             RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/asia.uvl", Region.C);
             RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/ozeania.uvl", Region.D);
 
-
-            
-
-            /*
-            System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
-            System.out.println("solutions model asia: " + Analyser.returnNumberOfSolutions(modelAsia));
-            System.out.println("solutions model ozeania: " + Analyser.returnNumberOfSolutions(modelOzeania));
-
             modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
             modelAsia.contextualizeAllConstraints();
             modelOzeania.contextualizeAllConstraints();
-            
-            System.out.println("solutions model us contextualized: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model ger contextualized: " + Analyser.returnNumberOfSolutions(modelGer));
-            System.out.println("solutions model asia contextualized: " + Analyser.returnNumberOfSolutions(modelAsia));
-            System.out.println("solutions model ozeania contextualized: " + Analyser.returnNumberOfSolutions(modelOzeania));
 
+            MergeStatistics mergeStatistics = new MergeStatistics();
+            RecreationModel unionMultipleModel = Merger.unionMultiple(mergeStatistics, modelUs, modelGer, modelAsia,
+                    modelOzeania);
 
+            // solutions union: 288+324+330+378=1320
+            System.out.println("solutions model contextualized us: " + Analyser.returnNumberOfSolutions(modelUs));
+            System.out.println("solutions model contextualized ger: " + Analyser.returnNumberOfSolutions(modelGer));
+            System.out.println("solutions model contextualized asia: " + Analyser.returnNumberOfSolutions(modelAsia));
+            System.out.println(
+                    "solutions model contextualized ozeania: " + Analyser.returnNumberOfSolutions(modelOzeania));
+            System.out
+                    .println("solutions union multiple model: " + Analyser.returnNumberOfSolutions(unionMultipleModel));
 
-            RecreationModel mergedModelUsGer = Merger.fullMerge(modelUs, modelGer).mergedModel();
-            RecreationModel mergedModelUsAsia = Merger.fullMerge(modelUs, modelAsia).mergedModel();
-            RecreationModel mergedModelUsOzeania = Merger.fullMerge(modelUs, modelOzeania).mergedModel();
-            RecreationModel mergedModelGerAsia = Merger.fullMerge(modelGer, modelAsia).mergedModel();
-            RecreationModel mergedModelGerOzeania = Merger.fullMerge(modelGer, modelOzeania).mergedModel();
-            RecreationModel mergedModelAsiaOzeania = Merger.fullMerge(modelAsia, modelOzeania).mergedModel();
+            RecreationModel mergedModel = Merger.inconsistencyCheck(unionMultipleModel, mergeStatistics);
+            System.out.println("solutions after inconsistency check model: " + Analyser.returnNumberOfSolutions(mergedModel));
 
-
-            System.out.println("solutions model us ger: " + Analyser.returnNumberOfSolutions(mergedModelUsGer));
-            System.out.println("solutions model us asia: " + Analyser.returnNumberOfSolutions(mergedModelUsAsia));
-            System.out.println("solutions model us ozeania: " + Analyser.returnNumberOfSolutions(mergedModelUsOzeania));
-            System.out.println("solutions model ger asia: " + Analyser.returnNumberOfSolutions(mergedModelGerAsia));
-            System.out.println("solutions model ger ozeania: " + Analyser.returnNumberOfSolutions(mergedModelGerOzeania));
-            System.out.println("solutions model asia ozeania: " + Analyser.returnNumberOfSolutions(mergedModelAsiaOzeania));
-            
-
-            Validator.validateMerge(mergedModelUsGer, modelUs, modelGer, true);
-            Validator.validateMerge(mergedModelUsAsia, modelUs, modelAsia, true);
-            Validator.validateMerge(mergedModelUsOzeania, modelUs, modelOzeania, true);
-            Validator.validateMerge(mergedModelGerAsia, modelGer, modelAsia, true);
-            Validator.validateMerge(mergedModelGerOzeania, modelGer, modelOzeania, true);
-            Validator.validateMerge(mergedModelAsiaOzeania, modelAsia, modelOzeania, true);*/
+            mergedModel = Merger.cleanup(mergedModel, mergeStatistics);
+            System.out.println("solutions after cleanup model: " + Analyser.returnNumberOfSolutions(mergedModel));
         } catch (Exception e) {
             e.printStackTrace();
         }

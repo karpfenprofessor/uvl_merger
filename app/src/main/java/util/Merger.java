@@ -292,71 +292,76 @@ public class Merger extends MergerHelper {
         return !Analyser.isConsistent(testingModel);
     }
 
-    /*
-     * public static RecreationModel unionMultiple(final RecreationModel... models)
-     * {
-     * if (models == null || models.length < 2 || models.length > 9) {
-     * throw new
-     * IllegalArgumentException("Number of models to union must be between 2 and 9"
-     * );
-     * }
-     * 
-     * StringBuilder regionStrings = new StringBuilder();
-     * for (int i = 0; i < models.length; i++) {
-     * regionStrings.append(models[i].getRegion().getRegionString());
-     * if (i < models.length - 1) {
-     * regionStrings.append(", ");
-     * }
-     * }
-     * logger.info("[unionMultiple] with models from regions {}", regionStrings);
-     * 
-     * final RecreationModel unionModel = new RecreationModel(Region.UNION);
-     * 
-     * // Add features from both models to union model's feature map
-     * for (RecreationModel model : models) {
-     * for (Feature feature : model.getFeatures().values()) {
-     * if (!unionModel.getFeatures().containsKey(feature.getName())) {
-     * unionModel.getFeatures().put(feature.getName(), feature); // Use original
-     * feature
-     * }
-     * }
-     * }
-     * 
-     * logger.debug("\t[unionMultiple] added {} unique features to union model",
-     * unionModel.getFeatures().size());
-     * 
-     * handleRootFeature(unionModel, models);
-     * 
-     * Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
-     * .analyseSharedFeatures(models);
-     * handleRegionFeature(unionModel, models, uniqueFeaturesPerModel);
-     * 
-     * for (RecreationModel model : models) {
-     * for (AbstractConstraint constraint : model.getConstraints()) {
-     * if (!constraint.isCustomConstraint()) {
-     * unionModel.addConstraint(constraint);
-     * }
-     * }
-     * }
-     * 
-     * removeDuplicateContextualizedGroupConstraints(unionModel);
-     * splitFeaturesWithMultipleParents(unionModel);
-     * 
-     * logger.info(
-     * "[unionMultiple] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints"
-     * ,
-     * unionModel.getFeatures().size(),
-     * unionModel.getConstraints().size(),
-     * unionModel.getConstraints().stream().filter(c ->
-     * c.isFeatureTreeConstraint()).count(),
-     * unionModel.getConstraints().stream().filter(c ->
-     * c.isCustomConstraint()).count(),
-     * unionModel.getConstraints().stream()
-     * .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
-     * .count());
-     * logger.info("");
-     * 
-     * return unionModel;
-     * }
-     */
+    public static RecreationModel unionMultiple(final MergeStatistics mergeStatistics, final RecreationModel... models) {
+        if (models == null || models.length < 3 || models.length > 9) {
+            throw new IllegalArgumentException("Number of input models in untionMultiple must be between 3 and 9");
+        }
+
+        StringBuilder regionStrings = new StringBuilder();
+        for (int i = 0; i < models.length; i++) {
+            regionStrings.append(models[i].getRegion().getRegionString());
+            if (i < models.length - 1) {
+                regionStrings.append(", ");
+            }
+        }
+
+        logger.info("[unionMultiple] with models from regions {}", regionStrings);
+
+        final RecreationModel unionModel = new RecreationModel(Region.UNION);
+
+        mergeStatistics.startTimerUnion();
+
+        for (RecreationModel model : models) {
+            for (Feature feature : model.getFeatures().values()) {
+                if (!unionModel.getFeatures().containsKey(feature.getName())) {
+                    unionModel.getFeatures().put(feature.getName(), feature);
+                }
+            }
+        }
+
+        logger.debug("\t[unionMultiple] added {} unique features to union model",
+                unionModel.getFeatures().size());
+
+        handleRootFeatureMultiple(unionModel, models);
+
+        Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
+                .analyseSharedFeatures(models);
+        handleRegionFeatureMultiple(unionModel, models, uniqueFeaturesPerModel);
+
+        for (RecreationModel model : models) {
+            for (AbstractConstraint constraint : model.getConstraints()) {
+                if (!constraint.isCustomConstraint()) {
+                    unionModel.addConstraint(constraint);
+                }
+            }
+        }
+
+        splitFeaturesWithMultipleParents(unionModel);
+
+        mergeStatistics.stopTimerUnion();
+        mergeStatistics.setNumberOfConstraintsBeforeMerge(unionModel.getConstraints().size());
+        mergeStatistics.setNumberOfFeatureTreeConstraintsBeforeMerge(
+                unionModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count());
+        mergeStatistics.setNumberOfCustomConstraintsBeforeMerge(
+                unionModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count());
+        mergeStatistics.setNumberOfCrossTreeConstraintsBeforeMerge(unionModel.getConstraints().stream()
+                .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+                .count());
+        mergeStatistics
+                .setContextualizationShareBeforeMerge(RecreationAnalyser.returnContextualizationShare(unionModel));
+
+
+        logger.info(
+                "[unionMultiple] finished with {} features and {} constraints, there are {} feature tree, {} custom and {} other constraints",
+                unionModel.getFeatures().size(),
+                unionModel.getConstraints().size(),
+                unionModel.getConstraints().stream().filter(c -> c.isFeatureTreeConstraint()).count(),
+                unionModel.getConstraints().stream().filter(c -> c.isCustomConstraint()).count(),
+                unionModel.getConstraints().stream()
+                        .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint())
+                        .count());
+        logger.info("");
+
+        return unionModel;
+    }
 }
