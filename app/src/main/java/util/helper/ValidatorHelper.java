@@ -57,8 +57,6 @@ public class ValidatorHelper {
      */
     public static boolean checkSimultaneousViolationsOrNegation(RecreationModel mergedKB,
             RecreationModel kb1, RecreationModel kb2) {
-        logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
-
         // Create a test model with the region set to TESTING
         RecreationModel testModel = new RecreationModel(Region.TESTING);
 
