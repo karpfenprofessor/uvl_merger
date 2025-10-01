@@ -68,8 +68,8 @@ public class ComparisonConstraint extends AbstractConstraint {
     public String toString() {
         StringBuilder sb = new StringBuilder(super.toString());
         sb.append("\toperator\t\t: ").append(operator).append("\n");
-        sb.append("\tleftOperand\t\t: ").append(leftOperand.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
-        sb.append("\trightOperand\t\t: ").append(rightOperand.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\tleftOperand\t\t: ").append(leftOperand.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\trightOperand\t\t: ").append(rightOperand.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
         sb.append("\t}");
         return sb.toString();
     }

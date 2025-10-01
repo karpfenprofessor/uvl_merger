@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class BusyboxMergeAnalysis {
     private static final Logger logger = LogManager.getLogger(BusyboxMergeAnalysis.class);
+    private static final String SECTION_SEPARATOR = "=".repeat(80);
     
     private static final String BUSYBOX_MODELS_PATH = "uvl/busybox/";
     private static final String RESULTS_DIRECTORY = "results/busybox/";
@@ -204,7 +205,7 @@ public class BusyboxMergeAnalysis {
                 writer.write("\n" + result.statistics().toString() + "\n");
             }
             
-            writer.write("\n" + "=".repeat(80) + "\n\n");
+            writer.write("\n" + SECTION_SEPARATOR + "\n\n");
         }
     }
     

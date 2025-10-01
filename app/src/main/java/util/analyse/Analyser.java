@@ -1,5 +1,6 @@
 package util.analyse;
 
+import lombok.experimental.UtilityClass;
 import model.choco.ChocoModel;
 import model.recreate.RecreationModel;
 import util.ChocoTranslator;
@@ -21,6 +22,7 @@ import util.analyse.impl.RecreationAnalyser;
  * Note: Methods automatically convert RecreationModel to BaseModel when needed
  * using {@link ChocoTranslator}.
  */
+@UtilityClass
 public class Analyser {
 
     public static long returnNumberOfSolutions(final RecreationModel model) {

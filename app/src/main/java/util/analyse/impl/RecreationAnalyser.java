@@ -1,5 +1,6 @@
 package util.analyse.impl;
 
+import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import model.recreate.RecreationModel;
@@ -24,6 +25,7 @@ import java.util.HashMap;
  * This class provides direct analysis capabilities for RecreationModel instances, which are
  * the working representations of feature models in our merging process. 
  */
+@UtilityClass
 public class RecreationAnalyser {
     private static final Logger logger = LogManager.getLogger(RecreationAnalyser.class);
 

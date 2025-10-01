@@ -15,16 +15,6 @@ public class MergePaperModelsWithValidation {
 
             RecreationModel mergedModel = Merger.fullMerge(modelUs, modelGer).mergedModel();
 
-            //AbstractConstraint constraint = mergedModel.getConstraints().remove(9);
-            //System.out.println("removed constraint to trigger testcase 1: " + constraint);
-
-            //NotConstraint constraint2 = new NotConstraint();
-            //FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint();
-            //antecedent.setFeature(mergedModel.getFeatures().get("15k"));
-            //constraint2.setInner(antecedent);
-            // mergedModel.addConstraint(constraint2);
-            // System.out.println("added constraint to trigger testcase 2: " + constraint2);
-
             Validator.validateMerge(mergedModel, modelUs, modelGer, true);
         } catch (Exception e) {
             e.printStackTrace();

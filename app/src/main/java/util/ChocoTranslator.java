@@ -1,6 +1,7 @@
 package util;
 
 import java.util.stream.Stream;
+import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.chocosolver.solver.Model;
@@ -14,6 +15,7 @@ import model.recreate.RecreationModel;
 import model.recreate.constraints.*;
 import model.recreate.feature.Feature;
 
+@UtilityClass
 public class ChocoTranslator {
     private static final Logger logger = LogManager.getLogger(ChocoTranslator.class);
 
@@ -35,7 +37,7 @@ public class ChocoTranslator {
             try {
                 processConstraint(constraint, chocoModel);
             } catch (Exception e) {
-                logger.error("[convertToChocoModel] error processing constraint: " + constraint, e);
+                logger.error("[convertToChocoModel] error processing constraint: {}", constraint, e);
                 throw e;
             }
         }

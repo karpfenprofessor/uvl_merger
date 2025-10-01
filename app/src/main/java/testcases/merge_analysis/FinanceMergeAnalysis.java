@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class FinanceMergeAnalysis {
     private static final Logger logger = LogManager.getLogger(FinanceMergeAnalysis.class);
+    private static final String SECTION_SEPARATOR = "=".repeat(80);
     
     private static final String FINANCE_MODELS_PATH = "uvl/finance/";
     private static final String RESULTS_DIRECTORY = "results/";
@@ -202,7 +203,7 @@ public class FinanceMergeAnalysis {
                 writer.write("\n" + result.statistics().toString() + "\n");
             }
             
-            writer.write("\n" + "=".repeat(80) + "\n\n");
+            writer.write("\n" + SECTION_SEPARATOR + "\n\n");
         }
     }
     

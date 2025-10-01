@@ -57,8 +57,8 @@ public class RecreationModel {
      * Contextualizes all constraints in the model.
      */
     public void contextualizeAllConstraints() {
-        logger.info("[contextualize] " + constraints.size() + " constraints in region " + getRegion().getRegionString()
-                + " with region value " + region.ordinal());
+        logger.info("[contextualize] {} constraints in region {} with region value {}", 
+                constraints.size(), getRegion().getRegionString(), region.ordinal());
 
         // contextualize each constraint with the respective region value
         for (AbstractConstraint constraint : constraints) {
@@ -66,9 +66,9 @@ public class RecreationModel {
         }
 
         // Create features that we need to represent the Region structure
-        Feature regionFeature = new Feature("Region");
+        Feature regionFeature = new Feature(Region.REGION_STRING);
         Feature specificRegionFeature = new Feature(getRegionString());
-        features.put("Region", regionFeature);
+        features.put(Region.REGION_STRING, regionFeature);
         features.put(getRegionString(), specificRegionFeature);
         logger.debug("\t[contextualize] added region root [{}] and contextualization feature [{}]", regionFeature, specificRegionFeature);
 
@@ -82,7 +82,7 @@ public class RecreationModel {
         rootRegionGc.setUpperCardinality(1);
         rootRegionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(rootRegionGc);
-        logger.debug("\t[contextualize] constrain super root and region root with " + rootRegionGc.toString());
+        logger.debug("\t[contextualize] constrain super root and region root with {}", rootRegionGc.toString());
 
         // Create mandatory group constraint hanging the contextualization feature under the region root
         List<Feature> regionChildren = new ArrayList<>();
@@ -94,9 +94,9 @@ public class RecreationModel {
         regionGc.setUpperCardinality(1);
         regionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(regionGc);
-        logger.debug("\t[contextualize] constrain region root and contextualization feature with " + regionGc.toString());
+        logger.debug("\t[contextualize] constrain region root and contextualization feature with {}", regionGc.toString());
 
-        logger.info("[contextualize] finished region " + getRegionString());
+        logger.info("[contextualize] finished region {}", getRegionString());
         logger.info("");
     }
 

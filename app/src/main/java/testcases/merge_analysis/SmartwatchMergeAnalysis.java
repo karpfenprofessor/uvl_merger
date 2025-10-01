@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class SmartwatchMergeAnalysis {
     private static final Logger logger = LogManager.getLogger(SmartwatchMergeAnalysis.class);
+    private static final String SECTION_SEPARATOR = "=".repeat(80);
     
     private static final String SMARTWATCH_MODELS_PATH = "uvl/smartwatch/";
     private static final String RESULTS_DIRECTORY = "results/smartwatch/";
@@ -207,7 +208,7 @@ public class SmartwatchMergeAnalysis {
                 writer.write("\n" + result.statistics().toString() + "\n");
             }
             
-            writer.write("\n" + "=".repeat(80) + "\n\n");
+            writer.write("\n" + SECTION_SEPARATOR + "\n\n");
         }
     }
     

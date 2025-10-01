@@ -3,11 +3,11 @@ package util.analyse.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import lombok.experimental.UtilityClass;
 import util.analyse.statistics.SolveStatistics;
 
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.constraints.Constraint;
-// import org.chocosolver.solver.search.loop.monitors.IMonitorDownBranch;
 import org.chocosolver.solver.variables.Variable;
 
 import model.choco.ChocoModel;
@@ -24,8 +24,10 @@ import java.util.Arrays;
  * This class provides direct analysis capabilities for BaseModel instances, which are
  * the Choco constraint solver representations of feature models. 
  */
+@UtilityClass
 public class ChocoAnalyser {
     private static final Logger logger = LogManager.getLogger(ChocoAnalyser.class);
+    private static final String SEPARATOR = "----------------------------------------";
 
     public static boolean isConsistent(final ChocoModel chocoModel, boolean timeout) {
         Model model = chocoModel.getModel();
@@ -57,9 +59,7 @@ public class ChocoAnalyser {
             model.getSolver().limitTime(30000);
         }
         
-        //long startTime = System.currentTimeMillis();
         boolean solved = model.getSolver().solve();
-        //long endTime = System.currentTimeMillis();
         
         // Stop the monitoring thread
         monitorThread.interrupt();
@@ -104,9 +104,9 @@ public class ChocoAnalyser {
 
     public static void printConstraints(final ChocoModel baseModel) {
         Model model = baseModel.getModel();
-        logger.info("----------------------------------------");
-        logger.info("Printing all constraints in Choco model + " + baseModel.getRegionString() + ":");
-        logger.info("----------------------------------------");
+        logger.info(SEPARATOR);
+        logger.info("Printing all constraints in Choco model + {}:", baseModel.getRegionString());
+        logger.info(SEPARATOR);
 
         Constraint[] constraints = model.getCstrs();
         for (int i = 0; i < constraints.length; i++) {
@@ -139,20 +139,20 @@ public class ChocoAnalyser {
                 }
                 logger.info(varStr.substring(0, varStr.length() - 2));
             }
-            logger.info("----------------------------------------");
+            logger.info(SEPARATOR);
         }
-        logger.info("Total constraints in model " + baseModel.getRegionString() + ": {}", constraints.length);
-        logger.info("----------------------------------------");
+        logger.info("Total constraints in model {}: {}", baseModel.getRegionString(), constraints.length);
+        logger.info(SEPARATOR);
     }
 
     public static void printFeatures(final ChocoModel baseModel) {
         Model model = baseModel.getModel();
-        logger.info("Printing all features in Choco model " + baseModel.getRegionString() + ":");
+        logger.info("Printing all features in Choco model {}:", baseModel.getRegionString());
         Variable[] variables = model.getVars();
         for (int i = 0; i < variables.length; i++) {
             logger.info("  [{}]: {}", i, variables[i].toString());
         }
-        logger.info("Total features in model " + baseModel.getRegionString() + ": {}", variables.length);
+        logger.info("Total features in model {}: {}", baseModel.getRegionString(), variables.length);
     }
 
     public static int findIntersectionSolutions(final ChocoModel model1, final ChocoModel model2) {
@@ -204,9 +204,9 @@ public class ChocoAnalyser {
         final Model model = baseModel.getModel();
         model.getSolver().reset();
 
-        logger.info("--------------------------------------------------");
-        logger.info("Printing all solutions of model " + baseModel.getRegionString() + ":");
-        logger.info("--------------------------------------------------");
+        logger.info(SEPARATOR);
+        logger.info("Printing all solutions of model {}:", baseModel.getRegionString());
+        logger.info(SEPARATOR);
 
         String[] orderedFeatures = baseModel.getFeatures().keySet().toArray(new String[0]);
 
@@ -249,8 +249,8 @@ public class ChocoAnalyser {
             logger.info(solution.toString());
         }
 
-        logger.info("--------------------------------------------------");
-        logger.info("Total number of solutions in model " + baseModel.getRegionString() + ": {}", solutionCount);
-        logger.info("--------------------------------------------------");
+        logger.info(SEPARATOR);
+        logger.info("Total number of solutions in model {}: {}", baseModel.getRegionString(), solutionCount);
+        logger.info(SEPARATOR);
     }
 }

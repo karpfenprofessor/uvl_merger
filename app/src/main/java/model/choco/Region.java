@@ -24,6 +24,7 @@ public enum Region {
     MERGED(11);
 
     private final int value;
+    public static final String REGION_STRING = "Region";
 
     /*
      * Returns the string representation of the region.

@@ -70,9 +70,9 @@ public class BinaryConstraint extends AbstractConstraint {
         StringBuilder sb = new StringBuilder(super.toString());
         sb.append("\toperator\t\t: ").append(operator).append("\n");
         sb.append("\tantecedent\t\t: ").append(antecedent instanceof Feature ? ((Feature) antecedent).getName()
-                : antecedent.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+                : antecedent.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
         sb.append("\tconsequent\t\t: ").append(consequent instanceof Feature ? ((Feature) consequent).getName()
-                : consequent.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+                : consequent.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
         sb.append("\t}");
         return sb.toString();
     }

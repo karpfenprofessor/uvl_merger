@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import lombok.experimental.UtilityClass;
 import uvl.UVLJavaParser;
 import uvl.UVLJavaParser.AlternativeGroupContext;
 import uvl.UVLJavaParser.CardinalityGroupContext;
@@ -37,6 +38,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import uvl.UVLJavaLexer;
 
+@UtilityClass
 public class UVLParser {
     private static final Logger logger = LogManager.getLogger(UVLParser.class);
 
@@ -45,7 +47,7 @@ public class UVLParser {
     }
 
     public static RecreationModel parseUVLFile(String filePathString, Region region) throws Exception {
-        logger.info("[parseUVLFile] start " + filePathString + " for region " + region.getRegionString());
+        logger.info("[parseUVLFile] start {} for region {}", filePathString, region.getRegionString());
         Path filePath = Paths.get(UVLParser.class.getClassLoader()
                 .getResource(filePathString).toURI());
         String content = new String(Files.readAllBytes(filePath));
@@ -59,8 +61,8 @@ public class UVLParser {
         RecreationModel model = new RecreationModel(region, filePathString);
         parseFeatures(featureContext, model);
         parseConstraints(featureContext.constraints(), model);
-        logger.info("[parseUVLFile] finished " + filePathString + " for region " + region.getRegionString() 
-        + " with " + model.getFeatures().size() + " features and " + model.getConstraints().size() + " constraints");
+        logger.info("[parseUVLFile] finished {} for region {} with {} features and {} constraints", 
+        filePathString, region.getRegionString(), model.getFeatures().size(), model.getConstraints().size());
         logger.info("");
         
         return model;
@@ -76,7 +78,7 @@ public class UVLParser {
             parseFeaturesSection(featureModelCtx.features(), model);
         }
 
-        logger.debug("\t[parseFeatures] finished with " + model.getFeatures().size() + " features");
+        logger.debug("\t[parseFeatures] finished with {} features", model.getFeatures().size());
     }
 
     // Handle the 'features' section
@@ -87,7 +89,7 @@ public class UVLParser {
         if (rootFeatureCtx != null) {
             Feature root = parseFeature(rootFeatureCtx, model);
             model.setRootFeature(root);
-            logger.debug("\t[parseRootFeature] found root " + root.toString());
+            logger.debug("\t[parseRootFeature] found root {}", root.toString());
         }
     }
 

@@ -36,7 +36,7 @@ public class NotConstraint extends AbstractConstraint {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(super.toString());
-        sb.append("\tinner\t\t\t: ").append(inner.toString().replaceAll("\n", "\n\t\t\t\t  ")).append("\n");
+        sb.append("\tinner\t\t\t: ").append(inner.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
         sb.append("\t}");
         return sb.toString();
     }

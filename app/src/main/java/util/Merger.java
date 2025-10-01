@@ -6,6 +6,7 @@ import java.util.Set;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import lombok.experimental.UtilityClass;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import model.recreate.constraints.AbstractConstraint;
@@ -35,7 +36,8 @@ import util.helper.MergerHelper;
  *    - Uses constraint negation to identify removable constraints
  *    - Ensures the final model is minimal while preserving semantics
  */
-public class Merger extends MergerHelper {
+@UtilityClass
+public class Merger {
     private static final Logger logger = LogManager.getLogger(Merger.class);
 
     public record MergeResult(RecreationModel mergedModel, MergeStatistics mergedStatistics) {
@@ -94,8 +96,8 @@ public class Merger extends MergerHelper {
 
         logger.debug("\t[union] added {} unique features to union model", unionModel.getFeatures().size());
 
-        handleRootFeature(modelA, modelB, unionModel);
-        handleRegionFeature(modelA, modelB, unionModel);
+        MergerHelper.handleRootFeature(modelA, modelB, unionModel);
+        MergerHelper.handleRegionFeature(modelA, modelB, unionModel);
 
         // Add all non-Region constraints
         for (AbstractConstraint constraint : modelA.getConstraints()) {
@@ -110,7 +112,7 @@ public class Merger extends MergerHelper {
             }
         }
 
-        splitFeaturesWithMultipleParents(unionModel);
+        MergerHelper.splitFeaturesWithMultipleParents(unionModel);
 
         mergeStatistics.stopTimerUnion();
         mergeStatistics.setNumberOfConstraintsBeforeMerge(unionModel.getConstraints().size());
@@ -322,11 +324,11 @@ public class Merger extends MergerHelper {
         logger.debug("\t[unionMultiple] added {} unique features to union model",
                 unionModel.getFeatures().size());
 
-        handleRootFeatureMultiple(unionModel, models);
+        MergerHelper.handleRootFeatureMultiple(unionModel, models);
 
         Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
                 .analyseSharedFeatures(models);
-        handleRegionFeatureMultiple(unionModel, models, uniqueFeaturesPerModel);
+        MergerHelper.handleRegionFeatureMultiple(unionModel, models, uniqueFeaturesPerModel);
 
         for (RecreationModel model : models) {
             for (AbstractConstraint constraint : model.getConstraints()) {
@@ -336,7 +338,7 @@ public class Merger extends MergerHelper {
             }
         }
 
-        splitFeaturesWithMultipleParents(unionModel);
+        MergerHelper.splitFeaturesWithMultipleParents(unionModel);
 
         mergeStatistics.stopTimerUnion();
         mergeStatistics.setNumberOfConstraintsBeforeMerge(unionModel.getConstraints().size());

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
 
+import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +37,7 @@ import model.recreate.constraints.GroupConstraint;
  * - Feature splitting: Handles features with multiple parents by creating
  *   region-specific clones and equivalence constraints
  */
+@UtilityClass
 public class MergerHelper {
     private static final Logger logger = LogManager.getLogger(MergerHelper.class);
 
@@ -44,7 +46,7 @@ public class MergerHelper {
         logger.debug("\t[handleRegionFeature] create unified Region structure with regions: {} and {}",
                 modelA.getRegion().getRegionString(), modelB.getRegion().getRegionString());
         // Create unified Region structure
-        Feature regionFeature = unionModel.getFeatures().get("Region");
+        Feature regionFeature = unionModel.getFeatures().get(Region.REGION_STRING);
         Feature region1Feature = unionModel.getFeatures().get(modelA.getRegion().getRegionString());
         Feature region2Feature = unionModel.getFeatures().get(modelB.getRegion().getRegionString());
 
@@ -338,7 +340,7 @@ public class MergerHelper {
         logger.debug("\t[handleRegionFeatureMultiple] create unified Region structure with regions: {}", regionStrings);
 
         // Create unified Region structure
-        Feature regionFeature = unionModel.getFeatures().get("Region");
+        Feature regionFeature = unionModel.getFeatures().get(Region.REGION_STRING);
         
         // Create single group constraint for Region to root
         List<Feature> rootRegionChildren = new ArrayList<>();
@@ -399,7 +401,7 @@ public class MergerHelper {
         // Get special features that should be excluded
         Set<String> excludedFeatures = new HashSet<>();
         excludedFeatures.add(unionModel.getRootFeature().getName());
-        excludedFeatures.add("Region");
+        excludedFeatures.add(Region.REGION_STRING);
         for (Region r : Region.values()) {
             excludedFeatures.add(r.getRegionString());
         }
