@@ -19,6 +19,8 @@ import java.util.HashSet;
 import org.chocosolver.solver.variables.BoolVar;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Analysis utility for Choco-based feature models.
@@ -34,13 +36,41 @@ public class ChocoAnalyser {
         Model model = chocoModel.getModel();
         model.getSolver().reset();
         model.getSolver().limitSolution(1);
-        
+
         // Add timeout to prevent infinite hanging (30 seconds)
-        if(timeout) {
+        if (timeout) {
             model.getSolver().limitTime(30000);
         }
-        
-        return model.getSolver().solve();
+
+        Thread monitorThread = new Thread(() -> {
+            try {
+                int idx = 0;
+                while (!Thread.currentThread().isInterrupted()) {
+                    Thread.sleep(10000); // Check every 10 seconds
+                    logger.info("[monitor] {} Progress: nodes={}, fails={}",
+                            idx,
+                            model.getSolver().getMeasures().getNodeCount(),
+                            model.getSolver().getMeasures().getFailCount());
+                    idx++;
+                }
+            } catch (InterruptedException e) {
+                // Thread interrupted, stop monitoring
+            }
+        });
+        monitorThread.setDaemon(true);
+        monitorThread.start();
+
+        // Add timeout to prevent infinite hanging (30 seconds)
+        if (timeout) {
+            model.getSolver().limitTime(30000);
+        }
+
+        boolean solved = model.getSolver().solve();
+
+        // Stop the monitoring thread
+        monitorThread.interrupt();
+
+        return solved;
     }
 
     public static void solveAndCreateStatistic(final ChocoModel baseModel, final SolveStatistics solveStatistics) {
@@ -86,8 +116,7 @@ public class ChocoAnalyser {
 
             // Print involved variables
             Set<Variable> vars = new HashSet<>();
-            Arrays.stream(c.getPropagators()).forEach(p -> 
-                Collections.addAll(vars, p.getVars()));
+            Arrays.stream(c.getPropagators()).forEach(p -> Collections.addAll(vars, p.getVars()));
 
             if (!vars.isEmpty()) {
                 StringBuilder varStr = new StringBuilder("      Features: ");
@@ -185,7 +214,8 @@ public class ChocoAnalyser {
         StringBuilder header = new StringBuilder(String.format("%-4s | ", "Sol#"));
         for (int i = 0; i < orderedFeatures.length; i++) {
             String featureName = orderedFeatures[i];
-            header.append(featureName).append(" ".repeat(Math.max(0, columnWidths[i] - featureName.length()))).append(" | ");
+            header.append(featureName).append(" ".repeat(Math.max(0, columnWidths[i] - featureName.length())))
+                    .append(" | ");
         }
         logger.info(header);
 
@@ -204,7 +234,9 @@ public class ChocoAnalyser {
                 BoolVar featureVar = features.get(featureName);
                 if (featureVar != null) {
                     int value = featureVar.getValue();
-                    solution.append(value).append(" ".repeat(Math.max(0, columnWidths[i] - String.valueOf(value).length()))).append(" | ");
+                    solution.append(value)
+                            .append(" ".repeat(Math.max(0, columnWidths[i] - String.valueOf(value).length())))
+                            .append(" | ");
                 } else {
                     solution.append("-").append(" ".repeat(Math.max(0, columnWidths[i] - 1))).append(" | ");
                 }
