@@ -233,8 +233,9 @@ public class MergerHelper {
                 // Create clones for each parent and track them
                 List<Feature> clones = new ArrayList<>();
                 
-                for (String parentName : parentConstraints.keySet()) {
-                    GroupConstraint gc = parentConstraints.get(parentName);
+                for (Map.Entry<String, GroupConstraint> parentEntry : parentConstraints.entrySet()) {
+                    String parentName = parentEntry.getKey();
+                    GroupConstraint gc = parentEntry.getValue();
                     
                     // Get the clone name based on region for contextualized constraints
                     String cloneName;
@@ -385,7 +386,7 @@ public class MergerHelper {
         String rootName = models[0].getRootFeature().getName();
         for (RecreationModel model : models) {
             if (!model.getRootFeature().getName().equals(rootName)) {
-                throw new RuntimeException("Root feature must be the same in all models");
+                throw new MergerException("Root feature must be the same in all models");
             }
         }
         

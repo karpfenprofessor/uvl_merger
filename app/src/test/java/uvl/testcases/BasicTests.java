@@ -16,45 +16,45 @@ class BasicTests {
     private record TestCase(String filename, long expectedSolutions) {
     }
 
-    private final TestCase[] TEST_CASES_FEATURE_TREE = {
+    private final TestCase[] testCasesFeatureTree = {
             new TestCase("uvl/testcases/featureTree1.uvl", 1),
             new TestCase("uvl/testcases/featureTree2.uvl", 2),
-            new TestCase("uvl/testcases/featureTree3.uvl", 7), 
+            new TestCase("uvl/testcases/featureTree3.uvl", 7),
             new TestCase("uvl/testcases/featureTree4.uvl", 192),
             new TestCase("uvl/testcases/featureTree5.uvl", 8),
-            new TestCase("uvl/testcases/featureTree6.uvl", 18), 
+            new TestCase("uvl/testcases/featureTree6.uvl", 18),
             new TestCase("uvl/testcases/featureTree7.uvl", 480),
             new TestCase("uvl/testcases/featureTree8.uvl", 336),
             new TestCase("uvl/testcases/featureTree9.uvl", 1944000)
     };
 
-    private final TestCase[] TEST_CASES_CROSS_TREE = {
-        new TestCase("uvl/testcases/crossTree1.uvl", 340),
-        new TestCase("uvl/testcases/crossTree2.uvl", 72),
-        new TestCase("uvl/testcases/crossTree3.uvl", 18), 
-        new TestCase("uvl/testcases/crossTree4.uvl", 1),
-        new TestCase("uvl/testcases/crossTree5.uvl", 1),
-        new TestCase("uvl/testcases/crossTree6.uvl", 1), 
-        new TestCase("uvl/testcases/crossTree7.uvl", 1),
-        new TestCase("uvl/testcases/crossTree8.uvl", 1),
-        new TestCase("uvl/testcases/crossTree9.uvl", 311616)
+    private final TestCase[] testCasesCrossTree = {
+            new TestCase("uvl/testcases/crossTree1.uvl", 340),
+            new TestCase("uvl/testcases/crossTree2.uvl", 72),
+            new TestCase("uvl/testcases/crossTree3.uvl", 18),
+            new TestCase("uvl/testcases/crossTree4.uvl", 1),
+            new TestCase("uvl/testcases/crossTree5.uvl", 1),
+            new TestCase("uvl/testcases/crossTree6.uvl", 1),
+            new TestCase("uvl/testcases/crossTree7.uvl", 1),
+            new TestCase("uvl/testcases/crossTree8.uvl", 1),
+            new TestCase("uvl/testcases/crossTree9.uvl", 311616)
     };
 
-    private final TestCase[] TEST_CASES_PAPER = {
-        new TestCase("uvl/paper_test_models/us.uvl", 288),
-        new TestCase("uvl/paper_test_models/ger.uvl", 324)
+    private final TestCase[] testCasesPaper = {
+            new TestCase("uvl/paper_test_models/us.uvl", 288),
+            new TestCase("uvl/paper_test_models/ger.uvl", 324)
     };
 
-    private final TestCase[] TEST_CASES_FISH = {
-        new TestCase("uvl/testcases/featureTreeFish.uvl", 13824),
-        new TestCase("uvl/testcases/crossTreeFish.uvl", 448)
+    private final TestCase[] testCasesFish = {
+            new TestCase("uvl/testcases/featureTreeFish.uvl", 13824),
+            new TestCase("uvl/testcases/crossTreeFish.uvl", 448)
     };
 
-    private final TestCase[] TEST_CASES_RANDOM = {
-        new TestCase("uvl/testcases/model_test1.uvl", 24516),
-        new TestCase("uvl/testcases/model_test2.uvl", 18300),
-        //new TestCase("uvl/testcases/model_test3.uvl", 234), //61
-        new TestCase("uvl/testcases/model_test4.uvl", 5004)
+    private final TestCase[] testCasesRandom = {
+            new TestCase("uvl/testcases/model_test1.uvl", 24516),
+            new TestCase("uvl/testcases/model_test2.uvl", 18300),
+            // new TestCase("uvl/testcases/model_test3.uvl", 234), //61
+            new TestCase("uvl/testcases/model_test4.uvl", 5004)
     };
 
     private long getSolutionCount(String filename) throws Exception {
@@ -65,20 +65,21 @@ class BasicTests {
 
     @Test
     void testSolutionCountsOfFeatureTreeGroupConstraints() {
-        for (TestCase testCase : TEST_CASES_FEATURE_TREE) {
+        for (TestCase testCase : testCasesFeatureTree) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
                         "Solution count mismatch for " + testCase.filename);
             } catch (Exception e) {
-                throw new AssertionError("testSolutionCountsOfFeatureTreeGroupConstraints failed for " + testCase.filename, e);
+                throw new AssertionError(
+                        "testSolutionCountsOfFeatureTreeGroupConstraints failed for " + testCase.filename, e);
             }
         }
     }
 
     @Test
     void testSolutionCountsOfCrossTreeConstraints() {
-        for (TestCase testCase : TEST_CASES_CROSS_TREE) {
+        for (TestCase testCase : testCasesCrossTree) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
@@ -91,7 +92,7 @@ class BasicTests {
 
     @Test
     void testSolutionOfPaperCarModels() {
-        for (TestCase testCase : TEST_CASES_PAPER) {
+        for (TestCase testCase : testCasesPaper) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
@@ -104,7 +105,7 @@ class BasicTests {
 
     @Test
     void testSolutionOfRandomModels() {
-        for (TestCase testCase : TEST_CASES_RANDOM) {
+        for (TestCase testCase : testCasesRandom) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
@@ -117,7 +118,7 @@ class BasicTests {
 
     @Test
     void testSolutionOfFishTestModels() {
-        for (TestCase testCase : TEST_CASES_FISH) {
+        for (TestCase testCase : testCasesFish) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
                 assertEquals(testCase.expectedSolutions, actualSolutions,
@@ -177,9 +178,9 @@ class BasicTests {
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
 
             long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
-            assertEquals(TEST_CASES_PAPER[0].expectedSolutions, solutionsUs);
+            assertEquals(testCasesPaper[0].expectedSolutions, solutionsUs);
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
-            assertEquals(TEST_CASES_PAPER[1].expectedSolutions, solutionsGer);
+            assertEquals(testCasesPaper[1].expectedSolutions, solutionsGer);
 
             assertEquals(126, Analyser.findIntersectionSolutions(modelUs, modelGer));
 

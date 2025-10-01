@@ -18,7 +18,7 @@ class ValidatorTests {
     private record TestCase(String filename, Region region) {
     }
 
-    private final TestCase[] TEST_CASES_VALIDATOR = {
+    private final TestCase[] validatorSmartwatchTestModels = {
             new TestCase("uvl/smartwatch/miband2.uvl", Region.A),
             new TestCase("uvl/smartwatch/miband3.uvl", Region.B)
     };
@@ -26,10 +26,10 @@ class ValidatorTests {
     @Test
     void testCase1ExpectedToFail() {
         try {
-            RecreationModel modelA = UVLParser.parseUVLFile(TEST_CASES_VALIDATOR[0].filename,
-                    TEST_CASES_VALIDATOR[0].region);
-            RecreationModel modelB = UVLParser.parseUVLFile(TEST_CASES_VALIDATOR[1].filename,
-                    TEST_CASES_VALIDATOR[1].region);
+            RecreationModel modelA = UVLParser.parseUVLFile(validatorSmartwatchTestModels[0].filename,
+                    validatorSmartwatchTestModels[0].region);
+            RecreationModel modelB = UVLParser.parseUVLFile(validatorSmartwatchTestModels[1].filename,
+                    validatorSmartwatchTestModels[1].region);
 
             long solutionsCountA = Analyser.returnNumberOfSolutions(modelA);
             long solutionsCountB = Analyser.returnNumberOfSolutions(modelB);
@@ -39,7 +39,7 @@ class ValidatorTests {
 
             assertEquals(solutionsCountA + solutionsCountB, solutionsCountMerged);
             assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
-            
+
             mergedModel.getConstraints().remove(36);
 
             long solutionsCountMergedAfterConstraintRemoved = Analyser.returnNumberOfSolutions(mergedModel);
@@ -53,10 +53,10 @@ class ValidatorTests {
     @Test
     void testCase2AExpectedToFail() {
         try {
-            RecreationModel modelA = UVLParser.parseUVLFile(TEST_CASES_VALIDATOR[0].filename,
-                    TEST_CASES_VALIDATOR[0].region);
-            RecreationModel modelB = UVLParser.parseUVLFile(TEST_CASES_VALIDATOR[1].filename,
-                    TEST_CASES_VALIDATOR[1].region);
+            RecreationModel modelA = UVLParser.parseUVLFile(validatorSmartwatchTestModels[0].filename,
+                    validatorSmartwatchTestModels[0].region);
+            RecreationModel modelB = UVLParser.parseUVLFile(validatorSmartwatchTestModels[1].filename,
+                    validatorSmartwatchTestModels[1].region);
 
             long solutionsCountA = Analyser.returnNumberOfSolutions(modelA);
             long solutionsCountB = Analyser.returnNumberOfSolutions(modelB);
@@ -83,10 +83,10 @@ class ValidatorTests {
     @Test
     void testCase2BExpectedToFail() {
         try {
-            RecreationModel modelA = UVLParser.parseUVLFile(TEST_CASES_VALIDATOR[0].filename,
-                    TEST_CASES_VALIDATOR[0].region);
-            RecreationModel modelB = UVLParser.parseUVLFile(TEST_CASES_VALIDATOR[1].filename,
-                    TEST_CASES_VALIDATOR[1].region);
+            RecreationModel modelA = UVLParser.parseUVLFile(validatorSmartwatchTestModels[0].filename,
+                    validatorSmartwatchTestModels[0].region);
+            RecreationModel modelB = UVLParser.parseUVLFile(validatorSmartwatchTestModels[1].filename,
+                    validatorSmartwatchTestModels[1].region);
 
             long solutionsCountA = Analyser.returnNumberOfSolutions(modelA);
             long solutionsCountB = Analyser.returnNumberOfSolutions(modelB);
