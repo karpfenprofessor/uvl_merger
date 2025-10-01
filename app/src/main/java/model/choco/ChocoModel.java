@@ -38,8 +38,8 @@ public class ChocoModel {
 
     // adds a choco feature for tracking and reusing to the boolVarfeature map
     public void addFeature(final String name) {
-        final BoolVar var = model.boolVar(name);
-        features.put(name, var);
+        final BoolVar newFeature = model.boolVar(name);
+        features.put(name, newFeature);
     }
 
     // returns the boolVar feature for the given name

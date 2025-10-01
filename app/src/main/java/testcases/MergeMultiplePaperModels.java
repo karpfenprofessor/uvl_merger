@@ -3,7 +3,6 @@ package testcases;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import util.UVLParser;
-import util.Validator;
 import util.Merger;
 import util.analyse.Analyser;
 import util.analyse.statistics.MergeStatistics;

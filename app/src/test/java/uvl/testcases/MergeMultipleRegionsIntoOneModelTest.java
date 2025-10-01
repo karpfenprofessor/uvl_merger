@@ -11,12 +11,12 @@ import util.UVLParser;
 import util.analyse.Analyser;
 import util.analyse.statistics.MergeStatistics;
 
-public class MergeMultipleRegionsIntoOneModelTest {
+class MergeMultipleRegionsIntoOneModelTest {
 
     private record TestCase(String filename, Region region, long expectedSolutions) {
     }
  
-    private final TestCase[] PAPER_MODELS = {
+    private final TestCase[] paperModels = {
             new TestCase("uvl/paper_test_models/us.uvl", Region.A, 288),
             new TestCase("uvl/paper_test_models/ger.uvl", Region.B, 324),
             new TestCase("uvl/paper_test_models/asia.uvl", Region.C, 330),
@@ -24,12 +24,12 @@ public class MergeMultipleRegionsIntoOneModelTest {
     };
 
     @Test
-    public void testMergeMultiplePaperRegionsIntoOneModel() {
+    void testMergeMultiplePaperRegionsIntoOneModel() {
         try {
-            TestCase testCaseA = PAPER_MODELS[0];
-            TestCase testCaseB = PAPER_MODELS[1];
-            TestCase testCaseC = PAPER_MODELS[2];
-            TestCase testCaseD = PAPER_MODELS[3];
+            TestCase testCaseA = paperModels[0];
+            TestCase testCaseB = paperModels[1];
+            TestCase testCaseC = paperModels[2];
+            TestCase testCaseD = paperModels[3];
 
             RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
             RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
@@ -80,9 +80,6 @@ public class MergeMultipleRegionsIntoOneModelTest {
             assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                     "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                             + testCaseB.filename + " and " + testCaseC.filename + " and " + testCaseD.filename);
-
-            //assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true));
-            //assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false));
         } catch (Exception e) {
             throw new AssertionError("testMergeMultiplePaperRegionsIntoOneModel failed: " + e.getMessage(), e);
         }
