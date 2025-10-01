@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 @NoArgsConstructor
 public class MergeStatistics {
     private final Logger logger = LogManager.getLogger(MergeStatistics.class);
+    private static final String NANOSECONDS_UNIT = " ns";
+    private static final String DURATION_FORMAT = "%12d" + NANOSECONDS_UNIT + " (%.2f ms)";
 
     private long startTimeUnion;
     private long endTimeUnion;
@@ -142,13 +144,13 @@ public class MergeStatistics {
 
         // ─ Timing ───────────────────────────────────────────────────────────────
         sb.append("\t[statistics] Union operation duration:     ")
-                .append(String.format("%12d ns (%.2f ms)", getDurationUnion(), getDurationUnion() / 1_000_000.0)).append("\n");
+                .append(String.format(DURATION_FORMAT, getDurationUnion(), getDurationUnion() / 1_000_000.0)).append("\n");
         sb.append("\t[statistics] Inconsistency check duration: ")
-                .append(String.format("%12d ns (%.2f ms)", getDurationInconsistencyCheck(), getDurationInconsistencyCheck() / 1_000_000.0)).append("\n");
+                .append(String.format(DURATION_FORMAT, getDurationInconsistencyCheck(), getDurationInconsistencyCheck() / 1_000_000.0)).append("\n");
         sb.append("\t[statistics] Cleanup duration:             ")
-                .append(String.format("%12d ns (%.2f ms)", getDurationCleanup(), getDurationCleanup() / 1_000_000.0)).append("\n");
+                .append(String.format(DURATION_FORMAT, getDurationCleanup(), getDurationCleanup() / 1_000_000.0)).append("\n");
         sb.append("\t[statistics] Full merge duration:          ")
-                .append(String.format("%12d ns (%.2f ms)", getTotalDuration(), getTotalDuration() / 1_000_000.0)).append("\n");
+                .append(String.format(DURATION_FORMAT, getTotalDuration(), getTotalDuration() / 1_000_000.0)).append("\n");
 
         // ─ Number of features ────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of features in merged model: ").append(numberOfFeatures).append("\n");
@@ -232,8 +234,8 @@ public class MergeStatistics {
                 return "FAILED - Test Case 2A";
             case 3:
                 return "FAILED - Test Case 2B";
+            default:
+                return "UNKNOWN validation code: " + validate;
         }
-
-        return "UNKNOWN validation code: " + validate;
     }
 }
