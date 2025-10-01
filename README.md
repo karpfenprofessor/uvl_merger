@@ -105,7 +105,7 @@ app/src/main/resources/uvl/  # Test models
 - **JUnit 5** – Testing framework
 - **Log4J2** – Logging and output
 - **Lombok** – Code generation
-- **SonarQube** – Code quality analysis (coverage disabled)
+- **SonarQube** – Code quality analysis (coverage disabled) https://sonarcloud.io/project/overview?id=karpfenprofessor_uvl_merger
 
 ---
 
