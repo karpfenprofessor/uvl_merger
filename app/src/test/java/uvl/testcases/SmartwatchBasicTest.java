@@ -11,7 +11,7 @@ import util.analyse.statistics.MergeStatistics;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class SmartwatchBasicTest {
+class SmartwatchBasicTest {
         private record TestCase(String filename, long expectedSolutions) {
         }
 
@@ -46,7 +46,7 @@ public class SmartwatchBasicTest {
         }
 
         @Test
-        public void testSolutionCountsOfBaseModels() {
+        void testSolutionCountsOfBaseModels() {
                 for (TestCase testCase : MIBAND_BASE_MODELS) {
                         try {
                                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -60,7 +60,7 @@ public class SmartwatchBasicTest {
         }
 
         @Test
-        public void testSolutionCountsOfRealizedModels() {
+        void testSolutionCountsOfRealizedModels() {
                 for (TestCase testCase : MIBAND_REALIZED_MODELS) {
                         try {
                                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -75,7 +75,7 @@ public class SmartwatchBasicTest {
         }
 
         @Test
-        public void testContextualizationOfSingleModels() {
+        void testContextualizationOfSingleModels() {
                 for (TestCase testCase : MIBAND_BASE_MODELS) {
                         try {
                                 RecreationModel model = UVLParser.parseUVLFile(testCase.filename, Region.A);
@@ -112,7 +112,7 @@ public class SmartwatchBasicTest {
         }
 
         @Test
-        public void testMergeOfSmartwatchModel7RealizedAnd8Realized() {
+        void testMergeOfSmartwatchModel7RealizedAnd8Realized() {
                 try {
                         TestCase testCaseA = MIBAND_REALIZED_MODELS[7];
                         TestCase testCaseB = MIBAND_REALIZED_MODELS[8];
@@ -153,8 +153,7 @@ public class SmartwatchBasicTest {
                                         "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                                                         + testCaseB.filename);
 
-                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true));
-                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false));
+                        assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB));
 
                 } catch (Exception e) {
                         throw new AssertionError("testMergeOfSmartwatchModels failed: " + e.getMessage(), e);
@@ -162,7 +161,7 @@ public class SmartwatchBasicTest {
         }
 
         @Test
-        public void testUnionOfSmartwatchModels() {
+        void testUnionOfSmartwatchModels() {
                 try {
                         for (int i = 0; i < MIBAND_BASE_MODELS.length - 1; i++) {
                                 RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i].filename,
@@ -248,7 +247,7 @@ public class SmartwatchBasicTest {
         }
 
         @Test
-        public void testMergeOfSmartwatchModels() {
+        void testMergeOfSmartwatchModels() {
                 try {
                         for (int i = 0; i < MIBAND_BASE_MODELS.length - 1; i++) {
                                 RecreationModel modelA = UVLParser.parseUVLFile(MIBAND_BASE_MODELS[i].filename,
@@ -301,8 +300,7 @@ public class SmartwatchBasicTest {
                                                                 + MIBAND_BASE_MODELS[i].filename + " and "
                                                                 + MIBAND_BASE_MODELS[i + 1].filename);
 
-                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true), "Merge validation failed for " + MIBAND_BASE_MODELS[i].filename + " and " + MIBAND_BASE_MODELS[i + 1].filename);
-                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false), "Merge validation failed for " + MIBAND_BASE_MODELS[i].filename + " and " + MIBAND_BASE_MODELS[i + 1].filename);
+                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB), "Merge validation failed for " + MIBAND_BASE_MODELS[i].filename + " and " + MIBAND_BASE_MODELS[i + 1].filename);
                         }
 
                         for (int i = 0; i < MIBAND_REALIZED_MODELS.length - 1; i++) {
@@ -357,8 +355,7 @@ public class SmartwatchBasicTest {
                                                                 + MIBAND_REALIZED_MODELS[i].filename + " and "
                                                                 + MIBAND_REALIZED_MODELS[i + 1].filename);
 
-                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, true), "Merge validation failed for " + MIBAND_REALIZED_MODELS[i].filename + " and " + MIBAND_REALIZED_MODELS[i + 1].filename);
-                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB, false), "Merge validation failed for " + MIBAND_REALIZED_MODELS[i].filename + " and " + MIBAND_REALIZED_MODELS[i + 1].filename);
+                                assertEquals(0, Validator.validateMerge(mergedModel, modelA, modelB), "Merge validation failed for " + MIBAND_REALIZED_MODELS[i].filename + " and " + MIBAND_REALIZED_MODELS[i + 1].filename);
                         }
                 } catch (Exception e) {
                         throw new AssertionError("testUnionOfSmartwatchModels failed: " + e.getMessage(), e);

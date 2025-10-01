@@ -82,7 +82,7 @@ public class RecreationModel {
         rootRegionGc.setUpperCardinality(1);
         rootRegionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(rootRegionGc);
-        logger.debug("\t[contextualize] constrain super root and region root with {}", rootRegionGc.toString());
+        logger.debug("\t[contextualize] constrain super root and region root with {}", rootRegionGc);
 
         // Create mandatory group constraint hanging the contextualization feature under the region root
         List<Feature> regionChildren = new ArrayList<>();
@@ -94,7 +94,7 @@ public class RecreationModel {
         regionGc.setUpperCardinality(1);
         regionGc.setCustomConstraint(Boolean.TRUE);
         addConstraint(regionGc);
-        logger.debug("\t[contextualize] constrain region root and contextualization feature with {}", regionGc.toString());
+        logger.debug("\t[contextualize] constrain region root and contextualization feature with {}", regionGc);
 
         logger.info("[contextualize] finished region {}", getRegionString());
         logger.info("");

@@ -48,11 +48,13 @@ public class BinaryConstraint extends AbstractConstraint {
 
     @Override
     public AbstractConstraint copy() {
-        Object copiedAntecedent = (antecedent instanceof AbstractConstraint) ? ((AbstractConstraint) antecedent).copy()
-                : (antecedent instanceof Feature) ? antecedent : antecedent;
+        Object copiedAntecedent = (antecedent instanceof AbstractConstraint) 
+                ? ((AbstractConstraint) antecedent).copy() 
+                : antecedent;
 
-        Object copiedConsequent = (consequent instanceof AbstractConstraint) ? ((AbstractConstraint) consequent).copy()
-                : (consequent instanceof Feature) ? consequent : consequent;
+        Object copiedConsequent = (consequent instanceof AbstractConstraint) 
+                ? ((AbstractConstraint) consequent).copy() 
+                : consequent;
 
         return new BinaryConstraint(
                 copiedAntecedent,
@@ -69,10 +71,17 @@ public class BinaryConstraint extends AbstractConstraint {
     public String toString() {
         StringBuilder sb = new StringBuilder(super.toString());
         sb.append("\toperator\t\t: ").append(operator).append("\n");
-        sb.append("\tantecedent\t\t: ").append(antecedent instanceof Feature ? ((Feature) antecedent).getName()
-                : antecedent.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
-        sb.append("\tconsequent\t\t: ").append(consequent instanceof Feature ? ((Feature) consequent).getName()
-                : consequent.toString().replace("\n", "\n\t\t\t\t  ")).append("\n");
+        
+        String antecedentStr = antecedent instanceof Feature 
+                ? ((Feature) antecedent).getName()
+                : antecedent.toString().replace("\n", "\n\t\t\t\t  ");
+        sb.append("\tantecedent\t\t: ").append(antecedentStr).append("\n");
+        
+        String consequentStr = consequent instanceof Feature 
+                ? ((Feature) consequent).getName()
+                : consequent.toString().replace("\n", "\n\t\t\t\t  ");
+        sb.append("\tconsequent\t\t: ").append(consequentStr).append("\n");
+        
         sb.append("\t}");
         return sb.toString();
     }

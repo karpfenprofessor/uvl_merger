@@ -117,7 +117,7 @@ public class RecreationAnalyser {
                 recModel.getRegion().getRegionString());
         int i = 0;
         for (AbstractConstraint constraint : recModel.getConstraints()) {
-            logger.info("  [{}]: {}", i++, constraint.toString());
+            logger.info("  [{}]: {}", i++, constraint);
         }
         logger.info("Total constraints in model {}: {}", recModel.getRegion().getRegionString(), recModel.getConstraints().size());
     }
@@ -127,7 +127,7 @@ public class RecreationAnalyser {
                 recModel.getRegion().getRegionString());
         int i = 0;
         for (Feature feature : recModel.getFeatures().values()) {
-            logger.info("  [{}]: {}", i++, feature.toString());
+            logger.info("  [{}]: {}", i++, feature);
         }
         logger.info("Total features in model {}: {}", recModel.getRegion().getRegionString(), recModel.getFeatures().size());
     }

@@ -61,7 +61,7 @@ public class MergerHelper {
         rootRegionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(rootRegionGc);
         logger.debug("\t[handleRegionFeature] constrain super root and region root features with "
-                + rootRegionGc.toString());
+                + rootRegionGc);
 
         // Create single group constraint for Region's children
         List<Feature> regionChildren = new ArrayList<>();
@@ -75,7 +75,7 @@ public class MergerHelper {
         regionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(regionGc);
         logger.debug("\t[handleRegionFeature] constrain region root and contextualization features with "
-                + regionGc.toString());
+                + regionGc);
 
         // Find unique features in each model
         Set<String> modelAFeatures = modelA.getFeatures().keySet();
@@ -128,7 +128,7 @@ public class MergerHelper {
                 unionModel.addConstraint(gc);
                 logger.debug(
                         "\t[handleRootFeature] added mandatory group constraint for root features and created new super root feature: {}",
-                        newRoot.toString());
+                        newRoot);
             }
         } else if (model1.getRootFeature() != null) {
             unionModel.setRootFeature(unionModel.getFeatures().get(model1.getRootFeature().getName()));
@@ -352,7 +352,7 @@ public class MergerHelper {
         rootRegionGc.setUpperCardinality(1);
         rootRegionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(rootRegionGc);
-        logger.debug("\t[handleRegionFeature] constrain super root and region root features with {}", rootRegionGc.toString());
+        logger.debug("\t[handleRegionFeature] constrain super root and region root features with {}", rootRegionGc);
 
         // Create single group constraint for Region's children
         List<Feature> regionChildren = new ArrayList<>();
@@ -368,7 +368,7 @@ public class MergerHelper {
         regionGc.setUpperCardinality(1);
         regionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(regionGc);
-        logger.debug("\t[handleRegionFeature] constrain region root and contextualization features with {}", regionGc.toString());
+        logger.debug("\t[handleRegionFeature] constrain region root and contextualization features with {}", regionGc);
 
         // Add region implications for unique features
         for (Map.Entry<RecreationModel, Set<String>> entry : uniqueFeaturesPerModel.entrySet()) {
@@ -419,7 +419,7 @@ public class MergerHelper {
 
                     implication.setFeatureTreeConstraint(Boolean.TRUE);
                     unionModel.addConstraint(implication);
-                    logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
+                    logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication);
                 }
             }
         }

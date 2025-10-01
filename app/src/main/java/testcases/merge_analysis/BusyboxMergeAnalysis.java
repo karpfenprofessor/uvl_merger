@@ -281,7 +281,8 @@ public class BusyboxMergeAnalysis {
         logger.info("[BusyboxMergeAnalysis] Successful merges: {}", successfulMerges);
         logger.info("[BusyboxMergeAnalysis] Failed merges: {}", failedMerges);
         double successRate = !results.isEmpty() ? (double) successfulMerges / results.size() * 100 : 0.0;
-        logger.info("[BusyboxMergeAnalysis] Success rate: {}%", String.format("%.2f", successRate));
+        String formattedRate = String.format("%.2f", successRate);
+        logger.info("[BusyboxMergeAnalysis] Success rate: {}%", formattedRate);
         logger.info("[BusyboxMergeAnalysis] Results file: {}", resultsFilePath);
         logger.info(SEPARATOR_LINE);
     }

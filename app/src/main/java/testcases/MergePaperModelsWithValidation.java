@@ -15,7 +15,7 @@ public class MergePaperModelsWithValidation {
 
             RecreationModel mergedModel = Merger.fullMerge(modelUs, modelGer).mergedModel();
 
-            Validator.validateMerge(mergedModel, modelUs, modelGer, true);
+            Validator.validateMerge(mergedModel, modelUs, modelGer);
         } catch (Exception e) {
             e.printStackTrace();
         }

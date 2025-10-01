@@ -1,5 +1,8 @@
 package testcases;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import util.UVLParser;
@@ -8,6 +11,7 @@ import util.analyse.Analyser;
 import util.analyse.statistics.MergeStatistics;
 
 public class MergeMultiplePaperModels {
+    private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModels.class);
 
     public static void main(String[] args) {
         try {
@@ -26,19 +30,17 @@ public class MergeMultiplePaperModels {
                     modelOzeania);
 
             // solutions union: 288+324+330+378=1320
-            System.out.println("solutions model contextualized us: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model contextualized ger: " + Analyser.returnNumberOfSolutions(modelGer));
-            System.out.println("solutions model contextualized asia: " + Analyser.returnNumberOfSolutions(modelAsia));
-            System.out.println(
-                    "solutions model contextualized ozeania: " + Analyser.returnNumberOfSolutions(modelOzeania));
-            System.out
-                    .println("solutions union multiple model: " + Analyser.returnNumberOfSolutions(unionMultipleModel));
+            logger.info("solutions model contextualized us: {}", Analyser.returnNumberOfSolutions(modelUs));
+            logger.info("solutions model contextualized ger: {}", Analyser.returnNumberOfSolutions(modelGer));
+            logger.info("solutions model contextualized asia: {}", Analyser.returnNumberOfSolutions(modelAsia));
+            logger.info("solutions model contextualized ozeania: {}", Analyser.returnNumberOfSolutions(modelOzeania));
+            logger.info("solutions union multiple model: {}", Analyser.returnNumberOfSolutions(unionMultipleModel));
 
             RecreationModel mergedModel = Merger.inconsistencyCheck(unionMultipleModel, mergeStatistics);
-            System.out.println("solutions after inconsistency check model: " + Analyser.returnNumberOfSolutions(mergedModel));
+            logger.info("solutions after inconsistency check model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
             mergedModel = Merger.cleanup(mergedModel, mergeStatistics);
-            System.out.println("solutions after cleanup model: " + Analyser.returnNumberOfSolutions(mergedModel));
+            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));
         } catch (Exception e) {
             e.printStackTrace();
         }

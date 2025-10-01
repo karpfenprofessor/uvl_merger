@@ -211,7 +211,9 @@ public class MergeStatistics {
     }
 
     public void printStatistics() {
-        logger.info(toString());
+        if (logger.isInfoEnabled()) {
+            logger.info(toString());
+        }
     }
 
     /**

@@ -1,5 +1,8 @@
 package testcases;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import util.Merger;
 import util.Merger.MergeResult;
 import util.analyse.Analyser;
@@ -10,6 +13,7 @@ import model.choco.Region;
 import model.recreate.RecreationModel;
 
 public class MergeRealWorldModelsWithValidation {
+    private static final Logger logger = LogManager.getLogger(MergeRealWorldModelsWithValidation.class);
 
     public static void main(String[] args) throws Exception {
         String modelSmartwatchAString = "uvl/smartwatch/miband7.uvl";
@@ -37,15 +41,15 @@ public class MergeRealWorldModelsWithValidation {
 
         RecreationAnalyser.analyseSharedFeatures(originalA, originalB);
 
-        System.out.println("originalA: " + Analyser.isConsistent(originalA));
-        System.out.println("originalB: " + Analyser.isConsistent(originalB));
+        logger.info("originalA: {}", Analyser.isConsistent(originalA));
+        logger.info("originalB: {}", Analyser.isConsistent(originalB));
 
         MergeResult mergeResult = Merger.fullMerge(originalA, originalB);
-        System.out.println("originalA: " + Analyser.isConsistent(originalA));
-        System.out.println("originalB: " + Analyser.isConsistent(originalB));
-        System.out.println("mergedModel: " + Analyser.isConsistent(mergeResult.mergedModel()));
+        logger.info("originalA: {}", Analyser.isConsistent(originalA));
+        logger.info("originalB: {}", Analyser.isConsistent(originalB));
+        logger.info("mergedModel: {}", Analyser.isConsistent(mergeResult.mergedModel()));
 
         mergeResult.mergedStatistics().printStatistics();
-        Validator.validateMerge(mergeResult.mergedModel(), originalA, originalB, true);
+        Validator.validateMerge(mergeResult.mergedModel(), originalA, originalB);
     }
 }

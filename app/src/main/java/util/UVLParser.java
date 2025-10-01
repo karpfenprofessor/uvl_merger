@@ -89,7 +89,7 @@ public class UVLParser {
         if (rootFeatureCtx != null) {
             Feature root = parseFeature(rootFeatureCtx, model);
             model.setRootFeature(root);
-            logger.debug("\t[parseRootFeature] found root {}", root.toString());
+            logger.debug("\t[parseRootFeature] found root {}", root);
         }
     }
 

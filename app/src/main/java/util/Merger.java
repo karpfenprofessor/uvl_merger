@@ -147,14 +147,14 @@ public class Merger {
                 unionModel.getConstraints().stream()
                         .filter(c -> !c.isFeatureTreeConstraint() && !c.isCustomConstraint()).count());
 
-        final RecreationModel CKB = new RecreationModel(Region.MERGED);
+        final RecreationModel mergedModel = new RecreationModel(Region.MERGED);
         RecreationModel testingModel = null;
 
         mergeStatistics.startTimerInconsistencyCheck();
 
         // Copy all features and root feature from union model to merged model
-        CKB.getFeatures().putAll(unionModel.getFeatures());
-        CKB.setRootFeature(unionModel.getRootFeature());
+        mergedModel.getFeatures().putAll(unionModel.getFeatures());
+        mergedModel.setRootFeature(unionModel.getRootFeature());
 
         // loop over every contextualized constraint (line 6 in pseudocode)
         Iterator<AbstractConstraint> iterator = unionModel.getConstraints().iterator();
@@ -165,12 +165,12 @@ public class Merger {
             AbstractConstraint checkConstraint = constraint.copy();
             AbstractConstraint originalConstraint = constraint.copy();
             if (constraint.isCustomConstraint() || constraint.isFeatureTreeConstraint()) {
-                CKB.addConstraint(originalConstraint);
+                mergedModel.addConstraint(originalConstraint);
                 iterator.remove();
 
                 mergeStatistics.incrementInconsistencyNotCheckedCounter();
                 logger.debug("\t[inconsistencyCheck] skip and add constraint {}",
-                        originalConstraint.toString());
+                        originalConstraint);
                 continue;
             }
 
@@ -180,25 +180,25 @@ public class Merger {
             testingModel.setRootFeature(unionModel.getRootFeature());
 
             testingModel.addConstraints(unionModel.getConstraints());
-            testingModel.addConstraints(CKB.getConstraints());
+            testingModel.addConstraints(mergedModel.getConstraints());
 
-            logger.trace("\t[inconsistencyCheck] check constraint: {}", checkConstraint.toString());
+            logger.trace("\t[inconsistencyCheck] check constraint: {}", checkConstraint);
 
             if (isInconsistentWithNegatedContextualizedConstraint(checkConstraint, testingModel)) {
                 // decontextualize constraint and add to merged model (line 8 in pseudocode)
                 originalConstraint.disableContextualize();
-                CKB.addConstraint(originalConstraint);
+                mergedModel.addConstraint(originalConstraint);
 
                 mergeStatistics.incrementInconsistencyNonContextualizedCounter();
                 logger.debug("\n\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
-                        originalConstraint.toString());
+                        originalConstraint);
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
-                CKB.addConstraint(originalConstraint);
+                mergedModel.addConstraint(originalConstraint);
 
                 mergeStatistics.incrementInconsistencyContextualizedCounter();
                 logger.debug("\n\t[inconsistencyCheck] consistent, add contextualized constraint {}",
-                        originalConstraint.toString());
+                        originalConstraint);
             }
 
             // remove constraint from union model (line 12 in pseudocode)
@@ -213,10 +213,10 @@ public class Merger {
                 mergeStatistics.getInconsistencyContextualizedCounter(),
                 mergeStatistics.getInconsistencyNotCheckedCounter());
         logger.info("[inconsistencyCheck] finished with {} features and {} constraints",
-                CKB.getFeatures().size(), CKB.getConstraints().size());
+                mergedModel.getFeatures().size(), mergedModel.getConstraints().size());
         logger.info("");
 
-        return CKB;
+        return mergedModel;
     }
 
     public static RecreationModel cleanup(final RecreationModel mergedModel, final MergeStatistics mergeStatistics) {
@@ -244,12 +244,12 @@ public class Merger {
                 constraint.disableNegation();
                 mergeStatistics.incrementCleanupRemovedCounter();
                 System.out.print(" - ");
-                logger.trace("\t[cleanup] inconsistent, remove constraint {}", constraint.toString());
+                logger.trace("\t[cleanup] inconsistent, remove constraint {}", constraint);
             } else {
                 constraint.disableNegation();
                 mergeStatistics.incrementCleanupKeptAsIsCounter();
                 System.out.print(" + ");
-                logger.trace("\t[cleanup] consistent, keep unnegated constraint {}", constraint.toString());
+                logger.trace("\t[cleanup] consistent, keep unnegated constraint {}", constraint);
             }
         }
 

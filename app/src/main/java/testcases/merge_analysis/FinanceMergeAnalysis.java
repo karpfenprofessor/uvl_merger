@@ -279,7 +279,9 @@ public class FinanceMergeAnalysis {
         logger.info("[FinanceMergeAnalysis] Total merge operations: {}", results.size());
         logger.info("[FinanceMergeAnalysis] Successful merges: {}", successfulMerges);
         logger.info("[FinanceMergeAnalysis] Failed merges: {}", failedMerges);
-        logger.info("[FinanceMergeAnalysis] Success rate: {:.2f}%", (double) successfulMerges / results.size() * 100);
+        double successRate = (double) successfulMerges / results.size() * 100;
+        String formattedRate = String.format("%.2f", successRate);
+        logger.info("[FinanceMergeAnalysis] Success rate: {}%", formattedRate);
         logger.info("[FinanceMergeAnalysis] Results file: {}", resultsFilePath);
         logger.info("[FinanceMergeAnalysis] {}", SUMMARY_SEPARATOR);
     }

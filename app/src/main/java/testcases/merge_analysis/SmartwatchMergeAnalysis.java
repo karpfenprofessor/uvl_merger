@@ -284,7 +284,8 @@ public class SmartwatchMergeAnalysis {
         logger.info("[SmartwatchMergeAnalysis] Successful merges: {}", successfulMerges);
         logger.info("[SmartwatchMergeAnalysis] Failed merges: {}", failedMerges);
         double successRate = !results.isEmpty() ? (double) successfulMerges / results.size() * 100 : 0.0;
-        logger.info("[SmartwatchMergeAnalysis] Success rate: {}%", String.format("%.2f", successRate));
+        String formattedRate = String.format("%.2f", successRate);
+        logger.info("[SmartwatchMergeAnalysis] Success rate: {}%", formattedRate);
         logger.info("[SmartwatchMergeAnalysis] Results file: {}", resultsFilePath);
         logger.info(SEPARATOR_LINE);
     }

@@ -65,7 +65,7 @@ public class Validator extends ValidatorHelper {
      *         3 = Test 2B failed (missing solutions from KB₂ - merge too strict)
      */
     public static int validateMerge(final RecreationModel mergedKB, final RecreationModel kb1,
-            final RecreationModel kb2, final boolean useOrNegationConstraint) {
+            final RecreationModel kb2) {
         logger.info("[validateMerge] Starting validation of merged model");
 
         boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2);

@@ -11,7 +11,7 @@ import util.analyse.statistics.MergeStatistics;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 
-public class BasicTests {
+class BasicTests {
 
     private record TestCase(String filename, long expectedSolutions) {
     }
@@ -64,7 +64,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testSolutionCountsOfFeatureTreeGroupConstraints() {
+    void testSolutionCountsOfFeatureTreeGroupConstraints() {
         for (TestCase testCase : TEST_CASES_FEATURE_TREE) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -77,7 +77,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testSolutionCountsOfCrossTreeConstraints() {
+    void testSolutionCountsOfCrossTreeConstraints() {
         for (TestCase testCase : TEST_CASES_CROSS_TREE) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -90,7 +90,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testSolutionOfPaperCarModels() {
+    void testSolutionOfPaperCarModels() {
         for (TestCase testCase : TEST_CASES_PAPER) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -103,7 +103,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testSolutionOfRandomModels() {
+    void testSolutionOfRandomModels() {
         for (TestCase testCase : TEST_CASES_RANDOM) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -116,7 +116,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testSolutionOfFishTestModels() {
+    void testSolutionOfFishTestModels() {
         for (TestCase testCase : TEST_CASES_FISH) {
             try {
                 long actualSolutions = getSolutionCount(testCase.filename);
@@ -129,7 +129,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testContextualizationOfPaperCarModels() {
+    void testContextualizationOfPaperCarModels() {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
@@ -148,7 +148,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testUnionOfPaperCarModels() {
+    void testUnionOfPaperCarModels() {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
@@ -171,7 +171,7 @@ public class BasicTests {
     }
 
     @Test
-    public void testMergeOfPaperCarModels() {
+    void testMergeOfPaperCarModels() {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
@@ -181,7 +181,7 @@ public class BasicTests {
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
             assertEquals(TEST_CASES_PAPER[1].expectedSolutions, solutionsGer);
 
-            assertEquals(Analyser.findIntersectionSolutions(modelUs, modelGer), 126);
+            assertEquals(126, Analyser.findIntersectionSolutions(modelUs, modelGer));
 
             modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
@@ -201,8 +201,7 @@ public class BasicTests {
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 
-            assertEquals(0, Validator.validateMerge(mergedModel, modelUs, modelGer, true));
-            assertEquals(0, Validator.validateMerge(mergedModel, modelUs, modelGer, false));
+            assertEquals(0, Validator.validateMerge(mergedModel, modelUs, modelGer));
 
         } catch (Exception e) {
             throw new AssertionError("testMergeOfPaperCarModels failed, error: " + e.getMessage());

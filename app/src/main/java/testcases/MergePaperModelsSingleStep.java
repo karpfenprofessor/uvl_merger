@@ -11,34 +11,34 @@ import model.choco.Region;
 import model.recreate.RecreationModel;
 
 public class MergePaperModelsSingleStep {
-    protected final static Logger logger = LogManager.getLogger(MergePaperModelsSingleStep.class);
+    protected static final Logger logger = LogManager.getLogger(MergePaperModelsSingleStep.class);
 
     public static void main(String[] args) {
         try {
             RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
 
-            System.out.println("solutions model us: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model ger: " + Analyser.returnNumberOfSolutions(modelGer));
+            logger.info("solutions model us: {}", Analyser.returnNumberOfSolutions(modelUs));
+            logger.info("solutions model ger: {}", Analyser.returnNumberOfSolutions(modelGer));
 
             int intersectionSolutions = Analyser.findIntersectionSolutions(modelUs, modelGer);
-            System.out.println("intersection solutions: " + intersectionSolutions);
+            logger.info("intersection solutions: {}", intersectionSolutions);
 
             modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
 
-            System.out.println("solutions model us contextualized: " + Analyser.returnNumberOfSolutions(modelUs));
-            System.out.println("solutions model ger contextualized: " + Analyser.returnNumberOfSolutions(modelGer));
+            logger.info("solutions model us contextualized: {}", Analyser.returnNumberOfSolutions(modelUs));
+            logger.info("solutions model ger contextualized: {}", Analyser.returnNumberOfSolutions(modelGer));
 
             MergeStatistics mergeStatistics = new MergeStatistics();
             RecreationModel unionModel = Merger.union(modelUs, modelGer, mergeStatistics);
 
-            System.out.println("solutions union model: " + Analyser.returnNumberOfSolutions(unionModel));
+            logger.info("solutions union model: {}", Analyser.returnNumberOfSolutions(unionModel));
 
             RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, mergeStatistics);
             mergedModel = Merger.cleanup(mergedModel, mergeStatistics);
 
-            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModel));
+            logger.info("solutions merged model: {}", Analyser.returnNumberOfSolutions(mergedModel));
             Analyser.printFeatures(mergedModel);
             Analyser.printConstraints(mergedModel);
         } catch (Exception e) {
