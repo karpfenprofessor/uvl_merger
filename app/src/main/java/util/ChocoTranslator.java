@@ -81,20 +81,15 @@ public class ChocoTranslator {
         final Model model = chocoModel.getModel();
         BoolVar baseVar;
 
-        if (constraint instanceof GroupConstraint gc) {
-            baseVar = createGroupConstraintVar(gc, chocoModel, regionVar);
-        } else if (constraint instanceof BinaryConstraint bc) {
-            baseVar = createBinaryConstraintVar(bc, chocoModel);
-        } else if (constraint instanceof NotConstraint nc) {
-            baseVar = createNotConstraintVar(nc, chocoModel);
-        } else if (constraint instanceof FeatureReferenceConstraint frc) {
-            baseVar = chocoModel.getFeature(frc.getFeature().getName());
-        } else if (constraint instanceof OrNegationConstraint onc) {
-            baseVar = createOrNegationConstraintVar(onc, chocoModel);
-        } else {
-            throw new UnsupportedOperationException(
+        baseVar = switch (constraint) {
+            case GroupConstraint gc -> createGroupConstraintVar(gc, chocoModel, regionVar);
+            case BinaryConstraint bc -> createBinaryConstraintVar(bc, chocoModel);
+            case NotConstraint nc -> createNotConstraintVar(nc, chocoModel);
+            case FeatureReferenceConstraint frc -> chocoModel.getFeature(frc.getFeature().getName());
+            case OrNegationConstraint onc -> createOrNegationConstraintVar(onc, chocoModel);
+            default -> throw new UnsupportedOperationException(
                     "Unsupported constraint type: " + constraint.getClass().getSimpleName());
-        }
+        };
 
         return constraint.isNegation() ? model.boolNotView(baseVar) : baseVar;
     }
@@ -145,7 +140,6 @@ public class ChocoTranslator {
         // Use direct clause generation instead of sum constraint for much better performance
         // This avoids the expensive arithmetic constraint propagation
         model.addClauses(LogOp.ifOnlyIf(result, LogOp.or(reifiedVars)));
-        //model.sum(reifiedVars, ">=", 1).reifyWith(result);
         
         return result;
     }

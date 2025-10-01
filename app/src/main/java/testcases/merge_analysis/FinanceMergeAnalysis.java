@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 public class FinanceMergeAnalysis {
     private static final Logger logger = LogManager.getLogger(FinanceMergeAnalysis.class);
     private static final String SECTION_SEPARATOR = "=".repeat(80);
+    private static final String SUMMARY_SEPARATOR = "═".repeat(55);
     
     private static final String FINANCE_MODELS_PATH = "uvl/finance/";
     private static final String RESULTS_DIRECTORY = "results/";
@@ -189,7 +190,7 @@ public class FinanceMergeAnalysis {
      */
     private static void writeMergeResult(String filePath, MergeAnalysisResult result, int currentMerge, int totalMerges) throws IOException {
         try (FileWriter writer = new FileWriter(filePath, true)) { // true for append mode
-            writer.write(String.format("MERGE OPERATION %d/%d\n", currentMerge, totalMerges));
+            writer.write(String.format("MERGE OPERATION %d/%d%n", currentMerge, totalMerges));
             writer.write("─".repeat(50) + "\n");
             writer.write("Model A: " + result.modelPathA() + "\n");
             writer.write("Model B: " + result.modelPathB() + "\n");
@@ -272,15 +273,15 @@ public class FinanceMergeAnalysis {
         int successfulMerges = (int) results.stream().mapToLong(r -> r.errorMessage() == null ? 1 : 0).sum();
         int failedMerges = results.size() - successfulMerges;
         
-        logger.info("[FinanceMergeAnalysis] ═══════════════════════════════════════");
+        logger.info("");
         logger.info("[FinanceMergeAnalysis] ANALYSIS SUMMARY");
-        logger.info("[FinanceMergeAnalysis] ═══════════════════════════════════════");
+        logger.info("[FinanceMergeAnalysis] {}", SUMMARY_SEPARATOR);
         logger.info("[FinanceMergeAnalysis] Total merge operations: {}", results.size());
         logger.info("[FinanceMergeAnalysis] Successful merges: {}", successfulMerges);
         logger.info("[FinanceMergeAnalysis] Failed merges: {}", failedMerges);
         logger.info("[FinanceMergeAnalysis] Success rate: {:.2f}%", (double) successfulMerges / results.size() * 100);
         logger.info("[FinanceMergeAnalysis] Results file: {}", resultsFilePath);
-        logger.info("[FinanceMergeAnalysis] ═══════════════════════════════════════");
+        logger.info("[FinanceMergeAnalysis] {}", SUMMARY_SEPARATOR);
     }
     
     /**

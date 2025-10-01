@@ -93,8 +93,8 @@ public class MergerHelper {
                 uniqueToA.size(), uniqueToB.size());
 
         // Add region implications only for unique features
-        addUniqueFeatureRegionImplications(modelA, unionModel, region1Feature, uniqueToA);
-        addUniqueFeatureRegionImplications(modelB, unionModel, region2Feature, uniqueToB);
+        addUniqueFeatureRegionImplications(unionModel, region1Feature, uniqueToA);
+        addUniqueFeatureRegionImplications(unionModel, region2Feature, uniqueToB);
     }
 
     public static void handleRootFeature(final RecreationModel model1, final RecreationModel model2,
@@ -288,7 +288,7 @@ public class MergerHelper {
                             // Call the existing method to add region implications, but use a new set to avoid reference issues
                             Set<String> singleFeature = new HashSet<>();
                             singleFeature.add(cloneName);
-                            addUniqueFeatureRegionImplications(null, model, regionFeature, new HashSet<>(singleFeature));
+                            addUniqueFeatureRegionImplications(model, regionFeature, new HashSet<>(singleFeature));
                             logger.debug("\t[splitFeatures] added region implication constraint for {} → {}", 
                                     cloneName, region.getRegionString());
                         }
@@ -375,7 +375,7 @@ public class MergerHelper {
             RecreationModel model = entry.getKey();
             Set<String> uniqueFeatures = entry.getValue();
             Feature regionSpecificFeature = unionModel.getFeatures().get(model.getRegion().getRegionString());
-            addUniqueFeatureRegionImplications(model, unionModel, regionSpecificFeature, uniqueFeatures);
+            addUniqueFeatureRegionImplications(unionModel, regionSpecificFeature, uniqueFeatures);
         }
     }
 
@@ -394,8 +394,7 @@ public class MergerHelper {
                 rootName);
     }
 
-    public static void addUniqueFeatureRegionImplications(final RecreationModel sourceModel,
-            final RecreationModel unionModel,
+    public static void addUniqueFeatureRegionImplications(final RecreationModel unionModel,
             final Feature regionFeature, final Set<String> uniqueFeatureNames) {
 
         // Get special features that should be excluded
@@ -413,16 +412,12 @@ public class MergerHelper {
                 if (feature != null) {
                     // Create implication: feature → region
                     FeatureReferenceConstraint antecedent = new FeatureReferenceConstraint(feature);
-                    //NotConstraint notAntecedent = new NotConstraint(antecedent);
-
                     FeatureReferenceConstraint consequent = new FeatureReferenceConstraint(regionFeature);
-                    //NotConstraint notConsequent = new NotConstraint(consequent);
 
                     BinaryConstraint implication = new BinaryConstraint(antecedent,
                             BinaryConstraint.LogicalOperator.IMPLIES, consequent);
 
                     implication.setFeatureTreeConstraint(Boolean.TRUE);
-                    //implication.doContextualize(sourceModel.getRegion().ordinal());
                     unionModel.addConstraint(implication);
                     logger.debug("\t[addUniqueFeatureRegionImplications] add constraint: {}", implication.toString());
                 }

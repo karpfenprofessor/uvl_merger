@@ -37,9 +37,7 @@ public class RecreationAnalyser {
                 .filter(c -> !c.isCustomConstraint() && !c.isFeatureTreeConstraint())
                 .count();
 
-        float ratio = constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
-
-        return ratio;
+        return constraintsSize > 0 ? (float) contextualizedSize / constraintsSize : 0;
     }
 
     public static Map<RecreationModel, Set<String>> analyseSharedFeatures(final RecreationModel... models) {
@@ -83,7 +81,8 @@ public class RecreationAnalyser {
 
         logger.debug("\tshared features: {}", sharedFeatures.size());
         logger.debug("\ttotal unique features: {}", totalUniqueFeatures);
-        logger.debug("\tshare ratio: {} %", String.format("%.2f", shareRatio * 100));
+        String formattedRatio = String.format("%.2f", shareRatio * 100);
+        logger.debug("\tshare ratio: {} %", formattedRatio);
         
         // Find features exclusive to each model
         for (int i = 0; i < models.length; i++) {

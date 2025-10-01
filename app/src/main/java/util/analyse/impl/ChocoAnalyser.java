@@ -12,6 +12,7 @@ import org.chocosolver.solver.variables.Variable;
 
 import model.choco.ChocoModel;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
@@ -33,51 +34,13 @@ public class ChocoAnalyser {
         Model model = chocoModel.getModel();
         model.getSolver().reset();
         model.getSolver().limitSolution(1);
-        //model.getSolver().showShortStatistics();
-        
-        // Create a monitoring thread that reports progress every 2 seconds
-        Thread monitorThread = new Thread(() -> {
-            try {
-                int idx = 0;
-                while (!Thread.currentThread().isInterrupted()) {
-                    Thread.sleep(2000); // Check every 2 seconds
-                    logger.info("[monitor] {} Progress: nodes={}, fails={}", 
-                        idx,
-                        model.getSolver().getMeasures().getNodeCount(),
-                        model.getSolver().getMeasures().getFailCount());
-                    idx++;
-                }
-            } catch (InterruptedException e) {
-                // Thread interrupted, stop monitoring
-            }
-        });
-        monitorThread.setDaemon(true);
-        monitorThread.start();
         
         // Add timeout to prevent infinite hanging (30 seconds)
         if(timeout) {
             model.getSolver().limitTime(30000);
         }
         
-        boolean solved = model.getSolver().solve();
-        
-        // Stop the monitoring thread
-        monitorThread.interrupt();
-        
-        // Log final statistics
-        /*logger.info("[consistency] Final result: {} in {} ms (nodes={}, fails={})", 
-            solved ? "consistent" : "inconsistent",
-            endTime - startTime,
-            model.getSolver().getMeasures().getNodeCount(),
-            model.getSolver().getMeasures().getFailCount());*/
-        
-        if(timeout && !solved) {
-            if (model.getSolver().isStopCriterionMet()) {
-                logger.warn("Solver timed out after 30 seconds - model too complex");
-            }
-        }
-
-        return solved;
+        return model.getSolver().solve();
     }
 
     public static void solveAndCreateStatistic(final ChocoModel baseModel, final SolveStatistics solveStatistics) {
@@ -123,11 +86,8 @@ public class ChocoAnalyser {
 
             // Print involved variables
             Set<Variable> vars = new HashSet<>();
-            Arrays.stream(c.getPropagators()).forEach(p -> {
-                for (Variable v : p.getVars()) {
-                    vars.add(v);
-                }
-            });
+            Arrays.stream(c.getPropagators()).forEach(p -> 
+                Collections.addAll(vars, p.getVars()));
 
             if (!vars.isEmpty()) {
                 StringBuilder varStr = new StringBuilder("      Features: ");
@@ -137,7 +97,11 @@ public class ChocoAnalyser {
                             .append(v.getDomainSize())
                             .append("], ");
                 }
-                logger.info(varStr.substring(0, varStr.length() - 2));
+                String result = varStr.toString();
+                if (result.endsWith(", ")) {
+                    result = result.substring(0, result.length() - 2);
+                }
+                logger.info(result);
             }
             logger.info(SEPARATOR);
         }
@@ -150,7 +114,7 @@ public class ChocoAnalyser {
         logger.info("Printing all features in Choco model {}:", baseModel.getRegionString());
         Variable[] variables = model.getVars();
         for (int i = 0; i < variables.length; i++) {
-            logger.info("  [{}]: {}", i, variables[i].toString());
+            logger.info("  [{}]: {}", i, variables[i]);
         }
         logger.info("Total features in model {}: {}", baseModel.getRegionString(), variables.length);
     }
@@ -221,9 +185,9 @@ public class ChocoAnalyser {
         StringBuilder header = new StringBuilder(String.format("%-4s | ", "Sol#"));
         for (int i = 0; i < orderedFeatures.length; i++) {
             String featureName = orderedFeatures[i];
-            header.append(String.format("%-" + columnWidths[i] + "s | ", featureName));
+            header.append(featureName).append(" ".repeat(Math.max(0, columnWidths[i] - featureName.length()))).append(" | ");
         }
-        logger.info(header.toString());
+        logger.info(header);
 
         int solutionCount = 0;
         Map<String, BoolVar> features = baseModel.getFeatures();
@@ -240,13 +204,13 @@ public class ChocoAnalyser {
                 BoolVar featureVar = features.get(featureName);
                 if (featureVar != null) {
                     int value = featureVar.getValue();
-                    solution.append(String.format("%-" + columnWidths[i] + "d | ", value));
+                    solution.append(value).append(" ".repeat(Math.max(0, columnWidths[i] - String.valueOf(value).length()))).append(" | ");
                 } else {
-                    solution.append(String.format("%-" + columnWidths[i] + "s | ", "-"));
+                    solution.append("-").append(" ".repeat(Math.max(0, columnWidths[i] - 1))).append(" | ");
                 }
             }
 
-            logger.info(solution.toString());
+            logger.info(solution);
         }
 
         logger.info(SEPARATOR);
