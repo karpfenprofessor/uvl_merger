@@ -256,21 +256,21 @@ public class ChocoTranslator {
             Stream<Feature> consequentFeatures = getFeatureFromExpression(bc.getConsequent());
             return Stream.concat(antecedentFeatures, consequentFeatures);
         } else if (constraint instanceof NotConstraint nc) {
-            return findAllReferencedFeatures(nc.inner);
+            return findAllReferencedFeatures(nc.getInner());
         }
 
         return Stream.empty();
     }
 
     private static Stream<Feature> getFeatureFromExpression(Object expression) {
-        if (expression instanceof Feature) {
-            return Stream.of((Feature) expression);
-        } else if (expression instanceof BinaryConstraint) {
-            return findAllReferencedFeatures((BinaryConstraint) expression);
-        } else if (expression instanceof NotConstraint) {
-            return findAllReferencedFeatures((NotConstraint) expression);
-        } else if (expression instanceof FeatureReferenceConstraint) {
-            return findAllReferencedFeatures((FeatureReferenceConstraint) expression);
+        if (expression instanceof Feature feature) {
+            return Stream.of(feature);
+        } else if (expression instanceof BinaryConstraint bc) {
+            return findAllReferencedFeatures(bc);
+        } else if (expression instanceof NotConstraint nc) {
+            return findAllReferencedFeatures(nc);
+        } else if (expression instanceof FeatureReferenceConstraint frc) {
+            return findAllReferencedFeatures(frc);
         }
         
         return Stream.empty();

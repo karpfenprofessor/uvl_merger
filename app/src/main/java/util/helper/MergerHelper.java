@@ -60,8 +60,8 @@ public class MergerHelper {
         rootRegionGc.setUpperCardinality(1);
         rootRegionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(rootRegionGc);
-        logger.debug("\t[handleRegionFeature] constrain super root and region root features with "
-                + rootRegionGc);
+        logger.debug("\t[handleRegionFeature] constrain super root and region root features with {}", 
+                rootRegionGc);
 
         // Create single group constraint for Region's children
         List<Feature> regionChildren = new ArrayList<>();
@@ -74,8 +74,8 @@ public class MergerHelper {
         regionGc.setUpperCardinality(1);
         regionGc.setCustomConstraint(Boolean.TRUE);
         unionModel.addConstraint(regionGc);
-        logger.debug("\t[handleRegionFeature] constrain region root and contextualization features with "
-                + regionGc);
+        logger.debug("\t[handleRegionFeature] constrain region root and contextualization features with {}", 
+                regionGc);
 
         // Find unique features in each model
         Set<String> modelAFeatures = modelA.getFeatures().keySet();
@@ -268,7 +268,7 @@ public class MergerHelper {
                     
                     // Create a new list to avoid modifying the original list
                     // We make a deep copy of the constraint to avoid modifying the source models
-                    GroupConstraint newGc = (GroupConstraint) gc.copy();
+                    GroupConstraint newGc = gc.copy();
                     newGc.setChildren(new ArrayList<>(updatedChildren));
                     
                     // Remove the old constraint and add the new one

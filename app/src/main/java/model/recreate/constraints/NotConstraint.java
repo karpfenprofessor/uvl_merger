@@ -21,7 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NotConstraint extends AbstractConstraint {
 
-    public AbstractConstraint inner     = null;
+    private AbstractConstraint inner     = null;
 
     public NotConstraint(AbstractConstraint c, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
         super(isContextualized, contextValue, isNegation, isCustomConstraint, isFeatureTreeConstraint);

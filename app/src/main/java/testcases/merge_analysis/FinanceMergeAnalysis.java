@@ -64,7 +64,7 @@ public class FinanceMergeAnalysis {
     /**
      * Creates the results directory if it doesn't exist
      */
-    private static void createResultsDirectory() throws IOException {
+    private static void createResultsDirectory() {
         File resultsDir = new File(RESULTS_DIRECTORY);
         if (!resultsDir.exists()) {
             boolean created = resultsDir.mkdirs();

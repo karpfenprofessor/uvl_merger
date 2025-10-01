@@ -48,12 +48,12 @@ public class BinaryConstraint extends AbstractConstraint {
 
     @Override
     public AbstractConstraint copy() {
-        Object copiedAntecedent = (antecedent instanceof AbstractConstraint) 
-                ? ((AbstractConstraint) antecedent).copy() 
+        Object copiedAntecedent = (antecedent instanceof AbstractConstraint constraint) 
+                ? constraint.copy() 
                 : antecedent;
 
-        Object copiedConsequent = (consequent instanceof AbstractConstraint) 
-                ? ((AbstractConstraint) consequent).copy() 
+        Object copiedConsequent = (consequent instanceof AbstractConstraint constraint) 
+                ? constraint.copy() 
                 : consequent;
 
         return new BinaryConstraint(
@@ -72,13 +72,13 @@ public class BinaryConstraint extends AbstractConstraint {
         StringBuilder sb = new StringBuilder(super.toString());
         sb.append("\toperator\t\t: ").append(operator).append("\n");
         
-        String antecedentStr = antecedent instanceof Feature 
-                ? ((Feature) antecedent).getName()
+        String antecedentStr = antecedent instanceof Feature feature
+                ? feature.getName()
                 : antecedent.toString().replace("\n", "\n\t\t\t\t  ");
         sb.append("\tantecedent\t\t: ").append(antecedentStr).append("\n");
         
-        String consequentStr = consequent instanceof Feature 
-                ? ((Feature) consequent).getName()
+        String consequentStr = consequent instanceof Feature feature
+                ? feature.getName()
                 : consequent.toString().replace("\n", "\n\t\t\t\t  ");
         sb.append("\tconsequent\t\t: ").append(consequentStr).append("\n");
         

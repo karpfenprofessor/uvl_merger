@@ -49,8 +49,8 @@ public class RecreationAnalyser {
         }
 
         List<Set<String>> featureSets = Arrays.stream(models)
-                .map(model -> new HashSet<>(model.getFeatures().keySet()))
-                .collect(Collectors.toList());
+                .<Set<String>>map(model -> new HashSet<>(model.getFeatures().keySet()))
+                .toList();
 
         Set<String> sharedFeatures = new HashSet<>(featureSets.get(0));
         for (int i = 1; i < featureSets.size(); i++) {

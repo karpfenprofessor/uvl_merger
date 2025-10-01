@@ -24,7 +24,7 @@ import model.recreate.feature.Feature;
 @AllArgsConstructor
 public class FeatureReferenceConstraint extends AbstractConstraint 
 {
-        public Feature feature = null;
+        private Feature feature = null;
 
         public FeatureReferenceConstraint(Feature f, boolean isContextualized, Integer contextValue, boolean isNegation, boolean isCustomConstraint, boolean isFeatureTreeConstraint) {
             super(isContextualized, contextValue, isNegation, isCustomConstraint, isFeatureTreeConstraint);
