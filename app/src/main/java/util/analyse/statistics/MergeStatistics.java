@@ -158,9 +158,8 @@ public class MergeStatistics {
         sb.append("\t[statistics] Number of features in merged model: ").append(numberOfFeatures).append("\n");
         if (numberOfUniqueFeaturesPerModel != null && !numberOfUniqueFeaturesPerModel.isEmpty()) {
             sb.append("\t[statistics]  -> unique features per model:\n");
-            numberOfUniqueFeaturesPerModel.forEach((region, count) -> {
-                sb.append("\t[statistics]     ").append(region.getRegionString()).append(": ").append(count).append("\n");
-            });
+            numberOfUniqueFeaturesPerModel.forEach((region, count) -> 
+                sb.append("\t[statistics]     ").append(region.getRegionString()).append(": ").append(count).append("\n"));
         }
 
         // ─ Number of constraints ────────────────────────────────────────────────────

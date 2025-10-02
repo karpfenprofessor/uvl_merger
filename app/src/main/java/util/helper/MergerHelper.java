@@ -152,9 +152,8 @@ public class MergerHelper {
             GroupConstraint gc1 = (GroupConstraint) c1;
 
             for (AbstractConstraint c2 : model.getConstraints()) {
-                if (c1 == c2 || !(c2 instanceof GroupConstraint) || !c2.isContextualized()) {
+                if (c1 == c2 || !(c2 instanceof GroupConstraint) || !c2.isContextualized())
                     continue;
-                }
 
                 GroupConstraint gc2 = (GroupConstraint) c2;
 

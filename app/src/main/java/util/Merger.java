@@ -70,7 +70,7 @@ public class Merger {
 
         Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
                 .analyseSharedFeatures(sourceModelsToMerge);
-        Map<Region, Integer> uniqueFeaturesMap = new java.util.HashMap<>();
+        Map<Region, Integer> uniqueFeaturesMap = new java.util.EnumMap<>(Region.class);
         for (RecreationModel sourceModel : sourceModelsToMerge) {
             uniqueFeaturesMap.put(sourceModel.getRegion(),
                     uniqueFeaturesPerModel.get(sourceModel) != null ? uniqueFeaturesPerModel.get(sourceModel).size()
