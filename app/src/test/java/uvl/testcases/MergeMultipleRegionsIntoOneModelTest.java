@@ -76,15 +76,15 @@ class MergeMultipleRegionsIntoOneModelTest {
                                                         + testCaseB.filename + " and " + testCaseC.filename + " and "
                                                         + testCaseD.filename);
 
-                        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
-                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
+                        RecreationModel mergeResult = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult),
                                         "Solution count mismatch after inconsistencyCheck of " + testCaseA.filename
                                                         + " and "
                                                         + testCaseB.filename + " and " + testCaseC.filename + " and "
                                                         + testCaseD.filename);
 
-                        mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
-                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
+                        mergeResult = Merger.cleanup(mergeResult, new MergeStatistics());
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult),
                                         "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                                                         + testCaseB.filename + " and " + testCaseC.filename + " and "
                                                         + testCaseD.filename);

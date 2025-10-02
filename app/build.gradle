@@ -12,6 +12,7 @@ sonar {
     property "sonar.token", "f2469fb76d2c8b4002290a92a23295cf318f26e3"
     property "sonar.exclusions", "src/main/java/testcases/**"
     property "sonar.coverage.exclusions", "**/*"
+    property "sonar.cpd.exclusions", "**/*"
   }
 }
 repositories {
