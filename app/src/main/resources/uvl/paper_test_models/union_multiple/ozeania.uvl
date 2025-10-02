@@ -35,4 +35,7 @@ features
 constraints
   "Electro" => ! "Yes"
   "2L" => "Yes"
-  "Diesel" => ! "City"
+  "Diesel" => "White"
+  "City" => "White"
+  "City" => ! "2L"
+  "Gas" => "Yes"

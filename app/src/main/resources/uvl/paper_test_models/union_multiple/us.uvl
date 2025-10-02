@@ -33,6 +33,8 @@ features
           "25k"
 
 constraints
-  ! "Diesel"
+  ! "Hybrid"
   "Electro" => ! "Yes"
+  "Diesel" => "Black"
   "City" => ! "2L"
+  "Gas" => "Yes"

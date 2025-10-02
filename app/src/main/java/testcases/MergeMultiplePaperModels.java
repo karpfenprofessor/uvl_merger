@@ -15,10 +15,10 @@ public class MergeMultiplePaperModels {
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
-            RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/asia.uvl", Region.C);
-            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/ozeania.uvl", Region.D);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ger.uvl", Region.B);
+            RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/asia.uvl", Region.C);
+            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D);
 
             modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
@@ -29,7 +29,7 @@ public class MergeMultiplePaperModels {
             RecreationModel unionMultipleModel = Merger.unionMultiple(mergeStatistics, modelUs, modelGer, modelAsia,
                     modelOzeania);
 
-            // solutions union: 288+324+330+378=1320
+            // solutions union: 198+306+264+261=1029
             logger.info("solutions model contextualized us: {}", Analyser.returnNumberOfSolutions(modelUs));
             logger.info("solutions model contextualized ger: {}", Analyser.returnNumberOfSolutions(modelGer));
             logger.info("solutions model contextualized asia: {}", Analyser.returnNumberOfSolutions(modelAsia));
@@ -41,6 +41,8 @@ public class MergeMultiplePaperModels {
 
             mergedModel = Merger.cleanup(mergedModel, mergeStatistics);
             logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));
+
+            Analyser.printConstraints(mergedModel);
         } catch (Exception e) {
             e.printStackTrace();
         }

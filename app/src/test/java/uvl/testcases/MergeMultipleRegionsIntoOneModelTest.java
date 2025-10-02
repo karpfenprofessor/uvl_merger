@@ -17,11 +17,12 @@ class MergeMultipleRegionsIntoOneModelTest {
     }
  
     private final TestCase[] paperModels = {
-            new TestCase("uvl/paper_test_models/us.uvl", Region.A, 288),
-            new TestCase("uvl/paper_test_models/ger.uvl", Region.B, 324),
-            new TestCase("uvl/paper_test_models/asia.uvl", Region.C, 330),
-            new TestCase("uvl/paper_test_models/ozeania.uvl", Region.D, 378)
+            new TestCase("uvl/paper_test_models/union_multiple/us.uvl", Region.A, 198),
+            new TestCase("uvl/paper_test_models/union_multiple/ger.uvl", Region.B, 306),
+            new TestCase("uvl/paper_test_models/union_multiple/asia.uvl", Region.C, 264),
+            new TestCase("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D, 261)
     };
+
 
     @Test
     void testMergeMultiplePaperRegionsIntoOneModel() {
