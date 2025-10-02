@@ -76,20 +76,61 @@ class MergeMultipleRegionsIntoOneModelTest {
                                                         + testCaseB.filename + " and " + testCaseC.filename + " and "
                                                         + testCaseD.filename);
 
-                        RecreationModel mergeResult = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
+                        RecreationModel mergeResult = Merger.inconsistencyCheck(new MergeStatistics(), unionModel);
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult),
                                         "Solution count mismatch after inconsistencyCheck of " + testCaseA.filename
                                                         + " and "
                                                         + testCaseB.filename + " and " + testCaseC.filename + " and "
                                                         + testCaseD.filename);
 
-                        mergeResult = Merger.cleanup(mergeResult, new MergeStatistics());
+                        mergeResult = Merger.cleanup(new MergeStatistics(), mergeResult);
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult),
                                         "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                                                         + testCaseB.filename + " and " + testCaseC.filename + " and "
                                                         + testCaseD.filename);
                 } catch (Exception e) {
                         throw new AssertionError("testMergeMultiplePaperRegionsIntoOneModel failed: " + e.getMessage(),
+                                        e);
+                }
+        }
+
+        @Test
+        void testMergeMultiplePaperRegionsIntoOneModelSingleStep() {
+                try {
+                        TestCase testCaseA = paperModels[0];
+                        TestCase testCaseB = paperModels[1];
+                        TestCase testCaseC = paperModels[2];
+                        TestCase testCaseD = paperModels[3];
+
+                        RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
+                        RecreationModel modelC = UVLParser.parseUVLFile(testCaseC.filename, testCaseC.region);
+                        RecreationModel modelD = UVLParser.parseUVLFile(testCaseD.filename, testCaseD.region);
+
+                        assertEquals(testCaseA.expectedSolutions, Analyser.returnNumberOfSolutions(modelA),
+                                        "Solution count mismatch for " + testCaseA.filename);
+                        assertEquals(testCaseB.expectedSolutions, Analyser.returnNumberOfSolutions(modelB),
+                                        "Solution count mismatch for " + testCaseB.filename);
+                        assertEquals(testCaseC.expectedSolutions, Analyser.returnNumberOfSolutions(modelC),
+                                        "Solution count mismatch for " + testCaseC.filename);
+                        assertEquals(testCaseD.expectedSolutions, Analyser.returnNumberOfSolutions(modelD),
+                                        "Solution count mismatch for " + testCaseD.filename);
+
+                        long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
+                                        + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
+
+                        // Union the models
+                        RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
+                                        modelD).mergedModel();
+
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult),
+                                        "Solution count mismatch after fullMergeMultiple of " + testCaseA.filename
+                                                        + " and "
+                                                        + testCaseB.filename + " and " + testCaseC.filename + " and "
+                                                        + testCaseD.filename);
+                } catch (Exception e) {
+                        throw new AssertionError(
+                                        "testMergeMultiplePaperRegionsIntoOneModelSingleStep failed: " + e.getMessage(),
                                         e);
                 }
         }

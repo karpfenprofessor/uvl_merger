@@ -329,7 +329,7 @@ public class MergerHelper {
 
 
 
-    public static void handleRegionFeatureMultiple(final RecreationModel unionModel, final RecreationModel[] models,
+    public static void handleRegionFeatureForMultipleUnion(final RecreationModel unionModel, final RecreationModel[] models,
             final Map<RecreationModel, Set<String>> uniqueFeaturesPerModel) {
         StringBuilder regionStrings = new StringBuilder();
         for (int i = 0; i < models.length; i++) {
@@ -380,7 +380,7 @@ public class MergerHelper {
         }
     }
 
-    public static void handleRootFeatureMultiple(final RecreationModel unionModel, final RecreationModel... models) {
+    public static void handleRootFeatureForMultipleUnion(final RecreationModel unionModel, final RecreationModel... models) {
         // Set root feature for union model
         // Check if all models have same root feature
         String rootName = models[0].getRootFeature().getName();

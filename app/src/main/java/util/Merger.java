@@ -1,5 +1,6 @@
 package util;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -43,39 +44,46 @@ public class Merger {
     public record MergeResult(RecreationModel mergedModel, MergeStatistics mergedStatistics) {
     }
 
-    public static MergeResult fullMerge(final RecreationModel modelToMergeA, final RecreationModel modelToMergeB) {
-        logger.info("[merge] starting full merge process between models from regions {} and {}",
-                modelToMergeA.getRegion(), modelToMergeB.getRegion());
+    public static MergeResult fullMerge(final RecreationModel... sourceModelsToMerge) {
+        logger.info("[merge] starting full merge process between models from regions {}", String.join(", ", Arrays.stream(sourceModelsToMerge).map(RecreationModel::getRegion).map(Region::getRegionString).toArray(String[]::new)));
 
         MergeStatistics mergeStatistics = new MergeStatistics();
-        mergeStatistics.addMergedModelPath(modelToMergeA.getFilePath());
-        mergeStatistics.addMergedModelPath(modelToMergeB.getFilePath());
+        for (RecreationModel sourceModel : sourceModelsToMerge) {
+            mergeStatistics.addMergedModelPath(sourceModel.getFilePath());
+        }
 
         // Contextualize both original region models
-        modelToMergeA.contextualizeAllConstraints();
-        modelToMergeB.contextualizeAllConstraints();
+        for (RecreationModel sourceModel : sourceModelsToMerge) {
+            sourceModel.contextualizeAllConstraints();
+        }
 
-        RecreationModel unionModel = union(modelToMergeA, modelToMergeB, mergeStatistics);
+        RecreationModel unionModel = null;
+        if(sourceModelsToMerge.length == 2) {
+            unionModel = union(mergeStatistics, sourceModelsToMerge[0], sourceModelsToMerge[1]);
+        } else {
+            unionModel = unionMultiple(mergeStatistics, sourceModelsToMerge);
+        }
 
-        RecreationModel mergedModel = inconsistencyCheck(unionModel, mergeStatistics);
+        RecreationModel mergedModel = inconsistencyCheck(mergeStatistics,unionModel);
 
-        cleanup(mergedModel, mergeStatistics);
+        cleanup(mergeStatistics, mergedModel);
 
         Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
-                .analyseSharedFeatures(modelToMergeA, modelToMergeB);
-        mergeStatistics.setNumberOfUniqueFeaturesModelA(
-                uniqueFeaturesPerModel.get(modelToMergeA) != null ? uniqueFeaturesPerModel.get(modelToMergeA).size()
-                        : 0);
-        mergeStatistics.setNumberOfUniqueFeaturesModelB(
-                uniqueFeaturesPerModel.get(modelToMergeB) != null ? uniqueFeaturesPerModel.get(modelToMergeB).size()
-                        : 0);
+                .analyseSharedFeatures(sourceModelsToMerge);
+        Map<Region, Integer> uniqueFeaturesMap = new java.util.HashMap<>();
+        for (RecreationModel sourceModel : sourceModelsToMerge) {
+            uniqueFeaturesMap.put(sourceModel.getRegion(),
+                    uniqueFeaturesPerModel.get(sourceModel) != null ? uniqueFeaturesPerModel.get(sourceModel).size()
+                            : 0);
+        }
+
+        mergeStatistics.setNumberOfUniqueFeaturesPerModel(uniqueFeaturesMap);               
 
         logger.info("[merge] finished full merge with {} constraints", mergedModel.getConstraints().size());
         return new MergeResult(mergedModel, mergeStatistics);
     }
 
-    public static RecreationModel union(final RecreationModel modelA, final RecreationModel modelB,
-            final MergeStatistics mergeStatistics) {
+    public static RecreationModel union(final MergeStatistics mergeStatistics, final RecreationModel modelA, final RecreationModel modelB) {
         logger.info("[union] with models from regions {} and {}", modelA.getRegion().getRegionString(),
                 modelB.getRegion().getRegionString());
 
@@ -140,8 +148,7 @@ public class Merger {
         return unionModel;
     }
 
-    public static RecreationModel inconsistencyCheck(final RecreationModel unionModel,
-            final MergeStatistics mergeStatistics) {
+    public static RecreationModel inconsistencyCheck(final MergeStatistics mergeStatistics,final RecreationModel unionModel) {
         logger.info(
                 "[inconsistencyCheck] start looping {} constraints in union model (excluding feature tree and custom constraints)",
                 unionModel.getConstraints().stream()
@@ -219,7 +226,7 @@ public class Merger {
         return mergedModel;
     }
 
-    public static RecreationModel cleanup(final RecreationModel mergedModel, final MergeStatistics mergeStatistics) {
+    public static RecreationModel cleanup(final MergeStatistics mergeStatistics, final RecreationModel mergedModel) {
         logger.info(
                 "[cleanup] start looping {} constraints in merged model (excluding feature tree and custom constraints)",
                 mergedModel.getConstraints().stream()
@@ -324,11 +331,11 @@ public class Merger {
         logger.debug("\t[unionMultiple] added {} unique features to union model",
                 unionModel.getFeatures().size());
 
-        MergerHelper.handleRootFeatureMultiple(unionModel, models);
+        MergerHelper.handleRootFeatureForMultipleUnion(unionModel, models);
 
         Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
                 .analyseSharedFeatures(models);
-        MergerHelper.handleRegionFeatureMultiple(unionModel, models, uniqueFeaturesPerModel);
+        MergerHelper.handleRegionFeatureForMultipleUnion(unionModel, models, uniqueFeaturesPerModel);
 
         for (RecreationModel model : models) {
             for (AbstractConstraint constraint : model.getConstraints()) {

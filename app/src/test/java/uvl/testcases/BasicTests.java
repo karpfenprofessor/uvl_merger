@@ -163,7 +163,7 @@ class BasicTests {
             assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
             assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = Merger.union(modelUs, modelGer, new MergeStatistics());
+            RecreationModel unionModel = Merger.union(new MergeStatistics(), modelUs, modelGer);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
         } catch (Exception e) {
@@ -190,15 +190,15 @@ class BasicTests {
             assertEquals(solutionsUs, Analyser.returnNumberOfSolutions(modelUs));
             assertEquals(solutionsGer, Analyser.returnNumberOfSolutions(modelGer));
 
-            RecreationModel unionModel = Merger.union(modelUs, modelGer, new MergeStatistics());
+            RecreationModel unionModel = Merger.union(new MergeStatistics(), modelUs, modelGer);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(unionModel));
 
-            RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
+            RecreationModel mergedModel = Merger.inconsistencyCheck(new MergeStatistics(), unionModel);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 
-            mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
+            mergedModel = Merger.cleanup(new MergeStatistics(), mergedModel);
 
             assertEquals((solutionsUs + solutionsGer), Analyser.returnNumberOfSolutions(mergedModel));
 

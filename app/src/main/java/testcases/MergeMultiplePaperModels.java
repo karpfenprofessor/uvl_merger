@@ -36,13 +36,15 @@ public class MergeMultiplePaperModels {
             logger.info("solutions model contextualized ozeania: {}", Analyser.returnNumberOfSolutions(modelOzeania));
             logger.info("solutions union multiple model: {}", Analyser.returnNumberOfSolutions(unionMultipleModel));
 
-            RecreationModel mergedModel = Merger.inconsistencyCheck(unionMultipleModel, mergeStatistics);
+            RecreationModel mergedModel = Merger.inconsistencyCheck(mergeStatistics,unionMultipleModel);
             logger.info("solutions after inconsistency check model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
-            mergedModel = Merger.cleanup(mergedModel, mergeStatistics);
+            mergedModel = Merger.cleanup(mergeStatistics, mergedModel);
             logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
-            Analyser.printConstraints(mergedModel);
+
+            RecreationModel mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania).mergedModel();
+            logger.info("solutions after full merge model: {}", Analyser.returnNumberOfSolutions(mergedModelOneStep));
         } catch (Exception e) {
             e.printStackTrace();
         }

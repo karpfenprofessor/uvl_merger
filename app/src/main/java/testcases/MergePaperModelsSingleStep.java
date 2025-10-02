@@ -31,12 +31,12 @@ public class MergePaperModelsSingleStep {
             logger.info("solutions model ger contextualized: {}", Analyser.returnNumberOfSolutions(modelGer));
 
             MergeStatistics mergeStatistics = new MergeStatistics();
-            RecreationModel unionModel = Merger.union(modelUs, modelGer, mergeStatistics);
+            RecreationModel unionModel = Merger.union(mergeStatistics,modelUs, modelGer);
 
             logger.info("solutions union model: {}", Analyser.returnNumberOfSolutions(unionModel));
 
-            RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, mergeStatistics);
-            mergedModel = Merger.cleanup(mergedModel, mergeStatistics);
+            RecreationModel mergedModel = Merger.inconsistencyCheck(mergeStatistics, unionModel);
+            mergedModel = Merger.cleanup(mergeStatistics, mergedModel);
 
             logger.info("solutions merged model: {}", Analyser.returnNumberOfSolutions(mergedModel));
             Analyser.printFeatures(mergedModel);

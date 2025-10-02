@@ -135,20 +135,20 @@ class SmartwatchBasicTest {
                         long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions;
 
                         // Union the models
-                        RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
+                        RecreationModel unionModel = Merger.union(new MergeStatistics(), modelA, modelB);
 
                         // Verify the solution count after union
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(unionModel),
                                         "Solution count mismatch after union of " + testCaseA.filename + " and "
                                                         + testCaseB.filename);
 
-                        RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel, new MergeStatistics());
+                        RecreationModel mergedModel = Merger.inconsistencyCheck(new MergeStatistics(), unionModel);
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                         "Solution count mismatch after inconsistencyCheck of " + testCaseA.filename
                                                         + " and "
                                                         + testCaseB.filename);
 
-                        mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
+                        mergedModel = Merger.cleanup(new MergeStatistics(), mergedModel);
                         assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                         "Solution count mismatch after cleanup of " + testCaseA.filename + " and "
                                                         + testCaseB.filename);
@@ -192,7 +192,7 @@ class SmartwatchBasicTest {
                                                 mibandBaseModels[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
+                                RecreationModel unionModel = Merger.union(new MergeStatistics(), modelA, modelB);
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -232,7 +232,7 @@ class SmartwatchBasicTest {
                                                 mibandRealizedModels[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
+                                RecreationModel unionModel = Merger.union(new MergeStatistics(), modelA, modelB);
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -278,7 +278,7 @@ class SmartwatchBasicTest {
                                                 mibandBaseModels[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
+                                RecreationModel unionModel = Merger.union(new MergeStatistics(), modelA, modelB);
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -287,15 +287,14 @@ class SmartwatchBasicTest {
                                                                 + mibandBaseModels[i].filename + " and "
                                                                 + mibandBaseModels[i + 1].filename);
 
-                                RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel,
-                                                new MergeStatistics());
+                                RecreationModel mergedModel = Merger.inconsistencyCheck(new MergeStatistics(), unionModel);
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after inconsistencyCheck of "
                                                                 + mibandBaseModels[i].filename
                                                                 + " and "
                                                                 + mibandBaseModels[i + 1].filename);
 
-                                mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
+                                mergedModel = Merger.cleanup(new MergeStatistics(), mergedModel);
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after cleanup of "
                                                                 + mibandBaseModels[i].filename + " and "
@@ -336,7 +335,7 @@ class SmartwatchBasicTest {
                                                 mibandRealizedModels[i + 1].expectedSolutions;
 
                                 // Union the models
-                                RecreationModel unionModel = Merger.union(modelA, modelB, new MergeStatistics());
+                                RecreationModel unionModel = Merger.union(new MergeStatistics(), modelA, modelB);
 
                                 // Verify the solution count after union
                                 long actualSolutions = Analyser.returnNumberOfSolutions(unionModel);
@@ -345,15 +344,14 @@ class SmartwatchBasicTest {
                                                                 + mibandRealizedModels[i].filename + " and "
                                                                 + mibandRealizedModels[i + 1].filename);
 
-                                RecreationModel mergedModel = Merger.inconsistencyCheck(unionModel,
-                                                new MergeStatistics());
+                                RecreationModel mergedModel = Merger.inconsistencyCheck(new MergeStatistics(), unionModel);
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after inconsistencyCheck of "
                                                                 + mibandRealizedModels[i].filename
                                                                 + " and "
                                                                 + mibandRealizedModels[i + 1].filename);
 
-                                mergedModel = Merger.cleanup(mergedModel, new MergeStatistics());
+                                mergedModel = Merger.cleanup(new MergeStatistics(), mergedModel);
                                 assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergedModel),
                                                 "Solution count mismatch after cleanup of "
                                                                 + mibandRealizedModels[i].filename + " and "

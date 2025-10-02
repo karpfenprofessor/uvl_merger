@@ -3,6 +3,9 @@ package util.analyse.statistics;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import model.choco.Region;
+
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +17,8 @@ public class MergeStatistics {
     private final Logger logger = LogManager.getLogger(MergeStatistics.class);
     private static final String NANOSECONDS_UNIT = " ns";
     private static final String DURATION_FORMAT = "%12d" + NANOSECONDS_UNIT + " (%.2f ms)";
+
+    private java.util.List<String> mergedModelPaths = new java.util.ArrayList<>();
 
     private long startTimeUnion;
     private long endTimeUnion;
@@ -33,8 +38,7 @@ public class MergeStatistics {
     private long endTimeCleanup;
 
     private long numberOfFeatures;
-    private long numberOfUniqueFeaturesModelA;
-    private long numberOfUniqueFeaturesModelB;
+    private Map<Region, Integer> numberOfUniqueFeaturesPerModel;
     private boolean isConsistentAfterMerge;
 
     private float contextualizationShareBeforeMerge;
@@ -50,8 +54,6 @@ public class MergeStatistics {
     private long numberOfCrossTreeConstraintsAfterMerge;
 
     private Integer validate;
-
-    private java.util.List<String> mergedModelPaths = new java.util.ArrayList<>();
 
     public void startTimerUnion() {
         startTimeUnion = System.nanoTime();
@@ -154,8 +156,12 @@ public class MergeStatistics {
 
         // ─ Number of features ────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of features in merged model: ").append(numberOfFeatures).append("\n");
-        sb.append("\t[statistics]  -> unique features model A: ").append(numberOfUniqueFeaturesModelA).append("\n");
-        sb.append("\t[statistics]  -> unique features model B: ").append(numberOfUniqueFeaturesModelB).append("\n");
+        if (numberOfUniqueFeaturesPerModel != null && !numberOfUniqueFeaturesPerModel.isEmpty()) {
+            sb.append("\t[statistics]  -> unique features per model:\n");
+            numberOfUniqueFeaturesPerModel.forEach((region, count) -> {
+                sb.append("\t[statistics]     ").append(region.getRegionString()).append(": ").append(count).append("\n");
+            });
+        }
 
         // ─ Number of constraints ────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of constraints before merge: ")
