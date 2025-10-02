@@ -19,8 +19,6 @@ import java.util.HashSet;
 import org.chocosolver.solver.variables.BoolVar;
 
 import java.util.Arrays;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /*
  * Analysis utility for Choco-based feature models.
@@ -42,23 +40,22 @@ public class ChocoAnalyser {
             model.getSolver().limitTime(30000);
         }
 
-        Thread monitorThread = new Thread(() -> {
+        Thread monitorThread = Thread.ofVirtual().start(() -> {
             try {
                 int idx = 0;
                 while (!Thread.currentThread().isInterrupted()) {
                     Thread.sleep(10000); // Check every 10 seconds
-                    logger.info("[monitor] {} Progress: nodes={}, fails={}",
-                            idx,
+                    logger.info("[monitor] solving runs for {} seconds. Progress: nodes={}, fails={}",
+                            idx * 10,
                             model.getSolver().getMeasures().getNodeCount(),
                             model.getSolver().getMeasures().getFailCount());
                     idx++;
                 }
             } catch (InterruptedException e) {
-                // Thread interrupted, stop monitoring
+                // Re-interrupt the thread to preserve the interrupted status
+                Thread.currentThread().interrupt();
             }
         });
-        monitorThread.setDaemon(true);
-        monitorThread.start();
 
         // Add timeout to prevent infinite hanging (30 seconds)
         if (timeout) {

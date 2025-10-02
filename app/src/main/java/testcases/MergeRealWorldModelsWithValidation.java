@@ -37,7 +37,7 @@ public class MergeRealWorldModelsWithValidation {
         String modelFinanceJString = "uvl/finance/finance_10.uvl";
 
         RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceBString, Region.A);
-        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceCString, Region.B);
+        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceDString, Region.B);
 
         RecreationAnalyser.analyseSharedFeatures(originalA, originalB);
 
