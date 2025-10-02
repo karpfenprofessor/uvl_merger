@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import model.choco.Region;
 import model.recreate.RecreationModel;
 import util.UVLParser;
+import util.Validator;
 import util.Merger;
 import util.analyse.Analyser;
 import util.analyse.statistics.MergeStatistics;
@@ -44,6 +45,7 @@ public class MergeMultiplePaperModels {
 
 
             RecreationModel mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania).mergedModel();
+            Validator.validateMerge(mergedModelOneStep, modelUs, modelGer, modelAsia, modelOzeania);
             logger.info("solutions after full merge model: {}", Analyser.returnNumberOfSolutions(mergedModelOneStep));
         } catch (Exception e) {
             e.printStackTrace();

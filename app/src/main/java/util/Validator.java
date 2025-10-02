@@ -64,25 +64,32 @@ public class Validator extends ValidatorHelper {
      *         2 = Test 2A failed (missing solutions from KB₁ - merge too strict)
      *         3 = Test 2B failed (missing solutions from KB₂ - merge too strict)
      */
-    public static int validateMerge(final RecreationModel mergedKB, final RecreationModel kb1,
-            final RecreationModel kb2) {
+    public static int validateMerge(final RecreationModel mergedKB, final RecreationModel... sourceModels) {
         logger.info("[validateMerge] Starting validation of merged model");
 
-        boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, kb1, kb2);
-        int missingSolutionsResult = validateNoMissingSolutions(mergedKB, kb1, kb2);
+        boolean noExtraSolutions = validateNoExtraSolutions(mergedKB, sourceModels);
+        int missingSolutionsResult = validateNoMissingSolutions(mergedKB, sourceModels);
 
         if (!noExtraSolutions) {
             logger.warn("[validateMerge] Merge validation FAILED: Test Case 1 failed (extra solutions exist)");
             return 1;
-        } else if (missingSolutionsResult == 1) {
-            logger.warn("[validateMerge] Merge validation FAILED: Test Case 2A failed (missing solutions exist)");
-            return 2;
-        } else if (missingSolutionsResult == 2) {
-            logger.warn("[validateMerge] Merge validation FAILED: Test Case 2B failed (missing solutions exist)");
-            return 3;
+        } else if (missingSolutionsResult > 0) {
+            int errorIndex = missingSolutionsResult - 1;
+            String region = (errorIndex >= 0 && errorIndex < sourceModels.length)
+                    ? sourceModels[errorIndex].getRegionString()
+                    : "unknown";
+            logger.warn("[validateMerge] Merge validation FAILED: Test Case 2 failed (missing solutions exist) for source model {})", region);
+            return missingSolutionsResult + 1;
         } else {
-            logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({}) union Sol({})",
-                    kb1.getRegionString(), kb2.getRegionString());
+            StringBuilder regions = new StringBuilder();
+            for (int i = 0; i < sourceModels.length; i++) {
+                if (i > 0) {
+                    regions.append(" union ");
+                }
+                regions.append(sourceModels[i].getRegionString());
+            }
+            
+            logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({})", regions);
             return 0;
         }
     }
@@ -102,68 +109,80 @@ public class Validator extends ValidatorHelper {
      * @return true if validation passes (no extra solutions found),
      *         false if validation fails (extra solutions exist)
      */
-    public static boolean validateNoExtraSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
-            final RecreationModel kb2) {
+    public static boolean validateNoExtraSolutions(final RecreationModel mergedKB, final RecreationModel... sourceModels) {
         logger.info("[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions");
 
         // Test formula: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
         // True if extra solutions exist (validation fails)
-        boolean hasExtraSolutions = checkSimultaneousViolationsOrNegation(mergedKB, kb1, kb2);
+        boolean hasExtraSolutions = checkSimultaneousViolationsOrNegation(mergedKB, sourceModels);
+        
+        StringBuilder regions = new StringBuilder();
+            for (int i = 0; i < sourceModels.length; i++) {
+                if (i > 0) {
+                    regions.append(" union ");
+                }
+                regions.append(sourceModels[i].getRegionString());
+            }
 
         if (hasExtraSolutions) {
             logger.warn(
-                    "\t[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} union {} (merge too loose)",
-                    kb1.getRegionString(), kb2.getRegionString());
+                    "\t[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} (merge too loose)",
+                    regions);
             return false;
         } else {
             logger.info(
-                    "\t[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside {} union {}",
-                    kb1.getRegionString(), kb2.getRegionString());
+                    "\t[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside {}",
+                    regions);
             return true;
         }
     }
 
     /**
      * Test Case 2 - "No Missing Solutions"
-     * Validates that KBMerge preserves all valid configurations from KB₁ and KB₂.
+     * Validates that KBMerge preserves all valid configurations from all source models.
      * 
-     * Formula: ¬KBMerge ∧ (KB₁ ∨ KB₂)
-     * Expected: UNSAT for both tests (merge is not too strict)
+     * Formula: ¬KBMerge ∧ KBᵢ for each source model i
+     * Expected: UNSAT for all tests (merge is not too strict)
      * 
-     * Implementation performs two separate region-constrained checks:
-     * 1. Test 2A: ¬KBMerge ∧ KB₁ (with KB₁ region forced true, KB₂ region forced
-     * false)
-     * 2. Test 2B: ¬KBMerge ∧ KB₂ (with KB₂ region forced true, KB₁ region forced
-     * false)
+     * Implementation performs separate region-constrained checks for each source model:
+     * For each source model KBᵢ: ¬KBMerge ∧ KBᵢ (with KBᵢ region forced true, 
+     * all other regions forced false)
      * 
      * During each test, features unknown to the tested region are forced to false
      * to ensure proper isolation of region-specific validation.
      * 
-     * @param mergedKB the merged knowledge base to validate
-     * @param kb1      the first original knowledge base (tested in Test 2A)
-     * @param kb2      the second original knowledge base (tested in Test 2B)
+     * @param mergedKB     the merged knowledge base to validate
+     * @param sourceModels the original knowledge bases to test (varargs)
      * @return validation result code:
-     *         0 = both tests passed (no missing solutions)
-     *         1 = Test 2A failed (KB₁ has missing solutions - merge too strict)
-     *         2 = Test 2B failed (KB₂ has missing solutions - merge too strict)
+     *         0 = all tests passed (no missing solutions)
+     *         i+1 = test for source model i failed (KBᵢ has missing solutions - merge too strict)
      */
-    public static int validateNoMissingSolutions(final RecreationModel mergedKB, final RecreationModel kb1,
-            final RecreationModel kb2) {
+    public static int validateNoMissingSolutions(final RecreationModel mergedKB, final RecreationModel... sourceModels) {
         logger.info("[validateNoMissingSolutions] Test Case 2 - Checking for missing solutions");
-
-        // Test 2A: Check if KB₁ has missing solutions (¬KBMerge ∧ KB₁)
-        boolean kb1HasMissingSolutions = checkMissingSolutions(mergedKB, kb1, kb2);
-
-        // Test 2B: Check if KB₂ has missing solutions (¬KBMerge ∧ KB₂)
-        boolean kb2HasMissingSolutions = checkMissingSolutions(mergedKB, kb2, kb1);
-
-        // Return validation result based on which test failed
-        if (kb1HasMissingSolutions) {
-            return 1; // Test 2A failed: KB₁ missing solutions
-        } else if (kb2HasMissingSolutions) {
-            return 2; // Test 2B failed: KB₂ missing solutions
-        } else {
-            return 0; // Both tests passed: no missing solutions
+        
+        // Test each source model individually against all others
+        for (int i = 0; i < sourceModels.length; i++) {
+            RecreationModel currentModel = sourceModels[i];
+            
+            // Create array of all other models
+            RecreationModel[] otherModels = new RecreationModel[sourceModels.length - 1];
+            int otherIndex = 0;
+            for (int j = 0; j < sourceModels.length; j++) {
+                if (j != i) {
+                    otherModels[otherIndex++] = sourceModels[j];
+                }
+            }
+            
+            // Test if current model has missing solutions
+            boolean hasMissingSolutions = checkMissingSolutionsMultiple(mergedKB, currentModel, otherModels);
+            if (hasMissingSolutions) {
+                logger.warn("[validateNoMissingSolutions] Test Case 2 FAILED for source model {}", 
+                           currentModel.getRegionString());
+                return i + 1; // Return 1-based index of failed model
+            }
         }
+        
+        logger.info("[validateNoMissingSolutions] Test Case 2 PASSED: All source models preserved");
+        return 0; // All tests passed: no missing solutions
     }
 }
