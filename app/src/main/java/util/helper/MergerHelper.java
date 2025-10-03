@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.EnumMap;
 
 import lombok.experimental.UtilityClass;
 import org.apache.logging.log4j.LogManager;
@@ -308,7 +309,7 @@ public class MergerHelper {
      */
     public static Map<Region, Integer> analyzeContextualizedConstraintsPerRegion(final RecreationModel mergedModel, 
             final RecreationModel... sourceModels) {
-        Map<Region, Integer> contextualizedConstraintsPerRegion = new HashMap<>();
+        Map<Region, Integer> contextualizedConstraintsPerRegion = new EnumMap<>(Region.class);
         
         // Initialize counts for all source model regions
         for (RecreationModel sourceModel : sourceModels) {
@@ -340,7 +341,7 @@ public class MergerHelper {
      */
     public static Map<Region, Integer> analyzeContextualizedCrossTreeConstraintsPerRegion(final RecreationModel mergedModel, 
             final RecreationModel... sourceModels) {
-        Map<Region, Integer> contextualizedCrossTreeConstraintsPerRegion = new HashMap<>();
+        Map<Region, Integer> contextualizedCrossTreeConstraintsPerRegion = new EnumMap<>(Region.class);
         
         // Initialize counts for all source model regions
         for (RecreationModel sourceModel : sourceModels) {
