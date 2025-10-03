@@ -5,11 +5,13 @@ import org.apache.logging.log4j.Logger;
 
 import model.choco.Region;
 import model.recreate.RecreationModel;
+import model.recreate.constraints.AbstractConstraint;
+import model.recreate.constraints.BinaryConstraint;
+import model.recreate.constraints.FeatureReferenceConstraint;
 import util.UVLParser;
 import util.Validator;
 import util.Merger;
 import util.analyse.Analyser;
-import util.analyse.statistics.MergeStatistics;
 
 public class MergeMultiplePaperModels {
     private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModels.class);
@@ -21,7 +23,7 @@ public class MergeMultiplePaperModels {
             RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/asia.uvl", Region.C);
             RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D);
 
-            modelUs.contextualizeAllConstraints();
+            /*modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
             modelAsia.contextualizeAllConstraints();
             modelOzeania.contextualizeAllConstraints();
@@ -41,12 +43,30 @@ public class MergeMultiplePaperModels {
             logger.info("solutions after inconsistency check model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
             mergedModel = Merger.cleanup(mergeStatistics, mergedModel);
-            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));
+            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));*/
 
 
             RecreationModel mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania).mergedModel();
             Validator.validateMerge(mergedModelOneStep, modelUs, modelGer, modelAsia, modelOzeania);
-            logger.info("solutions after full merge model: {}", Analyser.returnNumberOfSolutions(mergedModelOneStep));
+            Analyser.printConstraints(mergedModelOneStep);
+                
+            // "A" & "City" => "White"
+            FeatureReferenceConstraint constraintFeatureCity = new FeatureReferenceConstraint();
+            constraintFeatureCity.setFeature(mergedModelOneStep.getFeatures().get("City"));
+
+            FeatureReferenceConstraint constraintFeatureWhite = new FeatureReferenceConstraint();
+            constraintFeatureWhite.setFeature(mergedModelOneStep.getFeatures().get("White"));
+
+            BinaryConstraint constraint = new BinaryConstraint();
+            constraint.setAntecedent(constraintFeatureCity);
+            constraint.setConsequent(constraintFeatureWhite);
+            constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+            constraint.doContextualize(Region.A.ordinal());
+            
+            mergedModelOneStep.addConstraint(constraint);
+
+            logger.info("solutions after modifying the constraint: {}", Analyser.returnNumberOfSolutions(mergedModelOneStep));
+            Validator.validateMerge(mergedModelOneStep, modelUs, modelGer, modelAsia, modelOzeania);
         } catch (Exception e) {
             e.printStackTrace();
         }

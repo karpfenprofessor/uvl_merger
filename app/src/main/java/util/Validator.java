@@ -176,13 +176,13 @@ public class Validator extends ValidatorHelper {
             // Test if current model has missing solutions
             boolean hasMissingSolutions = checkMissingSolutionsMultiple(mergedKB, currentModel, otherModels);
             if (hasMissingSolutions) {
-                logger.warn("[validateNoMissingSolutions] Test Case 2 FAILED for source model {}", 
+                logger.warn("\t[validateNoMissingSolutions] Test Case 2 FAILED for source model {}", 
                            currentModel.getRegionString());
                 return i + 1; // Return 1-based index of failed model
             }
         }
         
-        logger.info("[validateNoMissingSolutions] Test Case 2 PASSED: All source models preserved");
+        logger.info("\t[validateNoMissingSolutions] Test Case 2 PASSED: All source models preserved");
         return 0; // All tests passed: no missing solutions
     }
 }

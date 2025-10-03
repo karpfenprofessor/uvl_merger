@@ -38,4 +38,3 @@ constraints
   "Diesel" => ! "City"
   "City" => ! "2L"
   "Gas" => "Yes"
-  

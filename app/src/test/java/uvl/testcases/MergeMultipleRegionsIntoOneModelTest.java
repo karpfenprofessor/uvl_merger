@@ -1,13 +1,17 @@
 package uvl.testcases;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
 import model.choco.Region;
 import model.recreate.RecreationModel;
+import model.recreate.constraints.BinaryConstraint;
+import model.recreate.constraints.FeatureReferenceConstraint;
 import util.Merger;
 import util.UVLParser;
+import util.Validator;
 import util.analyse.Analyser;
 import util.analyse.statistics.MergeStatistics;
 
@@ -119,7 +123,6 @@ class MergeMultipleRegionsIntoOneModelTest {
                         long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
                                         + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
 
-                        // Union the models
                         RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
                                         modelD).mergedModel();
 
@@ -131,6 +134,228 @@ class MergeMultipleRegionsIntoOneModelTest {
                 } catch (Exception e) {
                         throw new AssertionError(
                                         "testMergeMultiplePaperRegionsIntoOneModelSingleStep failed: " + e.getMessage(),
+                                        e);
+                }
+        }
+
+        @Test
+        void testMergeMultiplePaperRegionsAndTriggerValidationTestcase1() {
+                try {
+                        TestCase testCaseA = paperModels[0];
+                        TestCase testCaseB = paperModels[1];
+                        TestCase testCaseC = paperModels[2];
+                        TestCase testCaseD = paperModels[3];
+
+                        RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
+                        RecreationModel modelC = UVLParser.parseUVLFile(testCaseC.filename, testCaseC.region);
+                        RecreationModel modelD = UVLParser.parseUVLFile(testCaseD.filename, testCaseD.region);
+
+                        long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
+                                        + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
+
+                        RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
+                                        modelD).mergedModel();
+
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(0, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+
+                        mergeResult.getConstraints().get(35).doContextualize(Region.A.ordinal());
+
+                        assertNotEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(1, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+                } catch (Exception e) {
+                        throw new AssertionError(
+                                        "testMergeMultiplePaperRegionsAndTriggerValidationTestcase1 failed: "
+                                                        + e.getMessage(),
+                                        e);
+                }
+        }
+
+        @Test
+        void testMergeMultiplePaperRegionsAndTriggerValidationTestcase2A() {
+                try {
+                        TestCase testCaseA = paperModels[0];
+                        TestCase testCaseB = paperModels[1];
+                        TestCase testCaseC = paperModels[2];
+                        TestCase testCaseD = paperModels[3];
+
+                        RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
+                        RecreationModel modelC = UVLParser.parseUVLFile(testCaseC.filename, testCaseC.region);
+                        RecreationModel modelD = UVLParser.parseUVLFile(testCaseD.filename, testCaseD.region);
+
+                        long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
+                                        + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
+
+                        RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
+                                        modelD).mergedModel();
+
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(0, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+
+                        // "A" & "City" => "White"
+                        FeatureReferenceConstraint constraintFeatureCity = new FeatureReferenceConstraint();
+                        constraintFeatureCity.setFeature(mergeResult.getFeatures().get("City"));
+
+                        FeatureReferenceConstraint constraintFeatureWhite = new FeatureReferenceConstraint();
+                        constraintFeatureWhite.setFeature(mergeResult.getFeatures().get("White"));
+
+                        BinaryConstraint constraint = new BinaryConstraint();
+                        constraint.setAntecedent(constraintFeatureCity);
+                        constraint.setConsequent(constraintFeatureWhite);
+                        constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+                        constraint.doContextualize(Region.A.ordinal());
+
+                        mergeResult.addConstraint(constraint);
+
+                        assertNotEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(2, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+                } catch (Exception e) {
+                        throw new AssertionError(
+                                        "testMergeMultiplePaperRegionsAndTriggerValidationTestcase2A failed: "
+                                                        + e.getMessage(),
+                                        e);
+                }
+        }
+
+        @Test
+        void testMergeMultiplePaperRegionsAndTriggerValidationTestcase2B() {
+                try {
+                        TestCase testCaseA = paperModels[0];
+                        TestCase testCaseB = paperModels[1];
+                        TestCase testCaseC = paperModels[2];
+                        TestCase testCaseD = paperModels[3];
+
+                        RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
+                        RecreationModel modelC = UVLParser.parseUVLFile(testCaseC.filename, testCaseC.region);
+                        RecreationModel modelD = UVLParser.parseUVLFile(testCaseD.filename, testCaseD.region);
+
+                        long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
+                                        + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
+
+                        RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
+                                        modelD).mergedModel();
+
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(0, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+
+                        // "B" & "2L" => "Yes"
+                        FeatureReferenceConstraint constraintFeatureAntecedent = new FeatureReferenceConstraint();
+                        constraintFeatureAntecedent.setFeature(mergeResult.getFeatures().get("2L"));
+
+                        FeatureReferenceConstraint constraintFeatureConsequent = new FeatureReferenceConstraint();
+                        constraintFeatureConsequent.setFeature(mergeResult.getFeatures().get("Yes"));
+
+                        BinaryConstraint constraint = new BinaryConstraint();
+                        constraint.setAntecedent(constraintFeatureAntecedent);
+                        constraint.setConsequent(constraintFeatureConsequent);
+                        constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+                        constraint.doContextualize(Region.B.ordinal());
+
+                        mergeResult.addConstraint(constraint);
+
+                        assertNotEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(3, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+                } catch (Exception e) {
+                        throw new AssertionError(
+                                        "testMergeMultiplePaperRegionsAndTriggerValidationTestcase2B failed: "
+                                                        + e.getMessage(),
+                                        e);
+                }
+        }
+
+        @Test
+        void testMergeMultiplePaperRegionsAndTriggerValidationTestcase2C() {
+                try {
+                        TestCase testCaseA = paperModels[0];
+                        TestCase testCaseB = paperModels[1];
+                        TestCase testCaseC = paperModels[2];
+                        TestCase testCaseD = paperModels[3];
+
+                        RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
+                        RecreationModel modelC = UVLParser.parseUVLFile(testCaseC.filename, testCaseC.region);
+                        RecreationModel modelD = UVLParser.parseUVLFile(testCaseD.filename, testCaseD.region);
+
+                        long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
+                                        + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
+
+                        RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
+                                        modelD).mergedModel();
+
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(0, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+
+                        // "C" & "SUV" => "Black"
+                        FeatureReferenceConstraint constraintFeatureAntecedent = new FeatureReferenceConstraint();
+                        constraintFeatureAntecedent.setFeature(mergeResult.getFeatures().get("SUV"));
+
+                        FeatureReferenceConstraint constraintFeatureConsequent = new FeatureReferenceConstraint();
+                        constraintFeatureConsequent.setFeature(mergeResult.getFeatures().get("Black"));
+
+                        BinaryConstraint constraint = new BinaryConstraint();
+                        constraint.setAntecedent(constraintFeatureAntecedent);
+                        constraint.setConsequent(constraintFeatureConsequent);
+                        constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+                        constraint.doContextualize(Region.C.ordinal());
+
+                        mergeResult.addConstraint(constraint);
+
+                        assertNotEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(4, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+                } catch (Exception e) {
+                        throw new AssertionError(
+                                        "testMergeMultiplePaperRegionsAndTriggerValidationTestcase2C failed: "
+                                                        + e.getMessage(),
+                                        e);
+                }
+        }
+
+        @Test
+        void testMergeMultiplePaperRegionsAndTriggerValidationTestcase2D() {
+                try {
+                        TestCase testCaseA = paperModels[0];
+                        TestCase testCaseB = paperModels[1];
+                        TestCase testCaseC = paperModels[2];
+                        TestCase testCaseD = paperModels[3];
+
+                        RecreationModel modelA = UVLParser.parseUVLFile(testCaseA.filename, testCaseA.region);
+                        RecreationModel modelB = UVLParser.parseUVLFile(testCaseB.filename, testCaseB.region);
+                        RecreationModel modelC = UVLParser.parseUVLFile(testCaseC.filename, testCaseC.region);
+                        RecreationModel modelD = UVLParser.parseUVLFile(testCaseD.filename, testCaseD.region);
+
+                        long expectedSolutions = testCaseA.expectedSolutions + testCaseB.expectedSolutions
+                                        + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
+
+                        RecreationModel mergeResult = Merger.fullMerge(modelA, modelB, modelC,
+                                        modelD).mergedModel();
+
+                        assertEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(0, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+
+                        // "D" & "1L" => "No"
+                        FeatureReferenceConstraint constraintFeatureAntecedent = new FeatureReferenceConstraint();
+                        constraintFeatureAntecedent.setFeature(mergeResult.getFeatures().get("1L"));
+
+                        FeatureReferenceConstraint constraintFeatureConsequent = new FeatureReferenceConstraint();
+                        constraintFeatureConsequent.setFeature(mergeResult.getFeatures().get("No"));
+
+                        BinaryConstraint constraint = new BinaryConstraint();
+                        constraint.setAntecedent(constraintFeatureAntecedent);
+                        constraint.setConsequent(constraintFeatureConsequent);
+                        constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
+                        constraint.doContextualize(Region.D.ordinal());
+
+                        mergeResult.addConstraint(constraint);
+
+                        assertNotEquals(expectedSolutions, Analyser.returnNumberOfSolutions(mergeResult));
+                        assertEquals(5, Validator.validateMerge(mergeResult, modelA, modelB, modelC, modelD));
+                } catch (Exception e) {
+                        throw new AssertionError(
+                                        "testMergeMultiplePaperRegionsAndTriggerValidationTestcase2D failed: "
+                                                        + e.getMessage(),
                                         e);
                 }
         }
