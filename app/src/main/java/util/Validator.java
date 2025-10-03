@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import model.recreate.RecreationModel;
+import util.helper.MergerHelper;
 import util.helper.ValidatorHelper;
 /*
  * Feature Model Merge Validation Utility
@@ -80,16 +81,8 @@ public class Validator extends ValidatorHelper {
                     : "unknown";
             logger.warn("[validateMerge] Merge validation FAILED: Test Case 2 failed (missing solutions exist) for source model {})", region);
             return missingSolutionsResult + 1;
-        } else {
-            StringBuilder regions = new StringBuilder();
-            for (int i = 0; i < sourceModels.length; i++) {
-                if (i > 0) {
-                    regions.append(" union ");
-                }
-                regions.append(sourceModels[i].getRegionString());
-            }
-            
-            logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({})", regions);
+        } else {    
+            logger.info("[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol({})", MergerHelper.buildRegionString(" union ", sourceModels));
             return 0;
         }
     }
@@ -115,24 +108,17 @@ public class Validator extends ValidatorHelper {
         // Test formula: KBMerge ∧ ¬KB₁ ∧ ¬KB₂
         // True if extra solutions exist (validation fails)
         boolean hasExtraSolutions = checkSimultaneousViolationsOrNegation(mergedKB, sourceModels);
-        
-        StringBuilder regions = new StringBuilder();
-            for (int i = 0; i < sourceModels.length; i++) {
-                if (i > 0) {
-                    regions.append(" union ");
-                }
-                regions.append(sourceModels[i].getRegionString());
-            }
+        String regionsString = MergerHelper.buildRegionString(" union ", sourceModels);
 
         if (hasExtraSolutions) {
             logger.warn(
                     "\t[validateNoExtraSolutions] Test Case 1 FAILED: KBMerge has configurations outside {} (merge too loose)",
-                    regions);
+                    regionsString);
             return false;
         } else {
             logger.info(
                     "\t[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside {}",
-                    regions);
+                    regionsString);
             return true;
         }
     }

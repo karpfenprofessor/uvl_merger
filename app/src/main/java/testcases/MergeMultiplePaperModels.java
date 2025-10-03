@@ -10,6 +10,7 @@ import model.recreate.constraints.BinaryConstraint;
 import model.recreate.constraints.FeatureReferenceConstraint;
 import util.UVLParser;
 import util.Validator;
+import util.Merger.MergeResult;
 import util.Merger;
 import util.analyse.Analyser;
 
@@ -46,27 +47,9 @@ public class MergeMultiplePaperModels {
             logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));*/
 
 
-            RecreationModel mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania).mergedModel();
-            Validator.validateMerge(mergedModelOneStep, modelUs, modelGer, modelAsia, modelOzeania);
-            Analyser.printConstraints(mergedModelOneStep);
-                
-            // "A" & "City" => "White"
-            FeatureReferenceConstraint constraintFeatureCity = new FeatureReferenceConstraint();
-            constraintFeatureCity.setFeature(mergedModelOneStep.getFeatures().get("City"));
-
-            FeatureReferenceConstraint constraintFeatureWhite = new FeatureReferenceConstraint();
-            constraintFeatureWhite.setFeature(mergedModelOneStep.getFeatures().get("White"));
-
-            BinaryConstraint constraint = new BinaryConstraint();
-            constraint.setAntecedent(constraintFeatureCity);
-            constraint.setConsequent(constraintFeatureWhite);
-            constraint.setOperator(BinaryConstraint.LogicalOperator.IMPLIES);
-            constraint.doContextualize(Region.A.ordinal());
-            
-            mergedModelOneStep.addConstraint(constraint);
-
-            logger.info("solutions after modifying the constraint: {}", Analyser.returnNumberOfSolutions(mergedModelOneStep));
-            Validator.validateMerge(mergedModelOneStep, modelUs, modelGer, modelAsia, modelOzeania);
+            MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania);
+            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia, modelOzeania);
+            mergedModelOneStep.mergedStatistics().printStatistics();
         } catch (Exception e) {
             e.printStackTrace();
         }

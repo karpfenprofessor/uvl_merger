@@ -71,7 +71,7 @@ class MergeMultipleRegionsIntoOneModelTest {
                                         + testCaseC.expectedSolutions + testCaseD.expectedSolutions;
 
                         // Union the models
-                        RecreationModel unionModel = Merger.unionMultiple(new MergeStatistics(), modelA, modelB, modelC,
+                        RecreationModel unionModel = Merger.union(new MergeStatistics(), modelA, modelB, modelC,
                                         modelD);
 
                         // Verify the solution count after union

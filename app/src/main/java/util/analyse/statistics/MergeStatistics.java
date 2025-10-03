@@ -53,6 +53,11 @@ public class MergeStatistics {
     private long numberOfCustomConstraintsAfterMerge;
     private long numberOfCrossTreeConstraintsAfterMerge;
 
+    private Map<Region, Integer> numberOfContextualizedConstraintsPerModel;
+    private Map<Region, Integer> numberOfContextualizedCrossTreeConstraintsPerModel;
+
+
+
     private Integer validate;
 
     public void startTimerUnion() {
@@ -203,6 +208,19 @@ public class MergeStatistics {
                 .append(contextualizationShareBeforeMerge).append("\n");
         sb.append("\t[statistics] Contextualisation share after merge: ")
                 .append(contextualizationShareAfterMerge).append("\n");
+
+        // ─ Contextualized constraints per model ────────────────────────────────────────────────────
+        if (numberOfContextualizedConstraintsPerModel != null && !numberOfContextualizedConstraintsPerModel.isEmpty()) {
+            sb.append("\t[statistics] Contextualized constraints per model:\n");
+            numberOfContextualizedConstraintsPerModel.forEach((region, count) -> 
+                sb.append("\t[statistics]   ").append(region.getRegionString()).append(": ").append(count).append("\n"));
+        }
+        
+        if (numberOfContextualizedCrossTreeConstraintsPerModel != null && !numberOfContextualizedCrossTreeConstraintsPerModel.isEmpty()) {
+            sb.append("\t[statistics] Contextualized cross-tree constraints per model:\n");
+            numberOfContextualizedCrossTreeConstraintsPerModel.forEach((region, count) -> 
+                sb.append("\t[statistics]   ").append(region.getRegionString()).append(": ").append(count).append("\n"));
+        }
 
         // ─ Validation result ────────────────────────────────────────────────────
         sb.append("\t[statistics] Validation result: ")

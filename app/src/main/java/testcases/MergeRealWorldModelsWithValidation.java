@@ -37,19 +37,22 @@ public class MergeRealWorldModelsWithValidation {
         String modelFinanceJString = "uvl/finance/finance_10.uvl";
 
         RecreationModel originalA = UVLParser.parseUVLFile(modelFinanceBString, Region.A);
-        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceDString, Region.B);
+        RecreationModel originalB = UVLParser.parseUVLFile(modelFinanceCString, Region.B);
+        RecreationModel originalC = UVLParser.parseUVLFile(modelFinanceDString, Region.C);
 
-        RecreationAnalyser.analyseSharedFeatures(originalA, originalB);
+        //RecreationAnalyser.analyseSharedFeatures(originalA, originalB);
 
         logger.info("originalA: {}", Analyser.isConsistent(originalA));
         logger.info("originalB: {}", Analyser.isConsistent(originalB));
+        logger.info("originalC: {}", Analyser.isConsistent(originalC));
 
-        MergeResult mergeResult = Merger.fullMerge(originalA, originalB);
+        MergeResult mergeResult = Merger.fullMerge(originalA, originalB, originalC);
         logger.info("originalA: {}", Analyser.isConsistent(originalA));
         logger.info("originalB: {}", Analyser.isConsistent(originalB));
+        logger.info("originalC: {}", Analyser.isConsistent(originalC));
         logger.info("mergedModel: {}", Analyser.isConsistent(mergeResult.mergedModel()));
-
+        
+        Validator.validateMerge(mergeResult.mergedModel(), originalA, originalB, originalC);
         mergeResult.mergedStatistics().printStatistics();
-        Validator.validateMerge(mergeResult.mergedModel(), originalA, originalB);
     }
 }
