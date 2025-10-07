@@ -4,9 +4,14 @@
 # Ignore Gradle build output directory
 build
 .vscode/launch.json
-app/bin/*
-logs/app.log
-app/logs/app.log
 *.gexf
+app/bin/*
+app/logs/*
 logs/*
 app/.vscode/settings.json
+app/src/main/resources/paper/latex/my_paper.abs
+app/src/main/resources/paper/latex/my_paper.aux
+app/src/main/resources/paper/latex/my_paper.log
+app/src/main/resources/paper/latex/my_paper.synctex.gz
+app/src/main/resources/paper/latex/my_paper.xmpdata
+app/src/main/resources/paper/latex/pdfa.xmpi
