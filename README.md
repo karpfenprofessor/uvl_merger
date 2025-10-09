@@ -20,8 +20,8 @@ The goal is to **merge two or more feature models** from the same domain, each t
 ### Basic Usage
 ```java
 // Parse two UVL models
-RecreationModel modelA = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-RecreationModel modelB = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+RecreationModel modelA = UVLParser.parseUVLFile("uvl/paper_test_models/original/us.uvl", Region.A);
+RecreationModel modelB = UVLParser.parseUVLFile("uvl/paper_test_models/original/ger.uvl", Region.B);
 
 // Perform full merge
 RecreationModel mergedModel = Merger.fullMerge(modelA, modelB).mergedModel();

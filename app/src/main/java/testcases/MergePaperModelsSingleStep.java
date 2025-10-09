@@ -15,8 +15,8 @@ public class MergePaperModelsSingleStep {
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/original/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/original/ger.uvl", Region.B);
 
             logger.info("solutions model us: {}", Analyser.returnNumberOfSolutions(modelUs));
             logger.info("solutions model ger: {}", Analyser.returnNumberOfSolutions(modelGer));

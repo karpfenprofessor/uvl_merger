@@ -41,8 +41,8 @@ class BasicTests {
     };
 
     private final TestCase[] testCasesPaper = {
-            new TestCase("uvl/paper_test_models/us.uvl", 288),
-            new TestCase("uvl/paper_test_models/ger.uvl", 324)
+            new TestCase("uvl/paper_test_models/original/us.uvl", 288),
+            new TestCase("uvl/paper_test_models/original/ger.uvl", 324)
     };
 
     private final TestCase[] testCasesFish = {
@@ -132,8 +132,8 @@ class BasicTests {
     @Test
     void testContextualizationOfPaperCarModels() {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/original/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/original/ger.uvl", Region.B);
 
             long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
@@ -151,8 +151,8 @@ class BasicTests {
     @Test
     void testUnionOfPaperCarModels() {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/original/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/original/ger.uvl", Region.B);
 
             long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
             long solutionsGer = Analyser.returnNumberOfSolutions(modelGer);
@@ -174,8 +174,8 @@ class BasicTests {
     @Test
     void testMergeOfPaperCarModels() {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/ger.uvl", Region.B);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/original/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/original/ger.uvl", Region.B);
 
             long solutionsUs = Analyser.returnNumberOfSolutions(modelUs);
             assertEquals(testCasesPaper[0].expectedSolutions, solutionsUs);

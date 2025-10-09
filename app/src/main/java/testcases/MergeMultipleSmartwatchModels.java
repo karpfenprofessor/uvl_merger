@@ -62,9 +62,10 @@ public class MergeMultipleSmartwatchModels {
              * Analyser.returnNumberOfSolutions(mergedModel));
              */
 
-            MergeResult mergedModelOneStep = Merger.fullMerge(modelMiband1, modelMiband1s, modelMiband2, modelMiband3, modelMiband4, modelMiband5, modelMiband6, modelMiband7, modelMiband8);
+            MergeResult mergedModelOneStep = Merger.fullMerge(modelMiband1s, modelMiband2);
             //Analyser.printConstraints(mergedModelOneStep.mergedModel());
-            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelMiband1, modelMiband1s, modelMiband2, modelMiband3, modelMiband4, modelMiband5, modelMiband6, modelMiband7, modelMiband8);
+            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelMiband1s, modelMiband2);
+            Analyser.printAllSolutions(mergedModelOneStep.mergedModel());
             //mergedModelOneStep.mergedStatistics().printStatistics();
         } catch (Exception e) {
             e.printStackTrace();

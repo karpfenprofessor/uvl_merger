@@ -14,15 +14,14 @@ import util.Merger.MergeResult;
 import util.Merger;
 import util.analyse.Analyser;
 
-public class MergeMultiplePaperModels {
+public class MergeMultiplePaperModelsSplitFeatures {
     private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModelsSplitFeatures.class);
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ger.uvl", Region.B);
-            RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/asia.uvl", Region.C);
-            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/split_features/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/split_features/ger.uvl", Region.B);
+            RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/split_features/asia.uvl", Region.C);
 
             /*modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
@@ -47,9 +46,9 @@ public class MergeMultiplePaperModels {
             logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));*/
 
 
-            MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania);
-            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia, modelOzeania);
-            mergedModelOneStep.mergedStatistics().printStatistics();
+            MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia);
+            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia);
+            //mergedModelOneStep.mergedStatistics().printStatistics();
         } catch (Exception e) {
             e.printStackTrace();
         }

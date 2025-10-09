@@ -321,10 +321,10 @@ public class Merger {
      */
     private static void updateProgressBar(int current, int total) {
         int percentage = (int) ((double) current / total * 100);
-        int filledBars = (int) ((double) current / total * 120); // More granular with 150 characters
+        int filledBars = (int) ((double) current / total * 100); // More granular with 150 characters
         
         System.out.print("\r[inconsistencyCheck] Progress: [");
-        for (int i = 0; i < 120; i++) {
+        for (int i = 0; i < 100; i++) {
             if (i < filledBars) {
                 System.out.print("█"); // Use block character for finer granularity
             } else {
