@@ -62,11 +62,26 @@ public class MergeMultipleSmartwatchModels {
              * Analyser.returnNumberOfSolutions(mergedModel));
              */
 
-            MergeResult mergedModelOneStep = Merger.fullMerge(modelMiband1s, modelMiband2);
+            MergeResult mergedModelOneStep = Merger.fullMerge(modelMiband1, modelMiband1s, modelMiband2);
+            MergeResult mergedModelOneStep2 = Merger.fullMerge(modelMiband4, modelMiband5, modelMiband6, modelMiband7, modelMiband8);
+
             //Analyser.printConstraints(mergedModelOneStep.mergedModel());
-            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelMiband1s, modelMiband2);
-            Analyser.printAllSolutions(mergedModelOneStep.mergedModel());
+            Validator.validateMerge(mergedModelOneStep2.mergedModel(), modelMiband4, modelMiband5, modelMiband6, modelMiband7, modelMiband8);
+            System.out.println("solutions model 4: " + Analyser.returnNumberOfSolutions(modelMiband4));
+            System.out.println("solutions model 5: " + Analyser.returnNumberOfSolutions(modelMiband5));
+            System.out.println("solutions model 6: " + Analyser.returnNumberOfSolutions(modelMiband6));
+            System.out.println("solutions model 7: " + Analyser.returnNumberOfSolutions(modelMiband7));
+            System.out.println("solutions model 8: " + Analyser.returnNumberOfSolutions(modelMiband8));
+            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModelOneStep2.mergedModel()));
+
+
+            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelMiband1, modelMiband1s, modelMiband2);
+            System.out.println("solutions model 1: " + Analyser.returnNumberOfSolutions(modelMiband1));
+            System.out.println("solutions model 1s: " + Analyser.returnNumberOfSolutions(modelMiband1s));
+            System.out.println("solutions model 2: " + Analyser.returnNumberOfSolutions(modelMiband2));
+            System.out.println("solutions merged model: " + Analyser.returnNumberOfSolutions(mergedModelOneStep.mergedModel()));
             //mergedModelOneStep.mergedStatistics().printStatistics();
+            //Analyser.printAllSolutions(mergedModelOneStep2.mergedModel());
         } catch (Exception e) {
             e.printStackTrace();
         }

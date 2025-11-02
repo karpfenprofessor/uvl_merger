@@ -1,0 +1,542 @@
+[parseUVLFile] start uvl/paper_test_models/union_multiple/us.uvl for region A
+	[parseRootFeature] found root Car
+	[parseFeatures] finished with 25 features
+	[parseConstraints] finished with 3 cross tree and 7 feature tree constraints
+[parseUVLFile] finished uvl/paper_test_models/union_multiple/us.uvl for region A with 25 features and 10 constraints
+
+[parseUVLFile] start uvl/paper_test_models/union_multiple/ger.uvl for region B
+	[parseRootFeature] found root Car
+	[parseFeatures] finished with 25 features
+	[parseConstraints] finished with 2 cross tree and 7 feature tree constraints
+[parseUVLFile] finished uvl/paper_test_models/union_multiple/ger.uvl for region B with 25 features and 9 constraints
+
+[parseUVLFile] start uvl/paper_test_models/union_multiple/asia.uvl for region C
+	[parseRootFeature] found root Car
+	[parseFeatures] finished with 25 features
+	[parseConstraints] finished with 4 cross tree and 7 feature tree constraints
+[parseUVLFile] finished uvl/paper_test_models/union_multiple/asia.uvl for region C with 25 features and 11 constraints
+
+[parseUVLFile] start uvl/paper_test_models/union_multiple/ozeania.uvl for region D
+	[parseRootFeature] found root Car
+	[parseFeatures] finished with 25 features
+	[parseConstraints] finished with 6 cross tree and 7 feature tree constraints
+[parseUVLFile] finished uvl/paper_test_models/union_multiple/ozeania.uvl for region D with 25 features and 13 constraints
+
+[contextualize] 10 constraints in region A with region value 0
+	[contextualize] added region root [Region] and contextualization feature [A]
+	[contextualize] constrain super root and region root with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Car
+	cardinality		: [1,1]
+	children		: [Region]
+	}
+	[contextualize] constrain region root and contextualization feature with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Region
+	cardinality		: [1,1]
+	children		: [A]
+	}
+[contextualize] finished region A
+
+[contextualize] 9 constraints in region B with region value 1
+	[contextualize] added region root [Region] and contextualization feature [B]
+	[contextualize] constrain super root and region root with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Car
+	cardinality		: [1,1]
+	children		: [Region]
+	}
+	[contextualize] constrain region root and contextualization feature with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Region
+	cardinality		: [1,1]
+	children		: [B]
+	}
+[contextualize] finished region B
+
+[contextualize] 11 constraints in region C with region value 2
+	[contextualize] added region root [Region] and contextualization feature [C]
+	[contextualize] constrain super root and region root with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Car
+	cardinality		: [1,1]
+	children		: [Region]
+	}
+	[contextualize] constrain region root and contextualization feature with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Region
+	cardinality		: [1,1]
+	children		: [C]
+	}
+[contextualize] finished region C
+
+[contextualize] 13 constraints in region D with region value 3
+	[contextualize] added region root [Region] and contextualization feature [D]
+	[contextualize] constrain super root and region root with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Car
+	cardinality		: [1,1]
+	children		: [Region]
+	}
+	[contextualize] constrain region root and contextualization feature with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Region
+	cardinality		: [1,1]
+	children		: [D]
+	}
+[contextualize] finished region D
+
+[union] with models from regions A, B, C, D
+	[unionMultiple] added 30 unique features to union model
+	[handleRootFeature] root feature is the same in all models, setting union root feature to Car
+[analyseSharedFeatures] comparing 4 models
+	model 1: 27 features
+	model 2: 27 features
+	model 3: 27 features
+	model 4: 27 features
+	shared features: 26
+	total unique features: 30
+	share ratio: 86,67 %
+	features exclusive to model 1 (A):
+		- A
+	features exclusive to model 2 (B):
+		- B
+	features exclusive to model 3 (C):
+		- C
+	features exclusive to model 4 (D):
+		- D
+
+	[handleRegionFeatureMultiple] create unified Region structure with regions: A, B, C, D
+	[handleRegionFeature] constrain super root and region root features with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Car
+	cardinality		: [1,1]
+	children		: [Region]
+	}
+	[handleRegionFeature] constrain region root and contextualization features with GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Region
+	cardinality		: [1,1]
+	children		: [A, B, C, D]
+	}
+[splitFeatures] checking feature tree for child group features with differentiating parents
+[unionMultiple] finished with 30 features and 45 constraints, there are 28 feature tree, 2 custom and 15 cross tree constraints
+
+solutions model contextualized us: 432
+solutions model contextualized ger: 468
+solutions model contextualized asia: 264
+solutions model contextualized ozeania: 303
+solutions union multiple model: 1467
+[inconsistencyCheck] start looping 15 constraints in union model (excluding feature tree and custom constraints)
+
+	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: No
+				  	}
+	}
+
+	[inconsistencyCheck] inconsistent, add decontextualized constraint NotConstraint {
+	inner			: BinaryConstraint {
+				  	operator		: AND
+				  	antecedent		: FeatureReferenceConstraint {
+				  				  	feature			: Electro
+				  				  	}
+				  	consequent		: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 0
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Black
+				  	}
+	}
+
+	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 1
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: City
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint NotConstraint {
+	isContextualized: true
+	contextValue	: 2
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 2
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: City
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: 2L
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 2
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Gas
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Yes
+				  	}
+	}
+
+	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: 2L
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Yes
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: City
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: White
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: City
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: 2L
+				  				  	}
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: White
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: BinaryConstraint {
+				  	operator		: AND
+				  	antecedent		: FeatureReferenceConstraint {
+				  				  	feature			: City
+				  				  	}
+				  	consequent		: FeatureReferenceConstraint {
+				  				  	feature			: 2L
+				  				  	}
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+[inconsistencyCheck] added 5 decontextualized, 10 contextualized and 30 not checked constraints to merged model
+[inconsistencyCheck] finished with 30 features and 45 constraints
+
+solutions after inconsistency check model: 1467
+[cleanup] start looping 15 constraints in merged model (excluding feature tree and custom constraints)
+	[cleanup] inconsistent, remove constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: No
+				  	}
+	}
+	[cleanup] inconsistent, remove constraint NotConstraint {
+	inner			: BinaryConstraint {
+				  	operator		: AND
+				  	antecedent		: FeatureReferenceConstraint {
+				  				  	feature			: Electro
+				  				  	}
+				  	consequent		: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 0
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Black
+				  	}
+	}
+	[cleanup] inconsistent, remove constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 1
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: City
+				  				  	}
+				  	}
+	}
+	[cleanup] inconsistent, remove constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint NotConstraint {
+	isContextualized: true
+	contextValue	: 2
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 2
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: City
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: 2L
+				  				  	}
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 2
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Gas
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Yes
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: 2L
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Yes
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: City
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: White
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: City
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: 2L
+				  				  	}
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: White
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 3
+	operator		: IMPLIES
+	antecedent		: BinaryConstraint {
+				  	operator		: AND
+				  	antecedent		: FeatureReferenceConstraint {
+				  				  	feature			: City
+				  				  	}
+				  	consequent		: FeatureReferenceConstraint {
+				  				  	feature			: 2L
+				  				  	}
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+[cleanup] removed 4 constraints
+[cleanup] kept 30 custom and feature tree constraints without checking
+[cleanup] finished with 30 features and 41 constraints
+
+solutions after cleanup model: 1467
+[validateMerge] Starting validation of merged model
+[validateNoExtraSolutions] Test Case 1 - Checking for extra solutions
+	[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside A union B union C union D
+[validateNoMissingSolutions] Test Case 2 - Checking for missing solutions
+	[checkMissingSolutionsMultiple] Checking for missing solutions in A
+	[checkMissingSolutionsMultiple] Test Case 2 for A PASSED: KBMerge includes all valid configurations
+	[checkMissingSolutionsMultiple] Checking for missing solutions in B
+	[checkMissingSolutionsMultiple] Test Case 2 for B PASSED: KBMerge includes all valid configurations
+	[checkMissingSolutionsMultiple] Checking for missing solutions in C
+	[checkMissingSolutionsMultiple] Test Case 2 for C PASSED: KBMerge includes all valid configurations
+	[checkMissingSolutionsMultiple] Checking for missing solutions in D
+	[checkMissingSolutionsMultiple] Test Case 2 for D PASSED: KBMerge includes all valid configurations
+	[validateNoMissingSolutions] Test Case 2 PASSED: All source models preserved
+[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol(A union B union C union D)
+[statistics] Merge operation statistics:
+	[statistics] Union operation duration:         22781300 ns (22,78 ms)
+	[statistics] Inconsistency check duration:    289612700 ns (289,61 ms)
+	[statistics] Cleanup duration:                149342900 ns (149,34 ms)
+	[statistics] Full merge duration:             461736900 ns (461,74 ms)
+	[statistics] Number of features in merged model: 30
+	[statistics] Number of constraints before merge: 45
+	[statistics] Number of constraints after merge: 41
+	[statistics] Number of inconsistency checks: 45
+	[statistics]   -> contextualised: 10
+	[statistics]   -> non-contextualised: 5
+	[statistics]   -> not checked: 30
+	[statistics] Number of cleanup checks: 45
+	[statistics]   -> kept as is: 11
+	[statistics]   -> removed as redundant: 4
+	[statistics]   -> not checked: 30
+	[statistics] Feature-tree constraints before merge: 28
+	[statistics] Feature-tree constraints after merge: 28
+	[statistics] Custom constraints before merge: 2
+	[statistics] Custom constraints after merge: 2
+	[statistics] Cross-tree constraints before merge: 15
+	[statistics] Cross-tree constraints after merge: 11
+	[statistics] Contextualisation share of cross tree constraintsbefore merge: 1.0
+	[statistics] Contextualisation share of cross tree constraintsafter merge: 0.90909094
+	[statistics] Validation result: not performed
+	[statistics] Consistent after merge: true
+

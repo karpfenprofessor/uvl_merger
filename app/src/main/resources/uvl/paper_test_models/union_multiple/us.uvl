@@ -33,8 +33,6 @@ features
           "25k"
 
 constraints
-  ! "Hybrid"
-  "Electro" => ! "Yes"
-  "Diesel" => "Black"
-  "City" => ! "2L"
-  "Gas" => "Yes"
+  "Electro" => "No"           // shared across all regions → will be decontextualized
+  ! ("Electro" & "Yes")       // redundant alias of above → will be removed in cleanup
+  "Diesel"  => "Black"        // region-specific preference → stays contextualized

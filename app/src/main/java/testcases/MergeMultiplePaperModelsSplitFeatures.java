@@ -13,6 +13,7 @@ import util.Validator;
 import util.Merger.MergeResult;
 import util.Merger;
 import util.analyse.Analyser;
+import util.analyse.statistics.MergeStatistics;
 
 public class MergeMultiplePaperModelsSplitFeatures {
     private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModelsSplitFeatures.class);
@@ -23,31 +24,28 @@ public class MergeMultiplePaperModelsSplitFeatures {
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/split_features/ger.uvl", Region.B);
             RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/split_features/asia.uvl", Region.C);
 
-            /*modelUs.contextualizeAllConstraints();
+            modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
             modelAsia.contextualizeAllConstraints();
-            modelOzeania.contextualizeAllConstraints();
 
             MergeStatistics mergeStatistics = new MergeStatistics();
-            RecreationModel unionMultipleModel = Merger.unionMultiple(mergeStatistics, modelUs, modelGer, modelAsia,
-                    modelOzeania);
+            RecreationModel unionMultipleModels = Merger.union(mergeStatistics, modelUs, modelGer, modelAsia);
 
-            // solutions union: 198+306+264+261=1029
+            // solutions union: 198+306+264=
             logger.info("solutions model contextualized us: {}", Analyser.returnNumberOfSolutions(modelUs));
             logger.info("solutions model contextualized ger: {}", Analyser.returnNumberOfSolutions(modelGer));
             logger.info("solutions model contextualized asia: {}", Analyser.returnNumberOfSolutions(modelAsia));
-            logger.info("solutions model contextualized ozeania: {}", Analyser.returnNumberOfSolutions(modelOzeania));
-            logger.info("solutions union multiple model: {}", Analyser.returnNumberOfSolutions(unionMultipleModel));
+            logger.info("solutions union multiple model: {}", Analyser.returnNumberOfSolutions(unionMultipleModels));
 
-            RecreationModel mergedModel = Merger.inconsistencyCheck(mergeStatistics,unionMultipleModel);
+            RecreationModel mergedModel = Merger.inconsistencyCheck(mergeStatistics,unionMultipleModels);
             logger.info("solutions after inconsistency check model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
             mergedModel = Merger.cleanup(mergeStatistics, mergedModel);
-            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));*/
+            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
 
-            MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia);
-            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia);
+            //MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia);
+            //Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia);
             //mergedModelOneStep.mergedStatistics().printStatistics();
         } catch (Exception e) {
             e.printStackTrace();

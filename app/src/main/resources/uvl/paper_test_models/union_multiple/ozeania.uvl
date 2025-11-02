@@ -33,9 +33,9 @@ features
           "25k"
 
 constraints
-  "Electro" => ! "Yes"
-  "2L" => "Yes"
-  "Diesel" => "White"
-  "City" => "White"
-  "City" => ! "2L"
-  "Gas" => "Yes"
+  "Electro" => ! "Yes"                     // shared across all regions → will be decontextualized
+  "2L"      => "Yes"                       // heavy engine requires coupling → stays contextualized
+  "City"    => "White"                     // local rule: city cars are white → stays contextualized
+  "City"    => ! "2L"                      // city cars can't have 2L engine → stays contextualized
+  "Diesel"  => "White"                     // diesel cars must be white → stays contextualized
+  ("City" & "2L") => ! "Yes"               // antecedent impossible due to "City" => ! "2L" → removed in cleanup

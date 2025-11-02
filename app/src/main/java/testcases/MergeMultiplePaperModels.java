@@ -13,6 +13,7 @@ import util.Validator;
 import util.Merger.MergeResult;
 import util.Merger;
 import util.analyse.Analyser;
+import util.analyse.statistics.MergeStatistics;
 
 public class MergeMultiplePaperModels {
     private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModelsSplitFeatures.class);
@@ -24,13 +25,13 @@ public class MergeMultiplePaperModels {
             RecreationModel modelAsia = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/asia.uvl", Region.C);
             RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D);
 
-            /*modelUs.contextualizeAllConstraints();
+            modelUs.contextualizeAllConstraints();
             modelGer.contextualizeAllConstraints();
             modelAsia.contextualizeAllConstraints();
             modelOzeania.contextualizeAllConstraints();
 
             MergeStatistics mergeStatistics = new MergeStatistics();
-            RecreationModel unionMultipleModel = Merger.unionMultiple(mergeStatistics, modelUs, modelGer, modelAsia,
+            RecreationModel unionMultipleModel = Merger.union(mergeStatistics, modelUs, modelGer, modelAsia,
                     modelOzeania);
 
             // solutions union: 198+306+264+261=1029
@@ -44,12 +45,13 @@ public class MergeMultiplePaperModels {
             logger.info("solutions after inconsistency check model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
             mergedModel = Merger.cleanup(mergeStatistics, mergedModel);
-            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));*/
+            logger.info("solutions after cleanup model: {}", Analyser.returnNumberOfSolutions(mergedModel));
 
-
-            MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania);
-            Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia, modelOzeania);
-            mergedModelOneStep.mergedStatistics().printStatistics();
+            Validator.validateMerge(mergedModel, modelUs, modelGer, modelAsia, modelOzeania);
+            mergeStatistics.printStatistics();
+            //MergeResult mergedModelOneStep = Merger.fullMerge(modelUs, modelGer, modelAsia, modelOzeania);
+            //Validator.validateMerge(mergedModelOneStep.mergedModel(), modelUs, modelGer, modelAsia, modelOzeania);
+            //mergedModelOneStep.mergedStatistics().printStatistics();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -33,7 +33,7 @@ features
           "25k"
 
 constraints
-  ! "Diesel"
-  "Electro" => ! "Yes"
-  "City" => ! "2L"
-  "Gas" => "Yes"
+  "Electro" => ! "Yes"                     // shared across all regions → will be decontextualized
+  !"Diesel"                               // regional ban on diesel vehicles → stays contextualized
+  "City" => ! "2L"                         // small-engine restriction in cities → stays contextualized
+  "Gas"  => "Yes"                          // gas cars require coupling device → stays contextualized

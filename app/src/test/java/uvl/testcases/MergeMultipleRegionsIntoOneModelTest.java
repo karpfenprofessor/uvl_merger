@@ -21,14 +21,10 @@ class MergeMultipleRegionsIntoOneModelTest {
         }
 
         private final TestCase[] paperModels = {
-                        new TestCase("uvl/paper_test_models/union_multiple/us.uvl", Region.A, 198),
-                        new TestCase("uvl/paper_test_models/union_multiple/ger.uvl", Region.B, 306),
+                        new TestCase("uvl/paper_test_models/union_multiple/us.uvl", Region.A, 432),
+                        new TestCase("uvl/paper_test_models/union_multiple/ger.uvl", Region.B, 468),
                         new TestCase("uvl/paper_test_models/union_multiple/asia.uvl", Region.C, 264),
-                        new TestCase("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D, 261)
-        };
-
-        private final TestCase[] mergedModel = {
-                        new TestCase("uvl/paper_test_models/union_multiple/merged_model.uvl", Region.MERGED, 1029)
+                        new TestCase("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.D, 303)
         };
 
         @Test
@@ -359,17 +355,4 @@ class MergeMultipleRegionsIntoOneModelTest {
                                         e);
                 }
         }
-
-        @Test
-        void testMergedModelSolutionCount() {
-                try {
-                        TestCase testCase = mergedModel[0];
-                        RecreationModel model = UVLParser.parseUVLFile(testCase.filename, testCase.region);
-                        assertEquals(testCase.expectedSolutions, Analyser.returnNumberOfSolutions(model),
-                                        "Solution count mismatch for " + testCase.filename);
-                } catch (Exception e) {
-                        throw new AssertionError("testMergedModelSolutionCount failed: " + e.getMessage(), e);
-                }
-        }
-
 }

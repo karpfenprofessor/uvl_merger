@@ -33,8 +33,5 @@ features
           "25k"
 
 constraints
-  ! "Gas"
-  "Electro" => ! "Yes"
-  "Diesel" => ! "City"
-  "City" => ! "2L"
-  "Gas" => "Yes"
+  "Electro" => ! "Yes"                     // shared across all regions → will be decontextualized
+  "Diesel"  => ! "City"                    // local emission rule: diesel not allowed in city → stays contextualized
