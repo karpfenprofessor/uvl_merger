@@ -7,21 +7,16 @@
 [parseUVLFile] start uvl/paper_test_models/union_multiple/ger.uvl for region B
 	[parseRootFeature] found root Car
 	[parseFeatures] finished with 25 features
-	[parseConstraints] finished with 2 cross tree and 7 feature tree constraints
-[parseUVLFile] finished uvl/paper_test_models/union_multiple/ger.uvl for region B with 25 features and 9 constraints
-
-[parseUVLFile] start uvl/paper_test_models/union_multiple/asia.uvl for region C
-	[parseRootFeature] found root Car
-	[parseFeatures] finished with 25 features
 	[parseConstraints] finished with 4 cross tree and 7 feature tree constraints
-[parseUVLFile] finished uvl/paper_test_models/union_multiple/asia.uvl for region C with 25 features and 11 constraints
+[parseUVLFile] finished uvl/paper_test_models/union_multiple/ger.uvl for region B with 25 features and 11 constraints
 
-[parseUVLFile] start uvl/paper_test_models/union_multiple/ozeania.uvl for region D
+[parseUVLFile] start uvl/paper_test_models/union_multiple/ozeania.uvl for region C
 	[parseRootFeature] found root Car
-	[parseFeatures] finished with 25 features
-	[parseConstraints] finished with 6 cross tree and 7 feature tree constraints
-[parseUVLFile] finished uvl/paper_test_models/union_multiple/ozeania.uvl for region D with 25 features and 13 constraints
+	[parseFeatures] finished with 26 features
+	[parseConstraints] finished with 4 cross tree and 8 feature tree constraints
+[parseUVLFile] finished uvl/paper_test_models/union_multiple/ozeania.uvl for region C with 26 features and 12 constraints
 
+[merge] starting full merge process between models from regions A, B, C
 [contextualize] 10 constraints in region A with region value 0
 	[contextualize] added region root [Region] and contextualization feature [A]
 	[contextualize] constrain super root and region root with GroupConstraint {
@@ -38,7 +33,7 @@
 	}
 [contextualize] finished region A
 
-[contextualize] 9 constraints in region B with region value 1
+[contextualize] 11 constraints in region B with region value 1
 	[contextualize] added region root [Region] and contextualization feature [B]
 	[contextualize] constrain super root and region root with GroupConstraint {
 	isCustomConstraint		: true
@@ -54,7 +49,7 @@
 	}
 [contextualize] finished region B
 
-[contextualize] 11 constraints in region C with region value 2
+[contextualize] 12 constraints in region C with region value 2
 	[contextualize] added region root [Region] and contextualization feature [C]
 	[contextualize] constrain super root and region root with GroupConstraint {
 	isCustomConstraint		: true
@@ -70,30 +65,13 @@
 	}
 [contextualize] finished region C
 
-[contextualize] 13 constraints in region D with region value 3
-	[contextualize] added region root [Region] and contextualization feature [D]
-	[contextualize] constrain super root and region root with GroupConstraint {
-	isCustomConstraint		: true
-	parent			: Car
-	cardinality		: [1,1]
-	children		: [Region]
-	}
-	[contextualize] constrain region root and contextualization feature with GroupConstraint {
-	isCustomConstraint		: true
-	parent			: Region
-	cardinality		: [1,1]
-	children		: [D]
-	}
-[contextualize] finished region D
-
-[union] with models from regions A, B, C, D
+[union] with models from regions A, B, C
 	[unionMultiple] added 30 unique features to union model
 	[handleRootFeature] root feature is the same in all models, setting union root feature to Car
-[analyseSharedFeatures] comparing 4 models
+[analyseSharedFeatures] comparing 3 models
 	model 1: 27 features
 	model 2: 27 features
-	model 3: 27 features
-	model 4: 27 features
+	model 3: 28 features
 	shared features: 26
 	total unique features: 30
 	share ratio: 86,67 %
@@ -103,10 +81,9 @@
 		- B
 	features exclusive to model 3 (C):
 		- C
-	features exclusive to model 4 (D):
-		- D
+		- SurfPackage
 
-	[handleRegionFeatureMultiple] create unified Region structure with regions: A, B, C, D
+	[handleRegionFeatureMultiple] create unified Region structure with regions: A, B, C
 	[handleRegionFeature] constrain super root and region root features with GroupConstraint {
 	isCustomConstraint		: true
 	parent			: Car
@@ -117,35 +94,38 @@
 	isCustomConstraint		: true
 	parent			: Region
 	cardinality		: [1,1]
-	children		: [A, B, C, D]
+	children		: [A, B, C]
+	}
+	[addUniqueFeatureRegionImplications] add constraint: BinaryConstraint {
+	isFeatureTreeConstraint	: true
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: SurfPackage
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: C
+				  	}
 	}
 [splitFeatures] checking feature tree for child group features with differentiating parents
-[unionMultiple] finished with 30 features and 45 constraints, there are 28 feature tree, 2 custom and 15 cross tree constraints
+[unionMultiple] finished with 30 features and 36 constraints, there are 23 feature tree, 2 custom and 11 cross tree constraints
 
-solutions model contextualized us: 432
-solutions model contextualized ger: 468
-solutions model contextualized asia: 264
-solutions model contextualized ozeania: 303
-solutions union multiple model: 1467
-[inconsistencyCheck] start looping 15 constraints in union model (excluding feature tree and custom constraints)
+[inconsistencyCheck] start looping 11 constraints in union model (excluding feature tree and custom constraints)
+
+	[inconsistencyCheck] consistent, add contextualized constraint NotConstraint {
+	isContextualized: true
+	contextValue	: 0
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Hybrid
+				  	}
+	}
 
 	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
 				  	feature			: Electro
 				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: No
-				  	}
-	}
-
-	[inconsistencyCheck] inconsistent, add decontextualized constraint NotConstraint {
-	inner			: BinaryConstraint {
-				  	operator		: AND
-				  	antecedent		: FeatureReferenceConstraint {
-				  				  	feature			: Electro
-				  				  	}
-				  	consequent		: FeatureReferenceConstraint {
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
 				  				  	feature			: Yes
 				  				  	}
 				  	}
@@ -160,6 +140,14 @@ solutions union multiple model: 1467
 				  	}
 	consequent		: FeatureReferenceConstraint {
 				  	feature			: Black
+				  	}
+	}
+
+	[inconsistencyCheck] consistent, add contextualized constraint NotConstraint {
+	isContextualized: true
+	contextValue	: 1
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Gas
 				  	}
 	}
 
@@ -189,14 +177,16 @@ solutions union multiple model: 1467
 				  	}
 	}
 
-	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
+	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 1
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
-				  	feature			: Electro
+				  	feature			: 1L
 				  	}
 	consequent		: NotConstraint {
 				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: Yes
+				  				  	feature			: SUV
 				  				  	}
 				  	}
 	}
@@ -205,33 +195,7 @@ solutions union multiple model: 1467
 	isContextualized: true
 	contextValue	: 2
 	inner			: FeatureReferenceConstraint {
-				  	feature			: Diesel
-				  	}
-	}
-
-	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 2
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: City
-				  	}
-	consequent		: NotConstraint {
-				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: 2L
-				  				  	}
-				  	}
-	}
-
-	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 2
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: Gas
-				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: Yes
+				  	feature			: Hybrid
 				  	}
 	}
 
@@ -249,94 +213,45 @@ solutions union multiple model: 1467
 
 	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
 	isContextualized: true
-	contextValue	: 3
+	contextValue	: 2
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
-				  	feature			: 2L
-				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: Yes
-				  	}
-	}
-
-	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: City
-				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: White
-				  	}
-	}
-
-	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: City
+				  	feature			: 1L
 				  	}
 	consequent		: NotConstraint {
 				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: 2L
+				  				  	feature			: SUV
 				  				  	}
 				  	}
 	}
 
-	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
+	[inconsistencyCheck] inconsistent, add decontextualized constraint BinaryConstraint {
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
-				  	feature			: Diesel
+				  	feature			: SurfPackage
 				  	}
 	consequent		: FeatureReferenceConstraint {
-				  	feature			: White
+				  	feature			: SUV
 				  	}
 	}
+[inconsistencyCheck] added 4 decontextualized, 7 contextualized and 25 not checked constraints to merged model
+[inconsistencyCheck] finished with 30 features and 36 constraints
 
-	[inconsistencyCheck] consistent, add contextualized constraint BinaryConstraint {
+[cleanup] start looping 11 constraints in merged model (excluding feature tree and custom constraints)
+	[cleanup] consistent, keep unnegated constraint NotConstraint {
 	isContextualized: true
-	contextValue	: 3
-	operator		: IMPLIES
-	antecedent		: BinaryConstraint {
-				  	operator		: AND
-				  	antecedent		: FeatureReferenceConstraint {
-				  				  	feature			: City
-				  				  	}
-				  	consequent		: FeatureReferenceConstraint {
-				  				  	feature			: 2L
-				  				  	}
-				  	}
-	consequent		: NotConstraint {
-				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: Yes
-				  				  	}
+	contextValue	: 0
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Hybrid
 				  	}
 	}
-[inconsistencyCheck] added 5 decontextualized, 10 contextualized and 30 not checked constraints to merged model
-[inconsistencyCheck] finished with 30 features and 45 constraints
-
-solutions after inconsistency check model: 1467
-[cleanup] start looping 15 constraints in merged model (excluding feature tree and custom constraints)
 	[cleanup] inconsistent, remove constraint BinaryConstraint {
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
 				  	feature			: Electro
 				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: No
-				  	}
-	}
-	[cleanup] inconsistent, remove constraint NotConstraint {
-	inner			: BinaryConstraint {
-				  	operator		: AND
-				  	antecedent		: FeatureReferenceConstraint {
-				  				  	feature			: Electro
-				  				  	}
-				  	consequent		: FeatureReferenceConstraint {
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
 				  				  	feature			: Yes
 				  				  	}
 				  	}
@@ -350,6 +265,13 @@ solutions after inconsistency check model: 1467
 				  	}
 	consequent		: FeatureReferenceConstraint {
 				  	feature			: Black
+				  	}
+	}
+	[cleanup] consistent, keep unnegated constraint NotConstraint {
+	isContextualized: true
+	contextValue	: 1
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Gas
 				  	}
 	}
 	[cleanup] inconsistent, remove constraint BinaryConstraint {
@@ -376,14 +298,16 @@ solutions after inconsistency check model: 1467
 				  				  	}
 				  	}
 	}
-	[cleanup] inconsistent, remove constraint BinaryConstraint {
+	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
+	isContextualized: true
+	contextValue	: 1
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
-				  	feature			: Electro
+				  	feature			: 1L
 				  	}
 	consequent		: NotConstraint {
 				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: Yes
+				  				  	feature			: SUV
 				  				  	}
 				  	}
 	}
@@ -391,31 +315,7 @@ solutions after inconsistency check model: 1467
 	isContextualized: true
 	contextValue	: 2
 	inner			: FeatureReferenceConstraint {
-				  	feature			: Diesel
-				  	}
-	}
-	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 2
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: City
-				  	}
-	consequent		: NotConstraint {
-				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: 2L
-				  				  	}
-				  	}
-	}
-	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 2
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: Gas
-				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: Yes
+				  	feature			: Hybrid
 				  	}
 	}
 	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
@@ -431,77 +331,49 @@ solutions after inconsistency check model: 1467
 	}
 	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
 	isContextualized: true
-	contextValue	: 3
+	contextValue	: 2
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
-				  	feature			: 2L
-				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: Yes
-				  	}
-	}
-	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: City
-				  	}
-	consequent		: FeatureReferenceConstraint {
-				  	feature			: White
-				  	}
-	}
-	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
-	operator		: IMPLIES
-	antecedent		: FeatureReferenceConstraint {
-				  	feature			: City
+				  	feature			: 1L
 				  	}
 	consequent		: NotConstraint {
 				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: 2L
+				  				  	feature			: SUV
 				  				  	}
 				  	}
 	}
 	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
 	operator		: IMPLIES
 	antecedent		: FeatureReferenceConstraint {
-				  	feature			: Diesel
+				  	feature			: SurfPackage
 				  	}
 	consequent		: FeatureReferenceConstraint {
-				  	feature			: White
+				  	feature			: SUV
 				  	}
 	}
-	[cleanup] consistent, keep unnegated constraint BinaryConstraint {
-	isContextualized: true
-	contextValue	: 3
-	operator		: IMPLIES
-	antecedent		: BinaryConstraint {
-				  	operator		: AND
-				  	antecedent		: FeatureReferenceConstraint {
-				  				  	feature			: City
-				  				  	}
-				  	consequent		: FeatureReferenceConstraint {
-				  				  	feature			: 2L
-				  				  	}
-				  	}
-	consequent		: NotConstraint {
-				  	inner			: FeatureReferenceConstraint {
-				  				  	feature			: Yes
-				  				  	}
-				  	}
-	}
-[cleanup] removed 4 constraints
-[cleanup] kept 30 custom and feature tree constraints without checking
-[cleanup] finished with 30 features and 41 constraints
+[cleanup] removed 2 constraints
+[cleanup] kept 25 custom and feature tree constraints without checking
+[cleanup] finished with 30 features and 34 constraints
 
-solutions after cleanup model: 1467
+[analyseSharedFeatures] comparing 3 models
+	model 1: 27 features
+	model 2: 27 features
+	model 3: 28 features
+	shared features: 26
+	total unique features: 30
+	share ratio: 86,67 %
+	features exclusive to model 1 (A):
+		- A
+	features exclusive to model 2 (B):
+		- B
+	features exclusive to model 3 (C):
+		- C
+		- SurfPackage
+
+[merge] finished full merge with 34 constraints
 [validateMerge] Starting validation of merged model
 [validateNoExtraSolutions] Test Case 1 - Checking for extra solutions
-	[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside A union B union C union D
+	[validateNoExtraSolutions] Test Case 1 PASSED: KBMerge has no configurations outside A union B union C
 [validateNoMissingSolutions] Test Case 2 - Checking for missing solutions
 	[checkMissingSolutionsMultiple] Checking for missing solutions in A
 	[checkMissingSolutionsMultiple] Test Case 2 for A PASSED: KBMerge includes all valid configurations
@@ -509,34 +381,343 @@ solutions after cleanup model: 1467
 	[checkMissingSolutionsMultiple] Test Case 2 for B PASSED: KBMerge includes all valid configurations
 	[checkMissingSolutionsMultiple] Checking for missing solutions in C
 	[checkMissingSolutionsMultiple] Test Case 2 for C PASSED: KBMerge includes all valid configurations
-	[checkMissingSolutionsMultiple] Checking for missing solutions in D
-	[checkMissingSolutionsMultiple] Test Case 2 for D PASSED: KBMerge includes all valid configurations
 	[validateNoMissingSolutions] Test Case 2 PASSED: All source models preserved
-[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol(A union B union C union D)
+[validateMerge] Merge validation PASSED: Sol(KBMerge) = Sol(A union B union C)
 [statistics] Merge operation statistics:
-	[statistics] Union operation duration:         22781300 ns (22,78 ms)
-	[statistics] Inconsistency check duration:    289612700 ns (289,61 ms)
-	[statistics] Cleanup duration:                149342900 ns (149,34 ms)
-	[statistics] Full merge duration:             461736900 ns (461,74 ms)
+	[statistics] Merged model paths:
+	[statistics]   -> uvl/paper_test_models/union_multiple/us.uvl
+	[statistics]   -> uvl/paper_test_models/union_multiple/ger.uvl
+	[statistics]   -> uvl/paper_test_models/union_multiple/ozeania.uvl
+	[statistics] Union operation duration:         27533100 ns (27,53 ms)
+	[statistics] Inconsistency check duration:    432084800 ns (432,08 ms)
+	[statistics] Cleanup duration:                182538000 ns (182,54 ms)
+	[statistics] Full merge duration:             642155900 ns (642,16 ms)
 	[statistics] Number of features in merged model: 30
-	[statistics] Number of constraints before merge: 45
-	[statistics] Number of constraints after merge: 41
-	[statistics] Number of inconsistency checks: 45
-	[statistics]   -> contextualised: 10
-	[statistics]   -> non-contextualised: 5
-	[statistics]   -> not checked: 30
-	[statistics] Number of cleanup checks: 45
-	[statistics]   -> kept as is: 11
-	[statistics]   -> removed as redundant: 4
-	[statistics]   -> not checked: 30
-	[statistics] Feature-tree constraints before merge: 28
-	[statistics] Feature-tree constraints after merge: 28
+	[statistics]  -> unique features per model:
+	[statistics]     A: 1
+	[statistics]     B: 1
+	[statistics]     C: 2
+	[statistics] Number of constraints before merge: 36
+	[statistics] Number of constraints after merge: 34
+	[statistics] Number of inconsistency checks: 36
+	[statistics]   -> contextualised: 7
+	[statistics]   -> non-contextualised: 4
+	[statistics]   -> not checked: 25
+	[statistics] Number of cleanup checks: 36
+	[statistics]   -> kept as is: 9
+	[statistics]   -> removed as redundant: 2
+	[statistics]   -> not checked: 25
+	[statistics] Feature-tree constraints before merge: 23
+	[statistics] Feature-tree constraints after merge: 23
 	[statistics] Custom constraints before merge: 2
 	[statistics] Custom constraints after merge: 2
-	[statistics] Cross-tree constraints before merge: 15
-	[statistics] Cross-tree constraints after merge: 11
+	[statistics] Cross-tree constraints before merge: 11
+	[statistics] Cross-tree constraints after merge: 9
 	[statistics] Contextualisation share of cross tree constraintsbefore merge: 1.0
-	[statistics] Contextualisation share of cross tree constraintsafter merge: 0.90909094
+	[statistics] Contextualisation share of cross tree constraintsafter merge: 0.7777778
+	[statistics] Contextualized constraints per model:
+	[statistics]   A: 9
+	[statistics]   B: 10
+	[statistics]   C: 10
+	[statistics] Contextualized cross-tree constraints per model:
+	[statistics]   A: 2
+	[statistics]   B: 3
+	[statistics]   C: 2
 	[statistics] Validation result: not performed
 	[statistics] Consistent after merge: true
 
+solutions model us: 288
+solutions model ger: 294
+solutions model ozeania: 390
+solutions merged model: 972
+Printing all constraints in Recreation model: MERGED
+  [0]: GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Car
+	cardinality		: [1,1]
+	children		: [Region]
+	}
+  [1]: GroupConstraint {
+	isCustomConstraint		: true
+	parent			: Region
+	cardinality		: [1,1]
+	children		: [A, B, C]
+	}
+  [2]: BinaryConstraint {
+	isFeatureTreeConstraint	: true
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: SurfPackage
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: C
+				  	}
+	}
+  [3]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: Type
+	cardinality		: [1,1]
+	children		: [Combi, Limo, City, SUV]
+	}
+  [4]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: Color
+	cardinality		: [1,1]
+	children		: [White, Black]
+	}
+  [5]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: Engine
+	cardinality		: [1,1]
+	children		: [1L, 1,5L, 2L]
+	}
+  [6]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: CouplingDevice
+	cardinality		: [1,1]
+	children		: [Yes, No]
+	}
+  [7]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: Fuel
+	cardinality		: [1,1]
+	children		: [Electro, Diesel, Gas, Hybrid]
+	}
+  [8]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: Service
+	cardinality		: [1,1]
+	children		: [15k, 20k, 25k]
+	}
+  [9]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 0
+	isFeatureTreeConstraint	: true
+	parent			: Car
+	cardinality		: [6,6]
+	children		: [Type, Color, Engine, CouplingDevice, Fuel, Service]
+	}
+  [10]: NotConstraint {
+	isContextualized: true
+	contextValue	: 0
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Hybrid
+				  	}
+	}
+  [11]: BinaryConstraint {
+	isContextualized: true
+	contextValue	: 0
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: Black
+				  	}
+	}
+  [12]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: Type
+	cardinality		: [1,1]
+	children		: [Combi, Limo, City, SUV]
+	}
+  [13]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: Color
+	cardinality		: [1,1]
+	children		: [White, Black]
+	}
+  [14]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: Engine
+	cardinality		: [1,1]
+	children		: [1L, 1,5L, 2L]
+	}
+  [15]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: CouplingDevice
+	cardinality		: [1,1]
+	children		: [Yes, No]
+	}
+  [16]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: Fuel
+	cardinality		: [1,1]
+	children		: [Electro, Diesel, Gas, Hybrid]
+	}
+  [17]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: Service
+	cardinality		: [1,1]
+	children		: [15k, 20k, 25k]
+	}
+  [18]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 1
+	isFeatureTreeConstraint	: true
+	parent			: Car
+	cardinality		: [6,6]
+	children		: [Type, Color, Engine, CouplingDevice, Fuel, Service]
+	}
+  [19]: NotConstraint {
+	isContextualized: true
+	contextValue	: 1
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Gas
+				  	}
+	}
+  [20]: BinaryConstraint {
+	isContextualized: true
+	contextValue	: 1
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Diesel
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: City
+				  				  	}
+				  	}
+	}
+  [21]: BinaryConstraint {
+	isContextualized: true
+	contextValue	: 1
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: 1L
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: SUV
+				  				  	}
+				  	}
+	}
+  [22]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Type
+	cardinality		: [1,1]
+	children		: [Combi, Limo, City, SUV]
+	}
+  [23]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Color
+	cardinality		: [1,1]
+	children		: [White, Black]
+	}
+  [24]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Engine
+	cardinality		: [1,1]
+	children		: [1L, 1,5L, 2L]
+	}
+  [25]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: CouplingDevice
+	cardinality		: [1,1]
+	children		: [Yes, No]
+	}
+  [26]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Fuel
+	cardinality		: [1,1]
+	children		: [Electro, Diesel, Gas, Hybrid]
+	}
+  [27]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Service
+	cardinality		: [1,1]
+	children		: [15k, 20k, 25k]
+	}
+  [28]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Car
+	cardinality		: [6,6]
+	children		: [Type, Color, Engine, CouplingDevice, Fuel, Service]
+	}
+  [29]: GroupConstraint {
+	isContextualized: true
+	contextValue	: 2
+	isFeatureTreeConstraint	: true
+	parent			: Car
+	cardinality		: [0,1]
+	children		: [SurfPackage]
+	}
+  [30]: NotConstraint {
+	isContextualized: true
+	contextValue	: 2
+	inner			: FeatureReferenceConstraint {
+				  	feature			: Hybrid
+				  	}
+	}
+  [31]: BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: Electro
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: Yes
+				  				  	}
+				  	}
+	}
+  [32]: BinaryConstraint {
+	isContextualized: true
+	contextValue	: 2
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: 1L
+				  	}
+	consequent		: NotConstraint {
+				  	inner			: FeatureReferenceConstraint {
+				  				  	feature			: SUV
+				  				  	}
+				  	}
+	}
+  [33]: BinaryConstraint {
+	operator		: IMPLIES
+	antecedent		: FeatureReferenceConstraint {
+				  	feature			: SurfPackage
+				  	}
+	consequent		: FeatureReferenceConstraint {
+				  	feature			: SUV
+				  	}
+	}
+Total constraints in model MERGED: 34

@@ -31,11 +31,11 @@ features
           "15k"
           "20k"
           "25k"
+    optional
+      "SurfPackage"
 
 constraints
-  "Electro" => ! "Yes"                     // shared across all regions → will be decontextualized
-  "2L"      => "Yes"                       // heavy engine requires coupling → stays contextualized
-  "City"    => "White"                     // local rule: city cars are white → stays contextualized
-  "City"    => ! "2L"                      // city cars can't have 2L engine → stays contextualized
-  "Diesel"  => "White"                     // diesel cars must be white → stays contextualized
-  ("City" & "2L") => ! "Yes"               // antecedent impossible due to "City" => ! "2L" → removed in cleanup
+  ! "Hybrid"
+  "Electro"     => ! "Yes"
+  "1L"          => ! "SUV"
+  "SurfPackage" => "SUV"
