@@ -365,4 +365,23 @@ class SmartwatchBasicTest {
                         throw new AssertionError("testUnionOfSmartwatchModels failed: " + e.getMessage(), e);
                 }
         }
+
+        //@Test
+        void testMergeOfMultipleSmartwatchModels() {
+                try {
+                        //RecreationModel modelA = UVLParser.parseUVLFile(mibandBaseModels[4].filename, Region.A);
+                        //RecreationModel modelB = UVLParser.parseUVLFile(mibandBaseModels[5].filename, Region.B);
+                        RecreationModel modelC = UVLParser.parseUVLFile(mibandBaseModels[6].filename, Region.C);
+                        RecreationModel modelD = UVLParser.parseUVLFile(mibandBaseModels[7].filename, Region.D);
+                        RecreationModel modelE = UVLParser.parseUVLFile(mibandBaseModels[8].filename, Region.E);
+
+                        RecreationModel mergeResult = Merger.fullMerge(modelC, modelD, modelE).mergedModel();
+                        long numberOfSolutions = Analyser.returnNumberOfSolutions(mergeResult);
+                        long expectedSolutions = mibandBaseModels[6].expectedSolutions + mibandBaseModels[7].expectedSolutions + mibandBaseModels[8].expectedSolutions;
+                        assertEquals(expectedSolutions, numberOfSolutions);
+                        assertEquals(0, Validator.validateMerge(mergeResult, modelC, modelD, modelE));
+                } catch (Exception e) {
+                        throw new AssertionError("testMergeOfMultipleSmartwatchModels failed: " + e.getMessage(), e);
+                }
+        }
 }

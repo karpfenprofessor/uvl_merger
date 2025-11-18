@@ -1,5 +1,9 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "java.debug.settings.onBuildFailureProceed": true
+    "java.debug.settings.onBuildFailureProceed": true,
+    "sonarlint.connectedMode.project": {
+        "connectionId": "karpfenprofessor",
+        "projectKey": "karpfenprofessor_uvl_merger"
+    }
 }

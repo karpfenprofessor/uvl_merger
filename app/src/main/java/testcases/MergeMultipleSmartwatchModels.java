@@ -1,13 +1,7 @@
 package testcases;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import model.choco.Region;
 import model.recreate.RecreationModel;
-import model.recreate.constraints.AbstractConstraint;
-import model.recreate.constraints.BinaryConstraint;
-import model.recreate.constraints.FeatureReferenceConstraint;
 import util.UVLParser;
 import util.Validator;
 import util.Merger.MergeResult;
@@ -15,7 +9,6 @@ import util.Merger;
 import util.analyse.Analyser;
 
 public class MergeMultipleSmartwatchModels {
-    private static final Logger logger = LogManager.getLogger(MergeMultipleSmartwatchModels.class);
 
     public static void main(String[] args) {
         try {

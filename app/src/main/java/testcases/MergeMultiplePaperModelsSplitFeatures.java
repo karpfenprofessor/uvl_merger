@@ -5,12 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import model.choco.Region;
 import model.recreate.RecreationModel;
-import model.recreate.constraints.AbstractConstraint;
-import model.recreate.constraints.BinaryConstraint;
-import model.recreate.constraints.FeatureReferenceConstraint;
 import util.UVLParser;
-import util.Validator;
-import util.Merger.MergeResult;
 import util.Merger;
 import util.analyse.Analyser;
 import util.analyse.statistics.MergeStatistics;
