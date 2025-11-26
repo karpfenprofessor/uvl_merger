@@ -1,0 +1,39 @@
+features
+  "Car"
+    mandatory
+      "Type"
+        alternative
+          "Combi"
+          "Limo"
+          "City"
+          "SUV"
+      "Color"
+        alternative
+          "White"
+          "Black"
+      "Engine"
+        alternative
+          "1L"
+          "1,5L"
+          "2L"
+      "CouplingDevice"
+        alternative
+          "Yes"
+          "No"
+      "Fuel"
+        alternative
+          "Electro"
+          "Diesel"
+          "Gas"
+          "Hybrid"
+      "Service"
+        alternative
+          "15k"
+          "20k"
+          "25k"
+
+constraints
+  ! "Hybrid"
+  "Electro" => ! "Yes"
+  "Diesel"  => "Black"
+  "SUV"     => ("1,5L" | "2L")

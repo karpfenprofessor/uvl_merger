@@ -10,16 +10,15 @@ import util.Validator;
 import util.Merger;
 import util.Merger.MergeResult;
 import util.analyse.Analyser;
-import util.analyse.statistics.MergeStatistics;
 
 public class MergeMultiplePaperModels2 {
     private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModels2.class);
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ger.uvl", Region.B);
-            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.C);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple_same_feature_tree/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple_same_feature_tree/ger.uvl", Region.B);
+            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple_same_feature_tree/ozeania.uvl", Region.C);
 
             /*logger.info("solutions model contextualized us: {}", Analyser.returnNumberOfSolutions(modelUs));
             logger.info("solutions model contextualized ger: {}", Analyser.returnNumberOfSolutions(modelGer));
