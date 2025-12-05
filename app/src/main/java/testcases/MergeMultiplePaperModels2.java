@@ -16,9 +16,9 @@ public class MergeMultiplePaperModels2 {
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple_same_feature_tree/us.uvl", Region.A);
-            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple_same_feature_tree/ger.uvl", Region.B);
-            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple_same_feature_tree/ozeania.uvl", Region.C);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/us.uvl", Region.A);
+            RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ger.uvl", Region.B);
+            RecreationModel modelOzeania = UVLParser.parseUVLFile("uvl/paper_test_models/union_multiple/ozeania.uvl", Region.C);
 
             /*logger.info("solutions model contextualized us: {}", Analyser.returnNumberOfSolutions(modelUs));
             logger.info("solutions model contextualized ger: {}", Analyser.returnNumberOfSolutions(modelGer));
@@ -51,7 +51,9 @@ public class MergeMultiplePaperModels2 {
             logger.info("solutions model ger: {}", Analyser.returnNumberOfSolutions(modelGer));
             logger.info("solutions model ozeania: {}", Analyser.returnNumberOfSolutions(modelOzeania));
             logger.info("solutions merged model: {}", Analyser.returnNumberOfSolutions(mergedModelOneStep.mergedModel()));
+
             Analyser.printConstraints(mergedModelOneStep.mergedModel());
+            Analyser.printFeatures(mergedModelOneStep.mergedModel());
         } catch (Exception e) {
             e.printStackTrace();
         }
