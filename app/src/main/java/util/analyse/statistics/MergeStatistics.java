@@ -204,9 +204,9 @@ public class MergeStatistics {
                 .append(numberOfCrossTreeConstraintsBeforeMerge).append("\n");
         sb.append("\t[statistics] Cross-tree constraints after merge: ")
                 .append(numberOfCrossTreeConstraintsAfterMerge).append("\n");
-        sb.append("\t[statistics] Contextualisation share of cross tree constraintsbefore merge: ")
+        sb.append("\t[statistics] Contextualisation share of cross tree constraints before merge: ")
                 .append(contextualizationShareBeforeMerge).append("\n");
-        sb.append("\t[statistics] Contextualisation share of cross tree constraintsafter merge: ")
+        sb.append("\t[statistics] Contextualisation share of cross tree constraints after merge: ")
                 .append(contextualizationShareAfterMerge).append("\n");
 
         // ─ Contextualized constraints per model ────────────────────────────────────────────────────

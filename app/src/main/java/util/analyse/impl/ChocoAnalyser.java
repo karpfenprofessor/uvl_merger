@@ -16,8 +16,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+
 import org.chocosolver.solver.variables.BoolVar;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /*
@@ -189,6 +192,70 @@ public class ChocoAnalyser {
 
         return solutionsModel1.size();
     }
+
+    public static int findIntersectionSolutionsProjected(final ChocoModel... models) {
+        if (models == null || models.length < 2) {
+            throw new IllegalArgumentException("findIntersectionSolutionsProjected requires at least 2 models");
+        }
+    
+        // 1) Compute shared feature names (intersection of all feature key sets)
+        Set<String> common = new HashSet<>(models[0].getFeatures().keySet());
+        for (ChocoModel m : models) {
+            common.retainAll(m.getFeatures().keySet());
+        }
+    
+        if (common.isEmpty()) {
+            logger.warn("[intersection] no common features across {} models, intersection is empty", models.length);
+            return 0;
+        }
+    
+        // Stable, canonical order over the shared features
+        List<String> sortedCommon = new ArrayList<>(common);
+        Collections.sort(sortedCommon);
+    
+        // 2) Collect projected solutions from each model
+        List<Set<String>> allSolutions = new ArrayList<>();
+    
+        for (ChocoModel model : models) {
+            Map<String, BoolVar> vars = model.getFeatures();
+            Set<String> solutions = new HashSet<>();
+    
+            // Reset solver stats / state
+            model.getModel().getSolver().reset();
+    
+            while (model.getModel().getSolver().solve()) {
+                StringBuilder sb = new StringBuilder();
+                for (String featureName : sortedCommon) {
+                    BoolVar v = vars.get(featureName);
+                    if (v == null) {
+                        throw new IllegalStateException(
+                            String.format("Feature '%s' expected in common features but not found in model %s", 
+                                featureName, model.getRegionString()));
+                    }
+                    sb.append(featureName)
+                      .append("=")
+                      .append(v.getValue())
+                      .append(";");
+                }
+                solutions.add(sb.toString());
+            }
+    
+            logger.info("[intersection] found {} projected solutions in model {} (on {} common features)",
+                    solutions.size(), model.getRegionString(), sortedCommon.size());
+            allSolutions.add(solutions);
+        }
+    
+        // 3) Intersect all projected solution sets
+        Set<String> intersection = new HashSet<>(allSolutions.get(0));
+        for (int i = 1; i < allSolutions.size(); i++) {
+            intersection.retainAll(allSolutions.get(i));
+        }
+    
+        logger.info("[intersection] found {} intersection solutions across {} models (projected on {} common features)",
+                intersection.size(), models.length, sortedCommon.size());
+    
+        return intersection.size();
+    }    
 
     public static void printAllSolutions(final ChocoModel baseModel) {
         final Model model = baseModel.getModel();

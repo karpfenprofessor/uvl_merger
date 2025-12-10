@@ -11,8 +11,8 @@ import util.Merger;
 import util.Merger.MergeResult;
 import util.analyse.Analyser;
 
-public class MergeMultiplePaperModels2 {
-    private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModels2.class);
+public class MergeMultiplePaperModelsWithNewFeature {
+    private static final Logger logger = LogManager.getLogger(MergeMultiplePaperModelsWithNewFeature.class);
 
     public static void main(String[] args) {
         try {
@@ -54,6 +54,7 @@ public class MergeMultiplePaperModels2 {
 
             Analyser.printConstraints(mergedModelOneStep.mergedModel());
             Analyser.printFeatures(mergedModelOneStep.mergedModel());
+            logger.info("intersection solutions: {}", Analyser.findIntersectionSolutions(modelUs, modelGer, modelOzeania));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,7 +10,7 @@ public class MergePaperModelsWithValidation {
 
     public static void main(String[] args) {
         try {
-            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/originalus.uvl", Region.A);
+            RecreationModel modelUs = UVLParser.parseUVLFile("uvl/paper_test_models/original/us.uvl", Region.A);
             RecreationModel modelGer = UVLParser.parseUVLFile("uvl/paper_test_models/original/ger.uvl", Region.B);
 
             RecreationModel mergedModel = Merger.fullMerge(modelUs, modelGer).mergedModel();

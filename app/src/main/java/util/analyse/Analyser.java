@@ -64,6 +64,20 @@ public class Analyser {
         return ChocoAnalyser.findIntersectionSolutions(chocoModelA, chocoModelB);
     }
 
+    public static int findIntersectionSolutions(final RecreationModel... models) {
+        if (models == null || models.length < 2) {
+            throw new IllegalArgumentException("findIntersectionSolutions requires at least 2 models");
+        }
+        ChocoModel[] chocoModels = new ChocoModel[models.length];
+        for (int i = 0; i < models.length; i++) {
+            chocoModels[i] = ChocoTranslator.convertToChocoModel(models[i]);
+        }
+        return findIntersectionSolutions(chocoModels);
+    }
+    public static int findIntersectionSolutions(final ChocoModel... chocoModels) {
+        return ChocoAnalyser.findIntersectionSolutionsProjected(chocoModels);
+    }
+
     public static boolean isConsistent(final RecreationModel model) {
         ChocoModel chocoModel = ChocoTranslator.convertToChocoModel(model);
         return isConsistent(chocoModel);
