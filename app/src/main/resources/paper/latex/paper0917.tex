@@ -26,8 +26,12 @@
 
 
 \begin{document}
+\copyrightyear{2025}
+\copyrightclause{Copyright for this paper by its authors.
+  Use permitted under Creative Commons License Attribution 4.0
+  International (CC BY 4.0).}
 \begin{abstract}
-Globally operating enterprises often maintain multiple variability models for the same product line, each developed to reflect the requirements of a specific market or regulatory context. Integrating such models is a challenging task since the merged knowledge base should preserve the semantics of all individual models. This paper extends the consistency-based merging approach of Uta et al.\ to support the integration of an arbitrary number of variability models ($n \ge 2$). We present a re-implementation of the extended merge procedure and evaluate it on both a synthesized automotive example with three regional models and on industrial-scale variability models from the financial services domain containing more than 700 features and 2{,}000 constraints each. Our results show that the cleanup phase effectively eliminates redundant constraints (up to 50\% reduction for highly similar models) and that contextualization is primarily driven by semantic divergence in cross-tree constraints rather than by low feature overlap alone.
+Globally operating enterprises often maintain multiple variability models for the same product line, where each model reflects requirements of a specific market or regulatory context. Integrating such models is challenging since the merged knowledge base should preserve the semantics of all input models. This paper extends the consistency-based merging approach of Uta et al.\ to support merging an arbitrary number of models ($n \ge 2$). We present a re-implementation of the procedure and evaluate it on (i) a synthesized automotive example with three regional models and (ii) industrial-scale variability models from the financial services domain with more than 700 features and more than 2{,}000 constraints per model. The results indicate that the cleanup phase removes substantial redundant cross-tree constraints for highly similar variants, while contextualization is mainly driven by semantic differences in constraints over shared features.
 \end{abstract}
 
 \begin{keywords}
@@ -46,14 +50,8 @@ In this context, we assume that the knowledge bases to be integrated (1) are con
 
 The contributions of this paper are: (1) We extend the consistency-based merging procedure to support more than two variability models while preserving the original semantics-preservation guarantees. (2) We provide a re-implementation of the extended merge process and analyze its behavior regarding redundancy elimination and contextualization. (3) We present an evaluation on real-world, industrial-scale variability models that complements the synthesized benchmark results in~\cite{Uta2019}.
 
-\section{Related Work}
-Several approaches deal with the issue of integrating knowledge bases. Knowledge base alignment~\cite{Galarraga2013} is the process of identifying relationships between concepts in different knowledge bases, for example, when classes describe the same concept but have different names. Ardissono et al.~\cite{Ardissono2003} introduce an approach to distributed configuration where individual knowledge bases are integrated into a distributed configuration process. Their work assumes that individual knowledge bases are consistent and that there are only few dependencies between them.
-
-The merging of knowledge bases is related to applying various merging operators to different belief sets~\cite{Delgrande2007,Liberatore1998}. Delgrande and Schaub~\cite{Delgrande2007} introduce a consistency-based merging approach where the result is a maximum consistent set of logical formulas representing the union of the individual knowledge bases. Contextual modeling~\cite{Felfernig2000} is related to decentralizing variability knowledge development and maintenance tasks.
-
-Approaches to merging feature models on a graphical level based on merging rules have been introduced in~\cite{Broek2010,Segura2007}. In this context, feature models with specific constraint types such as \textit{requires} and \textit{excludes} are merged in a semantics-preserving fashion. Compared to our approach, the merging introduced in~\cite{Broek2010,Segura2007} is restricted to specific constraint types and does not consider redundancy elimination.
-
-Our approach builds on the work of Uta et al.~\cite{Uta2019} and generalizes existing approaches by supporting arbitrary constraint types, producing redundancy-free knowledge bases, and extending the merge to an arbitrary number of input models ($n \ge 2$).
+\smallskip
+Related work on knowledge integration includes knowledge base alignment~\cite{Galarraga2013}, which addresses concept correspondences across models, and distributed configuration settings~\cite{Ardissono2003}, which assume largely independent and consistent sub-knowledge bases. Contextual modeling~\cite{Felfernig2000} is related to decentralizing variability knowledge development and maintenance tasks. From a belief merging perspective, consistency-based operators aim at constructing a maximal consistent subset of the union of belief sets~\cite{Liberatore1998,Delgrande2007}. For feature modeling, rule-based approaches merge models on a graphical level and focus on specific constraint types such as \emph{requires} and \emph{excludes}~\cite{Broek2010,Segura2007}. In contrast, our approach builds on Uta et al.~\cite{Uta2019} and supports arbitrary constraint types, redundancy elimination, and the integration of more than two input models.
 
 \section{Example Variability Models}
 To illustrate the setting addressed by our merge procedure, we use a
@@ -473,7 +471,7 @@ In future work, we plan to improve the runtime performance of the merge procedur
 \bibitem{Ardissono2003} L. Ardissono, A. Felfernig, G. Friedrich, A. Goy, D. Jannach, G. Petrone, R. Schaefer, M. Zanker, A framework for the development of personalized, distributed web-based configuration systems, \emph{AI Magazine} 24(3) (2003) 93--110.
 \bibitem{Benavides2005} D. Benavides, P. Trinidad, A. Ruiz-Cortés, Using constraint programming to reason on feature models, in: \emph{SEKE 2005}, pp. 677--682, Taipei, Taiwan, 2005.
 \bibitem{Benavides2010} D. Benavides, S. Segura, A. Ruiz-Cortés, Automated analysis of feature models 20 years later: A literature review, \emph{Information Systems} 35(6) (2010) 615--636.
-\bibitem{Broek2010} P. van den Broek, I. Galvão, J. Noppen, Merging feature models, in: \emph{SPLC 2010}, pp. 83--90, Jeju Island, South Korea, 2010.
+\bibitem{Broek2010} P. van den Broek, I. Galvão, J. Noppen, Merging feature models, in: \emph{SPLC 2010}, pp. 83--89, Jeju Island, South Korea, 2010.
 \bibitem{Czarnecki2005} K. Czarnecki, S. Helsen, U. Eisenecker, Formalizing cardinality-based feature models and their specialization, \emph{Software Process: Improvement and Practice} 10(1) (2005) 7--29.
 \bibitem{Delgrande2007} J. Delgrande, T. Schaub, A consistency-based framework for merging knowledge bases, \emph{Journal of Applied Logic} 5(3) (2007) 459--477.
 \bibitem{Felfernig2000} A. Felfernig, D. Jannach, M. Zanker, Contextual diagrams as structuring mechanisms for designing configuration knowledge bases in UML, in: \emph{UML 2000}, LNCS 1939, Springer, 2000, pp. 240--254.
@@ -482,15 +480,12 @@ In future work, we plan to improve the runtime performance of the merge procedur
 \bibitem{Galarraga2013} L. Galárraga, N. Preda, F. Suchanek, Mining rules to align knowledge bases, in: \emph{AKBC 2013}, pp. 43--48, San Francisco, CA, USA, 2013.
 \bibitem{Kang1990} K. Kang, S. Cohen, J. Hess, W. Novak, S. Peterson, Feature-oriented domain analysis feasibility study (FODA), CMU/SEI-90-TR-021, 1990.
 \bibitem{Liberatore1998} P. Liberatore, M. Schaerf, Arbitration (or how to merge knowledge bases), \emph{IEEE Trans. Knowl. Data Eng.} 10(1) (1998) 76--90.
-\bibitem{Reiter1987} R. Reiter, A theory of diagnosis from first principles, \emph{Artificial Intelligence} 23(1) (1987) 57--95.
 \bibitem{Segura2007} S. Segura, D. Benavides, A. Ruiz-Cortés, P. Trinidad, Automated merging of feature models using graph transformations, in: \emph{GTTSE 2007}, LNCS 5235, Springer, 2008, pp. 489--505.
 \bibitem{Stumptner1997} M. Stumptner, An overview of knowledge-based configuration, \emph{AI Communications} 10(2) (1997) 111--125.
 \bibitem{Tsang1993} E. Tsang, \emph{Foundations of Constraint Satisfaction}, Academic Press, 1993.
-\bibitem{Uta2019}M. Uta, A. Felfernig, G. Schenner, J. Sp\"ocklberger,
-Consistency-based Merging of Variability Models, in: \emph{ConfWS 2019}, 2019.
+\bibitem{Uta2019} M. Uta, A. Felfernig, G. Schenner, J. Sp\"ocklberger,
+Consistency-based Merging of Variability Models, in: \emph{21st International Configuration Workshop (ConfWS 2019)}, Hamburg, Germany, CEUR Workshop Proceedings, Vol.~2467, 2019, \url{https://ceur-ws.org/Vol-2467/paper-02.pdf}.
 \bibitem{uvlhub2024} UVL Hub -- A repository for Universal Variability Language models, \url{https://uvlhub.io/}, accessed 2024.
 \end{thebibliography}
-
-\bigskip\noindent\textit{Copyright statement.} © 2025 for this paper by its authors. Use permitted under Creative Commons License Attribution 4.0 International (CC BY 4.0).
 
 \end{document}
