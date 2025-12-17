@@ -1,0 +1,496 @@
+% CEUR-WS LaTeX source built from the provided sample layout, filled with the paper’s content
+% Title per user request; content reproduces the original paper (CC BY 4.0)
+\documentclass{ceurart}
+
+%% Packages that are part of standard LaTeX installations (as in sample)
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\conference{ConfWS 2026}
+
+
+%% Metadata
+\title{Consistency-based merging of multiple Variability Models and Performance Evaluation}
+
+%% Authors and affiliations (replicated from the original paper)
+\author[1]{Manuel Mörtl}[email=manuel.moertl@tugraz.at]
+\author[1]{Alexander Felfernig}[email=alexander.felfernig@ist.tugraz.at]
+
+\address[1]{Graz University of Technology, Austria}
+
+
+\begin{document}
+\begin{abstract}
+Globally operating enterprises often maintain multiple variability models for the same product line, each developed to reflect the requirements of a specific market or regulatory context. Integrating such models is a challenging task since the merged knowledge base should preserve the semantics of all individual models. This paper extends the consistency-based merging approach of Uta et al.\ to support the integration of an arbitrary number of variability models ($n \ge 2$). We present a re-implementation of the extended merge procedure and evaluate it on both a synthesized automotive example with three regional models and on industrial-scale variability models from the financial services domain containing more than 700 features and 2{,}000 constraints each. Our results show that the cleanup phase effectively eliminates redundant constraints (up to 50\% reduction for highly similar models) and that contextualization is primarily driven by semantic divergence in cross-tree constraints rather than by low feature overlap alone.
+\end{abstract}
+
+\begin{keywords}
+Variability models \sep feature models \sep UVL \sep constraint satisfaction \sep knowledge base merging \sep semantics preservation
+\end{keywords}
+
+\maketitle
+\section{Introduction}
+Configuration~\cite{Stumptner1997,Felfernig2014} is one of the most successful applications of Artificial Intelligence technologies applied in domains such as telecommunication switches, financial services, furniture, and software components. In many cases, configuration knowledge bases are represented in terms of variability models such as feature models that provide an intuitive way of representing variability properties of complex systems~\cite{Kang1990,Czarnecki2005}. Starting with rule-based approaches, formalizations of variability models have been transformed into model-based knowledge representations which are more applicable for the handling of large and complex knowledge bases, for example, in terms of knowledge base maintainability and expressivity of complex constraints~\cite{Benavides2010,Felfernig2014}. Examples of model-based knowledge representations are constraint-based representations~\cite{Tsang1993}, description logic and answer set programming (ASP)~\cite{Felfernig2014}. Besides variability reasoning for single users, recent research also addresses scenarios where groups of users are completing a configuration task~\cite{Felfernig2018}. In this paper, we focus on single user scenarios where variability models are represented as a constraint satisfaction problem (CSP)~\cite{Benavides2005,Tsang1993}.
+
+Globally operating enterprises often maintain multiple variability models for the same product line, each developed to reflect the requirements of a local market, organization, or regulatory context. Integrating such models is a challenging task since the integrated knowledge base should produce the same results as the individual knowledge bases. Uta et al.~\cite{Uta2019} introduce a consistency-based approach to variability model integration that relies on contextual modeling and conflict detection to guarantee semantics preservation, i.e., the solution space of the merged knowledge base corresponds to the union of the solution spaces of the original knowledge bases.
+
+This paper builds on the consistency-based merging approach of~\cite{Uta2019} and extends it to support the integration of an arbitrary number of variability models ($n>2$). We report on a re-implementation of the merge procedure and an empirical evaluation that complements the initial performance analysis of synthesized knowledge bases in~\cite{Uta2019}. Beyond replicating the automotive running example, we evaluate the approach on large-scale, real-world variability models from the financial services domain, and analyze redundancy elimination and contextualization effects.
+
+In this context, we assume that the knowledge bases to be integrated (1) are consistent and (2) use a shared vocabulary for overlapping features. Furthermore, we allow region- or variant-specific features that occur only in a subset of the models; alignment issues for non-matching identifiers are beyond the scope of this paper.
+
+The contributions of this paper are: (1) We extend the consistency-based merging procedure to support more than two variability models while preserving the original semantics-preservation guarantees. (2) We provide a re-implementation of the extended merge process and analyze its behavior regarding redundancy elimination and contextualization. (3) We present an evaluation on real-world, industrial-scale variability models that complements the synthesized benchmark results in~\cite{Uta2019}.
+
+\section{Related Work}
+Several approaches deal with the issue of integrating knowledge bases. Knowledge base alignment~\cite{Galarraga2013} is the process of identifying relationships between concepts in different knowledge bases, for example, when classes describe the same concept but have different names. Ardissono et al.~\cite{Ardissono2003} introduce an approach to distributed configuration where individual knowledge bases are integrated into a distributed configuration process. Their work assumes that individual knowledge bases are consistent and that there are only few dependencies between them.
+
+The merging of knowledge bases is related to applying various merging operators to different belief sets~\cite{Delgrande2007,Liberatore1998}. Delgrande and Schaub~\cite{Delgrande2007} introduce a consistency-based merging approach where the result is a maximum consistent set of logical formulas representing the union of the individual knowledge bases. Contextual modeling~\cite{Felfernig2000} is related to decentralizing variability knowledge development and maintenance tasks.
+
+Approaches to merging feature models on a graphical level based on merging rules have been introduced in~\cite{Broek2010,Segura2007}. In this context, feature models with specific constraint types such as \textit{requires} and \textit{excludes} are merged in a semantics-preserving fashion. Compared to our approach, the merging introduced in~\cite{Broek2010,Segura2007} is restricted to specific constraint types and does not consider redundancy elimination.
+
+Our approach builds on the work of Uta et al.~\cite{Uta2019} and generalizes existing approaches by supporting arbitrary constraint types, producing redundancy-free knowledge bases, and extending the merge to an arbitrary number of input models ($n \ge 2$).
+
+\section{Example Variability Models}
+To illustrate the setting addressed by our merge procedure, we use a
+small but representative running example from the automotive domain.
+Following the modeling style of~\cite{Uta2019}, we assume three
+regional variability models, each representing a configuration
+knowledge base for a specific market: the United States (US), Germany
+(GER), and Oceania (OCE).  All three models are formalized as
+constraint satisfaction problems (CSPs)~\cite{Tsang1993}, which allows
+us to precisely compare their solution spaces before and after the
+merge.
+
+The models share a common core vocabulary that captures the main
+vehicle properties.  Table~\ref{tab:features} lists the features and
+their admissible values that occur in all three knowledge bases.
+This shared part provides the basis for alignment in our running
+example.  At the same time, the models are not fully identical:
+the US and GER models use the same feature tree, whereas the OCE model
+adds an additional optional feature \textit{SurfPackage} as a child of
+the root feature \textit{Car}.  This variant-specific feature
+represents a typical situation in practice, where a local model
+introduces additional options that are unavailable in other regions.
+
+\begin{table}[h]
+\caption{Shared features and their possible values across all models.}
+\label{tab:features}
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Feature} & \textbf{Possible Values} \\
+\midrule
+type         & \textit{combi, limo, city, suv} \\
+color        & \textit{white, black} \\
+engine       & \textit{1L, 1{,}5L, 2L} \\
+couplingdev  & \textit{yes, no} \\
+fuel         & \textit{electro, diesel, gas, hybrid} \\
+service      & \textit{15k, 20k, 25k} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\caption{Regional cross-tree constraints (before contextualization).}
+\label{tab:constraints-regional}
+\centering
+\begin{tabular}{p{0.30\linewidth} p{0.30\linewidth} p{0.30\linewidth}}
+\toprule
+\textbf{US} &
+\textbf{GER} &
+\textbf{OCE} \\
+\midrule
+$\begin{aligned}
+&c^{US}_1:\; \neg\,\text{Hybrid};\\[0.2em]
+&c^{US}_2:\; \text{Electro} \rightarrow \neg\,\text{Yes};\\[0.2em]
+&c^{US}_3:\; \text{Diesel} \rightarrow \text{Black}.\\
+\end{aligned}$
+&
+$\begin{aligned}
+&c^{GER}_1:\; \neg\,\text{Gas};\\[0.2em]
+&c^{GER}_2:\; \text{Electro} \rightarrow \neg\,\text{Yes};\\[0.2em]
+&c^{GER}_3:\; \text{Diesel} \rightarrow \neg\,\text{City};\\[0.2em]
+&c^{GER}_4:\; \text{1L} \rightarrow \neg\,\text{SUV}.\\
+\end{aligned}$
+&
+$\begin{aligned}
+&c^{OCE}_1:\; \neg\,\text{Hybrid};\\[0.2em]
+&c^{OCE}_2:\; \text{Electro} \rightarrow \neg\,\text{Yes};\\[0.2em]
+&c^{OCE}_3:\; \text{1L} \rightarrow \neg\,\text{SUV};\\[0.2em]
+&c^{OCE}_4:\; \text{SurfPackage} \rightarrow \text{SUV}.\\
+\end{aligned}$
+\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Beyond the shared feature vocabulary, the main differences between
+the regional models stem from region-specific cross-tree constraints.
+These constraints encode market- and regulation-driven restrictions
+(e.g., forbidden fuel types or region-dependent dependencies between
+engine and body type).  The original regional constraint sets are
+shown in Table~\ref{tab:constraints-regional}.  Note that some
+constraints occur in more than one region (e.g., the constraint
+relating \textit{Electro} and \textit{CouplingDevice}), while others
+are specific to a single region.  Identifying such overlaps is
+important for redundancy elimination in the merged model.
+
+As a baseline for the later merge analysis, each regional knowledge
+base is solved individually to determine the number of valid
+configurations.  The resulting solution counts are reported in
+Table~\ref{tab:solutions-regional}.  These three regional models form
+the input to the merge process described in
+Section~\ref{sec:merge}, where the models are first contextualized and
+then merged in a semantics-preserving way.  In particular, the
+Oceania-specific \textit{SurfPackage} feature motivates the need to
+support model-specific features while still preserving the union of
+regional solution spaces.
+
+\section{Merge Process}
+\label{sec:merge}
+This section describes the semantics-preserving merge process applied
+to the regional variability models introduced in the previous section.
+The approach builds on the consistency-based merging technique of
+Uta et al.~\cite{Uta2019} and extends it to support the integration of
+an arbitrary number of consistent input models ($n \ge 2$). As
+assumed throughout this paper, the models share a largely common
+vocabulary for overlapping features, while still allowing
+region-specific extensions.
+
+The merge process operates on constraint-based representations of the
+regional models. The goal is to construct a single integrated knowledge
+base whose solution space corresponds exactly to the union of the
+regional solution spaces. To achieve this, each regional knowledge base
+$\mathrm{CKB}_i$ is first contextualized by introducing an explicit
+region indicator. All constraints from $\mathrm{CKB}_i$
+are guarded accordingly, resulting in a contextualized knowledge base
+$\mathrm{CKB}'_i$. This step separates the regional semantics within a
+single unified model and prevents unintended interactions between
+constraints from different regions.
+
+The contextualized knowledge bases are then combined by forming their
+union
+$\mathrm{CKB}' = \bigcup_{i=1}^{n} \mathrm{CKB}'_i$.
+Features that occur only in a single regional model require special handling. For each such feature $f$, we add an implication
+$f \rightarrow \mathrm{region}_i$ to ensure that the feature
+can only be selected when the corresponding region is active. This
+allows the merge to handle non-identical feature
+structures without explicit feature alignment or manual
+model adaptation.
+
+After constructing the union model, we apply a consistency-based cleanup phase. For each contextualized constraint, the algorithm checks
+whether its decontextualized variant can be added without changing
+the overall solution space. Constraints that are semantically shared
+across regions are decontextualized and kept once in the merged
+model, while region-specific constraints remain guarded by the region
+indicator. Finally, redundant constraints are removed using
+standard inconsistency checks. Algorithm~1 summarizes the complete
+merge procedure.
+
+\newpage
+\noindent\textbf{Algorithm 1} CKB-MULTI-MERGE($\mathrm{CKB}'_{1}, \ldots, \mathrm{CKB}'_{n}$): $\mathrm{CKB}$
+\begin{center}
+\begin{tabular}{@{}l@{\hspace{0.8em}}l@{}}
+1:  & $\{\mathrm{CKB}'_{1}, \ldots, \mathrm{CKB}'_{n}\}$: $n \ge 2$ contextualized and consistent configuration knowledge bases \\ 
+2:  & $\{\, c' : \text{a contextualized version of constraint } c \,\}$ \\
+2a: & $\{\, \mathrm{region}_i : \text{contextualization variable associated with region } i \,\}$ \\
+3:  & $\{\, \mathrm{CKB} : \text{knowledge base resulting from the merge operation} \,\}$ \\
+4:  & $\mathrm{CKB} \leftarrow \emptyset;$ \\
+5:  & $\mathrm{CKB}' \leftarrow \bigcup_{i=1}^{n} \mathrm{CKB}'_{i};$ \\
+5a: & \textbf{for all} features $f$ that occur only in a single $\mathrm{CKB}'_{i}$ \textbf{do} \\
+5b: & \quad $\mathrm{CKB}' \leftarrow \mathrm{CKB}' \cup \{\, f \rightarrow \mathrm{region}_{i} \,\};$ \\
+5c: & \textbf{end for} \\
+6:  & \textbf{for all} $c' \in \mathrm{CKB}'$ \textbf{do} \\
+7:  & \quad \textbf{if} $\text{inconsistent}(\{\neg c\} \cup \mathrm{CKB}' \cup \mathrm{CKB})$ \textbf{then} \\
+8:  & \quad\quad $\mathrm{CKB} \leftarrow \mathrm{CKB} \cup \{c\};$ \\
+9:  & \quad \textbf{else} \\
+10: & \quad\quad $\mathrm{CKB} \leftarrow \mathrm{CKB} \cup \{c'\};$ \\
+11: & \quad \textbf{end if} \\
+12: & \quad $\mathrm{CKB}' \leftarrow \mathrm{CKB}' - \{c'\};$ \\
+13: & \textbf{end for} \\
+14: & \textbf{for all} $c \in \mathrm{CKB}$ \textbf{do} \\
+15: & \quad \textbf{if} \ \text{inconsistent}(($\mathrm{CKB} - \{c\}) \cup \{\neg c\}$) \textbf{then} \\
+16: & \quad\quad $\mathrm{CKB} \leftarrow \mathrm{CKB} - \{c\};$ \\
+17: & \quad \textbf{end if} \\
+18: & \textbf{end for} \\
+19: & \textbf{return} \ $\mathrm{CKB};$ \\
+\end{tabular}
+\end{center}
+
+For our running example with three regions (US, GER, and OCE), the
+merge introduces a mandatory \textit{Region} choice under the root
+feature \textit{Car} and restricts the Oceania-specific feature
+\textit{SurfPackage} to region \textit{OCE}. The correctness of the
+merge can be seen in the resulting solution spaces.
+Table~\ref{tab:solutions-regional} shows that the number of valid
+configurations of the merged knowledge base equals the sum of
+the regional solution counts. This confirms that no additional solutions
+are introduced and no valid regional solutions are lost.
+
+\begin{table}[h]
+\caption{Solution spaces of regional and merged knowledge bases.}
+\label{tab:solutions-regional}
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Knowledge base} & \textbf{\#solutions} \\
+\midrule
+$\mathrm{CKB}_{\mathrm{US}},\; \mathrm{CKB}'_{\mathrm{US}}$           & 288 \\
+$\mathrm{CKB}_{\mathrm{GER}},\; \mathrm{CKB}'_{\mathrm{GER}}$         & 294 \\
+$\mathrm{CKB}_{\mathrm{OCE}},\; \mathrm{CKB}'_{\mathrm{OCE}}$         & 390 \\
+\addlinespace
+$\mathrm{CKB}' = \mathrm{CKB}'_{\mathrm{US}} \cup 
+\mathrm{CKB}'_{\mathrm{GER}} \cup 
+\mathrm{CKB}'_{\mathrm{OCE}}$ & 972 \\
+\addlinespace
+$\mathrm{CKB}'_{\mathrm{US}} \cap 
+\mathrm{CKB}'_{\mathrm{GER}} \cap 
+\mathrm{CKB}'_{\mathrm{OCE}}$ & 114$^{\dagger}$ \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\raggedright
+$^{\dagger}$\,Intersection computed on the projection to features common to
+all three models; OCE-specific features are ignored in the matching.
+\end{table}
+
+Table~\ref{tab:constraints-merged} shows the effect of contextualization and decontextualization on individual
+constraints. Constraints that are identical
+across regions appear once in decontextualized form, while
+constraints that encode region-specific restrictions remain guarded
+by the corresponding \textit{Region} value. Together with the region
+feature hierarchy and the generated feature--region implications, the
+merged knowledge base forms a single, globally consistent variability
+model. Its semantics corresponds exactly to the union of the
+original regional models.
+
+\begin{table}[h]
+\caption{Merged feature tree (fragment) and selected cross-tree constraints.}
+\label{tab:constraints-merged}
+\centering
+\begin{tabular}{p{0.38\linewidth} p{0.57\linewidth}}
+\toprule
+\textbf{Merged feature tree (fragment)} &
+\textbf{Merged model constraints} \\
+\midrule
+$\begin{aligned}
+&\textit{Car} \\
+&\quad \rightarrow \textit{Region}~(US \mid GER \mid OCE) \\[0.25em]
+&\quad \rightarrow \textit{Type}~(\textit{Combi} \mid \textit{Limo} \mid \textit{City} \mid \textit{SUV}) \\[0.25em]
+&\quad \rightarrow \textit{Color}~(\textit{White} \mid \textit{Black}) \\[0.25em]
+&\quad \rightarrow \textit{Engine}~(\textit{1L} \mid \textit{1{,}5L} \mid \textit{2L}) \\[0.25em]
+&\quad \rightarrow \textit{CouplingDevice}~(\textit{Yes} \mid \textit{No}) \\[0.25em]
+&\quad \rightarrow \textit{Fuel}~(\textit{Electro} \mid \textit{Diesel} \mid \textit{Gas} \mid \textit{Hybrid}) \\[0.25em]
+&\quad \rightarrow \textit{Service}~(\textit{15k} \mid \textit{20k} \mid \textit{25k}) \\[0.25em]
+&\quad \rightarrow \textit{SurfPackage}~[\text{only in Region }OCE]^{\ddagger}
+\end{aligned}$
+&
+$\begin{aligned}
+&c_{1}: && \text{Electro} \rightarrow \neg\,\text{Yes};\\[0.3em]
+&c_{2}: && \text{SurfPackage} \rightarrow \text{SUV};^{\ddagger}\\[0.3em]
+&c_{1}^{US}: && \text{Region} = US \rightarrow \neg\,\text{Hybrid};\\[0.3em]
+&c_{3}^{US}: && \text{Region} = US \rightarrow (\text{Diesel} \rightarrow \text{Black});\\[0.3em]
+&c_{1}^{GER}: && \text{Region} = GER \rightarrow \neg\,\text{Gas};\\[0.3em]
+&c_{3}^{GER}: && \text{Region} = GER \rightarrow (\text{Diesel} \rightarrow \neg\,\text{City});\\[0.3em]
+&c_{4}^{GER}: && \text{Region} = GER \rightarrow (\text{1L} \rightarrow \neg\,\text{SUV});\\[0.3em]
+&c_{1}^{OCE}: && \text{Region} = OCE \rightarrow \neg\,\text{Hybrid};\\[0.3em]
+&c_{3}^{OCE}: && \text{Region} = OCE \rightarrow (\text{1L} \rightarrow \neg\,\text{SUV}).\\
+\end{aligned}$
+\\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\raggedright
+$^{\ddagger}$\,The constraint $\text{SurfPackage} \rightarrow \text{SUV}$ is decontextualized since the feature-region implication $\text{SurfPackage} \rightarrow \text{OCE}$ already restricts its applicability to the OCE region.
+\end{table}
+
+\newpage
+\section{Evaluation on Real-world Variability Models}
+\label{sec:realworld}
+To complement the automotive running example and the synthesized
+benchmark results reported by Uta et al.~\cite{Uta2019}, we evaluate
+the merge procedure on industrial-scale variability models from the
+financial services domain. These models were obtained from a publicly
+available UVL repository~\cite{uvlhub2024} and represent independently
+maintained variants of the same configuration knowledge base. With
+more than 700 features and more than 2{,}000 cross-tree constraints
+per model, they allow us to study redundancy elimination and
+contextualization effects at realistic model sizes.
+
+\subsection{Models}
+We selected nine UVL models (Finance~1--Finance~9) for analysis. All models share a common vocabulary but differ in the presence of
+optional features, the structure of the feature hierarchy, and the
+semantics encoded by cross-tree constraints. Table~\ref{tab:finance_compact_percent}
+summarizes the model sizes and their pairwise Jaccard similarity over
+feature sets. The matrix shows two subgroups: Finance~1--Finance~4
+are nearly identical in terms of feature overlap, while Finance~5--Finance~9
+form a second cluster with high internal similarity but lower overlap
+with the first subgroup.
+
+\FloatBarrier
+\begin{table*}[t]
+\caption{Feature counts and Jaccard similarity matrix (percent form, rounded) for the real-world finance models.}
+\centering
+\small
+\begin{tabular}{l c c c c c c c c c c}
+\toprule
+\textbf{Model} 
+& \textbf{Features} 
+& \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} 
+& \textbf{F5} & \textbf{F6} & \textbf{F7} & \textbf{F8} & \textbf{F9} \\
+\midrule
+Finance~1 
+& 704 
+& 100\% & 99\% & 98\% & 95\% & 57\% & 53\% & 51\% & 50\% & 50\% \\
+
+Finance~2 
+& 712
+& 99\% & 100\% & 99\% & 96\% & 58\% & 54\% & 52\% & 51\% & 51\% \\
+
+Finance~3 
+& 711
+& 98\% & 99\% & 100\% & 98\% & 58\% & 54\% & 52\% & 51\% & 51\% \\
+
+Finance~4 
+& 716
+& 95\% & 96\% & 98\% & 100\% & 59\% & 54\% & 53\% & 51\% & 51\% \\
+
+Finance~5 
+& 712
+& 57\% & 58\% & 58\% & 59\% & 100\% & 91\% & 88\% & 86\% & 86\% \\
+
+Finance~6 
+& 759
+& 53\% & 54\% & 54\% & 54\% & 91\% & 100\% & 98\% & 95\% & 96\% \\
+
+Finance~7 
+& 771
+& 51\% & 52\% & 52\% & 53\% & 88\% & 98\% & 100\% & 97\% & 98\% \\
+
+Finance~8 
+& 774
+& 50\% & 51\% & 51\% & 51\% & 86\% & 95\% & 97\% & 100\% & 100\% \\
+
+Finance~9 
+& 771
+& 50\% & 51\% & 51\% & 51\% & 86\% & 96\% & 98\% & 100\% & 100\% \\
+\bottomrule
+\end{tabular}
+\label{tab:finance_compact_percent}
+\end{table*}
+\FloatBarrier
+
+\subsection{Constraint Density and Contextualization Effects}
+Our evaluation focuses on two aspects of the
+consistency-based merge: (i) how many
+redundant cross-tree constraints can be removed by the cleanup phase,
+and (ii) how much contextualization is required in the merged model.
+Figure~\ref{fig:finance-two-plots} summarizes these aspects for all
+pairs of finance models.
+
+The left plot shows the average number of cross-tree constraints
+per feature before and after the cleanup step. For highly similar
+model pairs, the cleanup removes a substantial fraction of
+constraints. This indicates that independently maintained variants often
+contain overlapping semantics expressed through identical or implied
+constraints. For less similar pairs, the reduction is smaller but
+still noticeable, suggesting that redundancy is not limited to
+near-identical model variants.
+
+The right plot shows how contextualization share relates to feature overlap.
+One might expect contextualization to increase mainly when
+models share fewer features, but the observed pattern is different:
+high overlap is typically associated with low contextualization, yet
+some pairs with comparable overlap require much more
+contextualization. This shows that contextualization is driven
+primarily by differences in constraint semantics (i.e., conflicting or
+non-equivalent restrictions over shared features), not by the
+absence of a shared feature vocabulary. For low-overlap pairs, the
+contextualization share remains moderate because many constraints are
+local to one model and do not interact strongly with the
+other variant.
+
+\begin{figure}[!ht]
+\centering
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot_finance_constraints_per_feature.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{plot_finance_shareRatio_vs_contextualization.png}
+\end{minipage}
+\caption{(Left) Average number of cross-tree constraints per feature for
+all model pairs before and after the merge cleanup. (Right)
+Contextualization share as a function of feature overlap between model
+pairs.}
+\label{fig:finance-two-plots}
+\end{figure}
+
+\subsection{Findings}
+The evaluation on industrial-scale finance models leads to the
+following observations:
+
+\begin{itemize}[leftmargin=*]
+\item The cleanup phase removes a considerable amount of redundant
+      cross-tree knowledge even for large real-world models. For highly
+      similar model pairs (Jaccard similarity $>95\%$), more than 40\% of constraints
+      are identified as redundant and can be removed.
+\item Contextualization is mainly induced by semantic divergence in
+      constraints over shared features, not by low feature overlap.
+      Model pairs with 85--90\% feature overlap show contextualization
+      shares varying from 4\% to over 25\%, which indicates that structural
+      similarity does not imply semantic equivalence.
+\item Merges remain manageable for low-overlap pairs (50--60\% Jaccard similarity)
+      because a large portion of constraints is model-local and does not
+      require extensive conditionalization.
+\end{itemize}
+
+Overall, the results show that the consistency-based merge procedure
+scales beyond small running examples and can consolidate large
+variants by eliminating redundancy while preserving region- or
+variant-specific semantics.
+
+\section{Threats to Validity}
+The main threat to external validity is the representativeness of the models used in our evaluation. The automotive running example is synthesized to illustrate the core concepts of the merge procedure, while the finance models are real-world variants from a publicly available repository. However, these models come from a single domain (financial services) and may not fully represent the diversity of variability models found in other industrial contexts such as automotive or telecommunications. Future work should include models from additional domains to strengthen the generalizability of our findings.
+
+A threat to internal validity is that our re-implementation may not behave identically to the original implementation by Uta et al.~\cite{Uta2019}. We addressed this by validating the merge results on the automotive running example, where the solution counts of the merged model match the expected union of regional solution spaces.
+
+\section{Conclusions and Future Work}
+In this paper, we presented an extension to the consistency-based merging approach of Uta et al.~\cite{Uta2019} that supports the integration of an arbitrary number of variability models ($n \ge 2$). The approach preserves the original semantics-preservation guarantees while handling region-specific features through feature-region implications. Our evaluation on industrial-scale finance models shows that the cleanup phase effectively removes redundant constraints (up to 50\% reduction for highly similar models) and that contextualization is primarily driven by semantic divergence in cross-tree constraints rather than by low feature overlap alone.
+
+In future work, we plan to improve the runtime performance of the merge procedure for very large knowledge bases and to evaluate the approach on variability models from additional domains. We also want to investigate incremental merge strategies that allow efficient updates when individual regional models are modified.
+
+\newpage
+\begin{thebibliography}{17}
+\bibitem{Ardissono2003} L. Ardissono, A. Felfernig, G. Friedrich, A. Goy, D. Jannach, G. Petrone, R. Schaefer, M. Zanker, A framework for the development of personalized, distributed web-based configuration systems, \emph{AI Magazine} 24(3) (2003) 93--110.
+\bibitem{Benavides2005} D. Benavides, P. Trinidad, A. Ruiz-Cortés, Using constraint programming to reason on feature models, in: \emph{SEKE 2005}, pp. 677--682, Taipei, Taiwan, 2005.
+\bibitem{Benavides2010} D. Benavides, S. Segura, A. Ruiz-Cortés, Automated analysis of feature models 20 years later: A literature review, \emph{Information Systems} 35(6) (2010) 615--636.
+\bibitem{Broek2010} P. van den Broek, I. Galvão, J. Noppen, Merging feature models, in: \emph{SPLC 2010}, pp. 83--90, Jeju Island, South Korea, 2010.
+\bibitem{Czarnecki2005} K. Czarnecki, S. Helsen, U. Eisenecker, Formalizing cardinality-based feature models and their specialization, \emph{Software Process: Improvement and Practice} 10(1) (2005) 7--29.
+\bibitem{Delgrande2007} J. Delgrande, T. Schaub, A consistency-based framework for merging knowledge bases, \emph{Journal of Applied Logic} 5(3) (2007) 459--477.
+\bibitem{Felfernig2000} A. Felfernig, D. Jannach, M. Zanker, Contextual diagrams as structuring mechanisms for designing configuration knowledge bases in UML, in: \emph{UML 2000}, LNCS 1939, Springer, 2000, pp. 240--254.
+\bibitem{Felfernig2014} A. Felfernig, L. Hotz, C. Bagley, J. Tiihonen, \emph{Knowledge-based Configuration: From Research to Business Cases}, Morgan Kaufmann, 2014.
+\bibitem{Felfernig2018} A. Felfernig, L. Boratto, M. Stettinger, M. Tkalčič, \emph{Group Recommender Systems -- An Introduction}, Springer, 2018.
+\bibitem{Galarraga2013} L. Galárraga, N. Preda, F. Suchanek, Mining rules to align knowledge bases, in: \emph{AKBC 2013}, pp. 43--48, San Francisco, CA, USA, 2013.
+\bibitem{Kang1990} K. Kang, S. Cohen, J. Hess, W. Novak, S. Peterson, Feature-oriented domain analysis feasibility study (FODA), CMU/SEI-90-TR-021, 1990.
+\bibitem{Liberatore1998} P. Liberatore, M. Schaerf, Arbitration (or how to merge knowledge bases), \emph{IEEE Trans. Knowl. Data Eng.} 10(1) (1998) 76--90.
+\bibitem{Reiter1987} R. Reiter, A theory of diagnosis from first principles, \emph{Artificial Intelligence} 23(1) (1987) 57--95.
+\bibitem{Segura2007} S. Segura, D. Benavides, A. Ruiz-Cortés, P. Trinidad, Automated merging of feature models using graph transformations, in: \emph{GTTSE 2007}, LNCS 5235, Springer, 2008, pp. 489--505.
+\bibitem{Stumptner1997} M. Stumptner, An overview of knowledge-based configuration, \emph{AI Communications} 10(2) (1997) 111--125.
+\bibitem{Tsang1993} E. Tsang, \emph{Foundations of Constraint Satisfaction}, Academic Press, 1993.
+\bibitem{Uta2019}M. Uta, A. Felfernig, G. Schenner, J. Sp\"ocklberger,
+Consistency-based Merging of Variability Models, in: \emph{ConfWS 2019}, 2019.
+\bibitem{uvlhub2024} UVL Hub -- A repository for Universal Variability Language models, \url{https://uvlhub.io/}, accessed 2024.
+\end{thebibliography}
+
+\bigskip\noindent\textit{Copyright statement.} © 2025 for this paper by its authors. Use permitted under Creative Commons License Attribution 4.0 International (CC BY 4.0).
+
+\end{document}
