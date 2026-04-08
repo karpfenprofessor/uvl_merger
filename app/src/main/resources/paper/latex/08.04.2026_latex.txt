@@ -1,0 +1,416 @@
+% CEUR-WS LaTeX source built from the provided sample layout, filled with the paper’s content
+% Title per user request; content reproduces the original paper (CC BY 4.0)
+\documentclass{ceurart}
+
+%% Packages that are part of standard LaTeX installations (as in sample)
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\conference{ConfWS 2026}
+
+
+%% Metadata
+\title{Consistency-based merging of multiple Variability Models and Performance Evaluation}
+
+%% Authors and affiliations (replicated from the original paper)
+\author[1]{Manuel Mörtl}[email=manuel.moertl@tugraz.at]
+\author[1]{Alexander Felfernig}[email=alexander.felfernig@ist.tugraz.at]
+
+\address[1]{Graz University of Technology, Austria}
+
+
+\begin{document}
+\copyrightyear{2026}
+\copyrightclause{Copyright for this paper by its authors.
+  Use permitted under Creative Commons License Attribution 4.0
+  International (CC BY 4.0).}
+\begin{abstract}
+Variability models that are developed independently for different markets or organizational contexts often need to be integrated into a single knowledge base. For such an integration to be useful, the merged model must preserve semantics, that is, its solution space must correspond exactly to the union of the solution spaces of the input models. This paper extends the consistency-based merge approach of Uta et al.~\cite{Uta2019} from two to an arbitrary number of variability models represented as constraint satisfaction problems. The generalized procedure combines contextualization, feature-region guarding for subset-specific features, consistency-based decontextualization, and elimination of redundancies to construct a compact integrated knowledge base. We illustrate the approach on an automotive example with three regional models and evaluate it on industrial-scale variability models from the financial services domain. The empirical results show that elimination of redundancies removes a substantial number of redundant non-structural constraints, especially for structurally similar model pairs, while contextualization is driven primarily by semantic incompatibilities of non-structural constraints over shared features.
+\end{abstract}
+
+\begin{keywords}
+Variability models \sep consistency-based merging \sep feature models \sep constraint satisfaction problems \sep semantics preservation \sep contextualization
+\end{keywords}
+
+\maketitle
+\section{Introduction}
+Configuration~\cite{Stumptner1997,Felfernig2014} is a well-established
+application area of Artificial Intelligence and is used in domains such as
+telecommunications, financial services, manufacturing and software
+systems. In many of these settings, configuration knowledge is represented by
+variability models, for example, feature models, which provide a structured way
+to capture the variability of complex systems~\cite{Kang1990,Czarnecki2005}.
+To support automated reasoning over valid configurations, such models are often
+formalized as constraint satisfaction problems (CSPs)~\cite{Benavides2005,Tsang1993}.
+For organizations operating globally, configuration knowledge is frequently
+maintained in multiple regional or organizational variants that reflect local
+requirements, regulations, or product adaptations. Integrating these variants
+into a single model is challenging because the merged model must represent exactly the union of the individual solution spaces: it must not introduce configurations absent from every source model, and it must not lose configurations valid in at least one..
+
+Uta et al.~\cite{Uta2019} address this problem with a consistency-based merge
+procedure for two variability models. Their approach relies on
+contextualization and conflict detection to construct an integrated knowledge
+base whose solution space is equal to the union of the solution spaces of the
+original models. In addition, the procedure removes unnecessary
+contextualization and logically redundant constraints, which yields a more
+compact merged model. However, the original work is limited in two important
+respects. First, it considers only the merge of two input models. Second, its
+empirical evaluation is based on synthesized knowledge bases, while industrial-scale
+variability models remain an open direction for further investigation.
+
+This paper builds on that foundation. We generalize the
+consistency-based merge procedure to support an arbitrary number of consistent
+input models ($n \geq 2$) that share a common vocabulary for overlapping
+features, while also allowing features that occur only in a subset of the
+models. To preserve semantics in this setting, the merge procedure introduces
+feature-region implications for subset-specific features, performs
+consistency-based decontextualization, and removes redundant constraints from
+the resulting integrated knowledge base. We illustrate the generalized
+procedure on an automotive example with three regional models.
+
+We then complement the synthesized evaluation of Uta et al.~\cite{Uta2019}
+with an empirical study on industrial-scale real-world variability models from
+the financial services domain. Using pairwise merges of nine models, we analyze
+how structural overlap relates to two properties of the merge result: the
+reduction of non-structural constraints during redundancy elimination and the share of
+constraints that remain contextualized. The results show that high structural
+overlap often coincides with stronger redundancy elimination effects, but does not by itself
+explain contextualization behavior. Instead, contextualization is primarily
+determined by the semantic compatibility of non-structural constraints over
+shared features.
+
+The contributions of this paper are threefold. First, we extend the
+consistency-based merge procedure of Uta et al.~\cite{Uta2019} from two to
+multiple variability models. Second, we provide a detailed illustration of the
+generalized merge process on a three-model automotive example. Third, we
+evaluate the approach on industrial-scale models, thereby addressing
+a central limitation of the original work.
+
+
+\section{Example Variability Models}
+\label{sec:example}
+The following example extends the automotive example of Uta et al.~\cite{Uta2019} from two to three regional knowledge bases in order to illustrate the multi-model merge procedure.
+
+We consider three regional knowledge bases from the United States, Germany, and Oceania. Each knowledge base is represented as a constraint satisfaction problem (CSP)~\cite{Tsang1993}, that is, as a set of variables with associated domains and constraints. In this representation, variables represent features or feature properties and valid configurations correspond to CSP solutions. As in~\cite{Uta2019}, we assume that the individual knowledge bases are consistent.
+
+The three knowledge bases share a common vocabulary for overlapping features that captures the main characteristics of the vehicle. Table~\ref{tab:example-features} lists the variables and their admissible domain values that occur in all three knowledge bases. This shared vocabulary provides the basis for alignment and comparability between regions.
+
+The United States and Germany models share the same feature hierarchy, whereas the Oceania model introduces an additional optional feature \textit{SurfPackage} below the root feature \textit{Car}. This structural asymmetry is deliberately introduced to illustrate how the merge procedure handles region-specific structural extensions while preserving solution-space semantics.
+
+\begin{table}[t]
+\caption{Variables and their domain values shared across the regional knowledge bases.}
+\label{tab:example-features}
+\centering
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Domain Values} \\
+\midrule
+\textit{type}            & \textit{combi, limo, city, suv} \\
+\textit{color}           & \textit{white, black} \\
+\textit{engine}          & \textit{1L, 1{.}5L, 2L} \\
+\textit{couplingDevice}  & \textit{yes, no} \\
+\textit{fuel}            & \textit{electro, diesel, gas, hybrid} \\
+\textit{service}         & \textit{15k, 20k, 25k} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Non-structural constraints of the three regional knowledge bases.}
+\label{tab:example-constraints}
+\centering
+\begin{tabular}{p{0.48\linewidth} p{0.48\linewidth}}
+\toprule
+\multicolumn{2}{c}{\textbf{Non-structural constraints}} \\
+\midrule
+$\begin{aligned}
+&c^{US}_1:\; fuel \neq hybrid\\
+&c^{US}_2:\; fuel = electro \rightarrow couplingDevice = no\\
+&c^{US}_3:\; fuel = diesel \rightarrow color = black\\[0.3em]
+&c^{GER}_1:\; fuel \neq gas\\
+&c^{GER}_2:\; fuel = electro \rightarrow couplingDevice = no
+\end{aligned}$
+&
+$\begin{aligned}
+&c^{GER}_3:\; fuel = diesel \rightarrow type \neq city\\
+&c^{GER}_4:\; engine = 1L \rightarrow type \neq suv\\[0.3em]
+&c^{OCE}_1:\; fuel \neq hybrid\\
+&c^{OCE}_2:\; fuel = electro \rightarrow couplingDevice = no\\
+&c^{OCE}_3:\; engine = 1L \rightarrow type \neq suv\\
+&c^{OCE}_4:\; surfPackage = yes \rightarrow type = suv
+\end{aligned}$
+\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The regional knowledge bases differ primarily in their non-structural constraints. These constraints encode market- and regulation-driven restrictions, for example, region-dependent exclusions of fuel types or dependencies between engine size and vehicle type. Table~\ref{tab:example-constraints} summarizes the original non-structural constraints of the three knowledge bases.
+
+To validate semantics preservation, we first solve each individually consistent knowledge base and determine its solution space. The resulting numbers of valid configurations are reported in Table~\ref{tab:example-solutions}. 
+These three consistent knowledge bases, which share a common vocabulary for their overlapping features, form the input to the multi-model merge procedure described in Section~\ref{sec:merge}.
+
+
+
+\section{Merging Multiple Variability Models}
+\label{sec:merge}
+This section describes the semantics-preserving generalization of the consistency-based merge procedure of Uta et al.~\cite{Uta2019} from two to an arbitrary number of consistent regional knowledge bases ($n \ge 2$). As in the original approach, we assume that the overlapping features are represented using a shared vocabulary.
+The goal is to construct a single integrated knowledge base whose solution space corresponds exactly to the union of the solution spaces of the regional knowledge bases. 
+
+To achieve this, each regional knowledge base $\mathrm{CKB}_i$ is contextualized by introducing a contextual variable \textit{region}. Each constraint of $\mathrm{CKB}_i$ is then guarded by the corresponding region value, resulting in a contextualized knowledge base $\mathrm{CKB}'_i$. This step isolates regional semantics within a unified model and prevents unintended interactions between constraints originating from different regional knowledge bases.
+
+The contextualized knowledge bases are then combined by taking their union $\mathrm{CKB}' = \bigcup_{i=1}^{n} \mathrm{CKB}'_i$. For each feature $f$ that occurs only in a subset of the regional knowledge bases, an implication $f = yes \rightarrow region = r_i$ is introduced for each knowledge base $\mathrm{CKB}'_i$ in which $f$ is defined. This prevents the union model from admitting configurations that select features specific to one regional knowledge base together with a different region value, and is therefore necessary for semantics preservation.
+
+After constructing the union model, the merge procedure performs consistency-based decontextualization. For each contextualized constraint $c'$, let $c$ denote its decontextualized form obtained by removing the region guard. The procedure tests whether $c$ is entailed by the current intermediate merge state by checking if $\{\neg c\} \cup \mathrm{CKB}' \cup \mathrm{CKB}$ is inconsistent. If this is the case, no configuration satisfying $\neg c$ exists and $c$ can be added to the integrated knowledge base in decontextualized form. Otherwise, the contextualized constraint $c'$ is retained. Hence, contextual guards are removed only when they are not required for semantics preservation.
+
+In a second phase, redundant constraints are removed by testing for each constraint $c \in \mathrm{CKB}$, if $\neg c$ is inconsistent with the merged knowledge base $\mathrm{CKB} - \{c\}$. In this case, $c$ is logically implied by the remaining merged knowledge base and can be removed. This yields a more compact integrated knowledge base without changing its solution space.
+
+The Algorithm~\ref{alg:merge-algorithm} summarizes the generalized merge procedure.
+
+\begin{algorithm}
+\caption{CKB-MULTI-MERGE($\mathrm{CKB}'_{1}, \ldots, \mathrm{CKB}'_{n}$): $\mathrm{CKB}$}
+\label{alg:merge-algorithm}
+\centering
+\begin{tabular}{@{}l@{\hspace{0.8em}}l@{}}
+1:  & $\{\mathrm{CKB}'_{1}, \ldots, \mathrm{CKB}'_{n}\}$: $n \ge 2$ contextualized and consistent regional  knowledge bases \\
+2:  & $\{\, c' : \text{a contextualized version of constraint } c \,\}$ \\
+3:  & $\{\, r_i : \text{value of the contextual variable } \textit{region} \text{ associated with knowledge base } i \,\}$ \\
+4:  & $\{\, \mathrm{CKB} : \text{knowledge base resulting from the merge operation} \,\}$ \\
+5:  & $\mathrm{CKB} \leftarrow \emptyset;$ \\
+6:  & $\mathrm{CKB}' \leftarrow \bigcup_{i=1}^{n} \mathrm{CKB}'_{i};$ \\
+7:  & \textbf{for all} features $f$ that are not defined in all $\mathrm{CKB}'_{i}$ \textbf{do} \\
+8:  & \quad \textbf{for all} $i$ \textbf{such that} $f$ is defined in $\mathrm{CKB}'_{i}$ \textbf{do} \\
+9:  & \qquad $\mathrm{CKB}' \leftarrow \mathrm{CKB}' \cup \{\, f = yes \rightarrow \mathrm{region} = r_i \,\};$ \\
+10: & \quad \textbf{end for} \\
+11: & \textbf{end for} \\
+12: & \textbf{for all} $c' \in \mathrm{CKB}'$ \textbf{do} \\
+13: & \quad \textbf{if} $\text{inconsistent}(\{\neg c\} \cup \mathrm{CKB}' \cup \mathrm{CKB})$ \textbf{then} \\
+14: & \quad\quad $\mathrm{CKB} \leftarrow \mathrm{CKB} \cup \{c\};$ \\
+15: & \quad \textbf{else} \\
+16: & \quad\quad $\mathrm{CKB} \leftarrow \mathrm{CKB} \cup \{c'\};$ \\
+17: & \quad \textbf{end if} \\
+18: & \quad $\mathrm{CKB}' \leftarrow \mathrm{CKB}' - \{c'\};$ \\
+19: & \textbf{end for} \\
+20: & \textbf{for all} $c \in \mathrm{CKB}$ \textbf{do} \\
+21: & \quad \textbf{if} \ \text{inconsistent}(($\mathrm{CKB} - \{c\}) \cup \{\neg c\}$) \textbf{then} \\
+22: & \quad\quad $\mathrm{CKB} \leftarrow \mathrm{CKB} - \{c\};$ \\
+23: & \quad \textbf{end if} \\
+24: & \textbf{end for} \\
+25: & \textbf{return} \ $\mathrm{CKB};$ \\
+\end{tabular}
+\end{algorithm}
+
+We now illustrate the result of the merge procedure using the automotive example introduced in Section~\ref{sec:example}.
+For the three regional knowledge bases (US, GER and OCE), the
+merge introduces a mandatory \textit{region} choice under the root
+feature \textit{Car} and restricts the Oceania-specific feature
+\textit{SurfPackage} to region \textit{OCE}. 
+
+
+Table~\ref{tab:constraints-merged} shows the resulting merged feature hierarchy and non-structural constraints. Constraints whose region guard is semantically unnecessary appear once in decontextualized form, whereas constraints expressing regional restrictions remain guarded by the corresponding \textit{region} value. Together with the generated feature-to-region implications, this yields a consistent integrated knowledge base whose solution space equals the union of the solution spaces of the original regional knowledge bases.
+
+
+\begin{table}[t]
+\caption{Merged feature hierarchy and non-structural constraints of the integrated knowledge base.}
+\label{tab:constraints-merged}
+\centering
+\begin{tabular}{p{0.38\linewidth} p{0.57\linewidth}}
+\toprule
+\textbf{Feature hierarchy} &
+\textbf{Non-structural constraints} \\
+\midrule
+$\begin{aligned}
+&\textit{Car} \\
+&\quad \rightarrow \textit{region}~(US \mid GER \mid OCE) \\[0.25em]
+&\quad \rightarrow \textit{type}~(\textit{combi} \mid \textit{limo} \mid \textit{city} \mid \textit{suv}) \\[0.25em]
+&\quad \rightarrow \textit{color}~(\textit{white} \mid \textit{black}) \\[0.25em]
+&\quad \rightarrow \textit{engine}~(\textit{1L} \mid \textit{1{.}5L} \mid \textit{2L}) \\[0.25em]
+&\quad \rightarrow \textit{couplingDevice}~(\textit{yes} \mid \textit{no}) \\[0.25em]
+&\quad \rightarrow \textit{fuel}~(\textit{electro} \mid \textit{diesel} \mid \textit{gas} \mid \textit{hybrid}) \\[0.25em]
+&\quad \rightarrow \textit{service}~(\textit{15k} \mid \textit{20k} \mid \textit{25k}) \\[0.25em]
+&\quad \rightarrow \textit{surfPackage}~(\textit{yes} \mid \textit{no})^{\ddagger}
+\end{aligned}$
+&
+$\begin{aligned}
+&c_{1}: && fuel = electro \rightarrow couplingDevice = no\\[0.3em]
+&c_{2}: && surfPackage = yes \rightarrow type = suv^{\ddagger}\\[0.3em]
+&c_{1}^{US}: && region = US \rightarrow fuel \neq hybrid\\[0.3em]
+&c_{3}^{US}: && region = US \rightarrow (fuel = diesel \rightarrow color = black)\\[0.3em]
+&c_{1}^{GER}: && region = GER \rightarrow fuel \neq gas\\[0.3em]
+&c_{3}^{GER}: && region = GER \rightarrow (fuel = diesel \rightarrow type \neq city)\\[0.3em]
+&c_{4}^{GER}: && region = GER \rightarrow (engine = 1L \rightarrow type \neq suv)\\[0.3em]
+&c_{1}^{OCE}: && region = OCE \rightarrow fuel \neq hybrid\\[0.3em]
+&c_{3}^{OCE}: && region = OCE \rightarrow (engine = 1L \rightarrow type \neq suv)\\
+\end{aligned}$
+\\
+\bottomrule
+\end{tabular}
+\medskip
+\parbox{0.95\linewidth}{\raggedright\footnotesize
+$^{\ddagger}$ The constraint $c_{2}$ is decontextualized since the
+feature-to-region implication $surfPackage = yes \rightarrow region = OCE$
+already restricts its applicability to the OCE region.}
+\end{table}
+
+Table~\ref{tab:example-solutions} confirms semantics preservation for the automotive example. The integrated knowledge base has 972 valid configurations, which is exactly the union of the solution spaces of the three regional knowledge bases. Thus, the merge does not introduce additional configurations and preserves all valid regional configurations.
+
+\begin{table}[t]
+\caption{Number of valid configurations of the regional knowledge bases, their contextualized variants, the union model, and the projected intersection of regional solution spaces.}
+\label{tab:example-solutions}
+\centering
+\begin{tabular}{lc}
+\toprule
+\textbf{Knowledge base} & \textbf{\#solutions} \\
+\midrule
+$\mathrm{CKB}_{\mathrm{US}},\; \mathrm{CKB}'_{\mathrm{US}}$           & 288 \\
+$\mathrm{CKB}_{\mathrm{GER}},\; \mathrm{CKB}'_{\mathrm{GER}}$         & 294 \\
+$\mathrm{CKB}_{\mathrm{OCE}},\; \mathrm{CKB}'_{\mathrm{OCE}}$         & 390 \\
+\addlinespace
+$\mathrm{CKB}' = \mathrm{CKB}'_{\mathrm{US}} \cup 
+\mathrm{CKB}'_{\mathrm{GER}} \cup 
+\mathrm{CKB}'_{\mathrm{OCE}}$ & 972 \\
+\addlinespace
+$\mathrm{CKB}'_{\mathrm{US}} \cap 
+\mathrm{CKB}'_{\mathrm{GER}} \cap 
+\mathrm{CKB}'_{\mathrm{OCE}}$ & 114$^{\dagger}$ \\
+\bottomrule
+\end{tabular}
+\medskip
+\parbox{0.95\linewidth}{\raggedright\footnotesize
+$^{\dagger}$ Intersection computed after projecting configurations to the
+feature set shared by all three regional knowledge bases; OCE-specific features are ignored
+when determining matching configurations.}
+\end{table}
+
+
+\section{Empirical Evaluation on Industrial-Scale Variability Models}
+\label{sec:realworld}
+In contrast to the evaluation by Uta et al.~\cite{Uta2019}, which relies on synthesized variability models, we investigate the behavior of the merge procedure on industrial-scale variability models from the financial services domain. The models were obtained from a publicly available UVL repository~\cite{uvlhub2024} and represent variants of the same configuration domain, treated as independent knowledge bases for the purposes of this evaluation. Each model contains more than 700 features and more than 2{,}000 non-structural constraints, providing a realistic setting to analyze redundancy elimination and contextualization effects. 
+To observe these effects across different degrees of structural overlap, we performed pairwise merges of all nine models.
+
+
+\subsection{Structural Similarity of the Finance Models}
+To interpret the results of pairwise merges, we first characterize
+the structural similarity of the nine finance models in terms of feature-set overlap.
+All input models share a partial common vocabulary over their overlapping features, but differ in their full feature sets, hierarchy structures, and the semantics of their non-structural constraints. 
+Table~\ref{tab:finance_similarity} summarizes the model sizes and their pairwise similarity over their feature sets. 
+The similarity matrix reveals two groups. Finance~1--Finance~4
+show a very high mutual overlap and can be regarded as a first structurally coherent group. Finance~5--Finance~9 form a second group with high internal similarity, but substantially lower overlap with Finance~1--Finance~4.
+
+
+\begin{table*}[t]
+\caption{Feature counts and pairwise Jaccard similarity of the models based on feature sets (rounded percent values).}
+\label{tab:finance_similarity}
+\centering
+\small
+\begin{tabular}{l c c c c c c c c c c}
+\toprule
+\textbf{Model} 
+& \textbf{Features} 
+& \textbf{F1} & \textbf{F2} & \textbf{F3} & \textbf{F4} 
+& \textbf{F5} & \textbf{F6} & \textbf{F7} & \textbf{F8} & \textbf{F9} \\
+\midrule
+Finance~1 
+& 704 
+& -- & 99 & 98 & 95 & 57 & 53 & 51 & 50 & 50 \\
+
+Finance~2 
+& 712
+& 99 & -- & 99 & 96 & 58 & 54 & 52 & 51 & 51 \\
+
+Finance~3 
+& 711
+& 98 & 99 & -- & 98 & 58 & 54 & 52 & 51 & 51 \\
+
+Finance~4 
+& 716
+& 95 & 96 & 98 & -- & 59 & 54 & 53 & 51 & 51 \\
+
+Finance~5 
+& 712
+& 57 & 58 & 58 & 59 & -- & 91 & 88 & 86 & 86 \\
+
+Finance~6 
+& 759
+& 53 & 54 & 54 & 54 & 91 & -- & 89 & 86 & 86 \\
+
+Finance~7 
+& 771
+& 51 & 52 & 52 & 53 & 88 & 89 & -- & 96 & 95 \\
+
+Finance~8 
+& 774
+& 50 & 51 & 51 & 51 & 86 & 86 & 96 & -- & 97 \\
+
+Finance~9 
+& 771
+& 50 & 51 & 51 & 51 & 86 & 86 & 95 & 97 & -- \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+\subsection{Redundancy Elimination and Contextualization Effects}
+Our evaluation focuses on two outcomes of the
+consistency-based merge: (i) the reduction of redundant non-structural constraints through redundancy elimination, and (ii) the share of constraints that remain contextualized in the merged model.
+ 
+Figure~\ref{fig:finance-contextualization-overlap} relates these outcomes to the overlap of the feature sets of the input models. Pairs with a high degree of feature overlap often exhibit substantial reductions during redundancy elimination, which indicates that overlapping feature sets create opportunities to identify logically redundant constraints. However, similar levels of feature overlap can still lead to noticeably different reduction values, showing that overlap alone does not determine the amount of redundancy that can be eliminated.
+For contextualization, the results show an even weaker dependence on feature set overlap. Model pairs with comparable overlap can exhibit substantially different contextualization shares, while low-overlap pairs do not necessarily lead to high contextualization. This can be explained by the role of non-structural constraints: contextualization is required when constraints over shared features are not globally compatible and must remain region-specific, whereas constraints that are local to a single model do not introduce conflicts and therefore do not need to stay contextualized.
+
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{plot_contextualization_vs_overlap.png}
+\caption{Contextualization share after merge in relation to feature-set overlap for all pairwise merges. Marker shapes distinguish within-group and between-group pairs, while color indicates the percentage reduction of non-structural constraints during redundancy elimination.}
+\label{fig:finance-contextualization-overlap}
+\end{figure}
+
+
+\subsection{Discussion}
+The evaluation indicates that feature-set overlap provides a useful structural baseline for interpreting pairwise merges but is not sufficient to explain merge outcomes.
+More generally, the results highlight that merge behavior is determined by how constraints interact over the shared feature space. In particular, whether constraints can be decontextualized or must remain context-specific depends on their logical compatibility rather than on structural similarity alone.
+Since the evaluation is based on finance models from a single domain, these observations should be interpreted as domain-specific evidence rather than as universally generalizable properties.
+Overall, the results show that the consistency-based merge procedure is applicable to industrial-scale knowledge bases beyond the synthesized settings of the original evaluation. It can consolidate large variants by eliminating redundancy while preserving region- or variant-specific semantics.
+
+\section{Threats to Validity}
+The main threat to external validity is the representativeness of the models used in our evaluation. The automotive example is synthetic and serves only to illustrate and validate the merge procedure. The empirical analysis is based on real-world variability models from the financial services domain obtained from a publicly available repository. However, these models originate from a single domain and may not be representative of variability models in other application domains. 
+A threat to internal validity is that the merge procedure of Uta et al.~\cite{Uta2019} was independently re-implemented. This may introduce implementation-specific differences, for example, in preprocessing, solver behavior, or runtime characteristics, even if the resulting solution spaces are preserved.
+Furthermore, the evaluation relies on derived metrics such as feature-set overlap, contextualization share, and reduction of non-structural constraints. These measures capture observable aspects of merge behavior but do not directly quantify semantic similarity between models.
+fehlt etwas?
+
+
+\section{Conclusion and Future Work}
+In this paper, we extend the consistency-based merging approach of Uta et al.~\cite{Uta2019} to support the integration of an arbitrary number of variability models while preserving semantics. The proposed procedure constructs a compact integrated knowledge base through contextualization, decontextualization, and elimination of redundancy.
+
+Our evaluation on industrial-scale variability models from the financial services domain shows that the merge procedure can be applied to industrial-scale models and that merge outcomes are shaped by both structural overlap and semantic differences in non-structural constraints. In particular, structural overlap is a useful baseline for interpreting the merge, but it is not sufficient to explain the characteristics of the resulting integrated model.
+
+Future work should include evaluating the approach on variability models from additional application domains in order to assess the generalizability of the observed effects and the applicability of the merge procedure. Further directions include analyzing true multi-model merges beyond pairwise combinations, developing measures that better capture semantic similarity between models, and addressing vocabulary alignment for independently developed knowledge bases.
+
+
+\begin{thebibliography}{17}
+\bibitem{Ardissono2003} L. Ardissono, A. Felfernig, G. Friedrich, A. Goy, D. Jannach, G. Petrone, R. Schaefer, M. Zanker, A framework for the development of personalized, distributed web-based configuration systems, \emph{AI Magazine} 24(3) (2003) 93--110.
+\bibitem{Benavides2005} D. Benavides, P. Trinidad, A. Ruiz-Cortés, Using constraint programming to reason on feature models, in: \emph{SEKE 2005}, pp. 677--682, Taipei, Taiwan, 2005.
+\bibitem{Benavides2010} D. Benavides, S. Segura, A. Ruiz-Cortés, Automated analysis of feature models 20 years later: A literature review, \emph{Information Systems} 35(6) (2010) 615--636.
+\bibitem{Broek2010} P. van den Broek, I. Galvão, J. Noppen, Merging feature models, in: \emph{SPLC 2010}, pp. 83--89, Jeju Island, South Korea, 2010.
+\bibitem{Czarnecki2005} K. Czarnecki, S. Helsen, U. Eisenecker, Formalizing cardinality-based feature models and their specialization, \emph{Software Process: Improvement and Practice} 10(1) (2005) 7--29.
+\bibitem{Delgrande2007} J. Delgrande, T. Schaub, A consistency-based framework for merging knowledge bases, \emph{Journal of Applied Logic} 5(3) (2007) 459--477.
+\bibitem{Felfernig2000} A. Felfernig, D. Jannach, M. Zanker, Contextual diagrams as structuring mechanisms for designing configuration knowledge bases in UML, in: \emph{UML 2000}, LNCS 1939, Springer, 2000, pp. 240--254.
+\bibitem{Felfernig2014} A. Felfernig, L. Hotz, C. Bagley, J. Tiihonen, \emph{Knowledge-based Configuration: From Research to Business Cases}, Morgan Kaufmann, 2014.
+\bibitem{Felfernig2018} A. Felfernig, L. Boratto, M. Stettinger, M. Tkalčič, \emph{Group Recommender Systems -- An Introduction}, Springer, 2018.
+\bibitem{Galarraga2013} L. Galárraga, N. Preda, F. Suchanek, Mining rules to align knowledge bases, in: \emph{AKBC 2013}, pp. 43--48, San Francisco, CA, USA, 2013.
+\bibitem{Kang1990} K. Kang, S. Cohen, J. Hess, W. Novak, S. Peterson, Feature-oriented domain analysis feasibility study (FODA), CMU/SEI-90-TR-021, 1990.
+\bibitem{Liberatore1998} P. Liberatore, M. Schaerf, Arbitration (or how to merge knowledge bases), \emph{IEEE Trans. Knowl. Data Eng.} 10(1) (1998) 76--90.
+\bibitem{Segura2007} S. Segura, D. Benavides, A. Ruiz-Cortés, P. Trinidad, Automated merging of feature models using graph transformations, in: \emph{GTTSE 2007}, LNCS 5235, Springer, 2008, pp. 489--505.
+\bibitem{Stumptner1997} M. Stumptner, An overview of knowledge-based configuration, \emph{AI Communications} 10(2) (1997) 111--125.
+\bibitem{Tsang1993} E. Tsang, \emph{Foundations of Constraint Satisfaction}, Academic Press, 1993.
+\bibitem{Uta2019} M. Uta, A. Felfernig, G. Schenner, J. Sp\"ocklberger,
+Consistency-based Merging of Variability Models, in: \emph{21st International Configuration Workshop (ConfWS 2019)}, Hamburg, Germany, CEUR Workshop Proceedings, Vol.~2467, 2019, \url{https://ceur-ws.org/Vol-2467/paper-02.pdf}.
+\bibitem{uvlhub2024} UVL Hub -- A repository for Universal Variability Language models, \url{https://uvlhub.io/}, accessed 2024.
+\end{thebibliography}
+
+\end{document}
