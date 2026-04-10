@@ -16,7 +16,7 @@
 
 
 %% Metadata
-\title{Consistency-based merging of multiple Variability Models and Performance Evaluation}
+\title{Consistency-based Merging of Multiple Variability Models: Generalization and Empirical Evaluation}
 
 %% Authors and affiliations (replicated from the original paper)
 \author[1]{Manuel Mörtl}[email=manuel.moertl@tugraz.at]
@@ -101,7 +101,7 @@ We consider three regional knowledge bases from the United States, Germany, and 
 
 The three knowledge bases share a common vocabulary for overlapping features that captures the main characteristics of the vehicle. Table~\ref{tab:example-features} lists the variables and their admissible domain values that occur in all three knowledge bases. This shared vocabulary provides the basis for alignment and comparability between regions.
 
-The United States and Germany models share the same feature hierarchy, whereas the Oceania model introduces an additional optional feature \textit{SurfPackage} below the root feature \textit{Car}. This structural asymmetry is deliberately introduced to illustrate how the merge procedure handles region-specific structural extensions while preserving solution-space semantics.
+The United States and Germany models share the same feature hierarchy, whereas the Oceania model introduces an additional optional feature \textit{SurfPackage} below the root feature \textit{Car}. This structural asymmetry illustrates how the merge procedure handles region-specific structural extensions while preserving solution-space semantics.
 
 \begin{table}[t]
 \caption{Variables and their domain values shared across the regional knowledge bases.}
@@ -152,7 +152,7 @@ $\begin{aligned}
 
 The regional knowledge bases differ primarily in their non-structural constraints. These constraints encode market- and regulation-driven restrictions, for example, region-dependent exclusions of fuel types or dependencies between engine size and vehicle type. Table~\ref{tab:example-constraints} summarizes the original non-structural constraints of the three knowledge bases.
 
-To validate semantics preservation, we first solve each individually consistent knowledge base and determine its solution space. The resulting numbers of valid configurations are reported in Table~\ref{tab:example-solutions}. 
+To validate semantics preservation, we first enumerate the solution space of each individually consistent knowledge base and determine its solution space. The resulting numbers of valid configurations are reported in Table~\ref{tab:example-solutions}. 
 These three consistent knowledge bases, which share a common vocabulary for their overlapping features, form the input to the multi-model merge procedure described in Section~\ref{sec:merge}.
 
 
@@ -290,21 +290,17 @@ when determining matching configurations.}
 
 \section{Empirical Evaluation on Industrial-Scale Variability Models}
 \label{sec:realworld}
-In contrast to the evaluation by Uta et al.~\cite{Uta2019}, which relies on synthesized variability models, we investigate the behavior of the merge procedure on industrial-scale variability models from the financial services domain. The models were obtained from a publicly available UVL repository~\cite{uvlhub2024} and represent variants of the same configuration domain, treated as independent knowledge bases for the purposes of this evaluation. Each model contains more than 700 features and more than 2{,}000 non-structural constraints, providing a realistic setting to analyze redundancy elimination and contextualization effects. 
-To observe these effects across different degrees of structural overlap, we performed pairwise merges of all nine models.
+In contrast to the evaluation by Uta et al.~\cite{Uta2019}, which relies on synthesized variability models, we investigate the behavior of the merge procedure on industrial-scale variability models from the financial services domain. The models were obtained from a publicly available UVL repository~\cite{uvlhub2024} and represent variants of the same configuration domain, which we treat as independently maintained knowledge bases for the purposes of this evaluation. Each model contains more than 700 features and more than 2{,}000 non-structural constraints, providing an industrial-scale setting for analyzing redundancy elimination and contextualization effects. To observe these effects across different degrees of structural overlap, we performed pairwise merges of all nine models.
 
 
 \subsection{Structural Similarity of the Finance Models}
-To interpret the results of pairwise merges, we first characterize
+To interpret the results of the pairwise merges, we first characterize
 the structural similarity of the nine finance models in terms of feature-set overlap.
-All input models share a partial common vocabulary over their overlapping features, but differ in their full feature sets, hierarchy structures, and the semantics of their non-structural constraints. 
-Table~\ref{tab:finance_similarity} summarizes the model sizes and their pairwise similarity over their feature sets. 
-The similarity matrix reveals two groups. Finance~1--Finance~4
-show a very high mutual overlap and can be regarded as a first structurally coherent group. Finance~5--Finance~9 form a second group with high internal similarity, but substantially lower overlap with Finance~1--Finance~4.
-
+All input models share a common vocabulary over overlapping features, but differ in their full feature sets, hierarchy structures, and non-structural constraints. 
+Table~\ref{tab:finance_similarity} summarizes the model sizes and the pairwise Jaccard similarity of their feature sets. The similarity matrix suggests a separation into two groups. Finance~1--Finance~4 have a very high pairwise overlap, while Finance~5--Finance~9 also show a high overlap among themselves but a substantially lower overlap with Finance~1--Finance~4.
 
 \begin{table*}[t]
-\caption{Feature counts and pairwise Jaccard similarity of the models based on feature sets (rounded percent values).}
+\caption{Feature counts and pairwise Jaccard similarity of the finance models based on feature sets (rounded percentages).}
 \label{tab:finance_similarity}
 \centering
 \small
@@ -356,11 +352,10 @@ Finance~9
 
 
 \subsection{Redundancy Elimination and Contextualization Effects}
-Our evaluation focuses on two outcomes of the
-consistency-based merge: (i) the reduction of redundant non-structural constraints through redundancy elimination, and (ii) the share of constraints that remain contextualized in the merged model.
- 
-Figure~\ref{fig:finance-contextualization-overlap} relates these outcomes to the overlap of the feature sets of the input models. Pairs with a high degree of feature overlap often exhibit substantial reductions during redundancy elimination, which indicates that overlapping feature sets create opportunities to identify logically redundant constraints. However, similar levels of feature overlap can still lead to noticeably different reduction values, showing that overlap alone does not determine the amount of redundancy that can be eliminated.
-For contextualization, the results show an even weaker dependence on feature set overlap. Model pairs with comparable overlap can exhibit substantially different contextualization shares, while low-overlap pairs do not necessarily lead to high contextualization. This can be explained by the role of non-structural constraints: contextualization is required when constraints over shared features are not globally compatible and must remain region-specific, whereas constraints that are local to a single model do not introduce conflicts and therefore do not need to stay contextualized.
+Our evaluation examines two outcomes of the consistency-based merge on the finance models: (i) the reduction of redundant non-structural constraints through redundancy elimination, and (ii) the share of constraints that remain contextualized in the integrated model.
+
+Figure~\ref{fig:finance-contextualization-overlap} relates both outcomes to the feature-set overlap of the input models for all pairwise merges. 
+A shared feature space is a precondition for both redundancy elimination and contextualization, since constraints can only coincide or conflict where they refer to shared features. However, the results do not indicate that feature-set overlap by itself determines either outcome. Instead, both are driven by the non-structural constraints defined over the shared feature space: redundancy elimination depends on whether constraints become logically redundant, whereas contextualization depends on whether constraints over shared features are globally compatible.
 
 
 \begin{figure}[t]
@@ -371,25 +366,35 @@ For contextualization, the results show an even weaker dependence on feature set
 \end{figure}
 
 
-\subsection{Discussion}
-The evaluation indicates that feature-set overlap provides a useful structural baseline for interpreting pairwise merges but is not sufficient to explain merge outcomes.
-More generally, the results highlight that merge behavior is determined by how constraints interact over the shared feature space. In particular, whether constraints can be decontextualized or must remain context-specific depends on their logical compatibility rather than on structural similarity alone.
-Since the evaluation is based on finance models from a single domain, these observations should be interpreted as domain-specific evidence rather than as universally generalizable properties.
-Overall, the results show that the consistency-based merge procedure is applicable to industrial-scale knowledge bases beyond the synthesized settings of the original evaluation. It can consolidate large variants by eliminating redundancy while preserving region- or variant-specific semantics.
+\subsection{Validation of Semantics Preservation}
+For each pairwise merge, we validated semantics preservation by checking whether
+\[
+\mathrm{Sol}(CKB_{Merge}) = \mathrm{Sol}(CKB_1) \cup \mathrm{Sol}(CKB_2).
+\]
+This was verified by confirming that
+\[
+CKB_{Merge} \land \neg (CKB_1 \lor CKB_2)
+\]
+and
+\[
+\neg CKB_{Merge} \land (CKB_1 \lor CKB_2)
+\]
+are both unsatisfiable.
+The first condition checks that the integrated knowledge base does not admit additional configurations, and the second condition checks that no valid configuration of the input knowledge bases is lost.
+
 
 \section{Threats to Validity}
 The main threat to external validity is the representativeness of the models used in our evaluation. The automotive example is synthetic and serves only to illustrate and validate the merge procedure. The empirical analysis is based on real-world variability models from the financial services domain obtained from a publicly available repository. However, these models originate from a single domain and may not be representative of variability models in other application domains. 
 A threat to internal validity is that the merge procedure of Uta et al.~\cite{Uta2019} was independently re-implemented. This may introduce implementation-specific differences, for example, in preprocessing, solver behavior, or runtime characteristics, even if the resulting solution spaces are preserved.
 Furthermore, the evaluation relies on derived metrics such as feature-set overlap, contextualization share, and reduction of non-structural constraints. These measures capture observable aspects of merge behavior but do not directly quantify semantic similarity between models.
-fehlt etwas?
 
 
 \section{Conclusion and Future Work}
-In this paper, we extend the consistency-based merging approach of Uta et al.~\cite{Uta2019} to support the integration of an arbitrary number of variability models while preserving semantics. The proposed procedure constructs a compact integrated knowledge base through contextualization, decontextualization, and elimination of redundancy.
+In this paper, we generalized the consistency-based merging approach of Uta et al.~\cite{Uta2019} from two to an arbitrary number of variability models while preserving semantics. The proposed procedure constructs a compact integrated knowledge base through contextualization, consistency-based decontextualization, and redundancy elimination.
 
-Our evaluation on industrial-scale variability models from the financial services domain shows that the merge procedure can be applied to industrial-scale models and that merge outcomes are shaped by both structural overlap and semantic differences in non-structural constraints. In particular, structural overlap is a useful baseline for interpreting the merge, but it is not sufficient to explain the characteristics of the resulting integrated model.
+Our evaluation on industrial-scale variability models from the financial services domain shows that the approach is applicable beyond the synthesized setting of the original work.
 
-Future work should include evaluating the approach on variability models from additional application domains in order to assess the generalizability of the observed effects and the applicability of the merge procedure. Further directions include analyzing true multi-model merges beyond pairwise combinations, developing measures that better capture semantic similarity between models, and addressing vocabulary alignment for independently developed knowledge bases.
+Future work should include evaluating the approach on variability models from additional application domains in order to assess the generalizability of the observed effects and the applicability of the merge procedure. Further directions include analyzing true multi-model merges beyond pairwise combinations, developing measures that better capture semantic similarity between models, and addressing vocabulary alignment for independently developed or evolving knowledge bases.
 
 
 \begin{thebibliography}{17}
@@ -410,7 +415,7 @@ Future work should include evaluating the approach on variability models from ad
 \bibitem{Tsang1993} E. Tsang, \emph{Foundations of Constraint Satisfaction}, Academic Press, 1993.
 \bibitem{Uta2019} M. Uta, A. Felfernig, G. Schenner, J. Sp\"ocklberger,
 Consistency-based Merging of Variability Models, in: \emph{21st International Configuration Workshop (ConfWS 2019)}, Hamburg, Germany, CEUR Workshop Proceedings, Vol.~2467, 2019, \url{https://ceur-ws.org/Vol-2467/paper-02.pdf}.
-\bibitem{uvlhub2024} UVL Hub -- A repository for Universal Variability Language models, \url{https://uvlhub.io/}, accessed 2024.
+\bibitem{uvlhub2024} UVL Hub -- A repository for Universal Variability Language models, \url{https://uvlhub.io/}, accessed 2026.
 \end{thebibliography}
 
 \end{document}

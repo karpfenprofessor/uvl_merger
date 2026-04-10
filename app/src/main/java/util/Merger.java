@@ -118,7 +118,7 @@ public class Merger {
             }
         }
 
-        MergerHelper.splitFeaturesWithMultipleParents(unionModel);
+        MergerHelper.splitFeaturesWithMultipleParents(unionModel, mergeStatistics);
 
         mergeStatistics.stopTimerUnion();
         mergeStatistics.setNumberOfConstraintsBeforeMerge(unionModel.getConstraints().size());
@@ -181,7 +181,7 @@ public class Merger {
 
                 mergeStatistics.incrementInconsistencyNotCheckedCounter();
                 // System.out.print(" s ");
-                //updateProgressBar(processedConstraints, totalConstraints);
+                updateProgressBar(processedConstraints, totalConstraints);
                 /*logger.debug("\t[inconsistencyCheck] skip and add constraint {}",
                         originalConstraint);*/
                 continue;
@@ -204,8 +204,8 @@ public class Merger {
 
                 mergeStatistics.incrementInconsistencyNonContextualizedCounter();
                 // System.out.print(" d ");
-                //updateProgressBar(processedConstraints, totalConstraints);
-                logger.debug("\n\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
+                updateProgressBar(processedConstraints, totalConstraints);
+                logger.trace("\n\t[inconsistencyCheck] inconsistent, add decontextualized constraint {}",
                         originalConstraint);
             } else {
                 // add contextualized constraint to merged model (line 10 in pseudocode)
@@ -213,8 +213,8 @@ public class Merger {
 
                 mergeStatistics.incrementInconsistencyContextualizedCounter();
                 // System.out.print(" c ");
-                //updateProgressBar(processedConstraints, totalConstraints);
-                logger.debug("\n\t[inconsistencyCheck] consistent, add contextualized constraint {}",
+                updateProgressBar(processedConstraints, totalConstraints);
+                logger.trace("\n\t[inconsistencyCheck] consistent, add contextualized constraint {}",
                         originalConstraint);
             }
 
@@ -262,13 +262,13 @@ public class Merger {
                 iterator.remove();
                 constraint.disableNegation();
                 mergeStatistics.incrementCleanupRemovedCounter();
-                //System.out.print(" - ");
-                logger.debug("\t[cleanup] inconsistent, remove constraint {}", constraint);
+                System.out.print(" - ");
+                logger.trace("\t[cleanup] inconsistent, remove constraint {}", constraint);
             } else {
                 constraint.disableNegation();
                 mergeStatistics.incrementCleanupKeptAsIsCounter();
-                //System.out.print(" + ");
-                logger.debug("\t[cleanup] consistent, keep unnegated constraint {}", constraint);
+                System.out.print(" + ");
+                logger.trace("\t[cleanup] consistent, keep unnegated constraint {}", constraint);
             }
         }
 

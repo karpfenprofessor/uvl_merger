@@ -106,7 +106,7 @@ public class MergerHelper {
                 rootName);
     }
 
-    public static void splitFeaturesWithMultipleParents(final RecreationModel model) {
+    public static void splitFeaturesWithMultipleParents(final RecreationModel model, final MergeStatistics mergeStatistics) {
         logger.debug("[splitFeatures] checking feature tree for child group features with differentiating parents");
 
         // Map to store features that have multiple parents: [featureName -> [parentName
@@ -153,6 +153,7 @@ public class MergerHelper {
 
                 // Create clones for each parent and track them
                 List<Feature> clones = new ArrayList<>();
+                List<String> cloneNames = new ArrayList<>();
 
                 for (Map.Entry<String, GroupConstraint> parentEntry : parentConstraints.entrySet()) {
                     String parentName = parentEntry.getKey();
@@ -176,6 +177,7 @@ public class MergerHelper {
                     // Add clone to model
                     model.getFeatures().put(cloneName, clone);
                     clones.add(clone);
+                    cloneNames.add(cloneName);
 
                     // Create a new list for children to avoid modifying the original
                     List<Feature> updatedChildren = new ArrayList<>();
@@ -243,6 +245,11 @@ public class MergerHelper {
                 model.addConstraint(equivalence);
 
                 logger.info("\t[splitFeatures] added equivalence constraint: {}", equivalence);
+
+                // Document split in statistics (count + mapping original -> created clone names)
+                if (mergeStatistics != null) {
+                    mergeStatistics.recordSplitUpFeatureWithMultipleParents(featureName, cloneNames);
+                }
             }
         }
     }
@@ -283,13 +290,22 @@ public class MergerHelper {
         Map<RecreationModel, Set<String>> uniqueFeaturesPerModel = RecreationAnalyser
                 .analyseSharedFeatures(sourceModelsToMerge);
         Map<Region, Integer> uniqueFeaturesMap = new java.util.EnumMap<>(Region.class);
+        Map<Region, Set<String>> uniqueFeatureNamesMap = new java.util.EnumMap<>(Region.class);
+
         for (RecreationModel sourceModel : sourceModelsToMerge) {
-            uniqueFeaturesMap.put(sourceModel.getRegion(),
-                    uniqueFeaturesPerModel.get(sourceModel) != null ? uniqueFeaturesPerModel.get(sourceModel).size()
-                            : 0);
+            Set<String> uniqueFeatureNames = uniqueFeaturesPerModel.get(sourceModel);
+            uniqueFeaturesMap.put(
+                    sourceModel.getRegion(),
+                    uniqueFeatureNames != null ? uniqueFeatureNames.size() : 0);
+
+            // Store actual unique feature names per region (defensive copy)
+            uniqueFeatureNamesMap.put(
+                    sourceModel.getRegion(),
+                    uniqueFeatureNames != null ? new HashSet<>(uniqueFeatureNames) : new HashSet<>());
         }
 
         mergeStatistics.setNumberOfUniqueFeaturesPerModel(uniqueFeaturesMap);
+        mergeStatistics.setUniqueFeaturesPerModel(uniqueFeatureNamesMap);
     }
 
     public static String buildRegionString(final String separator, final RecreationModel... models) {

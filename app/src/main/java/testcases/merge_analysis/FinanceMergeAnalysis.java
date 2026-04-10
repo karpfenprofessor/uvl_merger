@@ -108,8 +108,8 @@ public class FinanceMergeAnalysis {
             return results;
         }
         
-        for (int i = 0; i < modelPaths.size(); i++) {
-            for (int j = i + 1; j < modelPaths.size(); j++) {
+        for (int i = 5; i < modelPaths.size(); i++) {
+            for (int j = (i == 5 ? 8 : i + 1); j < modelPaths.size(); j++) {
                 currentMerge++;
                 String modelPathA = modelPaths.get(i);
                 String modelPathB = modelPaths.get(j);

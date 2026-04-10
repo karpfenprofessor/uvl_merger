@@ -6,6 +6,10 @@ import lombok.Setter;
 import model.choco.Region;
 
 import java.util.Map;
+import java.util.List;
+import java.util.Set;
+import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +25,14 @@ public class MergeStatistics {
     private java.util.List<String> mergedModelPaths = new java.util.ArrayList<>();
 
     private long startTimeUnion;
+    private long splitFeaturesWithMultipleParentsCounter = 0;
     private long endTimeUnion;
+
+    /**
+     * Tracks feature splits performed by {@code MergerHelper.splitFeaturesWithMultipleParents(...)}.
+     * Key: original feature name, Value: list of newly created feature names that replace it in the tree.
+     */
+    private Map<String, List<String>> splitUpFeaturesWithMultipleParents = new LinkedHashMap<>();
 
     private long startTimeInconsistencyCheck;
     private long inconsistencyCheckCounter = 0;
@@ -39,6 +50,7 @@ public class MergeStatistics {
 
     private long numberOfFeatures;
     private Map<Region, Integer> numberOfUniqueFeaturesPerModel;
+    private Map<Region, Set<String>> uniqueFeaturesPerModel;
     private boolean isConsistentAfterMerge;
 
     private float contextualizationShareBeforeMerge;
@@ -136,6 +148,24 @@ public class MergeStatistics {
         mergedModelPaths.add(filePath);
     }
 
+    /**
+     * Records that a feature had to be split because it had multiple parents.
+     *
+     * @param originalFeatureName original feature name that was split
+     * @param newFeatureNames new feature names created to replace it (typically one per parent/region)
+     */
+    public void recordSplitUpFeatureWithMultipleParents(String originalFeatureName, List<String> newFeatureNames) {
+        if (splitUpFeaturesWithMultipleParents == null) {
+            splitUpFeaturesWithMultipleParents = new LinkedHashMap<>();
+        }
+        if (newFeatureNames == null) {
+            splitUpFeaturesWithMultipleParents.put(originalFeatureName, new ArrayList<>());
+        } else {
+            splitUpFeaturesWithMultipleParents.put(originalFeatureName, new ArrayList<>(newFeatureNames));
+        }
+        splitFeaturesWithMultipleParentsCounter++;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -166,6 +196,17 @@ public class MergeStatistics {
             numberOfUniqueFeaturesPerModel.forEach((region, count) -> 
                 sb.append("\t[statistics]     ").append(region.getRegionString()).append(": ").append(count).append("\n"));
         }
+        if (uniqueFeaturesPerModel != null && !uniqueFeaturesPerModel.isEmpty()) {
+            sb.append("\t[statistics]  -> unique feature names per model:\n");
+            uniqueFeaturesPerModel.forEach((region, features) -> {
+                sb.append("\t[statistics]     ").append(region.getRegionString()).append(": ");
+                if (features == null || features.isEmpty()) {
+                    sb.append("[]\n");
+                } else {
+                    sb.append(features).append("\n");
+                }
+            });
+        }
 
         // ─ Number of constraints ────────────────────────────────────────────────────
         sb.append("\t[statistics] Number of constraints before merge: ")
@@ -174,6 +215,13 @@ public class MergeStatistics {
                 .append(numberOfConstraintsAfterMerge).append("\n");
 
         // ─ Counters ─────────────────────────────────────────────────────────────
+        sb.append("\t[statistics] Number of split up features: ")
+                .append(splitFeaturesWithMultipleParentsCounter).append("\n");
+        if (splitUpFeaturesWithMultipleParents != null && !splitUpFeaturesWithMultipleParents.isEmpty()) {
+            sb.append("\t[statistics]   -> split mapping (original -> new features):\n");
+            splitUpFeaturesWithMultipleParents.forEach((original, replacements) ->
+                    sb.append("\t[statistics]      ").append(original).append(" -> ").append(replacements).append("\n"));
+        }
         sb.append("\t[statistics] Number of inconsistency checks: ")
                 .append(inconsistencyCheckCounter).append("\n");
         sb.append("\t[statistics]   -> contextualised: ")
